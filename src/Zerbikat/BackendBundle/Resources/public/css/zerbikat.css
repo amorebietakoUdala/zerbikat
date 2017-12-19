@@ -1,6 +1,5 @@
 body{
     margin-top: 50px;
-    font-family: 'Alegreya Sans', sans-serif;
 }
 .fitxaMenua
 {
@@ -33,25 +32,4 @@ body{
 
 .inpersonalizatua {
     background-color: #902b2b !important;
-}
-
-.list-group-item.active,
-.list-group-item.active:hover,
-.list-group-item.active:focus {
-    background-color: #0071bd !important;
-    border-color: #0071bd !important;
-}
-
-a.list-group-item-success:focus, a.list-group-item-success:hover, button.list-group-item-success:focus, button.list-group-item-success:hover {
-    color: #0071bd;
-    background-color: #a3d2f3;
-}
-
-.list-group-item-success {
-    color: #0071bd;
-    background-color: #d1e5f3;
-}
-
-a.list-group-item-success, button.list-group-item-success {
-    color: #0071bd;
 }
