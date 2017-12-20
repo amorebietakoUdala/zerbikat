@@ -1,6 +1,6 @@
 body{
-    margin-top: 50px;
-    font-family: 'Alegreya Sans', sans-serif;
+    margin-top: 0px;
+/*    font-family: 'Alegreya Sans', sans-serif;  */
 }
 .fitxaMenua
 {
@@ -54,4 +54,17 @@ a.list-group-item-success:focus, a.list-group-item-success:hover, button.list-gr
 
 a.list-group-item-success, button.list-group-item-success {
     color: #0071bd;
+}
+
+#logo_lerroa img {
+    height: 80px;
+}
+
+#logo_lerroa {
+    height: auto;
+}
+
+#menu_lerroa {
+    margin-top: 80px;
+    margin-bottom: 0px;
 }
