@@ -58,14 +58,16 @@ a.list-group-item-success, button.list-group-item-success {
 }
 
 #logo_lerroa img {
-    height: 80px;
+    height: 60px;
 }
 
 #logo_lerroa {
     height: auto;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #e7e7e7;
 }
 
 #menu_lerroa {
-    margin-top: 80px;
+    margin-top: 60px;
     margin-bottom: 0px;
 }
