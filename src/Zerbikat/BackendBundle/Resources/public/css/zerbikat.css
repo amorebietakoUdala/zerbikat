@@ -1,5 +1,5 @@
 body{
-    margin-top: 0px;
+    margin-top: 50px;
 /*    font-family: 'Alegreya Sans', sans-serif;  */
 }
 .fitxaMenua
@@ -34,6 +34,7 @@ body{
 .inpersonalizatua {
     background-color: #902b2b !important;
 }
+
 
 .list-group-item.active,
 .list-group-item.active:hover,
