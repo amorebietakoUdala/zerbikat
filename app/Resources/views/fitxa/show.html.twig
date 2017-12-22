@@ -375,7 +375,7 @@
                                     {% endfor %}
                                 </table>
                                 {% set kont=kont+1 %}
-                            {% endfor %}
+			    {% endfor %}
                         {% else %}
                             {% for azpiatal in fitxa.azpiatalak %}
                                 <table class="table table-bordered">
@@ -420,6 +420,7 @@
                     {% set kont=0 %}
                     {% if eremuak.kostuatable %}
                         {% if fitxa.udala.zergaor %}
+{#
                             {% for kostutaula in kostuZerrenda %}
                                 <table class="table table-bordered">
                                     <tr>
@@ -448,6 +449,7 @@
                                 </table>
                                 {% set kont=kont+1 %}
                             {% endfor %}
+#}
                         {% else %}
                             {% for azpiatal in fitxa.azpiatalak %}
                                 <table class="table table-bordered">
