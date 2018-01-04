@@ -943,6 +943,12 @@
                 <source>messages.expedientes</source>
                 <target>Código Expedientes</target>
             </trans-unit>
-        </body>
+
+            <trans-unit id="Volver a la web del ayuntamiento">
+                <source>Volver a la web del ayuntamiento</source>
+                <target>Volver a la web del ayuntamiento</target>
+            </trans-unit>
+
+	</body>
     </file>
 </xliff>

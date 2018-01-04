@@ -58,7 +58,7 @@ a.list-group-item-success, button.list-group-item-success {
 }
 
 #logo_lerroa img {
-    height: 60px;
+    height: 70px;
 }
 
 #logo_lerroa {
@@ -68,6 +68,10 @@ a.list-group-item-success, button.list-group-item-success {
 }
 
 #menu_lerroa {
-    margin-top: 60px;
+    margin-top: 70px;
     margin-bottom: 0px;
+}
+
+#itzuli_esteka {
+    padding-top: 22px;
 }
