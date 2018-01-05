@@ -939,6 +939,10 @@
                 <source>Volver a la web del ayuntamiento</source>
                 <target>Udal webgunera itzuli</target>
             </trans-unit>
+            <trans-unit id="La información ofrecida a continuación carece de validez jurídica y se ofrece sólo a efectos informativos">
+                <source>La información ofrecida a continuación carece de validez jurídica y se ofrece sólo a efectos informativos</source>
+                <target>Oharra: Informazio honek ez du balio juridikorik, bakarrik ematen da herritarrak jakinaren gainean egon daitezen</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -32,6 +32,8 @@
     <br/>
     {{ parent() }}
 
+    <div class="container-fluid alert alert-info" role="alert">{{ "La información ofrecida a continuación carece de validez jurídica y se ofrece sólo a efectos informativos" | trans }}</div>
+
     <div>
 
         <!-- Nav tabs -->
@@ -40,6 +42,7 @@
             <li role="presentation"><a href="#familiaka" aria-controls="profile" role="tab" data-toggle="tab">{{ "Familia / Azpifamilia" | trans }}</a></li>
         </ul>
 
+	
         <div class="tab-content">
 
             <div role="tabpanel" class="tab-pane active" id="sailka">

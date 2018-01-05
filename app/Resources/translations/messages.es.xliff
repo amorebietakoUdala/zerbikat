@@ -949,6 +949,11 @@
                 <target>Volver a la web del ayuntamiento</target>
             </trans-unit>
 
+            <trans-unit id="La información ofrecida a continuación carece de validez jurídica y se ofrece sólo a efectos informativos">
+                <source>La información ofrecida a continuación carece de validez jurídica y se ofrece sólo a efectos informativos</source>
+                <target>La información ofrecida a continuación carece de validez jurídica y se ofrece sólo a efectos informativos</target>
+            </trans-unit>
+
 	</body>
     </file>
 </xliff>
