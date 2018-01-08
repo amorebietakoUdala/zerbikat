@@ -541,10 +541,12 @@
 			    <ul>
 				{% for araua in fitxa.araudiak %}
 				    <li>
-					{% if araua.araudia.estekaeu %}
+					{% if araua.araudia.estekaeu is defined and araua.araudia.arauaeu is defined and araua.atalaeu is defined %}
 					    <a href="{{ araua.araudia.estekaeu }}">{{ araua.araudia.arauaeu }} </a> - {{ araua.atalaeu }}
 					{% else %}
-					    {{ araua.araudia.arauaeu }} - {{ araua.atalaeu }}
+					    {% if araua.araudia.arauaeu is defined and araua.atalaeu is defined %}
+						{{ araua.araudia.arauaeu }} - {{ araua.atalaeu }}
+					    {% endif %}
 					{% endif %}
 				    </li>
 				    {% set kont=kont+1 %}
@@ -563,10 +565,12 @@
                         <ul>
                             {% for araua in fitxa.araudiak %}
                                 <li>
-                                    {% if araua.araudia.estekaes %}
+                                    {% if araua.araudia.estekaes is defined and araua.araudia.arauaes is defined and araua.atalaes is defined %}
                                         <a href="{{ araua.araudia.estekaes }}">{{ araua.araudia.arauaes }}</a> - {{ araua.atalaes }}
                                     {% else %}
-                                        {{ araua.araudia.arauaes }} - {{ araua.atalaes }}
+					{% if araua.araudia.arauaes is defined and araua.atalaes is defined %}
+					    {{ araua.araudia.arauaes }} - {{ araua.atalaes }}
+					{% endif %}
                                     {% endif %}
                                 </li>
                                 {% set kont=kont+1 %}
