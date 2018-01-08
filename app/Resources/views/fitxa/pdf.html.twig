@@ -340,11 +340,17 @@
                                         <tr>
                                             <td colspan="9">{{ kontzeptu['kontzeptuaeu_prod'] }}</td>
                                             <td NOWRAP colspan="3">
-                                                {{ kontzeptu['kopurua_prod'] }} {{ kontzeptu['unitatea_prod'] }}
+						{% if kontzeptu['kopurua_prod'] is defined %}
+						    {{ kontzeptu['kopurua_prod'] }}
+						{% endif %}
+						{% if kontzeptu['unitatea_prod'] is defined %}
+						    {{ kontzeptu['unitatea_prod'] }}
+						{% endif %}
                                             </td>
                                         </tr>
                                     {% endfor %}
                                 </table>
+				<p>&nbsp;</p>
                                 {% set kont=kont+1 %}
                             {% endfor %}
                         {% else %}
@@ -407,11 +413,17 @@
                                         <tr>
                                             <td colspan="9">{{ kontzeptu['kontzeptuaes_prod'] }}</td>
                                             <td NOWRAP colspan="3">
-                                                {{ kontzeptu['kopurua_prod'] }} {{ kontzeptu['unitatea_prod'] }}
+						{% if kontzeptu['kopurua_prod'] is defined %}
+						    {{ kontzeptu['kopurua_prod'] }}
+						{% endif %}
+						{% if kontzeptu['unitatea_prod'] is defined %}
+						    {{ kontzeptu['unitatea_prod'] }}
+						{% endif %}
                                             </td>
                                         </tr>
                                     {% endfor %}
                                 </table>
+				<p>&nbsp;</p>
                                 {% set kont=kont+1 %}
                             {% endfor %}
                         {% else %}
@@ -525,18 +537,20 @@
                     {% if eremuak.araudiatext %}{{ fitxa.araudiaeu |raw }}<br/>{% endif %}
 
                     {% if eremuak.araudiatable %}
-                        <ul>
-                            {% for araua in fitxa.araudiak %}
-                                <li>
-                                    {% if araua.araudia.estekaeu %}
-                                        <a href="{{ araua.araudia.estekaeu }}">{{ araua.araudia.arauaeu }} </a> - {{ araua.atalaeu }}
-                                    {% else %}
-                                        {{ araua.araudia.arauaeu }} - {{ araua.atalaeu }}
-                                    {% endif %}
-                                </li>
-                                {% set kont=kont+1 %}
-                            {% endfor %}
-                        </ul>
+			{% if fitxa.araudiak|length > 0 %}
+			    <ul>
+				{% for araua in fitxa.araudiak %}
+				    <li>
+					{% if araua.araudia.estekaeu %}
+					    <a href="{{ araua.araudia.estekaeu }}">{{ araua.araudia.arauaeu }} </a> - {{ araua.atalaeu }}
+					{% else %}
+					    {{ araua.araudia.arauaeu }} - {{ araua.atalaeu }}
+					{% endif %}
+				    </li>
+				    {% set kont=kont+1 %}
+				{% endfor %}
+			    </ul>
+			{% endif %}
                     {% endif %}
                     {% if (fitxa.araudiaeu is empty and kont==0) %}
                         Ez dagokio

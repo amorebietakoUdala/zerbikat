@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Zerbikat\BackendBundle\Entity\Familia;
 use Zerbikat\BackendBundle\Entity\Fitxa;
 use Zerbikat\BackendBundle\Entity\Fitxafamilia;
+use \Symfony\Component\HttpFoundation\Response;
 
 
 /**
@@ -169,6 +170,131 @@ class FitxaController extends Controller
     }
 
     /**
+     * Fitxa guztiekin pdf bat sortu
+     * @Route("/pdf/all", name="fitxa_guztiak_pdf")
+     * @Method("GET")
+     */
+    
+    public function pdfAllAction () {
+	$user = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$fitxak = $em->getRepository( 'BackendBundle:Fitxa' )->findBy([
+	    'udala' => $user->getUdala(),
+//	    'espedientekodea' => 'IL01400'
+	    ],
+	    ['espedientekodea' => 'ASC'] // order
+	);
+	
+	$pdf = $this->__generateAllFitxaHTML($fitxak);
+	
+        $filename = "izapideen-liburua";
+	return $pdf->Output( $filename . ".pdf", 'I' ); // This will output the PDF as a response directly
+    }
+    
+    /**
+     * Generates the complete HTML codea of all Fitxa in the array passed as argument
+     * 
+     * @param Array $fitxak
+     */
+    
+    private function __generateAllFitxaHTML( Array $fitxak ) {
+	$logger = $this->get('logger');
+	$em = $this->getDoctrine()->getManager();
+	$udala = $fitxak[0]->getUdala();
+	$kanalmotak = $em->getRepository( 'BackendBundle:Kanalmota' )->findAll();
+        $query = $em->createQuery(
+            /** @lang text */
+            '
+          SELECT f.oharraktext,f.helburuatext,f.ebazpensinpli,f.arduraaitorpena,f.aurreikusi,f.arrunta,f.isiltasunadmin,f.norkeskatutext,f.norkeskatutable,f.dokumentazioatext,f.dokumentazioatable,f.kostuatext,f.kostuatable,f.araudiatext,f.araudiatable,f.prozeduratext,f.prozeduratable,f.doklaguntext,f.doklaguntable,f.datuenbabesatext,f.datuenbabesatable,f.norkebatzitext,f.norkebatzitable,f.besteak1text,f.besteak1table,f.besteak2text,f.besteak2table,f.besteak3text,f.besteak3table,f.kanalatext,f.kanalatable,f.azpisailatable
+            FROM BackendBundle:Eremuak f
+            WHERE f.udala = :udala            
+        '
+        );
+        $query->setParameter( 'udala', $udala );
+        $eremuak = $query->getSingleResult();
+
+	$query = $em->createQuery(
+            /** @lang text */
+            '
+          SELECT f.oharraklabeleu,f.oharraklabeles,f.helburualabeleu,f.helburualabeles,f.ebazpensinplilabeleu,f.ebazpensinplilabeles,f.arduraaitorpenalabeleu,f.arduraaitorpenalabeles,f.aurreikusilabeleu,f.aurreikusilabeles,f.arruntalabeleu,f.arruntalabeles,f.isiltasunadminlabeleu,f.isiltasunadminlabeles,f.norkeskatulabeleu,f.norkeskatulabeles,f.dokumentazioalabeleu,f.dokumentazioalabeles,f.kostualabeleu,f.kostualabeles,f.araudialabeleu,f.araudialabeles,f.prozeduralabeleu,f.prozeduralabeles,f.doklagunlabeleu,f.doklagunlabeles,f.datuenbabesalabeleu,f.datuenbabesalabeles,f.norkebatzilabeleu,f.norkebatzilabeles,f.besteak1labeleu,f.besteak1labeles,f.besteak2labeleu,f.besteak2labeles,f.besteak3labeleu,f.besteak3labeles,f.kanalalabeleu,f.kanalalabeles,f.epealabeleu,f.epealabeles,f.doanlabeleu,f.doanlabeles,f.azpisailalabeleu,f.azpisailalabeles
+            FROM BackendBundle:Eremuak f
+            WHERE f.udala = :udala
+        '
+        );
+        $query->setParameter( 'udala', $udala );
+        $labelak = $query->getSingleResult();
+	
+        $pdf = $this->get( "white_october.tcpdf" )->create('vertical',PDF_UNIT, PDF_PAGE_FORMAT,true,'UTF-8', false);
+        $pdf->SetAuthor( $this->getUser()->getUdala() );
+        $pdf->SetTitle( ( "Izapideen Liburua" ) );
+        $pdf->SetSubject( "Libro de procedimientos" );
+        $pdf->setFontSubsetting( false );
+	$pdf->SetFont( 'helvetica', '', 11, '', true );
+	
+	$full_html = '';
+	foreach ($fitxak as $fitxa ) {
+	    $logger->debug($fitxa->getEspedienteKodea());
+	    $kostuZerrenda = array();
+	    foreach ( $fitxa->getKostuak() as $kostu ) {
+		$logger->info($kostu->getId());
+		$client = new GuzzleHttp\Client();
+
+		$api = $this->container->getParameter( 'zzoo_aplikazioaren_API_url' );
+    //            $proba = $client->request( 'GET', 'http://zergaordenantzak.dev/app_dev.php/api/azpiatalas/'.$kostu->getKostua().'.json' );
+		$proba = $client->request( 'GET', $api . '/zerga/' . $kostu->getKostua() . '.json' );
+
+		$fitxaKostua = (string)$proba->getBody();
+		$array = json_decode( $fitxaKostua, true );
+		$kostuZerrenda[] = $array;
+	    }
+	    // Debug only:
+//	    return $this->render(
+	    $html = $this->render(
+		'fitxa/pdf.html.twig',
+		array(
+		    'fitxa'         => $fitxa,
+		    'kanalmotak'    => $kanalmotak,
+//		    'delete_form'   => $deleteForm->createView(),
+		    'eremuak'       => $eremuak,
+		    'labelak'       => $labelak,
+		    'kostuZerrenda' => $kostuZerrenda,
+		)
+	    );
+	    $pdf->AddPage();
+	    $pdf->writeHTML($html->getContent(), true, false, false, false, '');
+
+//	    $full_html = $full_html.$html->getContent();
+	}
+//	$full_html = '<html><head><meta charset="utf-8"></head><body>'.$full_html.'</body></html>';
+	return $pdf;
+//	return $full_html;
+    }
+
+     /**
+     * Izapide guztien PDF bat sortu.
+     *
+     * @param string $html
+     */
+    private function __pdfaSortu ($html) {
+        $pdf = $this->get( "white_october.tcpdf" )->create(
+            'vertical',
+            PDF_UNIT,
+            PDF_PAGE_FORMAT,
+            true,
+            'UTF-8',
+            false
+        );
+        $pdf->SetAuthor( $this->getUser()->getUdala() );
+        $pdf->SetTitle( ( "Izapideen Liburua" ) );
+        $pdf->SetSubject( "Libro de procedimientos" );
+        $pdf->setFontSubsetting( false );
+       $pdf->SetFont( 'helvetica', '', 11, '', true );
+        $pdf->AddPage();
+	$pdf->writeHTML($html, true, false, false, false, '');
+	return $pdf;
+    }
+
+        /**
      * Finds and displays a Fitxa entity.
      *
      * @Route("/pdf/{id}", name="fitxa_pdf")

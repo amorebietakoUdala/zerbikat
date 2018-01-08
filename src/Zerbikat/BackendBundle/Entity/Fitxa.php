@@ -2216,7 +2216,7 @@
     /**
      * Get kostuak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Doctrine\Common\Collections\Collection|FitxaKostua[]
      */
     public function getKostuak()
     {
