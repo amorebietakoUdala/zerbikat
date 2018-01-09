@@ -38,14 +38,14 @@
 
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#sailka" aria-controls="home" role="tab" data-toggle="tab">{{ "Saila / Azpisaila" | trans }}</a></li>
-            <li role="presentation"><a href="#familiaka" aria-controls="profile" role="tab" data-toggle="tab">{{ "Familia / Azpifamilia" | trans }}</a></li>
+            <li role="presentation"><a href="#sailka" aria-controls="home" role="tab" data-toggle="tab">{{ "Saila / Azpisaila" | trans }}</a></li>
+            <li role="presentation" class="active"><a href="#familiaka" aria-controls="profile" role="tab" data-toggle="tab">{{ "Familia / Azpifamilia" | trans }}</a></li>
         </ul>
 
 	
         <div class="tab-content">
 
-            <div role="tabpanel" class="tab-pane active" id="sailka">
+            <div role="tabpanel" class="tab-pane" id="sailka">
 
                 {% for saila in sailak %}
                     <div class="list-group col-sm-6">
@@ -57,14 +57,13 @@
                             </div>
                         </a>
                         <div id='fam{{ saila.id }}' style='display: none;'>
-
-                            {% for azpi in saila.azpisailak  %}
+                            {% for azpi in saila.azpisailak | sort  %}
                                 <a href="#" class="list-group-item list-group-item-success">
                                     {% if app.request.locale == 'eu' %}{{ azpi.azpisailaeu }}{% else %} {{ azpi.azpisailaes }}{% endif %}
                                     {% for fitxa in azpi.fitxak %}
-                                        <a  data-id="{{ fitxa.id }}" href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitxa.id }) }}"
+                                        <a  data-orden="{{ fitxa.espedienteKodea }}" data-id="{{ fitxa.id }}" href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitxa.id }) }}"
                                             class="list-group-item">
-                                            {% if app.request.locale == 'eu' %}{{ fitxa.deskribapenaeu }}{% else %} {{ fitxa.deskribapenaes }}{% endif %}
+                                            {{ fitxa.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitxa.deskribapenaeu }}{% else %}{{ fitxa.deskribapenaes }}{% endif %}
                                         </a>
 
                                     {% endfor %}
@@ -78,7 +77,7 @@
             </div>
 
 
-            <div role="tabpanel" class="tab-pane" id="familiaka">
+            <div role="tabpanel" class="tab-pane  active" id="familiaka">
 
                 {% for familia in familiak %}
                     <div class="list-group col-sm-6">
@@ -93,10 +92,10 @@
                             </div>
                         </a>
                         <div id='fam-{{ familia.id }}' style='display: none;'>
-                            {% for fitxafamilia  in  familia.fitxafamilia %}
+                            {% for fitxafamilia  in  familia.fitxafamilia | sort %}
                                 <a href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitxafamilia.fitxa.id }) }}"
                                    class="list-group-item">
-                                    {% if app.request.locale == 'eu' %}{{ fitxafamilia.fitxa.deskribapenaeu }}{% else %} {{ fitxafamilia.fitxa.deskribapenaes }}{% endif %}
+                                    {{ fitxafamilia.fitxa.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitxafamilia.fitxa.deskribapenaeu }}{% else %} {{ fitxafamilia.fitxa.deskribapenaes }}{% endif %}
                                 </a>
                             {% endfor %}
 
@@ -104,9 +103,9 @@
                                 <a href="#" class="list-group-item list-group-item-success">
                                     {% if app.request.locale == 'eu' %}{{ c.familiaeu }}{% else %} {{ c.familiaes }}{% endif %}
                                     {% for fitx in c.fitxafamilia %}
-                                        <a data-orden="{{ fitx.ordena }}" data-id="{{ fitx.id }}" href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitx.fitxa.id }) }}"
+                                        <a data-orden="{{ fitx.fitxa.espedienteKodea }}" data-id="{{ fitx.id }}" href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitx.fitxa.id }) }}"
                                            class="list-group-item">
-                                            {% if app.request.locale == 'eu' %}{{ fitx.fitxa.deskribapenaeu }}{% else %} {{ fitx.fitxa.deskribapenaes }}{% endif %}
+                                            {{ fitx.fitxa.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitx.fitxa.deskribapenaeu }}{% else %} {{ fitx.fitxa.deskribapenaes }}{% endif %}
                                         </a>
 
                                     {% endfor %}

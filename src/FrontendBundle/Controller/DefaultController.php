@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Zerbikat\BackendBundle\Entity\Fitxa;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
@@ -19,7 +20,7 @@ class DefaultController extends Controller
      *     }
      * )
      */
-    public function indexAction ( $udala )
+    public function indexAction ( $udala, Request $request )
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -43,7 +44,7 @@ class DefaultController extends Controller
                   FROM BackendBundle:Familia f
                   LEFT JOIN BackendBundle:Udala u WITH f.udala=u.id
                 WHERE u.kodea = :udala AND f.parent is NULL 
-                ORDER BY ezkutuan ASC
+                ORDER BY f.familia'.$request->getLocale().' ASC
                 '
         );
         $query->setParameter( 'udala', $udala );
@@ -56,7 +57,7 @@ class DefaultController extends Controller
                   FROM BackendBundle:Saila s
                   LEFT JOIN BackendBundle:Udala u WITH s.udala=u.id
                 WHERE u.kodea = :udala
-                ORDER BY s.kodea DESC
+                ORDER BY s.saila'.$request->getLocale().' ASC
                 '
         );
         $query->setParameter( 'udala', $udala );
