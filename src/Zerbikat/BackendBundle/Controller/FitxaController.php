@@ -228,10 +228,10 @@ class FitxaController extends Controller
         $pdf->SetAuthor( $this->getUser()->getUdala() );
         $pdf->SetTitle( ( "Izapideen Liburua" ) );
         $pdf->SetSubject( "Libro de procedimientos" );
-        $pdf->setFontSubsetting( false );
+        $pdf->setFontSubsetting( true );
 	$pdf->SetFont( 'helvetica', '', 11, '', true );
 	
-	$full_html = '';
+//	$full_html = '';
 	foreach ($fitxak as $fitxa ) {
 	    $logger->debug($fitxa->getEspedienteKodea());
 	    $kostuZerrenda = array();
