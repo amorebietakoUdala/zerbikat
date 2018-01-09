@@ -171,20 +171,23 @@ class FitxaController extends Controller
 
     /**
      * Fitxa guztiekin pdf bat sortu
-     * @Route("/pdf/all", name="fitxa_guztiak_pdf")
+     * @Route("/pdf/all/{id}", name="fitxa_guztiak_pdf")
      * @Method("GET")
      */
     
-    public function pdfAllAction () {
+    public function pdfAllAction ( $id = null ) {
 	$user = $this->getUser();
+	$roles = $user->getRoles();
+	$isRoleSuperAdmin = in_array("ROLE_SUPER_ADMIN", $roles);
+	$udala = ( $isRoleSuperAdmin ? $id : $user->getUdala());
 	$em = $this->getDoctrine()->getManager();
 	$fitxak = $em->getRepository( 'BackendBundle:Fitxa' )->findBy([
-	    'udala' => $user->getUdala(),
+	    'udala' => $udala,
 //	    'espedientekodea' => 'IL01400'
 	    ],
 	    ['espedientekodea' => 'ASC'] // order
 	);
-	
+//	dump($udala);die;
 	$pdf = $this->__generateAllFitxaHTML($fitxak);
 	
         $filename = "izapideen-liburua";

@@ -943,6 +943,10 @@
                 <source>La información ofrecida a continuación carece de validez jurídica y se ofrece sólo a efectos informativos</source>
                 <target>Oharra: Informazio honek ez du balio juridikorik, bakarrik ematen da herritarrak jakinaren gainean egon daitezen</target>
             </trans-unit>
-        </body>
+            <trans-unit id="messages.esportatu_liburua">
+                <source>messages.esportatu_liburua</source>
+                <target>Izapideen libura PDFan</target>
+            </trans-unit>
+	</body>
     </file>
 </xliff>

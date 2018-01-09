@@ -954,6 +954,10 @@
                 <target>La información ofrecida a continuación carece de validez jurídica y se ofrece sólo a efectos informativos</target>
             </trans-unit>
 
+            <trans-unit id="messages.esportatu_liburua">
+                <source>messages.esportatu_liburua</source>
+                <target>PDF de procedimientos</target>
+            </trans-unit>
 	</body>
     </file>
 </xliff>
