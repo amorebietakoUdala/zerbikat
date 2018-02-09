@@ -958,6 +958,16 @@
                 <source>messages.esportatu_liburua</source>
                 <target>PDF de procedimientos</target>
             </trans-unit>
+
+	    <trans-unit id="messages.bilatu">
+                <source>messages.bilatu</source>
+                <target>Buscar</target>
+            </trans-unit>
+
+	    <trans-unit id="messages.bilatu_placeholder">
+                <source>messages.bilatu_placeholder</source>
+                <target>Introduzca el texto a buscar...</target>
+            </trans-unit>
 	</body>
     </file>
 </xliff>

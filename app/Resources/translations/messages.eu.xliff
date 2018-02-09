@@ -947,6 +947,15 @@
                 <source>messages.esportatu_liburua</source>
                 <target>Izapideen libura PDFan</target>
             </trans-unit>
+	    <trans-unit id="messages.bilatu">
+                <source>messages.bilatu</source>
+                <target>Bilatu</target>
+            </trans-unit>
+
+	    <trans-unit id="messages.bilatu_placeholder">
+                <source>messages.bilatu_placeholder</source>
+                <target>Sartu bilatu nahi den testua...</target>
+            </trans-unit>
 	</body>
     </file>
 </xliff>
