@@ -375,9 +375,9 @@
                                                 <tr>
                                                     <td colspan="2">
                                                         {% if app.request.locale == 'eu' %}
-                                                            {{ parrafo['testuaeu']| raw }}
+                                                            {{ parrafo['testuaeu_prod']| raw }}
                                                         {% else %}
-                                                            {{ parrafo['testuaes']| raw }}
+                                                            {{ parrafo['testuaes_prod']| raw }}
                                                         {% endif %}
                                                     </td>
                                                 </tr>
@@ -394,8 +394,11 @@
                                                         {% endif %}
                                                     </td>
                                                     <td NOWRAP>
-                                                        {% if ((kontzeptu['kopurua_prod'] is defined) and (kontzeptu['unitatea_prod'] is defined)) %}
-                                                            {{ kontzeptu['kopurua_prod'] }} {{ kontzeptu['unitatea_prod'] }}
+                                                        {% if (kontzeptu['kopurua_prod'] is defined) %}
+                                                            {{ kontzeptu['kopurua_prod'] }}
+                                                        {% endif %}
+                                                        {% if kontzeptu['unitatea_prod'] is defined %}
+                                                            {{ kontzeptu['unitatea_prod'] }}
                                                         {% endif %}
                                                     </td>
                                                 </tr>
