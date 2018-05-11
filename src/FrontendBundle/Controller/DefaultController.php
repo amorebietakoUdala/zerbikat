@@ -149,7 +149,6 @@ class DefaultController extends Controller
     public function pdfDocLagunAction ( Fitxa $fitxa, $udala )
     {
         $em         = $this->getDoctrine()->getManager();
-        $kanalmotak = $em->getRepository( 'BackendBundle:Kanalmota' )->findAll();
 
         $query = $em->createQuery(
             /** @lang text */
@@ -173,26 +172,13 @@ class DefaultController extends Controller
         $query->setParameter( 'udala', $udala );
         $labelak = $query->getSingleResult();
 
-        $kostuZerrenda = array();
-        foreach ( $fitxa->getKostuak() as $kostu ) {
-            $client = new GuzzleHttp\Client();
-            $api    = $this->container->getParameter( 'zzoo_aplikazioaren_API_url' );
-            $proba  = $client->request( 'GET', $api . '/zerga/' . $kostu->getKostua() . '.json' );
-
-            $fitxaKostua     = (string)$proba->getBody();
-            $array           = json_decode( $fitxaKostua, true );
-            $kostuZerrenda[] = $array;
-        }
-
         $html = $this->render(
             'frontend/pdf_dokumentazioa.html.twig',
             array(
                 'fitxa'         => $fitxa,
-                'kanalmotak'    => $kanalmotak,
                 'eremuak'       => $eremuak,
                 'labelak'       => $labelak,
                 'udala'         => $udala,
-                'kostuZerrenda' => $kostuZerrenda,
             )
         );
 
