@@ -974,6 +974,11 @@
                 <target>PDF de documentación a aportar</target>
             </trans-unit>
 
+	    <trans-unit id="messages.resumen_doklaguntzailea">
+                <source>messages.resumen_doklaguntzailea</source>
+                <target>Resumen documentación a aportar en PDF</target>
+            </trans-unit>
+
 	</body>
     </file>
 </xliff>

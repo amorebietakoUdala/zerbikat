@@ -959,7 +959,10 @@
                 <source>messages.esportatu_doklaguntzailea</source>
                 <target>Dokumentazio laguntzailearen PDFa esportatu</target>
             </trans-unit>
-
+	    <trans-unit id="messages.resumen_doklaguntzailea">
+                <source>messages.resumen_doklaguntzailea</source>
+                <target>Aurkeztu beharreko dokumentazioaren laburpena PDFan</target>
+            </trans-unit>
 	</body>
     </file>
 </xliff>
