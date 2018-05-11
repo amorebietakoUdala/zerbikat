@@ -1,0 +1,124 @@
+{% block body %}
+    <table border="1" cellpadding="4">
+        <tr>
+            <td colspan="12" style="text-align:right">
+                {% if fitxa.updatedAt %}
+                    <span style="font-size: small;">Azken eguneraketa: {{ fitxa.updatedAt|date('Y-m-d H:i:s') }}</span>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <img src="{{ fitxa.udala.logoa }}"/>
+                <h6 style="text-align:center">{{ fitxa.udala.izendapenaeu }}</h6>
+                <h6 style="text-align:center">{{ fitxa.udala.ifk }}</h6>
+            </td>
+            <td colspan="2"><h2>{{ fitxa.espedientekodea }}</h2></td>
+            <td colspan="8">
+                <h4>{{ fitxa.deskribapenaeu }}</h4>
+                <h5>{{ fitxa.deskribapenaes }}</h5>
+            </td>
+        </tr>
+    </table>
+
+    {% if (eremuak.dokumentazioatext or eremuak.dokumentazioatable) %}
+        <table cellspacing="0" cellpadding="4">
+            <tr>
+                <td>
+                    <h4>{{ labelak.dokumentazioalabeleu }}</h4>
+                </td>
+                <td>
+                    <h4>{{ labelak.dokumentazioalabeles }}</h4>
+                </td>
+            </tr>
+            <tr>
+                <td style="font-size: small;">
+                    {% if eremuak.dokumentazioatable %}
+                        <ul>
+                            {% for dokumentua in fitxa.dokumentazioak %}
+                                <li>
+                                    {% if dokumentua.estekaeu %}
+                                        <a href="{{ dokumentua.estekaeu }}">{{ dokumentua.kodea }} {{ dokumentua.deskribapenaeu }}
+                                        </a>
+                                    {% else %}
+                                        {{ dokumentua.kodea }} {{ dokumentua.deskribapenaeu }}
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    {% if eremuak.dokumentazioatext %}{{ fitxa.dokumentazioaeu|raw }}{% endif %}
+                </td>
+                <td style="font-size: small;">
+                    {% if eremuak.dokumentazioatable %}
+                        <ul>
+                            {% for dokumentua in fitxa.dokumentazioak %}
+                                <li>
+                                    {% if dokumentua.estekaes %}
+                                        <a href="{{ dokumentua.estekaes }}">{{ dokumentua.kodea }} {{ dokumentua.deskribapenaes }}
+                                        </a>
+                                    {% else %}
+                                        {{ dokumentua.kodea }} {{ dokumentua.deskribapenaes }}
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    {% if eremuak.dokumentazioatext %}{{ fitxa.dokumentazioaes|raw }}{% endif %}
+                </td>
+            </tr>
+        </table>
+    {% endif %}
+
+    {% if (eremuak.doklaguntext or eremuak.doklaguntable) %}
+        <table cellspacing="0" cellpadding="4">
+            <tr>
+                <td>
+                    <h4>{{ labelak.doklagunlabeleu }}</h4>
+                </td>
+                <td>
+                    <h4>{{ labelak.doklagunlabeles }}</h4>
+                </td>
+            </tr>
+            <tr>
+                <td style="font-size: small;">
+                    {% if eremuak.doklaguntext %}{{ fitxa.doklaguneu |raw }}{% endif %}
+                    {% if eremuak.doklaguntable %}
+                        <ul>
+                            {% for doklagun in fitxa.doklagunak %}
+                                <li>
+                                    {% if doklagun.estekaeu %}
+                                        <a href="{{ doklagun.estekaeu }}">
+                                            {{ doklagun.kodea }} {{ doklagun.deskribapenaeu }}
+                                        </a>
+                                    {% else %}
+                                        {{ doklagun.kodea }} {{ doklagun.deskribapenaeu }}
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </td>
+                <td style="font-size: small;">
+                    {% if eremuak.doklaguntext %}{{ fitxa.doklagunes |raw }}{% endif %}
+                    {% if eremuak.doklaguntable %}
+                        <ul>
+                            {% for doklagun in fitxa.doklagunak %}
+                                <li>
+                                    {% if doklagun.estekaes %}
+                                        <a href="{{ doklagun.estekaes }}">
+                                            {{ doklagun.kodea }} {{ doklagun.deskribapenaes }}
+                                        </a>
+                                    {% else %}
+                                        {{ doklagun.kodea }} {{ doklagun.deskribapenaes }}
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    {% endif %}
+
+{% endblock %}

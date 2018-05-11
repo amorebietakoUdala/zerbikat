@@ -12,6 +12,7 @@
                     {% if is_granted('ROLE_ADMIN') %}<li><a href="{{ path('udala_edit', { 'id': udala.id }) }}" class="fa fa-pencil"> {{ 'messages.aldatu'|trans }}</a></li>{% endif %}
 		    {% if is_granted('ROLE_SUPER_ADMIN') %}<li><a href="{{ path('fitxa_guztiak_pdf', { 'id' : udala.id }) }}" class="fa fa-file-pdf-o"> {{ 'messages.esportatu_liburua'|trans }}</a></li>{% endif %}
 		    {% if not is_granted('ROLE_SUPER_ADMIN') and is_granted('ROLE_ADMIN') %}<li><a href="{{ path('fitxa_guztiak_pdf') }}" class="fa fa-file-pdf-o"> {{ 'messages.esportatu_liburua'|trans }}</a></li>{% endif %}
+		    {% if not is_granted('ROLE_SUPER_ADMIN') and is_granted('ROLE_ADMIN') %}<li><a href="{{ path('doklagun_guztiak_pdf') }}" class="fa fa-file-pdf-o"> {{ 'messages.esportatu_doklaguntzailea'|trans }}</a></li>{% endif %}
                 </ul>
             </div>
         </div>

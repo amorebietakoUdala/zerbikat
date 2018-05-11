@@ -170,6 +170,31 @@ class FitxaController extends Controller
     }
 
     /**
+     * Fitxa bakoitzaren dokumentazio laguntzailearen pdf bat sortu
+     * @Route("/pdf/all/doklagun/{id}", name="doklagun_guztiak_pdf")
+     * @Method("GET")
+     */
+    
+    public function pdfAllDokLagnAction ( $id = null ) {
+	$user = $this->getUser();
+	$roles = $user->getRoles();
+	$isRoleSuperAdmin = in_array("ROLE_SUPER_ADMIN", $roles);
+	$udala = ( $isRoleSuperAdmin ? $id : $user->getUdala());
+	$em = $this->getDoctrine()->getManager();
+	$fitxak = $em->getRepository( 'BackendBundle:Fitxa' )->findBy([
+	    'udala' => $udala,
+//	    'espedientekodea' => 'IL01400'
+	    ],
+	    ['espedientekodea' => 'ASC'] // order
+	);
+//	dump($udala);die;
+	$pdf = $this->__generateAllFitxaHTML($fitxak,'fitxa/pdf_dokumentazioa.html.twig');
+	
+        $filename = "izapideen-liburua";
+	return $pdf->Output( $filename . ".pdf", 'I' ); // This will output the PDF as a response directly
+    }
+
+    /**
      * Fitxa guztiekin pdf bat sortu
      * @Route("/pdf/all/{id}", name="fitxa_guztiak_pdf")
      * @Method("GET")
@@ -193,14 +218,14 @@ class FitxaController extends Controller
         $filename = "izapideen-liburua";
 	return $pdf->Output( $filename . ".pdf", 'I' ); // This will output the PDF as a response directly
     }
-    
+
     /**
      * Generates the complete HTML codea of all Fitxa in the array passed as argument
      * 
      * @param Array $fitxak
      */
     
-    private function __generateAllFitxaHTML( Array $fitxak ) {
+    private function __generateAllFitxaHTML( Array $fitxak, $plantilla = 'fitxa/pdf.html.twig' ) {
 	$logger = $this->get('logger');
 	$em = $this->getDoctrine()->getManager();
 	$udala = $fitxak[0]->getUdala();
@@ -253,7 +278,7 @@ class FitxaController extends Controller
 	    // Debug only:
 //	    return $this->render(
 	    $html = $this->render(
-		'fitxa/pdf.html.twig',
+		$plantilla,
 		array(
 		    'fitxa'         => $fitxa,
 		    'kanalmotak'    => $kanalmotak,

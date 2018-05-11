@@ -951,11 +951,15 @@
                 <source>messages.bilatu</source>
                 <target>Bilatu</target>
             </trans-unit>
-
 	    <trans-unit id="messages.bilatu_placeholder">
                 <source>messages.bilatu_placeholder</source>
                 <target>Sartu bilatu nahi den testua...</target>
             </trans-unit>
+	    <trans-unit id="messages.esportatu_doklaguntzailea">
+                <source>messages.esportatu_doklaguntzailea</source>
+                <target>Dokumentazio laguntzailearen PDFa esportatu</target>
+            </trans-unit>
+
 	</body>
     </file>
 </xliff>
