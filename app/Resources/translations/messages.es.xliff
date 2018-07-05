@@ -979,6 +979,11 @@
                 <target>Resumen documentación a aportar en PDF</target>
             </trans-unit>
 
+	    <trans-unit id="messages.goiburua">
+                <source>messages.goiburua</source>
+                <target>Manual de trámites</target>
+            </trans-unit>
+
 	</body>
     </file>
 </xliff>

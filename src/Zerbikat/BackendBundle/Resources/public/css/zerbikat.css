@@ -73,5 +73,38 @@ a.list-group-item-success, button.list-group-item-success {
 }
 
 #itzuli_esteka {
-    padding-top: 22px;
+    margin-top: 5px;
+    text-decoration: none;
+    background-color: #fff;
+}
+
+#itzuli_esteka a {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    text-decoration: none;
+}
+
+#itzuli_esteka a:hover {
+    text-decoration: none;
+    background-color: #fff;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+#goiburua {
+    margin-left: 5px;
+    margin-top: 5px;
+    width: 55rem;
+    text-align: center;
+    font-size: 4rem;
+}
+
+#goiburua a {
+    text-decoration: none;
+}
+
+#goiburua a:hover {
+    text-decoration: none;
+    background-color: #fff;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
 }

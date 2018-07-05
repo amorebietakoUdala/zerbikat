@@ -4,9 +4,12 @@
     <nav id="logo_lerroa" class="navbar navbar-fixed-top">
         <div class="container ">
             <div class="navbar-header">
-                <img id="logoa" src="{{ asset('bundles/backend/images/logo.png') }}" alt="Amorebieta-Etxanoko Udala"/>
+		<ul class="nav navbar-nav">
+		    <li><img id="logoa" src="{{ asset('bundles/backend/images/logo.png') }}" alt="Amorebieta-Etxanoko Udala"/></li>
+		    <li id="goiburua" class="list-inline"><a href="#">{{ "messages.goiburua" | trans }}</a></li>
+		    <li id="itzuli_esteka" class="list-inline"><a href="https://www.amorebieta-etxano.eus/">{{ "Volver a la web del ayuntamiento" | trans }}</a></li>
+		</ul>
             </div>
-	    <span id="itzuli_esteka" class="navbar-right"><a href="https://www.amorebieta-etxano.eus/">{{ "Volver a la web del ayuntamiento" | trans }}</a></span>
         </div>
     </nav>
     <nav id="menu_lerroa" class="navbar navbar-default">

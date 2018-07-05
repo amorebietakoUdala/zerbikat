@@ -963,6 +963,10 @@
                 <source>messages.resumen_doklaguntzailea</source>
                 <target>Aurkeztu beharreko dokumentazioaren laburpena PDFan</target>
             </trans-unit>
+	    <trans-unit id="messages.izapideen_liburua">
+                <source>messages.goiburua</source>
+                <target>Izapideen liburua</target>
+            </trans-unit>
 	</body>
     </file>
 </xliff>
