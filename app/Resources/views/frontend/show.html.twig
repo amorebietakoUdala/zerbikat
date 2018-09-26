@@ -144,7 +144,7 @@
                                     <li>
                                         {% if app.request.locale == 'eu' %}
                                             {% if dokumentua.estekaeu %}
-                                                <a href="{{ dokumentua.estekaeu }}">
+                                                <a href="{{ dokumentua.estekaeu }}" target="_blank">
                                                     {{ dokumentua.kodea }} {{ dokumentua.deskribapenaeu }}
                                                 </a>
                                             {% else %}
@@ -152,7 +152,7 @@
                                             {% endif %}
                                         {% else %}
                                             {% if dokumentua.estekaes %}
-                                                <a href="{{ dokumentua.estekaes }}">
+                                                <a href="{{ dokumentua.estekaes }}" target="_blank">
                                                     {{ dokumentua.kodea }} {{ dokumentua.deskribapenaes }}
                                                 </a>
                                             {% else %}
