@@ -984,6 +984,16 @@
                 <target>Manual de trámites</target>
             </trans-unit>
 
+	    <trans-unit id="Saila / Azpisaila">
+                <source>Saila / Azpisaila</source>
+                <target>Área / Subárea</target>
+            </trans-unit>
+
+	    <trans-unit id="Familia / Azpifamilia">
+                <source>Familia / Azpifamilia</source>
+                <target>Familia / Subfamilia</target>
+            </trans-unit>
+
 	</body>
     </file>
 </xliff>

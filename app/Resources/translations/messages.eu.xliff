@@ -967,6 +967,15 @@
                 <source>messages.goiburua</source>
                 <target>Izapideen liburua</target>
             </trans-unit>
+	    <trans-unit id="Saila / Azpisaila">
+                <source>Saila / Azpisaila</source>
+                <target>Saila / Azpisaila</target>
+            </trans-unit>
+
+	    <trans-unit id="Familia / Azpifamilia">
+                <source>Saila / Azpisaila</source>
+                <target>Saila / Azpisaila</target>
+            </trans-unit>
 	</body>
     </file>
 </xliff>
