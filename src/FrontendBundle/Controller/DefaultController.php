@@ -31,6 +31,7 @@ class DefaultController extends Controller
                   FROM BackendBundle:Fitxa f 
                   LEFT JOIN BackendBundle:Udala u  WITH f.udala=u.id
                 WHERE u.kodea = :udala
+		AND f.publikoa = 1
                 ORDER BY f.kontsultak DESC 
                 '
         );
