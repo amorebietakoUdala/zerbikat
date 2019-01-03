@@ -103,10 +103,12 @@
                         </a>
                         <div class="listaServicios" id='fam-{{ familia.id }}' style='display: none;'>
                             {% for fitxafamilia  in  familia.fitxafamilia | sort %}
-                                <a href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitxafamilia.fitxa.id }) }}"
-                                   class="list-group-item listaGen">
-                                    {{ fitxafamilia.fitxa.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitxafamilia.fitxa.deskribapenaeu }}{% else %} {{ fitxafamilia.fitxa.deskribapenaes }}{% endif %}
-                                </a>
+				{% if fitxafamilia.fitxa.publikoa == 1 %}
+				    <a href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitxafamilia.fitxa.id }) }}"
+				       class="list-group-item listaGen">
+					{{ fitxafamilia.fitxa.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitxafamilia.fitxa.deskribapenaeu }}{% else %} {{ fitxafamilia.fitxa.deskribapenaes }}{% endif %}
+				    </a>
+				{% endif %}
                             {% endfor %}
 
                             {% for c in familia.children |sort %}
