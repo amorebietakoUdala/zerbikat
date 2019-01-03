@@ -70,11 +70,12 @@
                                 <a href="#" class="list-group-item list-group-item-success listaGen">
                                     {% if app.request.locale == 'eu' %}{{ azpi.azpisailaeu }}{% else %} {{ azpi.azpisailaes }}{% endif %}
                                     {% for fitxa in azpi.fitxak %}
-                                        <a  data-orden="{{ fitxa.espedienteKodea }}" data-id="{{ fitxa.id }}" href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitxa.id }) }}"
-                                            class="list-group-item ">
-                                            {{ fitxa.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitxa.deskribapenaeu }}{% else %}{{ fitxa.deskribapenaes }}{% endif %}
-                                        </a>
-
+					{% if fitxa.publikoa == 1 %}
+					    <a  data-orden="{{ fitxa.espedienteKodea }}" data-id="{{ fitxa.id }}" href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitxa.id }) }}"
+						class="list-group-item ">
+						{{ fitxa.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitxa.deskribapenaeu }}{% else %}{{ fitxa.deskribapenaes }}{% endif %}
+					    </a>
+					{% endif %}
                                     {% endfor %}
 
                                 </a>
