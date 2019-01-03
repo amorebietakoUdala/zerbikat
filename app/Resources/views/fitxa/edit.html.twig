@@ -140,13 +140,19 @@
                 {{ form_widget(edit_form.espedientekodea, {'attr': {'class': 'form-control ckeditor'}}) }}
             </h1>
         </div>
-
         <div class="col-md-8">
+	    {% if is_granted('ROLE_SUPER_ADMIN') %} 
+		<h4 class="pull-right">
+		    {{ form_errors(edit_form.publikoa) }}
+		    {{ form_widget(edit_form.publikoa, {'attr': {'class': 'c-checkbox'}}) }}
+		    {{ 'messages.publikoa'|trans }}
+		</h4>
+	    {%endif%}
             <h1>
                 {{ form_label(edit_form.deskribapenaeu, 'Deskribapena: ', { 'label_attr': {'class': 'control-label'} }) }}
                 {{ form_errors(edit_form.deskribapenaeu) }}
                 {{ form_widget(edit_form.deskribapenaeu, {'attr': {'class': 'form-control'}}) }}
-            </h1>
+	    </h1>
             <h3>
                 {{ form_label(edit_form.deskribapenaes, 'Descripción: ', { 'label_attr': {'class': 'control-label'} }) }}
                 {{ form_errors(edit_form.deskribapenaes) }}
@@ -1001,12 +1007,6 @@
                         {#{{ form_label(edit_form.kontsultak, 'Kontsulta kopurua:', { 'label_attr': {'class': 'control-label'} }) }}#}
                         {{ form_errors(edit_form.kontsultak) }}
                         {{ form_widget(edit_form.kontsultak, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    <div class="form-group col-sm-4">
-                        {{ form_errors(edit_form.publikoa) }}
-                        {{ form_widget(edit_form.publikoa, {'attr': {'class': 'c-checkbox'}}) }}
-                        {#{{ form_label(edit_form.publikoa, 'Publikoa da?', { 'label_attr': {'class': 'control-label'} }) }}#}
-                        <b>{{ 'messages.publikoa'|trans }}</b>
                     </div>
                     <div class="form-group col-sm-4">
                         {{ form_errors(edit_form.hitzarmena) }}
