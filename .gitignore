@@ -18,3 +18,5 @@
 .idea/workspace.xml
 /web/doc/
 /.idea/Zerbikat.iml
+/doc/*
+/bin/
