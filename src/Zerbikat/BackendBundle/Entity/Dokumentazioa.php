@@ -48,14 +48,14 @@ class Dokumentazioa
     /**
      * @var string
      *
-     * @ORM\Column(name="estekaeu", type="string", length=255, nullable=true)
+     * @ORM\Column(name="estekaeu", type="string", length=1024, nullable=true)
      */
     private $estekaeu;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="estekaes", type="string", length=255, nullable=true)
+     * @ORM\Column(name="estekaes", type="string", length=1024, nullable=true)
      */
     private $estekaes;
 
