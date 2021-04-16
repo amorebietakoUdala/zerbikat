@@ -5,7 +5,7 @@
     "description": "The \"Symfony Standard Edition\" distribution",
     "autoload": {
         "psr-4": { "": "src/" },
-        "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
+        "classmap": ["app/AppKernel.php", "app/AppCache.php"]
     },
     "autoload-dev": {
         "psr-4": { "Tests\\": "tests/" }
@@ -25,15 +25,22 @@
         "jms/serializer-bundle": "^1.1",
         "nelmio/api-doc-bundle": "^2.12",
         "friendsofsymfony/user-bundle": "~2.0@dev",
-        "whiteoctober/tcpdf-bundle": "^1.0",
+        "whiteoctober/tcpdf-bundle": "1.0",
         "bmatzner/fontawesome-bundle": "^4.6",
         "guzzlehttp/guzzle": "6.3",
         "guzzlehttp/psr7": "1.4.0",
-        "symfony/polyfill-php72": "^1.10"
+        "symfony/polyfill-php72": "^1.10",
+        "braincrafted/bootstrap-bundle": "^2.2",
+        "egeloen/ckeditor-bundle": "^4.0",
+        "knplabs/knp-menu-bundle": "^3.1",
+        "white-october/pagerfanta-bundle": "^1.3",
+        "friendsofsymfony/jsrouting-bundle": "^2.7",
+        "egeloen/json-builder": "^2.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
-        "symfony/phpunit-bridge": "^3.0"
+        "symfony/phpunit-bridge": "^3.0",
+        "easycorp/easy-log-handler": "^1.0"
     },
     "scripts": {
         "post-install-cmd": [
@@ -52,10 +59,10 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
         ],
-	"reset-bootstrap-cmd": [
-        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache"
-	]
+        "reset-bootstrap-cmd": [
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache"
+        ]
     },
     "config": {
         "platform": {
