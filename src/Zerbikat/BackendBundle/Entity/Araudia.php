@@ -33,14 +33,14 @@ class Araudia
     /**
      * @var string
      *
-     * @ORM\Column(name="arauaeu", type="string", length=255, nullable=true)
+     * @ORM\Column(name="arauaeu", type="string", length=1024, nullable=true)
      */
     private $arauaeu;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="arauaes", type="string", length=255, nullable=true)
+     * @ORM\Column(name="arauaes", type="string", length=1024, nullable=true)
      */
     private $arauaes;
 
@@ -94,7 +94,7 @@ class Araudia
 
     public function __toString()
     {
-        return (string) $this->getKodea()."-".$this->getArauaeu();
+        return (string) $this->getKodea() . "-" . $this->getArauaeu();
     }
 
 
