@@ -409,6 +409,24 @@
          */
         private $isiltasunadmin;
 
+        /**
+         * @var \Zerbikat\BackendBundle\Entity\User
+         * @Expose
+         * @ORM\ManyToOne(targetEntity="Zerbikat\BackendBundle\Entity\User")
+         * @ORM\JoinColumn(name="nork_sortua_id", referencedColumnName="id")
+         *
+         */
+        private $norkSortua;
+
+         /**
+         * @var \Zerbikat\BackendBundle\Entity\User
+         * @Expose
+         * @ORM\ManyToOne(targetEntity="Zerbikat\BackendBundle\Entity\User")
+         * @ORM\JoinColumn(name="nork_aldatua_id", referencedColumnName="id")
+         *
+         */
+        private $norkAldatua;
+
 
         /**
          *      ERLAZIOAK: ManyToMany
@@ -1779,6 +1797,54 @@
     public function getIsiltasunadmin()
     {
         return $this->isiltasunadmin;
+    }
+
+    /**
+     * Set norkSortua
+     *
+     * @param \Zerbikat\BackendBundle\Entity\User $norkSortua
+     *
+     * @return Fitxa
+     */
+    public function setNorkSortua(User $norkSortua)
+    {
+        $this->norkSortua = $norkSortua;
+
+        return $this;
+    }
+
+    /**
+     * Get norkSortua
+     *
+     * @return User
+     */
+    public function getNorkSortua()
+    {
+        return $this->norkSortua;
+    }
+
+    /**
+     * Set norkAldatua
+     *
+     * @param \Zerbikat\BackendBundle\Entity\User $norkAldatua
+     *
+     * @return Fitxa
+     */
+    public function setNorkAldatua(User $norkAldatua)
+    {
+        $this->norkAldatua = $norkAldatua;
+
+        return $this;
+    }
+
+    /**
+     * Get norkAldatua
+     *
+     * @return User
+     */
+    public function getNorkAldatua()
+    {
+        return $this->norkAldatua;
     }
 
     /**

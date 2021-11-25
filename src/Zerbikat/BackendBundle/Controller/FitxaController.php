@@ -84,6 +84,7 @@ class FitxaController extends Controller
 
             if ( $form->isSubmitted() && $form->isValid() ) {
                 $fitxa->setCreatedAt( new \DateTime() );
+                $fitxa->setNorkSortua($this->getUser());
 
                 $em->persist( $fitxa );
                 $em->flush();
@@ -466,37 +467,34 @@ class FitxaController extends Controller
             $editForm->handleRequest( $request );
             $em = $this->getDoctrine()->getManager();
 
-            if ( $editForm->isSubmitted() ) {
-                if ( $editForm->isValid() ) {
-
-                    foreach ( $originalKostuak as $kostu ) {
-                        if ( false === $fitxa->getKostuak()->contains( $kostu ) ) {
-                            $kostu->setFitxa( null );
-                            $em->remove( $kostu );
-                            $em->persist( $fitxa );
-                        }
+            if ( $editForm->isSubmitted() && $editForm->isValid() ) {
+                foreach ( $originalKostuak as $kostu ) {
+                    if ( false === $fitxa->getKostuak()->contains( $kostu ) ) {
+                        $kostu->setFitxa( null );
+                        $em->remove( $kostu );
+                        $em->persist( $fitxa );
                     }
-                    foreach ( $originalAraudiak as $araudi ) {
-                        if ( false === $fitxa->getAraudiak()->contains( $araudi ) ) {
-                            $araudi->setFitxa( null );
-                            $em->remove( $araudi );
-                            $em->persist( $fitxa );
-                        }
-                    }
-                    foreach ( $originalProzedurak as $prozedura ) {
-                        if ( false === $fitxa->getProzedurak()->contains( $prozedura ) ) {
-                            $prozedura->setFitxa( null );
-                            $em->remove( $prozedura );
-                            $em->persist( $fitxa );
-                        }
-                    }
-
-                    $fitxa->setUpdatedAt( new \DateTime() );
-                    $em->persist( $fitxa );
-                    $em->flush();
-
-                    return $this->redirectToRoute( 'fitxa_edit', array( 'id' => $fitxa->getId() ) );
                 }
+                foreach ( $originalAraudiak as $araudi ) {
+                    if ( false === $fitxa->getAraudiak()->contains( $araudi ) ) {
+                        $araudi->setFitxa( null );
+                        $em->remove( $araudi );
+                        $em->persist( $fitxa );
+                    }
+                }
+                foreach ( $originalProzedurak as $prozedura ) {
+                    if ( false === $fitxa->getProzedurak()->contains( $prozedura ) ) {
+                        $prozedura->setFitxa( null );
+                        $em->remove( $prozedura );
+                        $em->persist( $fitxa );
+                    }
+                }
+                $fitxa->setNorkAldatua($this->getUser());
+                $fitxa->setUpdatedAt( new \DateTime() );
+                $em->persist( $fitxa );
+                $em->flush();
+
+                return $this->redirectToRoute( 'fitxa_edit', array( 'id' => $fitxa->getId() ) );
             }
 
             /** @var Query $query */
