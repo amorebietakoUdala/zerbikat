@@ -418,16 +418,6 @@
          */
         private $norkSortua;
 
-         /**
-         * @var \Zerbikat\BackendBundle\Entity\User
-         * @Expose
-         * @ORM\ManyToOne(targetEntity="Zerbikat\BackendBundle\Entity\User")
-         * @ORM\JoinColumn(name="nork_aldatua_id", referencedColumnName="id")
-         *
-         */
-        private $norkAldatua;
-
-
         /**
          *      ERLAZIOAK: ManyToMany
          */
@@ -497,7 +487,6 @@
          */
         private $azpiatalak;
 
-
         /**
          *      ERLAZIOAK: ManyToMany + Extra fields
          */
@@ -530,7 +519,6 @@
          * @ORM\OneToMany(targetEntity="FitxaKostua", mappedBy="fitxa",cascade={"persist"})
          */
         private $kostuak;
-
 
         public function __toString ()
         {
@@ -1821,30 +1809,6 @@
     public function getNorkSortua()
     {
         return $this->norkSortua;
-    }
-
-    /**
-     * Set norkAldatua
-     *
-     * @param \Zerbikat\BackendBundle\Entity\User $norkAldatua
-     *
-     * @return Fitxa
-     */
-    public function setNorkAldatua(User $norkAldatua)
-    {
-        $this->norkAldatua = $norkAldatua;
-
-        return $this;
-    }
-
-    /**
-     * Get norkAldatua
-     *
-     * @return User
-     */
-    public function getNorkAldatua()
-    {
-        return $this->norkAldatua;
     }
 
     /**

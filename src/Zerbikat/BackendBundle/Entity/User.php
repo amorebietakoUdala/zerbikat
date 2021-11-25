@@ -3,6 +3,7 @@
 
 namespace Zerbikat\BackendBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Zerbikat\BackendBundle\Annotation\UdalaEgiaztatu;
@@ -50,13 +51,6 @@ class User extends BaseUser
     protected $password;
 
 
-
-
-
-
-
-
-
     /**
      *      FUNTZIOAK
      */
@@ -67,6 +61,7 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
+        $this->fitxaAldaketa = new ArrayCollection();
         // your own logic
     }
 

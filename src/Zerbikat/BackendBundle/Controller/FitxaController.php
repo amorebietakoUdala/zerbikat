@@ -13,7 +13,7 @@ use Zerbikat\BackendBundle\Entity\Familia;
 use Zerbikat\BackendBundle\Entity\Fitxa;
 use Zerbikat\BackendBundle\Entity\Fitxafamilia;
 use \Symfony\Component\HttpFoundation\Response;
-
+use Zerbikat\BackendBundle\Entity\FitxaAldaketa;
 
 /**
  * Fitxa controller.
@@ -85,9 +85,9 @@ class FitxaController extends Controller
             if ( $form->isSubmitted() && $form->isValid() ) {
                 $fitxa->setCreatedAt( new \DateTime() );
                 $fitxa->setNorkSortua($this->getUser());
-
                 $em->persist( $fitxa );
                 $em->flush();
+                $this->saveFitxaAldaketa($fitxa, 'Sortua');
 
                 return $this->redirectToRoute( 'fitxa_edit', array( 'id' => $fitxa->getId() ) );
             } else {
@@ -489,10 +489,10 @@ class FitxaController extends Controller
                         $em->persist( $fitxa );
                     }
                 }
-                $fitxa->setNorkAldatua($this->getUser());
                 $fitxa->setUpdatedAt( new \DateTime() );
                 $em->persist( $fitxa );
                 $em->flush();
+                $this->saveFitxaAldaketa($fitxa, 'Aldatua');
 
                 return $this->redirectToRoute( 'fitxa_edit', array( 'id' => $fitxa->getId() ) );
             }
@@ -581,7 +581,7 @@ class FitxaController extends Controller
             if ( $form->isSubmitted() ) {
                 $em = $this->getDoctrine()->getManager();
                 $em->remove( $fitxa );
-                $em->flush();
+                $this->saveFitxaAldaketa($fitxa, 'Ezabatua');
             }
 
             return $this->redirectToRoute( 'fitxa_index' );
@@ -613,6 +613,19 @@ class FitxaController extends Controller
                     ->setAction( $this->generateUrl( 'familia_delete', array( 'id' => $familia->getId() ) ) )
                     ->setMethod( 'DELETE' )
                     ->getForm();
+    }
+
+    private function saveFitxaAldaketa($fitxa, $aldaketaMota) {
+        $em = $this->getDoctrine()->getManager();
+        $fitxaAldaketa = new FitxaAldaketa();
+        $fitxaAldaketa->setNork($this->getUser());
+        $fitxaAldaketa->setNoiz(new \DateTime());
+        $fitxaAldaketa->setFitxaId($fitxa->getId());
+        $fitxaAldaketa->setFitxaKodea($fitxa->getEspedientekodea());
+        $fitxaAldaketa->setAldaketaMota($aldaketaMota);
+        $em->persist( $fitxaAldaketa );
+        $em->flush();
+
     }
 
 }
