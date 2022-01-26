@@ -3,6 +3,7 @@
 namespace FrontendBundle\Controller;
 
 use GuzzleHttp;
+use Proxies\__CG__\Zerbikat\BackendBundle\Entity\Azpiatala;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -23,44 +24,73 @@ class DefaultController extends Controller
     public function indexAction ( $udala, Request $request )
     {
         $em = $this->getDoctrine()->getManager();
+        $familia = $request->get('familia') !== null? $request->get('familia'): null;
+        $azpisaila = $request->get('azpisaila') !== null? $request->get('azpisaila'): null ;
 
-        $query = $em->createQuery(
-            /** @lang text */
-            '
-                SELECT f 
-                  FROM BackendBundle:Fitxa f 
-                  LEFT JOIN BackendBundle:Udala u  WITH f.udala=u.id
-                WHERE u.kodea = :udala
-		AND f.publikoa = 1
-                ORDER BY f.kontsultak DESC 
-                '
-        );
+        $sqlFitxak = 
+        /** @lang text */
+        '
+            SELECT f 
+              FROM BackendBundle:Fitxa f 
+              LEFT JOIN BackendBundle:Udala u  WITH f.udala=u.id ';
+        if (null !== $azpisaila) {
+            $sqlFitxak = $sqlFitxak.' LEFT JOIN BackendBundle:azpisaila az  WITH f.azpisaila=az.id ';
+        }
+        // if (null !== $familia) {
+        //     $sqlFitxak = $sqlFitxak.' LEFT JOIN BackendBundle:familia fam  WITH f.azpisaila=fam.id '
+        // }
+        $sqlFitxak = $sqlFitxak.' WHERE u.kodea = :udala ';
+        if (null !== $azpisaila) {
+            $sqlFitxak = $sqlFitxak.' AND f.azpisaila = :azpisaila ';
+        }
+        $sqlFitxak = $sqlFitxak.' AND f.publikoa = 1 ';
+        $sqlFitxak = $sqlFitxak.' ORDER BY f.kontsultak DESC';
+
+        $query = $em->createQuery($sqlFitxak);
+        if (null !== $azpisaila) {
+            $query->setParameter( 'azpisaila', $azpisaila );    
+        }
         $query->setParameter( 'udala', $udala );
         $fitxak = $query->getResult();
-
-        $query = $em->createQuery(
+        $sqlFamiliak = 
             /** @lang text */
             '
                 SELECT f, COALESCE (f.ordena,0) as HIDDEN ezkutuan            
-                  FROM BackendBundle:Familia f
-                  LEFT JOIN BackendBundle:Udala u WITH f.udala=u.id
-                WHERE u.kodea = :udala AND f.parent is NULL 
-                ORDER BY f.familia'.$request->getLocale().' ASC
-                '
-        );
+                FROM BackendBundle:Familia f
+                LEFT JOIN BackendBundle:Udala u WITH f.udala=u.id
+                WHERE u.kodea = :udala AND f.parent is NULL';
+        if (null !== $familia) {
+            $sqlFamiliak = $sqlFamiliak. ' AND f.id = :familia';
+        }
+        $sqlFamiliak = $sqlFamiliak.' ORDER BY f.familia'.$request->getLocale().' ASC';
+        // dump($sqlFamiliak);die;
+        $query = $em->createQuery($sqlFamiliak);
         $query->setParameter( 'udala', $udala );
+        if (null !== $familia) {
+            $query->setParameter( 'familia', $familia );
+        }
         $familiak = $query->getResult();
 
-        $query = $em->createQuery(
+        $sqlSailak =
             /** @lang text */
             '
                 SELECT s            
                   FROM BackendBundle:Saila s
-                  LEFT JOIN BackendBundle:Udala u WITH s.udala=u.id
-                WHERE u.kodea = :udala
-                ORDER BY s.saila'.$request->getLocale().' ASC
-                '
-        );
+                  LEFT JOIN BackendBundle:Udala u WITH s.udala=u.id ';
+        if (null !== $azpisaila) {
+            $sqlSailak = $sqlSailak. 'LEFT JOIN BackendBundle:Azpisaila az WITH az.saila=s.id ';
+        }
+        $sqlSailak = $sqlSailak.' WHERE u.kodea = :udala ';
+        if (null !== $azpisaila) {
+            $sqlSailak = $sqlSailak.' AND az.id = :azpisaila ';
+        }
+        $sqlSailak = $sqlSailak.'ORDER BY s.saila'.$request->getLocale().' ASC';
+
+        $query = $em->createQuery($sqlSailak);
+
+        if (null !== $azpisaila) {
+            $query->setParameter( 'azpisaila', $azpisaila );
+        }            
         $query->setParameter( 'udala', $udala );
         $sailak = $query->getResult();
 

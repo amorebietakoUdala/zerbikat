@@ -43,18 +43,23 @@
     </div>
 
     <br/>
-
+    {% set familiaId = app.request.get('familia') %}
+    {% set azpisailaId = app.request.get('azpisaila') %}
     <div>
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation"><a href="#sailka" aria-controls="home" role="tab" data-toggle="tab">{{ "Saila / Azpisaila" | trans }}</a></li>
-            <li role="presentation" class="active"><a href="#familiaka" aria-controls="profile" role="tab" data-toggle="tab">{{ "Familia / Azpifamilia" | trans }}</a></li>
+            <li role="presentation" {{ ( app.request.get('tab') == 'sailka' or app.request.get('tab') == null ) ? ' class="active"': '' }}>
+                <a href="#sailka" aria-controls="home" role="tab" data-toggle="tab">{{ "Saila / Azpisaila" | trans }}</a>
+            </li>
+            <li role="presentation" {{ ( app.request.get('tab') == 'familiaka' ) ? ' class="active"': '' }}>
+                <a href="#familiaka" aria-controls="profile" role="tab" data-toggle="tab">{{ "Familia / Azpifamilia" | trans }}</a>
+            </li>
         </ul>
 
 	
         <div class="tab-content">
 
-            <div role="tabpanel" class="tab-pane" id="sailka">
+            <div role="tabpanel" class="tab-pane {{ ( app.request.get('tab') == 'sailka' or app.request.get('tab') == null ) ? 'active': '' }}" id="sailka">
 
                 {% for saila in sailak %}
                     <div class="list-group col-sm-6 servicio">
@@ -67,18 +72,24 @@
                         </a>
                         <div id='fam{{ saila.id }}' class="listaServicios" style='display: none;'>
                             {% for azpi in saila.azpisailak | sort  %}
-                                <a href="#" class="list-group-item list-group-item-success listaGen">
-                                    {% if app.request.locale == 'eu' %}{{ azpi.azpisailaeu }}{% else %} {{ azpi.azpisailaes }}{% endif %}
-                                    {% for fitxa in azpi.fitxak %}
-					{% if fitxa.publikoa == 1 %}
-					    <a  data-orden="{{ fitxa.espedienteKodea }}" data-id="{{ fitxa.id }}" href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitxa.id }) }}"
-						class="list-group-item ">
-						{{ fitxa.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitxa.deskribapenaeu }}{% else %}{{ fitxa.deskribapenaes }}{% endif %}
-					    </a>
-					{% endif %}
-                                    {% endfor %}
-
-                                </a>
+                                    {% if azpisailaId is null %}
+                                        {% set fitxak2 = azpi.fitxak %}
+                                    {% else %}
+                                        {% set fitxak2 = fitxak %}
+                                    {% endif %}
+                                    {% if (azpisailaId is not null and azpi.id == azpisailaId) or azpisailaId is null %}
+                                        <a href="#" class="list-group-item list-group-item-success listaGen">
+                                        {% if app.request.locale == 'eu' %}{{ azpi.azpisailaeu }}{% else %} {{ azpi.azpisailaes }}{% endif %}
+                                        {% for fitxa in fitxak2 %}
+                                            {% if fitxa.publikoa == 1 and fitxa.azpisaila.id == azpi.id %}
+                                                <a  data-orden="{{ fitxa.espedienteKodea }}" data-id="{{ fitxa.id }}" href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitxa.id }) }}"
+                                                class="list-group-item ">
+                                                {{ fitxa.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitxa.deskribapenaeu }}{% else %}{{ fitxa.deskribapenaes }}{% endif %}
+                                                </a>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </a>
+                                    {% endif %}
                             {% endfor %}
                         </div>
                     </div>
@@ -87,7 +98,7 @@
             </div>
 
 
-            <div role="tabpanel" class="tab-pane active" id="familiaka">
+            <div role="tabpanel" class="tab-pane {{ app.request.get('tab') == 'familiaka' ? 'active': '' }}" id="familiaka">
 
                 {% for familia in familiak %}
                     <div class="list-group col-sm-6 servicio">
@@ -101,16 +112,28 @@
                                 </p>
                             </div>
                         </a>
+                        {% if (familiaId is not null and familiaId == familia.id) or familiaId is null %}
                         <div class="listaServicios" id='fam-{{ familia.id }}' style='display: none;'>
-                            {% for fitxafamilia  in  familia.fitxafamilia | sort %}
-				{% if fitxafamilia.fitxa.publikoa == 1 %}
-				    <a href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitxafamilia.fitxa.id }) }}"
-				       class="list-group-item listaGen">
-					{{ fitxafamilia.fitxa.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitxafamilia.fitxa.deskribapenaeu }}{% else %} {{ fitxafamilia.fitxa.deskribapenaes }}{% endif %}
-				    </a>
-				{% endif %}
-                            {% endfor %}
-
+                            {% if familiaId is not null %}
+                                {% set fitxakf = fitxak %}
+                                {% for fitxaf in fitxakf %}
+                                    {% if fitxaf.publikoa == 1 %}
+                                        <a href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitxaf.id }) }}"
+                                        class="list-group-item listaGen">
+                                        {{ fitxaf.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitxaf.deskribapenaeu }}{% else %} {{ fitxaf.deskribapenaes }}{% endif %}
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {% for fitxafamilia  in  familia.fitxafamilia | sort %}
+                                    {% if fitxafamilia.fitxa.publikoa == 1 %}
+                                        <a href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitxafamilia.fitxa.id }) }}"
+                                        class="list-group-item listaGen">
+                                        {{ fitxafamilia.fitxa.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitxafamilia.fitxa.deskribapenaeu }}{% else %} {{ fitxafamilia.fitxa.deskribapenaes }}{% endif %}
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
                             {% for c in familia.children |sort %}
                                 <a href="#" class="list-group-item list-group-item-success">
                                     {% if app.request.locale == 'eu' %}{{ c.familiaeu }}{% else %} {{ c.familiaes }}{% endif %}
@@ -119,12 +142,11 @@
                                            class="list-group-item">
                                             {{ fitx.fitxa.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitx.fitxa.deskribapenaeu }}{% else %} {{ fitx.fitxa.deskribapenaes }}{% endif %}
                                         </a>
-
                                     {% endfor %}
-
                                 </a>
                             {% endfor %}
                         </div>
+                        {% endif %}
                     </div>
                 {% endfor %}
 
