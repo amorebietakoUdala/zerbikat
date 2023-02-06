@@ -686,23 +686,6 @@
             </div>
         {% endif %}
 
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="page-header">
-                    <h3>
-                        {% if app.request.locale == 'eu' %}JARRAIBIDEAK (barne erabilera)
-                        {% else %}INSTRUCCIONES (uso interno)
-                        {% endif %}
-                    </h3>
-                </div>
-                <div>
-                    {% if app.request.locale == 'eu' %}{{ fitxa.jarraibideakeu |raw }}
-                    {% else %}{{ fitxa.jarraibideakes |raw }}
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-
         {% if (eremuak.besteak1text or eremuak.besteak1table) %}
             <div class="row">
                 <div class="col-sm-12">
