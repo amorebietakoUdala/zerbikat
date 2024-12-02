@@ -72,6 +72,7 @@ Encore
     .autoProvidejQuery()
     .copyFiles([
         {from: './assets/images', to: 'images/[path][name].[hash:8].[ext]'},
+        {from: './assets/images', to: 'img/[name].[ext]'},
         // Esto es para hacer una copia de assets tal cual en build y así no tener que copiar los jss fuera de build        
         {from: './assets/js', to: 'js/[path][name].[ext]'},
         {from: './assets/css', to: 'css/[path][name].[ext]'},

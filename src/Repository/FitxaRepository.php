@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Fitxa;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query\Expr\Join;
@@ -87,6 +88,67 @@ class FitxaRepository extends ServiceEntityRepository
             ->getResult()
         ;
         return $result;
+    }
+
+
+    // $sqlFitxak = 
+    // /** @lang text */
+    // '
+    //     SELECT f 
+    //       FROM App:Fitxa f 
+    //       LEFT JOIN App:Udala u  WITH f.udala=u.id ';
+    // if (null !== $azpisaila) {
+    //     $sqlFitxak = $sqlFitxak.' LEFT JOIN App:azpisaila az  WITH f.azpisaila=az.id ';
+    // }
+    // // if (null !== $familia) {
+    // //     $sqlFitxak = $sqlFitxak.' LEFT JOIN App:familia fam  WITH f.azpisaila=fam.id '
+    // // }
+    // $sqlFitxak = $sqlFitxak.' WHERE u.kodea = :udala ';
+    // if (null !== $azpisaila) {
+    //     $sqlFitxak = $sqlFitxak.' AND f.azpisaila = :azpisaila ';
+    // }
+    // $sqlFitxak = $sqlFitxak.' AND f.publikoa = 1 ';
+    // $sqlFitxak = $sqlFitxak.' ORDER BY f.kontsultak DESC';
+
+    // $query = $em->createQuery($sqlFitxak);
+    // if (null !== $azpisaila) {
+    //     $query->setParameter( 'azpisaila', $azpisaila );    
+    // }
+    // $query->setParameter( 'udala', $udala );
+    // $fitxak = $query->getResult();
+
+    public function findPublicByUdalaAndAzpisaila($udala,  $azpisaila) {
+        $qb = $this->createQueryBuilder('f');
+        if (null !== $azpisaila) {
+            $this->andWhereAzpisailaQB($qb, $azpisaila);
+        }
+        $this->andWhereUdalaQB($qb, $udala);
+        $this->andWherePublicQB($qb, true);
+        $qb->orderBy('f.kontsultak', 'DESC');
+        return $qb->getQuery()->getResult();
+    }
+
+    private function andWherePublicQB($qb, $public) {
+        $qb->andWhere('f.publikoa = :public');
+        $qb->setParameter('public', $public);
+        return $qb;
+    }
+
+    private function andWhereUdalaQB( QueryBuilder $qb, $udala): QueryBuilder 
+    {
+        $qb->leftJoin('App:Udala','u', Join::WITH, 'f.udala = u.id');
+        $qb->andWhere('u.kodea = :udala');
+        $qb->setParameter('udala', $udala);
+        return $qb;
+    }
+
+    private function andWhereAzpisailaQB( QueryBuilder $qb, $azpisaila): QueryBuilder 
+    {
+        $qb->leftJoin('App:Azpisaila','az', Join::WITH, 'f.azpisaila = az.id');
+//        $qb->leftJoin('App:Familia','fam', Join::WITH, 'f.azpisaila = fam.id');
+        $qb->andWhere('f.azpisaila = :azpisaila');
+        $qb->setParameter('azpisaila', $azpisaila);
+        return $qb;
     }
 
     /*

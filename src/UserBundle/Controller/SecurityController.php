@@ -15,7 +15,7 @@ use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use App\BackendBundle;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
@@ -58,7 +58,7 @@ class SecurityController extends AbstractController
 
         $urlOsoa=$request->getUri();
 
-        if (( $query_str != null )&&($this->container->getParameter('izfe_login_path')!='')) {
+        if (( $query_str != null )&&($this->getParameter('izfe_login_path')!='')) {
             parse_str( $query_str, $query_params );
             /* GET kodea*/
             if ( $query_str != null )
@@ -142,9 +142,9 @@ class SecurityController extends AbstractController
     private function izfelogin(Request $request, $NA,$udala,$hizkuntza,$fitxategia,$urlOsoa)
     {
         /* fitxategiko kodea */
-        if (file_exists ($this->container->getParameter('izfe_login_path').'/'.$fitxategia))
+        if (file_exists ($this->getParameter('izfe_login_path').'/'.$fitxategia))
         {
-            $fitx = fopen($this->container->getParameter('izfe_login_path').'/'.$fitxategia,"r");
+            $fitx = fopen($this->getParameter('izfe_login_path').'/'.$fitxategia,"r");
             $lerro = fgets($fitx);
             fclose( $fitx );
 

@@ -4,11 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    # mailer_transport: smtp
-    # mailer_host: 192.168.18.16
-    # mailer_user: null
-    # mailer_password: null
-    secret: ThisTokenIsNotSoSecretChangeIt
+    secret: '%env(APP_SECRET)%'
     izfe_login_path: null
     zzoo_aplikazioaren_API_url: 'http://garapenak2:8888/zergaordenantzak/api'
 
@@ -30,7 +26,6 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-            - '../src/FrontendBundle/'
             - '../src/UserBundle/'
 
     # controllers are imported separately to make sure services can be injected

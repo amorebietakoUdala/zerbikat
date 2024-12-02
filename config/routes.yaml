@@ -11,16 +11,6 @@ user:
 #    prefix:   /
     prefix:   /{_locale}/
 
-frontend:
-    resource: "@FrontendBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
-# api:
-#     type:     annotation
-#     resource: "App/Controller/ApiController.php"
-#     prefix:   /api
-
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /api/doc

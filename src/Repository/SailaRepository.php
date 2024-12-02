@@ -6,6 +6,8 @@ use App\Entity\Saila;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -63,6 +65,61 @@ class SailaRepository extends ServiceEntityRepository
         ;
     }
 
+    // $sqlSailak =
+    // /** @lang text */
+    // '
+    //     SELECT s            
+    //       FROM App:Saila s
+    //       LEFT JOIN App:Udala u WITH s.udala=u.id ';
+    // if (null !== $azpisaila) {
+    //     $sqlSailak = $sqlSailak. 'LEFT JOIN App:Azpisaila az WITH az.saila=s.id ';
+    // }
+    // $sqlSailak = $sqlSailak.' WHERE u.kodea = :udala ';
+    // if (null !== $azpisaila) {
+    //     $sqlSailak = $sqlSailak.' AND az.id = :azpisaila ';
+    // }
+    // $sqlSailak = $sqlSailak.'ORDER BY s.saila'.$request->getLocale().' ASC';
+
+    // $query = $em->createQuery($sqlSailak);
+
+    // if (null !== $azpisaila) {
+    //     $query->setParameter( 'azpisaila', $azpisaila );
+    // }            
+    // $query->setParameter( 'udala', $udala );
+
+    public function findByUdalaAndAzpisaila ($udala, $azpisaila) {
+        $qb = $this->createQueryBuilder('s');
+        $this->andWhereUdalaQB($qb, $udala);
+        if ( null !== $azpisaila) {
+            $qb = $this->andWhereAzpisailaQB($qb, $azpisaila);
+        }
+        return $qb->getQuery()->getResult();
+    }
+
+    private function lefJoinUdalaQB($qb): QueryBuilder {
+        $qb->leftJoin('App:Udala','u', Join::WITH, 's.udala = u.id');
+        return $qb;
+    }
+
+    private function andWhereUdalaQB($qb, $udala): QueryBuilder {
+        $qb = $this->lefJoinUdalaQB($qb);
+        $qb->andWhere('u.kodea = :udala');
+        $qb->setParameter('udala', $udala);
+        return $qb;
+    }
+
+    private function leftJoinAzpisailaQB($qb): QueryBuilder {
+        $qb->leftJoin('App:Azpisaila','az', Join::WITH, 'az.saila=s.id');
+        return $qb;
+    }
+
+    private function andWhereAzpisailaQB( QueryBuilder $qb, $azpisaila): QueryBuilder 
+    {
+        $qb = $this->leftJoinAzpisailaQB($qb);
+        $qb->andWhere('s.azpisaila = :azpisaila');
+        $qb->setParameter('azpisaila', $azpisaila);
+        return $qb;
+    }
 
     // $query = $this->em->createQuery(
     //     /** @lang text */

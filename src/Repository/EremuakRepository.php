@@ -6,6 +6,8 @@ use App\Entity\Eremuak;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -78,13 +80,42 @@ class EremuakRepository extends ServiceEntityRepository
     // $query = $em->createQuery(
     //     /** @lang text */
     //     '
+    //         SELECT f.oharraktext,f.helburuatext,f.ebazpensinpli,f.arduraaitorpena,f.aurreikusi,f.arrunta,f.isiltasunadmin,f.norkeskatutext,f.norkeskatutable,f.dokumentazioatext,f.dokumentazioatable,f.kostuatext,f.kostuatable,f.araudiatext,f.araudiatable,f.prozeduratext,f.prozeduratable,f.doklaguntext,f.doklaguntable,f.datuenbabesatext,f.datuenbabesatable,f.norkebatzitext,f.norkebatzitable,f.besteak1text,f.besteak1table,f.besteak2text,f.besteak2table,f.besteak3text,f.besteak3table,f.kanalatext,f.kanalatable,f.azpisailatable
+    //           FROM App:Eremuak f LEFT JOIN App:Udala u WITH f.udala=u.id
+    //         WHERE u.kodea = :udala
+    //         '
+    // );
+    // $query->setParameter( 'udala', $udala );
+    // //$eremuak = $query->getResult();
+    // $eremuak = $query->getSingleResult();
+
+    /**
+     * @return Eremuak[] Returns an array of Eremuak objects
+     */
+    public function findOneByUdalKodea($udalKodea)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.oharraktext,e.helburuatext,e.ebazpensinpli,e.arduraaitorpena,e.aurreikusi,e.arrunta,e.isiltasunadmin,e.norkeskatutext,e.norkeskatutable,e.dokumentazioatext,e.dokumentazioatable,e.kostuatext,e.kostuatable,e.araudiatext,e.araudiatable,e.prozeduratext,e.prozeduratable,e.doklaguntext,e.doklaguntable,e.datuenbabesatext,e.datuenbabesatable,e.norkebatzitext,e.norkebatzitable,e.besteak1text,e.besteak1table,e.besteak2text,e.besteak2table,e.besteak3text,e.besteak3table,e.kanalatext,e.kanalatable,e.azpisailatable');
+        $qb = $this->andWhereUdalKodeaQB($qb, $udalKodea);
+        return $qb->getQuery()->getSingleResult();
+    }
+
+    private function andWhereUdalKodeaQB ($qb, $udalKodea): QueryBuilder {
+        $qb->leftJoin('App:Udala','u', Join::WITH, 'e.udala=u.id')
+        ->andWhere('u.kodea = :udalaKodea')
+        ->setParameter('udalaKodea', $udalKodea);
+        return $qb;
+    }
+
+    // $query = $em->createQuery(
+    //     /** @lang text */
+    //     '
     //   SELECT f.oharraklabeleu,f.oharraklabeles,f.helburualabeleu,f.helburualabeles,f.ebazpensinplilabeleu,f.ebazpensinplilabeles,f.arduraaitorpenalabeleu,f.arduraaitorpenalabeles,f.aurreikusilabeleu,f.aurreikusilabeles,f.arruntalabeleu,f.arruntalabeles,f.isiltasunadminlabeleu,f.isiltasunadminlabeles,f.norkeskatulabeleu,f.norkeskatulabeles,f.dokumentazioalabeleu,f.dokumentazioalabeles,f.kostualabeleu,f.kostualabeles,f.araudialabeleu,f.araudialabeles,f.prozeduralabeleu,f.prozeduralabeles,f.doklagunlabeleu,f.doklagunlabeles,f.datuenbabesalabeleu,f.datuenbabesalabeles,f.norkebatzilabeleu,f.norkebatzilabeles,f.besteak1labeleu,f.besteak1labeles,f.besteak2labeleu,f.besteak2labeles,f.besteak3labeleu,f.besteak3labeles,f.kanalalabeleu,f.kanalalabeles,f.epealabeleu,f.epealabeles,f.doanlabeleu,f.doanlabeles,f.azpisailalabeleu,f.azpisailalabeles
     //     FROM App:Eremuak f
     //     WHERE f.udala=:udala
     // '
     // );
     // $query->setParameter( 'udala', $fitxa->getUdala() );
-
 
     public function findLabelakByUdala($udala) {
         return $this->createQueryBuilder('e')
@@ -94,6 +125,23 @@ class EremuakRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleResult()
         ;
+    }
+
+        // $query = $em->createQuery(
+        //     /** @lang text */
+        //     '
+        //         SELECT f.oharraklabeleu,f.oharraklabeles,f.helburualabeleu,f.helburualabeles,f.ebazpensinplilabeleu,f.ebazpensinplilabeles,f.arduraaitorpenalabeleu,f.arduraaitorpenalabeles,f.aurreikusilabeleu,f.aurreikusilabeles,f.arruntalabeleu,f.arruntalabeles,f.isiltasunadminlabeleu,f.isiltasunadminlabeles,f.norkeskatulabeleu,f.norkeskatulabeles,f.dokumentazioalabeleu,f.dokumentazioalabeles,f.kostualabeleu,f.kostualabeles,f.araudialabeleu,f.araudialabeles,f.prozeduralabeleu,f.prozeduralabeles,f.doklagunlabeleu,f.doklagunlabeles,f.datuenbabesalabeleu,f.datuenbabesalabeles,f.norkebatzilabeleu,f.norkebatzilabeles,f.besteak1labeleu,f.besteak1labeles,f.besteak2labeleu,f.besteak2labeles,f.besteak3labeleu,f.besteak3labeles,f.kanalalabeleu,f.kanalalabeles,f.epealabeleu,f.epealabeles,f.doanlabeleu,f.doanlabeles,f.azpisailalabeleu,f.azpisailalabeles
+        //           FROM App:Eremuak f LEFT JOIN App:Udala u WITH f.udala=u.id
+        //         WHERE u.kodea = :udala
+        //         '
+        // );
+        // $query->setParameter( 'udala', $udala );
+
+    public function findLabelakByUdalKodea($udalKodea) {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.oharraklabeleu,e.oharraklabeles,e.helburualabeleu,e.helburualabeles,e.ebazpensinplilabeleu,e.ebazpensinplilabeles,e.arduraaitorpenalabeleu,e.arduraaitorpenalabeles,e.aurreikusilabeleu,e.aurreikusilabeles,e.arruntalabeleu,e.arruntalabeles,e.isiltasunadminlabeleu,e.isiltasunadminlabeles,e.norkeskatulabeleu,e.norkeskatulabeles,e.dokumentazioalabeleu,e.dokumentazioalabeles,e.kostualabeleu,e.kostualabeles,e.araudialabeleu,e.araudialabeles,e.prozeduralabeleu,e.prozeduralabeles,e.doklagunlabeleu,e.doklagunlabeles,e.datuenbabesalabeleu,e.datuenbabesalabeles,e.norkebatzilabeleu,e.norkebatzilabeles,e.besteak1labeleu,e.besteak1labeles,e.besteak2labeleu,e.besteak2labeles,e.besteak3labeleu,e.besteak3labeles,e.kanalalabeleu,e.kanalalabeles,e.epealabeleu,e.epealabeles,e.doanlabeleu,e.doanlabeles,e.azpisailalabeleu,e.azpisailalabeles');
+        $this->andWhereUdalKodeaQB($qb, $udalKodea);
+        return $qb->getQuery()->getSingleResult();
     }
 
     /*

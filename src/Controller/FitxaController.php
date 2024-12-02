@@ -7,7 +7,7 @@ use Doctrine\ORM\Query;
 use GuzzleHttp;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Familia;
@@ -136,7 +136,7 @@ class FitxaController extends AbstractController
         $kostuZerrenda = array();
         foreach ( $fitxa->getKostuak() as $kostu ) {
             $client = new GuzzleHttp\Client();
-            $api = $this->container->getParameter( 'zzoo_aplikazioaren_API_url' );
+            $api = $this->getParameter( 'zzoo_aplikazioaren_API_url' );
             $proba = $client->request( 'GET', $api . '/zerga/' . $kostu->getKostua() . '.json' );
             $fitxaKostua = (string)$proba->getBody();
             $array = json_decode( $fitxaKostua, true );
@@ -276,7 +276,7 @@ class FitxaController extends AbstractController
 		$this->logger->info($kostu->getId());
 		$client = new GuzzleHttp\Client();
 
-		$api = $this->container->getParameter( 'zzoo_aplikazioaren_API_url' );
+		$api = $this->getParameter( 'zzoo_aplikazioaren_API_url' );
     //            $proba = $client->request( 'GET', 'http://zergaordenantzak.dev/app_dev.php/api/azpiatalas/'.$kostu->getKostua().'.json' );
 		$proba = $client->request( 'GET', $api . '/zerga/' . $kostu->getKostua() . '.json' );
 
@@ -372,7 +372,7 @@ class FitxaController extends AbstractController
         foreach ( $fitxa->getKostuak() as $kostu ) {
             $client = new GuzzleHttp\Client();
 
-            $api = $this->container->getParameter( 'zzoo_aplikazioaren_API_url' );
+            $api = $this->getParameter( 'zzoo_aplikazioaren_API_url' );
 //            $proba = $client->request( 'GET', 'http://zergaordenantzak.dev/app_dev.php/api/azpiatalas/'.$kostu->getKostua().'.json' );
             $proba = $client->request( 'GET', $api . '/zerga/' . $kostu->getKostua() . '.json' );
 
