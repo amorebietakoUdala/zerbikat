@@ -3,15 +3,23 @@
 namespace FrontendBundle\Controller;
 
 use GuzzleHttp;
-use Proxies\__CG__\Zerbikat\BackendBundle\Entity\Azpiatala;
+use Proxies\__CG__\App\Entity\Azpiatala;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Zerbikat\BackendBundle\Entity\Fitxa;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Fitxa;
 use Symfony\Component\HttpFoundation\Request;
+use WhiteOctober\TCPDFBundle\Controller\TCPDFController;
 
-class DefaultController extends Controller
+class DefaultController extends AbstractController
 {
+
+    private $tcpdfController;
+    
+    public function __construct(TCPDFController $tcpdfController)
+    {
+        $this->tcpdfController = $tcpdfController;   
+    }
 
     /**
      * @Route("/{udala}/{_locale}/", name="frontend_fitxa_index",
@@ -31,13 +39,13 @@ class DefaultController extends Controller
         /** @lang text */
         '
             SELECT f 
-              FROM BackendBundle:Fitxa f 
-              LEFT JOIN BackendBundle:Udala u  WITH f.udala=u.id ';
+              FROM App:Fitxa f 
+              LEFT JOIN App:Udala u  WITH f.udala=u.id ';
         if (null !== $azpisaila) {
-            $sqlFitxak = $sqlFitxak.' LEFT JOIN BackendBundle:azpisaila az  WITH f.azpisaila=az.id ';
+            $sqlFitxak = $sqlFitxak.' LEFT JOIN App:azpisaila az  WITH f.azpisaila=az.id ';
         }
         // if (null !== $familia) {
-        //     $sqlFitxak = $sqlFitxak.' LEFT JOIN BackendBundle:familia fam  WITH f.azpisaila=fam.id '
+        //     $sqlFitxak = $sqlFitxak.' LEFT JOIN App:familia fam  WITH f.azpisaila=fam.id '
         // }
         $sqlFitxak = $sqlFitxak.' WHERE u.kodea = :udala ';
         if (null !== $azpisaila) {
@@ -56,8 +64,8 @@ class DefaultController extends Controller
             /** @lang text */
             '
                 SELECT f, COALESCE (f.ordena,0) as HIDDEN ezkutuan            
-                FROM BackendBundle:Familia f
-                LEFT JOIN BackendBundle:Udala u WITH f.udala=u.id
+                FROM App:Familia f
+                LEFT JOIN App:Udala u WITH f.udala=u.id
                 WHERE u.kodea = :udala AND f.parent is NULL';
         if (null !== $familia) {
             $sqlFamiliak = $sqlFamiliak. ' AND f.id = :familia';
@@ -75,10 +83,10 @@ class DefaultController extends Controller
             /** @lang text */
             '
                 SELECT s            
-                  FROM BackendBundle:Saila s
-                  LEFT JOIN BackendBundle:Udala u WITH s.udala=u.id ';
+                  FROM App:Saila s
+                  LEFT JOIN App:Udala u WITH s.udala=u.id ';
         if (null !== $azpisaila) {
-            $sqlSailak = $sqlSailak. 'LEFT JOIN BackendBundle:Azpisaila az WITH az.saila=s.id ';
+            $sqlSailak = $sqlSailak. 'LEFT JOIN App:Azpisaila az WITH az.saila=s.id ';
         }
         $sqlSailak = $sqlSailak.' WHERE u.kodea = :udala ';
         if (null !== $azpisaila) {
@@ -120,14 +128,14 @@ class DefaultController extends Controller
     public function showAction ( Fitxa $fitxa, $udala )
     {
         $em         = $this->getDoctrine()->getManager();
-        $kanalmotak = $em->getRepository( 'BackendBundle:Kanalmota' )->findAll();
+        $kanalmotak = $em->getRepository( 'App:Kanalmota' )->findAll();
 
 
         $query = $em->createQuery(
             /** @lang text */
             '
                 SELECT f.oharraktext,f.helburuatext,f.ebazpensinpli,f.arduraaitorpena,f.aurreikusi,f.arrunta,f.isiltasunadmin,f.norkeskatutext,f.norkeskatutable,f.dokumentazioatext,f.dokumentazioatable,f.kostuatext,f.kostuatable,f.araudiatext,f.araudiatable,f.prozeduratext,f.prozeduratable,f.doklaguntext,f.doklaguntable,f.datuenbabesatext,f.datuenbabesatable,f.norkebatzitext,f.norkebatzitable,f.besteak1text,f.besteak1table,f.besteak2text,f.besteak2table,f.besteak3text,f.besteak3table,f.kanalatext,f.kanalatable,f.azpisailatable
-                  FROM BackendBundle:Eremuak f LEFT JOIN BackendBundle:Udala u WITH f.udala=u.id
+                  FROM App:Eremuak f LEFT JOIN App:Udala u WITH f.udala=u.id
                 WHERE u.kodea = :udala
                 '
         );
@@ -139,7 +147,7 @@ class DefaultController extends Controller
             /** @lang text */
             '
                 SELECT f.oharraklabeleu,f.oharraklabeles,f.helburualabeleu,f.helburualabeles,f.ebazpensinplilabeleu,f.ebazpensinplilabeles,f.arduraaitorpenalabeleu,f.arduraaitorpenalabeles,f.aurreikusilabeleu,f.aurreikusilabeles,f.arruntalabeleu,f.arruntalabeles,f.isiltasunadminlabeleu,f.isiltasunadminlabeles,f.norkeskatulabeleu,f.norkeskatulabeles,f.dokumentazioalabeleu,f.dokumentazioalabeles,f.kostualabeleu,f.kostualabeles,f.araudialabeleu,f.araudialabeles,f.prozeduralabeleu,f.prozeduralabeles,f.doklagunlabeleu,f.doklagunlabeles,f.datuenbabesalabeleu,f.datuenbabesalabeles,f.norkebatzilabeleu,f.norkebatzilabeles,f.besteak1labeleu,f.besteak1labeles,f.besteak2labeleu,f.besteak2labeles,f.besteak3labeleu,f.besteak3labeles,f.kanalalabeleu,f.kanalalabeles,f.epealabeleu,f.epealabeles,f.doanlabeleu,f.doanlabeles,f.azpisailalabeleu,f.azpisailalabeles
-                  FROM BackendBundle:Eremuak f LEFT JOIN BackendBundle:Udala u WITH f.udala=u.id
+                  FROM App:Eremuak f LEFT JOIN App:Udala u WITH f.udala=u.id
                 WHERE u.kodea = :udala
                 '
         );
@@ -185,7 +193,7 @@ class DefaultController extends Controller
             /** @lang text */
             '
           SELECT f.oharraktext,f.helburuatext,f.ebazpensinpli,f.arduraaitorpena,f.aurreikusi,f.arrunta,f.isiltasunadmin,f.norkeskatutext,f.norkeskatutable,f.dokumentazioatext,f.dokumentazioatable,f.kostuatext,f.kostuatable,f.araudiatext,f.araudiatable,f.prozeduratext,f.prozeduratable,f.doklaguntext,f.doklaguntable,f.datuenbabesatext,f.datuenbabesatable,f.norkebatzitext,f.norkebatzitable,f.besteak1text,f.besteak1table,f.besteak2text,f.besteak2table,f.besteak3text,f.besteak3table,f.kanalatext,f.kanalatable,f.azpisailatable
-            FROM BackendBundle:Eremuak f LEFT JOIN BackendBundle:Udala u WITH f.udala=u.id
+            FROM App:Eremuak f LEFT JOIN App:Udala u WITH f.udala=u.id
             WHERE u.kodea = :udala
         '
         );
@@ -196,7 +204,7 @@ class DefaultController extends Controller
             /** @lang text */
             '
           SELECT f.oharraklabeleu,f.oharraklabeles,f.helburualabeleu,f.helburualabeles,f.ebazpensinplilabeleu,f.ebazpensinplilabeles,f.arduraaitorpenalabeleu,f.arduraaitorpenalabeles,f.aurreikusilabeleu,f.aurreikusilabeles,f.arruntalabeleu,f.arruntalabeles,f.isiltasunadminlabeleu,f.isiltasunadminlabeles,f.norkeskatulabeleu,f.norkeskatulabeles,f.dokumentazioalabeleu,f.dokumentazioalabeles,f.kostualabeleu,f.kostualabeles,f.araudialabeleu,f.araudialabeles,f.prozeduralabeleu,f.prozeduralabeles,f.doklagunlabeleu,f.doklagunlabeles,f.datuenbabesalabeleu,f.datuenbabesalabeles,f.norkebatzilabeleu,f.norkebatzilabeles,f.besteak1labeleu,f.besteak1labeles,f.besteak2labeleu,f.besteak2labeles,f.besteak3labeleu,f.besteak3labeles,f.kanalalabeleu,f.kanalalabeles,f.epealabeleu,f.epealabeles,f.doanlabeleu,f.doanlabeles,f.azpisailalabeleu,f.azpisailalabeles
-            FROM BackendBundle:Eremuak f LEFT JOIN BackendBundle:Udala u WITH f.udala=u.id
+            FROM App:Eremuak f LEFT JOIN App:Udala u WITH f.udala=u.id
             WHERE u.kodea = :udala
         '
         );
@@ -213,7 +221,7 @@ class DefaultController extends Controller
             )
         );
 
-        $pdf = $this->get( "white_october.tcpdf" )->create(
+        $pdf = $this->tcpdfController->create(
             'vertical',
             PDF_UNIT,
             PDF_PAGE_FORMAT,
@@ -255,13 +263,13 @@ class DefaultController extends Controller
     public function pdfAction ( Fitxa $fitxa, $udala )
     {
         $em         = $this->getDoctrine()->getManager();
-        $kanalmotak = $em->getRepository( 'BackendBundle:Kanalmota' )->findAll();
+        $kanalmotak = $em->getRepository( 'App:Kanalmota' )->findAll();
 
         $query = $em->createQuery(
             /** @lang text */
             '
           SELECT f.oharraktext,f.helburuatext,f.ebazpensinpli,f.arduraaitorpena,f.aurreikusi,f.arrunta,f.isiltasunadmin,f.norkeskatutext,f.norkeskatutable,f.dokumentazioatext,f.dokumentazioatable,f.kostuatext,f.kostuatable,f.araudiatext,f.araudiatable,f.prozeduratext,f.prozeduratable,f.doklaguntext,f.doklaguntable,f.datuenbabesatext,f.datuenbabesatable,f.norkebatzitext,f.norkebatzitable,f.besteak1text,f.besteak1table,f.besteak2text,f.besteak2table,f.besteak3text,f.besteak3table,f.kanalatext,f.kanalatable,f.azpisailatable
-            FROM BackendBundle:Eremuak f LEFT JOIN BackendBundle:Udala u WITH f.udala=u.id
+            FROM App:Eremuak f LEFT JOIN App:Udala u WITH f.udala=u.id
             WHERE u.kodea = :udala
         '
         );
@@ -272,7 +280,7 @@ class DefaultController extends Controller
             /** @lang text */
             '
           SELECT f.oharraklabeleu,f.oharraklabeles,f.helburualabeleu,f.helburualabeles,f.ebazpensinplilabeleu,f.ebazpensinplilabeles,f.arduraaitorpenalabeleu,f.arduraaitorpenalabeles,f.aurreikusilabeleu,f.aurreikusilabeles,f.arruntalabeleu,f.arruntalabeles,f.isiltasunadminlabeleu,f.isiltasunadminlabeles,f.norkeskatulabeleu,f.norkeskatulabeles,f.dokumentazioalabeleu,f.dokumentazioalabeles,f.kostualabeleu,f.kostualabeles,f.araudialabeleu,f.araudialabeles,f.prozeduralabeleu,f.prozeduralabeles,f.doklagunlabeleu,f.doklagunlabeles,f.datuenbabesalabeleu,f.datuenbabesalabeles,f.norkebatzilabeleu,f.norkebatzilabeles,f.besteak1labeleu,f.besteak1labeles,f.besteak2labeleu,f.besteak2labeles,f.besteak3labeleu,f.besteak3labeles,f.kanalalabeleu,f.kanalalabeles,f.epealabeleu,f.epealabeles,f.doanlabeleu,f.doanlabeles,f.azpisailalabeleu,f.azpisailalabeles
-            FROM BackendBundle:Eremuak f LEFT JOIN BackendBundle:Udala u WITH f.udala=u.id
+            FROM App:Eremuak f LEFT JOIN App:Udala u WITH f.udala=u.id
             WHERE u.kodea = :udala
         '
         );
@@ -302,7 +310,7 @@ class DefaultController extends Controller
             )
         );
 
-        $pdf = $this->get( "white_october.tcpdf" )->create(
+        $pdf = $this->tcpdfController->create(
             'vertical',
             PDF_UNIT,
             PDF_PAGE_FORMAT,
@@ -346,12 +354,12 @@ class DefaultController extends Controller
     {
 
         $em         = $this->getDoctrine()->getManager();
-        $kanalmotak = $em->getRepository( 'BackendBundle:Kanalmota' )->findAll();
+        $kanalmotak = $em->getRepository( 'App:Kanalmota' )->findAll();
 
         $query = $em->createQuery(
             '
           SELECT f.oharraktext,f.helburuatext,f.ebazpensinpli,f.arduraaitorpena,f.aurreikusi,f.arrunta,f.isiltasunadmin,f.norkeskatutext,f.norkeskatutable,f.dokumentazioatext,f.dokumentazioatable,f.kostuatext,f.kostuatable,f.araudiatext,f.araudiatable,f.prozeduratext,f.prozeduratable,f.doklaguntext,f.doklaguntable,f.datuenbabesatext,f.datuenbabesatable,f.norkebatzitext,f.norkebatzitable,f.besteak1text,f.besteak1table,f.besteak2text,f.besteak2table,f.besteak3text,f.besteak3table,f.kanalatext,f.kanalatable,f.azpisailatable
-            FROM BackendBundle:Eremuak f LEFT JOIN BackendBundle:Udala u WITH f.udala=u.id
+            FROM App:Eremuak f LEFT JOIN App:Udala u WITH f.udala=u.id
             WHERE u.kodea = :udala
         '
         );
@@ -361,7 +369,7 @@ class DefaultController extends Controller
         $query = $em->createQuery(
             '
           SELECT f.oharraklabeleu,f.oharraklabeles,f.helburualabeleu,f.helburualabeles,f.ebazpensinplilabeleu,f.ebazpensinplilabeles,f.arduraaitorpenalabeleu,f.arduraaitorpenalabeles,f.aurreikusilabeleu,f.aurreikusilabeles,f.arruntalabeleu,f.arruntalabeles,f.isiltasunadminlabeleu,f.isiltasunadminlabeles,f.norkeskatulabeleu,f.norkeskatulabeles,f.dokumentazioalabeleu,f.dokumentazioalabeles,f.kostualabeleu,f.kostualabeles,f.araudialabeleu,f.araudialabeles,f.prozeduralabeleu,f.prozeduralabeles,f.doklagunlabeleu,f.doklagunlabeles,f.datuenbabesalabeleu,f.datuenbabesalabeles,f.norkebatzilabeleu,f.norkebatzilabeles,f.besteak1labeleu,f.besteak1labeles,f.besteak2labeleu,f.besteak2labeles,f.besteak3labeleu,f.besteak3labeles,f.kanalalabeleu,f.kanalalabeles,f.epealabeleu,f.epealabeles,f.doanlabeleu,f.doanlabeles,f.azpisailalabeleu,f.azpisailalabeles
-            FROM BackendBundle:Eremuak f LEFT JOIN BackendBundle:Udala u WITH f.udala=u.id
+            FROM App:Eremuak f LEFT JOIN App:Udala u WITH f.udala=u.id
             WHERE u.kodea = :udala
         '
         );
@@ -393,7 +401,7 @@ class DefaultController extends Controller
             )
         );
 
-        $pdf = $this->get( "white_october.tcpdf" )->create(
+        $pdf = $this->tcpdfController->create(
             'vertical',
             PDF_UNIT,
             PDF_PAGE_FORMAT,

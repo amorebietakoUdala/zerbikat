@@ -1,0 +1,76 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    # mailer_transport: smtp
+    # mailer_host: 192.168.18.16
+    # mailer_user: null
+    # mailer_password: null
+    secret: ThisTokenIsNotSoSecretChangeIt
+    izfe_login_path: null
+    zzoo_aplikazioaren_API_url: 'http://garapenak2:8888/zergaordenantzak/api'
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false
+        bind:
+            $allowedRoles: ["ROLE_USER", "ROLE_ADMIN"]
+            $class: App\Entity\User
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/FrontendBundle/'
+            - '../src/UserBundle/'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments']
+        # exclude:
+            # - '../src/Zerbikat/BackendBundle/Controller/'
+            # - '../src/ApiBundle/Controller/'
+            # - '../src/FrontendBundle/Controller/'
+            # - '../src/UserBundle/Controller/'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    App\Filter\Configurator:
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@security.token_storage"
+            - "@annotation_reader"
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }
+
+    UserBundle\:
+        resource: '../src/UserBundle'
+        exclude: '../src/UserBundle/{DependencyInjection,Repository,Entity}/'
+#            - '../src/AppBundle/Kernel.php'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    UserBundle\Controller\:
+        resource: '../src/UserBundle/Controller'
+        public: true
+        tags: ['controller.service_arguments']
+
+#    easycorp.easylog.handler:
+    EasyCorp\EasyLog\EasyLogHandler:
+        arguments:
+            - '%kernel.logs_dir%/%kernel.environment%.log'
+
+    easycorp.easylog.handler: '@EasyCorp\EasyLog\EasyLogHandler'
+    WhiteOctober\TCPDFBundle\Controller\TCPDFController: '@white_october.tcpdf'

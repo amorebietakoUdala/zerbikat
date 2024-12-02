@@ -1,0 +1,78 @@
+<?php
+
+namespace App\Repository;
+
+use App\Entity\Kanala;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Doctrine\Persistence\ManagerRegistry;
+
+/**
+ * @extends ServiceEntityRepository<Kanala>
+ *
+ * @method Kanala|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Kanala|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Kanala[]    findAll()
+ * @method Kanala[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ */
+class KanalaRepository extends ServiceEntityRepository
+{
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Kanala::class);
+    }
+
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function add(Kanala $entity, bool $flush = true): void
+    {
+        $this->_em->persist($entity);
+        if ($flush) {
+            $this->_em->flush();
+        }
+    }
+
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function remove(Kanala $entity, bool $flush = true): void
+    {
+        $this->_em->remove($entity);
+        if ($flush) {
+            $this->_em->flush();
+        }
+    }
+
+    // /**
+    //  * @return Kanala[] Returns an array of Kanalak objects
+    //  */
+
+    // public function findByKanalakByUdala($udala)
+    // {
+    //     return $this->createQueryBuilder('s')
+    //         ->innerJoin('App:Udala','u')
+    //         ->andWhere('u.kodea = :udala')
+    //         ->setParameter('udala', $udala)
+    //         ->orderBy('s.kodea', 'DESC')
+    //         ->getQuery()
+    //         ->getResult()
+    //     ;
+    // }
+
+
+    /*
+    public function findOneBySomeField($value): ?Kanalak
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.exampleField = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+    */
+}

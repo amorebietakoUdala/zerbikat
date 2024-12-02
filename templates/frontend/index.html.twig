@@ -1,0 +1,227 @@
+{% extends 'base.html.twig' %}
+
+{% block menua %}
+    <nav id="logo_lerroa" class="navbar navbar-fixed-top">
+        <div class="container ">
+            <div class="navbar-header">
+		<ul class="nav navbar-nav">
+		    <li><img id="logoa" src="{{ asset('build/images/logo.png') }}" alt="Amorebieta-Etxanoko Udala"/></li>
+		    <li id="goiburua" class="list-inline"><a href="#">{{ "messages.goiburua" | trans }}</a></li>
+		    <li id="itzuli_esteka" class="list-inline"><a href="https://www.amorebieta-etxano.eus/">{{ "Volver a la web del ayuntamiento" | trans }}</a></li>
+		</ul>
+            </div>
+        </div>
+    </nav>
+    <nav id="menu_lerroa" class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand"></a>
+                <ul class="nav navbar-nav">
+                    <li class="list-inline"><a
+                                href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'es'})) }}">ES</a>
+                    </li>
+                    <li class="list-inline"><a
+                                href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'eu'})) }}">EU</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse navbar-right">
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <br/>
+    {{ parent() }}
+
+    <div class="container-fluid alert alert-info" role="alert">{{ "La información ofrecida a continuación carece de validez jurídica y se ofrece sólo a efectos informativos" | trans }}</div>
+
+    <div class="input-group clearfix margin" style="width: 40%; float:right">
+	    <span class="input-group-addon">{{ "messages.bilatu" | trans | capitalize }}</span>
+	    <input id="filtrar" class="form-control" placeholder="{{ "messages.bilatu_placeholder" | trans | capitalize }}" type="text">
+    </div>
+
+    <br/>
+    {% set familiaId = app.request.get('familia') %}
+    {% set azpisailaId = app.request.get('azpisaila') %}
+    <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" {{ ( app.request.get('tab') == 'sailka' or app.request.get('tab') == null ) ? ' class="active"': '' }}>
+                <a href="#sailka" aria-controls="home" role="tab" data-toggle="tab">{{ "Saila / Azpisaila" | trans }}</a>
+            </li>
+            <li role="presentation" {{ ( app.request.get('tab') == 'familiaka' ) ? ' class="active"': '' }}>
+                <a href="#familiaka" aria-controls="profile" role="tab" data-toggle="tab">{{ "Familia / Azpifamilia" | trans }}</a>
+            </li>
+        </ul>
+
+	
+        <div class="tab-content">
+
+            <div role="tabpanel" class="tab-pane {{ ( app.request.get('tab') == 'sailka' or app.request.get('tab') == null ) ? 'active': '' }}" id="sailka">
+                {% for saila in sailak %}
+                    <div class="list-group col-sm-6 servicio">
+                        <a class="list-group-item active" style="cursor: pointer;" onclick="erakutsiEzkutatu('fam{{ saila.id }}')">
+                            <div class="list-group-item-wrapper">
+                                <h4 class="list-group-item-heading active">
+                                    {% if app.request.locale == 'eu' %}{{ saila.sailaeu }}{% else %}{{ saila.sailaes }}{% endif %}
+                                </h4>
+                            </div>
+                        </a>
+                        <div id='fam{{ saila.id }}' class="listaServicios" style='display: {{ app.request.get('familia') is not null or app.request.get('azpisaila') is not null ? 'block;' : 'none;'}}'
+                        >
+                            {% for azpi in saila.azpisailak | sort  %}
+                                    {% if azpisailaId is null %}
+                                        {% set fitxak2 = azpi.fitxak %}
+                                    {% else %}
+                                        {% set fitxak2 = fitxak %}
+                                    {% endif %}
+                                    {% if (azpisailaId is not null and azpi.id == azpisailaId) or azpisailaId is null %}
+                                        <a href="#" class="list-group-item list-group-item-success listaGen">
+                                        {% if app.request.locale == 'eu' %}{{ azpi.azpisailaeu }}{% else %} {{ azpi.azpisailaes }}{% endif %}
+                                        {% for fitxa in fitxak2 %}
+                                            {% if fitxa.publikoa == 1 and fitxa.azpisaila.id == azpi.id %}
+                                                <a  data-orden="{{ fitxa.espedienteKodea }}" data-id="{{ fitxa.id }}" href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitxa.id }) }}"
+                                                class="list-group-item ">
+                                                {{ fitxa.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitxa.deskribapenaeu }}{% else %}{{ fitxa.deskribapenaes }}{% endif %}
+                                                </a>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </a>
+                                    {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <div role="tabpanel" class="tab-pane {{ app.request.get('tab') == 'familiaka' ? 'active': '' }}" id="familiaka">
+
+                {% for familia in familiak %}
+                    <div class="list-group col-sm-6 servicio">
+                        <a class="list-group-item active" style="cursor: pointer;" onclick="erakutsiEzkutatu('fam-{{ familia.id }}')">
+                            <div class="list-group-item-wrapper">
+                                <h4 class="list-group-item-heading active">
+                                    {% if app.request.locale == 'eu' %}{{ familia.familiaeu }}{% else %} {{ familia.familiaes }}{% endif %}
+                                </h4>
+                                <p class="list-group-item-text">
+                                    {% if app.request.locale == 'eu' %}{{ familia.deskribapenaeu }}{% else %} {{ familia.deskribapenaes }}{% endif %}
+                                </p>
+                            </div>
+                        </a>
+                        {% if (familiaId is not null and familiaId == familia.id) or familiaId is null %}
+                        <div class="listaServicios" id='fam-{{ familia.id }}' style='display: {{ app.request.get('familia') is not null or app.request.get('azpisaila') is not null ? 'block;' : 'none;'}}'>
+                            {% if familiaId is not null %}
+                                {% set fitxakf = fitxak %}
+                                {% for fitxaf in fitxakf %}
+                                    {% if fitxaf.publikoa == 1 %}
+                                        <a href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitxaf.id }) }}"
+                                        class="list-group-item listaGen">
+                                        {{ fitxaf.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitxaf.deskribapenaeu }}{% else %} {{ fitxaf.deskribapenaes }}{% endif %}
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {% for fitxafamilia  in  familia.fitxafamilia | sort %}
+                                    {% if fitxafamilia.fitxa.publikoa == 1 %}
+                                        <a href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitxafamilia.fitxa.id }) }}"
+                                        class="list-group-item listaGen">
+                                        {{ fitxafamilia.fitxa.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitxafamilia.fitxa.deskribapenaeu }}{% else %} {{ fitxafamilia.fitxa.deskribapenaes }}{% endif %}
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            {% for c in familia.children |sort %}
+                                <a href="#" class="list-group-item list-group-item-success">
+                                    {% if app.request.locale == 'eu' %}{{ c.familiaeu }}{% else %} {{ c.familiaes }}{% endif %}
+                                    {% for fitx in c.fitxafamilia %}
+                                        <a data-orden="{{ fitx.fitxa.espedienteKodea }}" data-id="{{ fitx.id }}" href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitx.fitxa.id }) }}"
+                                           class="list-group-item">
+                                            {{ fitx.fitxa.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitx.fitxa.deskribapenaeu }}{% else %} {{ fitx.fitxa.deskribapenaes }}{% endif %}
+                                        </a>
+                                    {% endfor %}
+                                </a>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        function erakutsiEzkutatu($id) {
+
+            if (document.getElementById($id).style.display == 'none') {
+                document.getElementById($id).style.display = 'block';
+            }
+            else if (document.getElementById($id).style.display == 'block') {
+                document.getElementById($id).style.display = 'none';
+            }
+        }
+
+        function tamaina() {
+            var temp = 0;
+            $('.list-group .list-group-item-wrapper').each(function (index) {
+                if ($(this).outerHeight() > temp) {
+                    temp = $(this).outerHeight();
+                }
+            });
+            $('.list-group .list-group-item-wrapper').css('min-height', temp);
+        }
+	$(document).ready(function(){
+ 		 $( "#filtrar" ).keyup(function() {
+		  console.log('Key Up');
+		  var rex = new RegExp($(this).val(), 'i');
+		  /* En IE -> cuando no hay valor en el filtro detecta ''. En firefox y chrome detecta (?:).*/
+		  if(rex.source == '' || rex.source == '(?:)'){
+		  	$( ".servicio" ).show();
+         	$( ".servicio" ).children("h2").show();	
+        	$( ".servicio" ).children(".subtitulo").show();
+        	$( ".servicio" ).children("h2").removeClass("cerrar");
+        	$( ".listaServicios" ).css("display", "none");
+		  }else{
+			  $( ".servicio" ).hide();
+	 		  $( ".servicio" ).children("h2").hide();	
+			  $( ".servicio" ).children(".subtitulo").hide();
+	          $( ".listaServicios" ).find( "*" ).filter(function () {
+		             if(!rex.test($(this).text())){
+		          		$(this).hide();
+		          	}
+		          	if(rex.test($(this).text())){
+		          		$(this).closest( ".servicio" ).show();
+					    $(this).closest( ".servicio" ).children("h2").show();	
+					    $(this).closest( ".servicio" ).children(".subtitulo").show();
+					    $(this).closest( ".servicio" ).children(".listaServicios").show();
+		          		$(this).show(); 
+		          	}      	
+	          })
+	          $( ".listaServiciosDesplegado" ).find( "*" ).filter(function () {
+		             if(!rex.test($(this).text())){
+		          		$(this).hide();
+		          	}
+		          	if(rex.test($(this).text())){
+		          		$(this).closest( ".servicio" ).show();
+		          		$(this).closest( ".servicio" ).children("h2").show();		
+		          		$(this).closest( ".servicio" ).children(".subtitulo").show();	
+		          		$(this).closest( ".servicio" ).children(".listaServiciosDesplegado").show();
+		          		$(this).show();
+		          	}      	
+	          })
+	          $( ".servicio" ).children("h2").addClass("cerrar");
+	    }
+       })   
+	});
+	
+</script>
+{% endblock %}

@@ -2,9 +2,9 @@
 namespace UserBundle\Controller;
 //use Symfony\Bridge\Doctrine\Tests\Fixtures\User;
 use Pagerfanta\Exception\NotValidCurrentPageException;
-use Zerbikat\BackendBundle\Entity\User;
+use App\Entity\User;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,12 +17,36 @@ use Pagerfanta\Adapter\ArrayAdapter;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Zerbikat\BackendBundle\BackendBundle;
+use App\BackendBundle;
+use Symfony\Component\Security\Csrf\CsrfTokenManager;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use App\Form\UserType;
+use FOS\UserBundle\Model\UserManagerInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
-use Zerbikat\BackendBundle\Form\UserType;
-
-class SecurityController extends Controller
+class SecurityController extends AbstractController
 {
+    private $csrfTokenManager;
+    private $tokenStorage;
+    private $userManager;
+//    private $session;
+
+    public function __construct(
+        CsrfTokenManagerInterface $csrfTokenManager, 
+        TokenStorageInterface $tokenStorage, 
+        UserManagerInterface $userManager
+//        SessionInterface $session,
+    )
+    {
+        $this->csrfTokenManager = $csrfTokenManager;
+        $this->tokenStorage = $tokenStorage;
+        $this->userManager = $userManager;
+//        $this->session = $session;
+    }
 
     public function loginAction ( Request $request )
     {
@@ -51,7 +75,7 @@ class SecurityController extends Controller
                 else
                 {
                     $lastUsername = null;
-                    $csrfToken = $this->get( 'security.csrf.token_manager' )->getToken( 'authenticate' )->getValue();
+                    $csrfToken = $this->csrfTokenManager->getToken( 'authenticate' )->getValue();
                     $error = null;
                     return $this->renderLogin(
                         array (
@@ -71,15 +95,16 @@ class SecurityController extends Controller
             if ( class_exists( '\Symfony\Component\Security\Core\Security' ) ) {
                 $authErrorKey = Security::AUTHENTICATION_ERROR;
                 $lastUsernameKey = Security::LAST_USERNAME;
-            } else {
-                // BC for SF < 2.6
-                $authErrorKey = SecurityContextInterface::AUTHENTICATION_ERROR;
-                $lastUsernameKey = SecurityContextInterface::LAST_USERNAME;
             }
+            // else {
+            //     // BC for SF < 2.6
+            //     $authErrorKey = SecurityContextInterface::AUTHENTICATION_ERROR;
+            //     $lastUsernameKey = SecurityContextInterface::LAST_USERNAME;
+            // }
             // get the error if any (works with forward and redirect -- see below)
             if ( $request->attributes->has( $authErrorKey ) ) {
                 $error = $request->attributes->get( $authErrorKey );
-            } elseif ( null !== $session && $session->has( $authErrorKey ) ) {
+            } elseif ( null !== $session && $session->get( $authErrorKey ) !== null ) {
                 $error = $session->get( $authErrorKey );
                 $session->remove( $authErrorKey );
             } else {
@@ -91,13 +116,14 @@ class SecurityController extends Controller
             // last username entered by the user
             $lastUsername = (null === $session) ? '' : $session->get( $lastUsernameKey );
             if ( $this->has( 'security.csrf.token_manager' ) ) {
-                $csrfToken = $this->get( 'security.csrf.token_manager' )->getToken( 'authenticate' )->getValue();
-            } else {
-                // BC for SF < 2.4
-                $csrfToken = $this->has( 'form.csrf_provider' )
-                    ? $this->get( 'form.csrf_provider' )->generateCsrfToken( 'authenticate' )
-                    : null;
-            }
+                $csrfToken = $this->csrfTokenManager->getToken( 'authenticate' )->getValue();
+            } 
+            // else {
+            //     // BC for SF < 2.4
+            //     $csrfToken = $this->has( 'form.csrf_provider' )
+            //         ? $this->get( 'form.csrf_provider' )->generateCsrfToken( 'authenticate' )
+            //         : null;
+            // }
             return $this->renderLogin(
                 array (
                     'last_username' => $lastUsername,
@@ -113,7 +139,7 @@ class SecurityController extends Controller
         return $this->render( 'FOSUserBundle:Security:login.html.twig', $data );
     }
 
-    private function izfelogin($NA,$udala,$hizkuntza,$fitxategia,$urlOsoa)
+    private function izfelogin(Request $request, $NA,$udala,$hizkuntza,$fitxategia,$urlOsoa)
     {
         /* fitxategiko kodea */
         if (file_exists ($this->container->getParameter('izfe_login_path').'/'.$fitxategia))
@@ -129,8 +155,8 @@ class SecurityController extends Controller
                 $user = $userManager->findUserByUsername($NA);
 
                 $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-                $this->get('security.token_storage')->setToken($token);
-                $this->get('session')->set('_security_main', serialize($token));
+                $this->tokenStorage->setToken($token);
+                $request->getSession()->set('_security_main', serialize($token));
 
                 /* login-a egin ondoren fitxategia ezabatu */
                 return 1;
@@ -147,8 +173,7 @@ class SecurityController extends Controller
      * @Method("GET")
      */
     public function userAction($page) {
-        $userManager = $this->get('fos_user.user_manager');
-        $users = $userManager->findUsers();
+        $users = $this->userManager->findUsers();
 
         $deleteForms = array();
         foreach ($users as $user) {
@@ -169,9 +194,8 @@ class SecurityController extends Controller
      */
     public function newAction(Request $request)
     {
-        $auth_checker = $this->get('security.authorization_checker');
-        if(($auth_checker->isGranted('ROLE_ADMIN'))
-            ||($auth_checker->isGranted('ROLE_SUPER_ADMIN')))
+        if(($this->isGranted('ROLE_ADMIN'))
+            ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $userManager = $this->container->get('fos_user.user_manager');
             $user = $userManager->createUser();
@@ -179,7 +203,7 @@ class SecurityController extends Controller
 
             $user->setUdala($this->getUser()->getUdala());
 
-            $form = $this->createForm('Zerbikat\BackendBundle\Form\UsernewwithpasswordType', $user);
+            $form = $this->createForm('App\Form\UsernewwithpasswordType', $user);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
@@ -221,15 +245,14 @@ class SecurityController extends Controller
      */
     public function editAction(Request $request, User $user)
     {
-        $auth_checker = $this->get('security.authorization_checker');
-        if((($auth_checker->isGranted('ROLE_ADMIN')) && ($user->getUdala()==$this->getUser()->getUdala()))
-            ||($auth_checker->isGranted('ROLE_SUPER_ADMIN')))
+        if((($this->isGranted('ROLE_ADMIN')) && ($user->getUdala()==$this->getUser()->getUdala()))
+            ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($user);
-            if ($auth_checker->isGranted('ROLE_SUPER_ADMIN')) {
-                $editForm = $this->createForm('Zerbikat\BackendBundle\Form\SuperuserType', $user);
+            if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+                $editForm = $this->createForm('App\Form\SuperuserType', $user);
             } else {
-                $editForm = $this->createForm('Zerbikat\BackendBundle\Form\UserType', $user);
+                $editForm = $this->createForm('App\Form\UserType', $user);
             }
 
             $editForm->handleRequest($request);
@@ -260,11 +283,10 @@ class SecurityController extends Controller
      */
     public function passwdAction(Request $request, User $user)
     {
-        $auth_checker = $this->get('security.authorization_checker');
-        if((($auth_checker->isGranted('ROLE_ADMIN')) && ($user->getUdala()==$this->getUser()->getUdala()))
-            ||($auth_checker->isGranted('ROLE_SUPER_ADMIN')))
+        if((($this->isGranted('ROLE_ADMIN')) && ($user->getUdala()==$this->getUser()->getUdala()))
+            ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
-            $editForm = $this->createForm('Zerbikat\BackendBundle\Form\UserpasswdType', $user);
+            $editForm = $this->createForm('App\Form\UserpasswdType', $user);
 
             $editForm->handleRequest($request);
 
@@ -296,9 +318,8 @@ class SecurityController extends Controller
     public function deleteAction(Request $request, User $user)
     {
         //udala egokia den eta admin baimena duen egiaztatu
-        $auth_checker = $this->get('security.authorization_checker');
-        if((($auth_checker->isGranted('ROLE_ADMIN')) && ($user->getUdala()==$this->getUser()->getUdala()))
-            ||($auth_checker->isGranted('ROLE_SUPER_ADMIN')))
+        if((($this->isGranted('ROLE_ADMIN')) && ($user->getUdala()==$this->getUser()->getUdala()))
+            ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $form = $this->createDeleteForm($user);
             $form->handleRequest($request);

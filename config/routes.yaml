@@ -1,0 +1,30 @@
+controllers:
+    resource: ../src/Controller/
+    type: annotation
+    
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
+user:
+    resource: "@UserBundle/Controller/"
+    type:     annotation
+#    prefix:   /
+    prefix:   /{_locale}/
+
+frontend:
+    resource: "@FrontendBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+# api:
+#     type:     annotation
+#     resource: "App/Controller/ApiController.php"
+#     prefix:   /api
+
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
