@@ -61,8 +61,10 @@
 
             <div role="tabpanel" class="tab-pane {{ ( app.request.get('tab') == 'sailka' or app.request.get('tab') == null ) ? 'active': '' }}" id="sailka">
                 {% for saila in sailak %}
-                    <div class="list-group col-sm-6 servicio">
-                        <a class="list-group-item active" style="cursor: pointer;" onclick="erakutsiEzkutatu('fam{{ saila.id }}')">
+                    <div class="list-group col-sm-6 servicio" {{ stimulus_controller('erakutsi-ezkutatu',{
+                        id: 'fam'~saila.id,
+                    })}}>
+                        <a class="list-group-item active" style="cursor: pointer;" data-action="erakutsi-ezkutatu#onClick">
                             <div class="list-group-item-wrapper">
                                 <h4 class="list-group-item-heading active">
                                     {% if app.request.locale == 'eu' %}{{ saila.sailaeu }}{% else %}{{ saila.sailaes }}{% endif %}
@@ -101,8 +103,10 @@
             <div role="tabpanel" class="tab-pane {{ app.request.get('tab') == 'familiaka' ? 'active': '' }}" id="familiaka">
 
                 {% for familia in familiak %}
-                    <div class="list-group col-sm-6 servicio">
-                        <a class="list-group-item active" style="cursor: pointer;" onclick="erakutsiEzkutatu('fam-{{ familia.id }}')">
+                    <div class="list-group col-sm-6 servicio" {{ stimulus_controller('erakutsi-ezkutatu',{
+                        id: 'fam-'~familia.id,
+                    })}}>
+                        <a class="list-group-item active" style="cursor: pointer;" data-action="erakutsi-ezkutatu#onClick">
                             <div class="list-group-item-wrapper">
                                 <h4 class="list-group-item-heading active">
                                     {% if app.request.locale == 'eu' %}{{ familia.familiaeu }}{% else %} {{ familia.familiaes }}{% endif %}
@@ -159,69 +163,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script type="text/javascript">
-        function erakutsiEzkutatu($id) {
-
-            if (document.getElementById($id).style.display == 'none') {
-                document.getElementById($id).style.display = 'block';
-            }
-            else if (document.getElementById($id).style.display == 'block') {
-                document.getElementById($id).style.display = 'none';
-            }
-        }
-
-        function tamaina() {
-            var temp = 0;
-            $('.list-group .list-group-item-wrapper').each(function (index) {
-                if ($(this).outerHeight() > temp) {
-                    temp = $(this).outerHeight();
-                }
-            });
-            $('.list-group .list-group-item-wrapper').css('min-height', temp);
-        }
-	$(document).ready(function(){
- 		 $( "#filtrar" ).keyup(function() {
-		  console.log('Key Up');
-		  var rex = new RegExp($(this).val(), 'i');
-		  /* En IE -> cuando no hay valor en el filtro detecta ''. En firefox y chrome detecta (?:).*/
-		  if(rex.source == '' || rex.source == '(?:)'){
-		  	$( ".servicio" ).show();
-         	$( ".servicio" ).children("h2").show();	
-        	$( ".servicio" ).children(".subtitulo").show();
-        	$( ".servicio" ).children("h2").removeClass("cerrar");
-        	$( ".listaServicios" ).css("display", "none");
-		  }else{
-			  $( ".servicio" ).hide();
-	 		  $( ".servicio" ).children("h2").hide();	
-			  $( ".servicio" ).children(".subtitulo").hide();
-	          $( ".listaServicios" ).find( "*" ).filter(function () {
-		             if(!rex.test($(this).text())){
-		          		$(this).hide();
-		          	}
-		          	if(rex.test($(this).text())){
-		          		$(this).closest( ".servicio" ).show();
-					    $(this).closest( ".servicio" ).children("h2").show();	
-					    $(this).closest( ".servicio" ).children(".subtitulo").show();
-					    $(this).closest( ".servicio" ).children(".listaServicios").show();
-		          		$(this).show(); 
-		          	}      	
-	          })
-	          $( ".listaServiciosDesplegado" ).find( "*" ).filter(function () {
-		             if(!rex.test($(this).text())){
-		          		$(this).hide();
-		          	}
-		          	if(rex.test($(this).text())){
-		          		$(this).closest( ".servicio" ).show();
-		          		$(this).closest( ".servicio" ).children("h2").show();		
-		          		$(this).closest( ".servicio" ).children(".subtitulo").show();	
-		          		$(this).closest( ".servicio" ).children(".listaServiciosDesplegado").show();
-		          		$(this).show();
-		          	}      	
-	          })
-	          $( ".servicio" ).children("h2").addClass("cerrar");
-	    }
-       })   
-	});
-	
-</script>
+    {{ encore_entry_script_tags('frontend-index') }}
 {% endblock %}

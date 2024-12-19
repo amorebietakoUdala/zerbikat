@@ -63,6 +63,9 @@ class UdalaRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findOrderedByIdDesc() {
+        return $this->createQueryBuilder('u')->orderBy('u.kodea', 'DESC');
+    }
 
     // $query = $this->em->createQuery(
     //     /** @lang text */

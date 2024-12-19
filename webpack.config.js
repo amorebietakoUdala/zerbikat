@@ -21,6 +21,13 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
+    .addEntry('login', './assets/login.js')
+    .addEntry('user-list', './assets/js/user/list.js')
+    .addEntry('azpiatala-edit', './assets/js/azpiatala/edit.js')
+    .addEntry('frontend-index', './assets/js/frontend/index.js')
+    .addEntry('frontend-pdf', './assets/js/frontend/pdf.js')
+    .addEntry('familia-edit', './assets/js/familia/edit.js')
+    .addEntry('fitxa-edit', './assets/js/fitxa/edit.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
@@ -72,10 +79,9 @@ Encore
     .autoProvidejQuery()
     .copyFiles([
         {from: './assets/images', to: 'images/[path][name].[hash:8].[ext]'},
-        {from: './assets/images', to: 'img/[name].[ext]'},
         // Esto es para hacer una copia de assets tal cual en build y así no tener que copiar los jss fuera de build        
-        {from: './assets/js', to: 'js/[path][name].[ext]'},
-        {from: './assets/css', to: 'css/[path][name].[ext]'},
+        // {from: './assets/js', to: 'js/[path][name].[ext]'},
+        // {from: './assets/css', to: 'css/[path][name].[ext]'},
         {from: './assets/fonts', to: 'fonts/[path][name].[ext]'},
     ])
 

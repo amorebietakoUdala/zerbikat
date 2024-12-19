@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+
 {% block menua %}
     {{ parent() }}
     <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
@@ -122,55 +123,53 @@
 
     </div>
 
-<div class="row">
-    <div class="col-sm-3">
-        <div class="form-group">
-            <b>{{ 'messages.email'|trans }}</b>
-            {#{{ form_label(edit_form.email, 'Email: ', { 'label_attr': {'class': 'control-label'} }) }}#}
-            {{ form_errors(edit_form.email) }}
-            {{ form_widget(edit_form.email, {'attr': {'class': 'form-control'}}) }}
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <b>{{ 'messages.email'|trans }}</b>
+                {#{{ form_label(edit_form.email, 'Email: ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                {{ form_errors(edit_form.email) }}
+                {{ form_widget(edit_form.email, {'attr': {'class': 'form-control'}}) }}
+            </div>
         </div>
-    </div>
 
-    <div class="col-sm-3">
-        <div class="form-group">
-            <b>{{ 'messages.telefonoa'|trans }}</b>
-            {#{{ form_label(edit_form.telefonoa, 'Telefonoa: ', { 'label_attr': {'class': 'control-label'} }) }}#}
-            {{ form_errors(edit_form.telefonoa) }}
-            {{ form_widget(edit_form.telefonoa, {'attr': {'class': 'form-control'}}) }}
+        <div class="col-sm-3">
+            <div class="form-group">
+                <b>{{ 'messages.telefonoa'|trans }}</b>
+                {#{{ form_label(edit_form.telefonoa, 'Telefonoa: ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                {{ form_errors(edit_form.telefonoa) }}
+                {{ form_widget(edit_form.telefonoa, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <b>{{ 'messages.fax'|trans }}</b>
+                {#{{ form_label(edit_form.fax, 'FAX: ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                {{ form_errors(edit_form.fax) }}
+                {{ form_widget(edit_form.fax, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <b>{{ 'messages.ordutegia'|trans }}</b>
+                {#{{ form_label(edit_form.ordutegia, 'Ordutegia: ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                {{ form_errors(edit_form.ordutegia) }}
+                {{ form_widget(edit_form.ordutegia, {'attr': {'class': 'form-control'}}) }}
+            </div>
         </div>
     </div>
-    <div class="col-sm-3">
-        <div class="form-group">
-            <b>{{ 'messages.fax'|trans }}</b>
-            {#{{ form_label(edit_form.fax, 'FAX: ', { 'label_attr': {'class': 'control-label'} }) }}#}
-            {{ form_errors(edit_form.fax) }}
-            {{ form_widget(edit_form.fax, {'attr': {'class': 'form-control'}}) }}
-        </div>
-    </div>
-    <div class="col-sm-3">
-        <div class="form-group">
-            <b>{{ 'messages.ordutegia'|trans }}</b>
-            {#{{ form_label(edit_form.ordutegia, 'Ordutegia: ', { 'label_attr': {'class': 'control-label'} }) }}#}
-            {{ form_errors(edit_form.ordutegia) }}
-            {{ form_widget(edit_form.ordutegia, {'attr': {'class': 'form-control'}}) }}
-        </div>
-    </div>
-</div>
 
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
-    <div class="row">
-    {% else %}
-    <div class="row hidden">
-    {% endif %}
-        <div class="col-sm-6">
-            <div class="form-group">
-                <b>{{ 'messages.udala'|trans }}</b>
-                {#{{ form_label(edit_form.udala, 'Udala: ', { 'label_attr': {'class': 'control-label'} }) }}#}
-                {{ form_errors(edit_form.udala) }}
-                {{ form_widget(edit_form.udala, {'attr': {'class': 'form-control'}}) }}
-            </div>
+	    <div class="row">
+	{% else %}
+		<div class="row hidden">
+	{% endif %}
+        <div class="form-group">
+            <b>{{ 'messages.udala'|trans }}</b>
+            {#{{ form_label(edit_form.udala, 'Udala: ', { 'label_attr': {'class': 'control-label'} }) }}#}
+            {{ form_errors(edit_form.udala) }}
+            {{ form_widget(edit_form.udala, {'attr': {'class': 'form-control'}}) }}
         </div>
     </div>
 

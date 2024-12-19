@@ -92,22 +92,37 @@
         }
 
         /**
-         * Finds and displays a Familia entity.
+         * Deletes a Familia entity.
          *
-         * @Route("/{id}", name="familia_show")
-         * @Method("GET")
+         * @Route("/{id}", name="familia_delete", methods={"DELETE"}, options={"expose"=true})
          */
-        public function showAction ( Familia $familium )
+        public function deleteAction ( Request $request, Familia $familium )
         {
-            $deleteForm = $this->createDeleteForm( $familium );
+            if ( $request->isXmlHttpRequest() ) {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove( $familium );
+                $em->flush();
 
-            return $this->render(
-                'familia/show.html.twig',
-                array (
-                    'familium'    => $familium,
-                    'delete_form' => $deleteForm->createView(),
-                )
-            );
+                return New JsonResponse( array ( 'result' => 'ok' ) );
+            }
+
+
+            if ( (($this->isGranted( 'ROLE_ADMIN' )) && ($familium->getUdala() == $this->getUser()->getUdala()))
+                || ($this->isGranted( 'ROLE_SUPER_ADMIN' ))
+            ) {
+                $form = $this->createDeleteForm( $familium );
+                $form->handleRequest( $request );
+                if ( $form->isSubmitted() && $form->isValid() ) {
+                    $em = $this->getDoctrine()->getManager();
+                    $em->remove( $familium );
+                    $em->flush();
+                }
+
+                return $this->redirectToRoute( 'familia_index' );
+            } else {
+                //baimenik ez
+                return $this->redirectToRoute( 'backend_errorea' );
+            }
         }
 
         /**
@@ -156,38 +171,22 @@
         }
 
         /**
-         * Deletes a Familia entity.
+         * Finds and displays a Familia entity.
          *
-         * @Route("/{id}", name="familia_delete")
-         * @Method("DELETE")
+         * @Route("/{id}", name="familia_show")
+         * @Method("GET")
          */
-        public function deleteAction ( Request $request, Familia $familium )
+        public function showAction ( Familia $familium )
         {
-            if ( $request->isXmlHttpRequest() ) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove( $familium );
-                $em->flush();
+            $deleteForm = $this->createDeleteForm( $familium );
 
-                return New JsonResponse( array ( 'result' => 'ok' ) );
-            }
-
-
-            if ( (($this->isGranted( 'ROLE_ADMIN' )) && ($familium->getUdala() == $this->getUser()->getUdala()))
-                || ($this->isGranted( 'ROLE_SUPER_ADMIN' ))
-            ) {
-                $form = $this->createDeleteForm( $familium );
-                $form->handleRequest( $request );
-                if ( $form->isSubmitted() && $form->isValid() ) {
-                    $em = $this->getDoctrine()->getManager();
-                    $em->remove( $familium );
-                    $em->flush();
-                }
-
-                return $this->redirectToRoute( 'familia_index' );
-            } else {
-                //baimenik ez
-                return $this->redirectToRoute( 'backend_errorea' );
-            }
+            return $this->render(
+                'familia/show.html.twig',
+                array (
+                    'familium'    => $familium,
+                    'delete_form' => $deleteForm->createView(),
+                )
+            );
         }
 
         /**

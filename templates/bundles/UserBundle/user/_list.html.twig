@@ -1,0 +1,54 @@
+{% trans_default_domain 'user_bundle' %}
+<table id="taula" class="table bootstrap-table mt-3">
+   <thead>
+      <tr>
+         <th data-sortable="true">{{"user.id" | trans | capitalize}}</th>
+         <th data-sortable="true">{{"user.username" | trans | capitalize}}</th>
+         <th data-sortable="true">{{"user.firstName" | trans | capitalize}}</th>
+         <th data-sortable="true">{{"user.email" | trans | capitalize}}</th>
+         <th data-sortable="true">{{"user.roles" | trans | capitalize}}</th>
+         <th data-sortable="true" data-field="options">{{"table.options" | trans | capitalize}}</th>
+      </tr>
+   </thead>
+   <tbody>
+      {% for user in users %}
+      <tr>
+         <td>{{user.id}}</td>
+         <td>{{user.username}}</td>
+         <td>{{user.firstName}}</td>
+         <td>{{user.email}}</td>
+         <td>
+                  {% set rolesCount = user.roles | filter((v,k) => v != 'ROLE_ADIERAZLEAK') | length %}
+                  {% if rolesCount > 0 %}
+                        {% for role in user.roles | filter((v,k) => v != 'ROLE_ADIERAZLEAK') %}
+                           {{ role | trans | capitalize }} 
+                           {% if loop.index < rolesCount %}|{% endif %}
+                        {% endfor %}
+                  {% else %}
+                        {{ 'ROLE_ADIERAZLEAK' | trans }}
+                  {% endif %}
+         </td>
+         <td>
+         <a href="{{ path ("admin_user_show",{'id': user.id })}}"
+            {# data-return-url="{{ absolute_url(path(app.request.attributes.get('_route'))) }}" data-action="click->table#onClick" #}
+            ><i class="fa fa-eye"></i></a>
+         &nbsp;<a href="{{ path ("admin_user_edit",{'id': user.id })}}" 
+            {# data-return-url="{{ absolute_url(path(app.request.attributes.get('_route'))) }}" data-action="click->table#onClick" #}
+            ><i class="fa fa-edit"></i></a>
+         &nbsp;<a href="{{ path ('admin_user_delete',{'id': user.id })}}" {{ stimulus_controller('confirmation', {
+                        id: user.id,
+                        mezua: 'messages.ziurzaude'|trans([],'messages'),
+                        type: 'GET' }) 
+                  }} 
+                  data-action="confirmation#onClick"
+                  {# data-action="click->table#onClick" data-confirm="true" #}>
+                  <i class="fa fa-trash text-danger"></i>
+               </a>
+               {% if is_granted('ROLE_SUPER_ADMIN') %}
+                  &nbsp;<a href="{{ path('fitxa_index', { _switch_user: user.username }) }}"><i class="glyphicon glyphicon-user" aria-hidden="true"></i></a>
+               {% endif %}               
+         </td>
+      </tr>
+      {% endfor %}
+   </tbody>
+</table>

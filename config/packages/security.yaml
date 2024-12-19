@@ -2,7 +2,15 @@
 # http://symfony.com/doc/current/book/security.html
 security:
     encoders:
-        FOS\UserBundle\Model\UserInterface: bcrypt
+        AMREU\UserBundle\Model\UserInterface: bcrypt
+        legacy:
+            algorithm: sodium
+
+        App\Entity\User:
+            algorithm: bcrypt
+            migrate_from: 
+                - legacy
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
 
     role_hierarchy:
         ROLE_KUDEAKETA:   ROLE_USER
@@ -11,11 +19,10 @@ security:
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory:
-            memory: ~
-        fos_userbundle:
-            id: fos_user.user_provider.username
-
+        amreu_user_provider:
+            entity:
+                class: App\Entity\User
+                property: username
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -24,21 +31,25 @@ security:
             security: false
 
         main:
+            anonymous: lazy
+            logout_on_user_change: true
             pattern: ^/
+            guard:
+                authenticators:
+                    - amreu.login.form.authenticator
+                entry_point: amreu.login.form.authenticator
             form_login:
-                provider: fos_userbundle
+                provider: amreu_user_provider
                 csrf_token_generator: security.csrf.token_manager
                 check_path: /login_check
-                default_target_path: users_index
+                default_target_path: admin_user_list
                 always_use_default_target_path: true
             logout:
                 path:   /logout
                 target: /login
-            anonymous:    true
             switch_user:
-                provider:   fos_userbundle
+                provider:   amreu_user_provider
                 role: ROLE_SUPER_ADMIN
-            logout_on_user_change: true
 
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }

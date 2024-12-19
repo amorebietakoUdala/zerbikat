@@ -1,8 +1,5 @@
-{#{% extends 'base.html.twig' %}#}
-
 {% block body %}
     {{ form_start(form) }}
-        {#{{ form_widget(form) }}#}
         <tr>
             <td colspan="1" class="col-sm-1 hidden">
                     {{ form_label(form.udala, 'Udala: ', { 'label_attr': {'class': 'control-label'} }) }}
@@ -26,6 +23,5 @@
             </td>
             <td colspan="1" class="col-sm-1"></td>
         </tr>
-
     {{ form_end(form) }}
 {% endblock %}

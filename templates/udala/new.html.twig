@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+
 {% block menua %}
     {{ parent() }}
     <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
@@ -15,6 +16,7 @@
         </div>
     </nav>
 {% endblock %}
+
 {% block body %}
     {{ form_start(form) }}
     <div class="row">
@@ -123,7 +125,6 @@
             <div class="form-group">
                 {{ form_errors(form.zergaor) }}
                 {{ form_widget(form.zergaor, {'attr': {'class': 'c-checkbox'}}) }}
-                {{ 'messages.zergaorapp'|trans }}
             </div>
         </div>
     </div>

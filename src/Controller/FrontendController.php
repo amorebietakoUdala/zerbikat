@@ -13,6 +13,7 @@ use App\Repository\FitxaRepository;
 use App\Repository\KanalmotaRepository;
 use App\Repository\SailaRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use WhiteOctober\TCPDFBundle\Controller\TCPDFController;
 
 class FrontendController extends AbstractController
@@ -200,7 +201,6 @@ class FrontendController extends AbstractController
                 'kostuZerrenda' => $kostuZerrenda,
             )
         );
-
         $this->sendResponsePDF($html, $udala, $fitxa);
     }
 
@@ -230,7 +230,6 @@ class FrontendController extends AbstractController
             $array           = json_decode( $fitxaKostua, true );
             $kostuZerrenda[] = $array;
         }
-
         $html = $this->render(
             'frontend/pdfelebi.html.twig',
             array(
@@ -242,7 +241,6 @@ class FrontendController extends AbstractController
                 'kostuZerrenda' => $kostuZerrenda,
             )
         );
-
         $this->sendResponsePDF($html, $udala, $fitxa);
     }
 

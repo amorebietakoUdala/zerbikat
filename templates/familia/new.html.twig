@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+
 {% block menua %}
     {{ parent() }}
     <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
@@ -15,6 +16,7 @@
         </div>
     </nav>
 {% endblock %}
+
 {% block body %}
     {{ form_start(form) }}
     <div class="row">
@@ -86,33 +88,12 @@
     {{ form_end(form) }}
 {% endblock %}
 
-        {% block javascripts %}
+{% block stylesheets %}
     {{ parent() }}
+    {{ encore_entry_link_tags('familia-edit') }}
+{% endblock %}
 
-    <script type="text/javascript">
-        $(function () {
-
-            var customSorter = function(data) {
-
-                return data.sort(function(a,b){
-                    a = a.text.toLowerCase();
-                    b = b.text.toLowerCase();
-                    if(a > b) {
-                        return 1;
-                    } else if (a < b) {
-                        return -1;
-                    }
-                    return 0;
-                });
-
-            };
-
-            $('#familia_parent').select2({
-                theme: 'bootstrap',
-                tags: true,
-                sorter: customSorter
-            });
-        });
-    </script>
-
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('familia-edit') }}
 {% endblock %}

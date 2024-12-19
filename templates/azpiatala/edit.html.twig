@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+
 {% block menua %}
     {{ parent() }}
     <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
@@ -15,6 +16,7 @@
             </div>
         </div>
     </nav>
+
 {% endblock %}
 {% block body %}
     {{ form_start(edit_form) }}
@@ -61,8 +63,6 @@
             </td>
         </tr>
     </table>
-
-
 
     <table class="table table-bordered" id="parrafoa-fields-list" data-prototype="{% filter escape %}
     {% include 'azpiatalaparrafoa/prototype_new.html.twig' with {'form': edit_form.parrafoak.vars.prototype,'azpiatala':azpiatala} %}{% endfilter %}">
@@ -135,99 +135,15 @@
     <div class="hidden">
     {{ form_end(edit_form) }}
     </div>
+
+<div id="app" 
+    data-kontzeptuaCount="{{ edit_form.kontzeptuak|length }}" 
+    data-parrafoaCount="{{ edit_form.parrafoak|length }}">
+</div>
+
 {% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
-<script type="text/javascript">
-    // Zenbat prozedura gehitu diren gorde
-    var kontzeptuaCount = '{{ edit_form.kontzeptuak|length }}';
-    var parrafoaCount = '{{ edit_form.parrafoak|length }}';
-
-    jQuery(document).ready(function() {
-
-        // Parrafoak dituen table-a jaso
-        $collectionHolder = $('#parrafoa-fields-list');
-        // tr elementu guztiei ezabatzeko ikonoa jarri
-        $collectionHolder.find('tr').each(function()
-        {
-            if (!$(this).hasClass( "burua" ))
-                addParrafoaFormDeleteLink($(this));
-        });
-        // Kontzeptuak dituen table-a jaso
-        $collectionHolder = $('#kontzeptua-fields-list');
-        // li elementu guztiei ezabatzeko ikonoa jarri
-        $collectionHolder.find('tr').each(function()
-        {
-            if (!$(this).hasClass( "burua" ))
-                addKontzeptuaFormDeleteLink($(this));
-        });
-
-
-
-        jQuery('#add-parrafoa').click(function(e) {
-            e.preventDefault();
-//                alert ("sartu da!!");
-            var parrafoaList = jQuery('#parrafoa-fields-list');
-
-            // grab the prototype template
-            var newWidget = parrafoaList.attr('data-prototype');
-            // replace the "__name__" used in the id and name of the prototype
-            // with a number that's unique to your emails
-            // end name attribute looks like name="contact[emails][2]"
-            newWidget = newWidget.replace(/__name__/g, parrafoaCount);
-            parrafoaCount++;
-
-            // create a new list element and add it to the list
-            var newLi = jQuery('<tr></tr>').html(newWidget);
-            newLi.appendTo(parrafoaList);
-        });
-
-
-
-        jQuery('#add-kontzeptua').click(function(e) {
-            e.preventDefault();
-//                alert ("sartu da!!");
-            var kontzeptuaList = jQuery('#kontzeptua-fields-list');
-
-            // grab the prototype template
-            var newWidget = kontzeptuaList.attr('data-prototype');
-            // replace the "__name__" used in the id and name of the prototype
-            // with a number that's unique to your emails
-            // end name attribute looks like name="contact[emails][2]"
-            newWidget = newWidget.replace(/__name__/g, kontzeptuaCount);
-            kontzeptuaCount++;
-
-            // create a new list element and add it to the list
-            var newLi = jQuery('<tr></tr>').html(newWidget);
-            newLi.appendTo(kontzeptuaList);
-        });
-
-        function addParrafoaFormDeleteLink($tagFormLi) {
-            var $removeFormA = $('<td class="col-sm-1"><a href="#"><i class="fa fa-times text-danger"></i></a></td>');
-            $tagFormLi.append($removeFormA);
-
-            $removeFormA.on('click', function(e) {
-                // prevent the link from creating a "#" on the URL
-                e.preventDefault();
-
-                // remove the li for the tag form
-                $tagFormLi.remove();
-            });
-        }
-        function addKontzeptuaFormDeleteLink($tagFormLi) {
-            var $removeFormA = $('<td class="col-sm-1"><a href="#"><i class="fa fa-times text-danger"></i></a></td>');
-            $tagFormLi.append($removeFormA);
-
-            $removeFormA.on('click', function(e) {
-                // prevent the link from creating a "#" on the URL
-                e.preventDefault();
-
-                // remove the li for the tag form
-                $tagFormLi.remove();
-            });
-        }
-
-
-    })
-</script>
+    {{ encore_entry_script_tags('azpiatala-edit') }}
 {% endblock %}

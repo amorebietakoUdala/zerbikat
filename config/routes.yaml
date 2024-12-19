@@ -5,16 +5,7 @@ controllers:
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 
-user:
-    resource: "@UserBundle/Controller/"
-    type:     annotation
-#    prefix:   /
-    prefix:   /{_locale}/
-
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /api/doc
-
-fos_user:
-    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
 

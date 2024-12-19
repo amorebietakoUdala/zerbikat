@@ -79,7 +79,7 @@ class AraumotaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $araumotum = new Araumota();
-            $form = $this->createForm('App\Form\AraumotaType', $araumotum);
+            $form = $this->createForm(AraumotaType::class, $araumotum);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
@@ -137,7 +137,7 @@ class AraumotaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($araumotum);
-            $editForm = $this->createForm('App\Form\AraumotaType', $araumotum);
+            $editForm = $this->createForm(AraumotaType::class, $araumotum);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {

@@ -8,73 +8,13 @@
 
     <title>{% block title %}ZERBItzuen KATalogoa{% endblock %}</title>
     {% block stylesheets %}
-        <link href="{{ asset('build/css/bootstrap.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('build/css/zerbikat.css') }}" rel="stylesheet">
-        <link href="{{ asset('build/css/select2-bootstrap.min.css') }}" rel="stylesheet">
-        <link rel="stylesheet" type="text/css"
-              href="{{ asset('bundles/bmatznerfontawesome/css/font-awesome.min.css') }}"/>
-        <link rel="stylesheet" type="text/css" href="{{ asset('build/css/datatables.min.css') }}"
-              rel="stylesheet"/>
-        <link rel="stylesheet" type="text/css" href="{{ asset('build/css/jquery.dataTables.min.css') }}"
-              rel="stylesheet"/>
-        <link rel="stylesheet" type="text/css" href="{{ asset('build/css/buttons.dataTables.min.css') }}"
-              rel="stylesheet"/>
+        {{ encore_entry_link_tags('frontend-pdf') }}
     {% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="bundles/backend/js/html5shiv.min.js"></script>
-    <script src="bundles/backend/js/respond.min.js"></script>
-
-    <![endif]-->
-
-    <style>
-        .affix {
-            top: 2;
-            width: 100%;
-            /*-webkit-transition: all .5s ease-in-out;*/
-            /*transition: all .5s ease-in-out;*/
-            /*background-color: #F44336;*/
-            /*border-color: #F44336;*/
-            z-index: 1010;
-        }
-
-        /*.affix :hover*/
-        /*{*/
-        /*padding: 15px !important;*/
-        /*}*/
-        .affix a {
-            /*color: #777777 !important;*/
-            /*padding: 15px !important;*/
-            color: #777777;
-            padding: 15px;
-            /*-webkit-transition: all .5s ease-in-out;*/
-            /*transition: all .5s ease-in-out;*/
-        }
-
-        .affix a:hover {
-            /*color: #000 !important;*/
-            color: #000;
-        }
-
-        .affix-top a {
-            /*padding: 25px !important;*/
-        }
-
-        /*.affix + .container-fluid {*/
-        /*/*padding-top: 5px;*/
-        *
-
-        /
-        /*}*/
-    </style>
 </head>
 <body role="document">
 
 {% block menua %}
-    {#{% if is_granted('ROLE_KUDEAKETA') %}#}
     <nav class="navbar navbar-inverse navbar-fixed-top">
         {#<nav class="navbar navbar-inverse">#}
         <div class="container">
@@ -177,14 +117,10 @@
             </div><!--/.nav-collapse -->
         </div>
     </nav>
-
-
 {% endblock %}
 
 <div class="container theme-showcase" role="main">
-    {% block body %}
-
-    {% endblock %}
+    {% block body %}{% endblock %}
 </div>
 </body>
 </html>

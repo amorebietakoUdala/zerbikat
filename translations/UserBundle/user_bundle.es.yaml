@@ -1,0 +1,19 @@
+security.login.remember_me: "Recordarme"
+security.login.title: "Inicio de sesión"
+message.form.allData: __message.form.allData
+layout.logged_in_as: "Autenticado como: %username%"
+layout.logout: "Salir"
+layout.login: "Entrar"
+
+user.udala: "Ayuntamiento"
+user.activated: "Activado"
+user.firstName: "Nombre"
+
+ROLE_SUPER_ADMIN: "Super Administrador"
+ROLE_KUDEAKETA: "Gestor"
+
+messages.erabiltzaileak: "Usuarios"
+messages.gorde: "Guardar"
+messages.utzi: "Cancelar"
+messages.erabiltzaileberria: "Nuevo Usuario"
+

@@ -20,6 +20,7 @@
     },
     "require": {
         "php": ">=7.2",
+        "amorebietakoudala/user-bundle": "^1.4.6",
         "bmatzner/fontawesome-bundle": "^4.6",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-cache-bundle": "^1.2",
@@ -27,7 +28,7 @@
         "doctrine/orm": "^2.5",
         "friendsofsymfony/ckeditor-bundle": "^2.0",
         "friendsofsymfony/jsrouting-bundle": "^2.8",
-        "friendsofsymfony/rest-bundle": "2.7",
+        "friendsofsymfony/rest-bundle": "^2.7",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "guzzlehttp/guzzle": "6.3",
         "guzzlehttp/psr7": "1.4.0",
@@ -79,7 +80,6 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "ckeditor:install --clear=drop": "symfony-cmd"
         },

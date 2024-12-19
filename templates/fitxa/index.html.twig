@@ -59,7 +59,11 @@
                     <li><a href="{{ path('fitxa_pdf', { 'id': fitxa.id }) }}" target="_blank" ><i class="fa fa-file-pdf-o"></i></a></li>
                     {% if is_granted('ROLE_ADMIN') %}
                         <li>{{ form_start(deleteforms[fitxa.id],{'attr': {'id': fitxa.id}}) }}
-                            <a href="#" onclick="ezabatu({{ fitxa.id }},'{{ 'messages.ziurzaude'|trans }}');" ><i class="fa fa-trash text-danger"></i></a>
+                            <a href="#" {{ stimulus_controller('confirmation', {
+                                    id: fitxa.id,
+                                    mezua: 'messages.ziurzaude'|trans}) 
+                                }} 
+                                data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
                             {{ form_end(deleteforms[fitxa.id]) }}</li>
                     {% endif %}
                     </ul></td>
@@ -67,20 +71,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-
-{#<div class="text-center">#}
-    {#{% if fitxas is not empty %}#}
-        {#{% if pager.haveToPaginate %}#}
-            {#{{ pagerfanta(pager, 'twitter_bootstrap3_translated', {'routeName': 'fitxa_index_paginated'}) }}#}
-        {#{% endif %}#}
-    {#{% else %}#}
-        {#<p>{{ 'messages.emaitzarikez'|trans }}</p>#}
-    {#{% endif %}#}
-{#</div>#}
 {% endblock %}
-{#{% block javascripts %}#}
-    {#{{ parent() }}#}
-
-
-{#{% endblock %}#}

@@ -3,21 +3,23 @@
 namespace App\Controller;
 
 use JavierEguiluz\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminController;
-use FOS\UserBundle\Model\UserManagerInterface;
+use AMREU\UserBundle\Doctrine\UserManager;
 
 class AdminController extends BaseAdminController
 {
     private $userManager;
 
-    public function __construct(UserManagerInterface $userManager)
+    public function __construct(UserManager $userManager)
     {
         $this->userManager= $userManager;
     }
 
-    public function createNewUserEntity()
-    {
-        return $this->userManager->createUser();
-    }
+    
+    // TODO Implementar este método en el AMREU UserManager?
+    // public function createNewUserEntity()
+    // {
+    //     return $this->userManager->createUser();
+    // }
 
     public function prePersistUserEntity($user)
     {

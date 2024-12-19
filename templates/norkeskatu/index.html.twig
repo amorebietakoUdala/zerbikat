@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+
 {% block menua %}
     {{ parent() }}
     <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
@@ -14,6 +15,7 @@
         </div>
     </nav>
 {% endblock %}
+
 {% block body %}
     <table class="table" id="taulazerrenda">
         <thead>
@@ -37,7 +39,11 @@
                             <li><a href="{{ path('norkeskatu_edit', { 'id': norkeskatu.id }) }}" class="fa fa-pencil"></a></li>
                         {% if is_granted('ROLE_ADMIN') %}
                             <li>{{ form_start(deleteforms[norkeskatu.id],{'attr': {'id': norkeskatu.id}}) }}
-                                <a href="#" onclick="ezabatu({{ norkeskatu.id }},'{{ 'messages.ziurzaude'|trans }}');" ><i class="fa fa-trash text-danger"></i></a>
+                                <a href="#" {{ stimulus_controller('confirmation', {
+                                        id: norkeskatu.id,
+                                        mezua: 'messages.ziurzaude'|trans}) 
+                                    }} 
+                                    data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
                                 {{ form_end(deleteforms[norkeskatu.id]) }}</li>
                         {% endif %}
                     </ul>
@@ -53,20 +59,4 @@
             <p>{{ 'messages.emaitzarikez'|trans }}</p>
         {% endif %}
     </div>
-{% endblock %}
-{% block javascripts %}
-    {{ parent() }}
-    <script type="text/javascript">
-        function ezabatu (id,mezua)
-        {
-//            var r = confirm("Eskatzailea EZABATU. Ziur zaude?");
-            var r = confirm(mezua);
-            if (r == true)
-            {
-                document.getElementById(id).submit()
-            }else
-            {
-            }
-        };
-    </script>
 {% endblock %}

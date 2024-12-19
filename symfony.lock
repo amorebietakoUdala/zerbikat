@@ -1,4 +1,7 @@
 {
+    "amorebietakoudala/user-bundle": {
+        "version": "1.4.6"
+    },
     "bmatzner/fontawesome-bundle": {
         "version": "4.7.0"
     },

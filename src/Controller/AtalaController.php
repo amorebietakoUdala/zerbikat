@@ -76,7 +76,7 @@ class AtalaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $atala = new Atala();
-            $form = $this->createForm('App\Form\AtalaType', $atala);
+            $form = $this->createForm(AtalaType::class, $atala);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
@@ -137,7 +137,7 @@ class AtalaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($atala);
-            $editForm = $this->createForm('App\Form\AtalaType', $atala);
+            $editForm = $this->createForm(AtalaType::class, $atala);
             $editForm->handleRequest($request);
     
             if ($editForm->isSubmitted() && $editForm->isValid()) {

@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 use App\Repository\UdalaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Udala
@@ -134,7 +135,7 @@ class Udala
     protected $eremuak;
 
     /**
-     * @var fitxak[]
+     * @var Collection
      *
      * @ORM\OneToMany(targetEntity="Fitxa", mappedBy="udala")
      */
@@ -164,7 +165,7 @@ class Udala
         $this->orrikatzea=25;
 
 
-        $this->fitxak = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fitxak = new ArrayCollection();
     }
 
     /**

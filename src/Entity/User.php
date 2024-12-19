@@ -4,14 +4,16 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use FOS\UserBundle\Model\User as BaseUser;
+use AMREU\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use App\Annotation\UdalaEgiaztatu;
 use App\Repository\UserRepository;
+use App\Entity\Udala;
+use App\Entity\Azpisaila;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\Table(name="fos_user")
+ * @ORM\Table(name="user")
  * @UdalaEgiaztatu(userFieldName="udala_id")
  */
 class User extends BaseUser
@@ -24,11 +26,56 @@ class User extends BaseUser
     protected $id;
 
     /**
-     *          ERLAZIOAK
+     * @ORM\Column(type="string", length=180, unique=true)
      */
+    protected $username;
 
     /**
-     * @var udala
+     * @ORM\Column(type="json")
+     */
+    protected $roles = [];
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string")
+     */
+    protected $password;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    protected $firstName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    protected $email;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default":"1"}, nullable=false)
+     */
+    protected $activated = true;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $lastLogin;
+
+    /**
+    *          ERLAZIOAK
+    */
+
+    /**
+     * @var Azpisaila
+     *
+     * @ORM\ManyToOne(targetEntity="Azpisaila")
+     * @ORM\JoinColumn(name="azpisaila_id", referencedColumnName="id",onDelete="SET NULL")
+     *
+     */
+    private $azpisaila;
+
+    /**
+     * @var Udala
      * @ORM\ManyToOne(targetEntity="Udala")
      * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="SET NULL")
      *
@@ -36,40 +83,13 @@ class User extends BaseUser
     private $udala;
 
     /**
-     * @var \App\Entity\Azpisaila
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Azpisaila")
-     * @ORM\JoinColumn(name="azpisaila_id", referencedColumnName="id",onDelete="SET NULL")
-     *
-     */
-    private $azpisaila;
-
-    /**
-     * Plain password. Used for model validation. Must not be persisted.
-     *
-     * @var string
-     */
-    protected $password;
-
-
-    /**
      *      FUNTZIOAK
      */
 
-    /**
-     *      Constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->fitxaAldaketa = new ArrayCollection();
-        // your own logic
-    }
-
-    /**
+     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return User
      */
@@ -83,7 +103,7 @@ class User extends BaseUser
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {
@@ -93,11 +113,11 @@ class User extends BaseUser
     /**
      * Set azpisaila
      *
-     * @param \App\Entity\Azpisaila $azpisaila
+     * @param Azpisaila $azpisaila
      *
      * @return User
      */
-    public function setAzpisaila(\App\Entity\Azpisaila $azpisaila = null)
+    public function setAzpisaila(Azpisaila $azpisaila = null)
     {
         $this->azpisaila = $azpisaila;
 
@@ -107,7 +127,7 @@ class User extends BaseUser
     /**
      * Get azpisaila
      *
-     * @return \App\Entity\Azpisaila
+     * @return Azpisaila
      */
     public function getAzpisaila()
     {

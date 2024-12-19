@@ -54,7 +54,7 @@ class AtalaparrafoaController extends AbstractController
     {
         if ($this->isGranted('ROLE_ADMIN')) {
             $atalaparrafoa = new Atalaparrafoa();
-            $form = $this->createForm('App\Form\AtalaparrafoaType', $atalaparrafoa);
+            $form = $this->createForm(AtalaParrafoaType::class, $atalaparrafoa);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
@@ -111,7 +111,7 @@ class AtalaparrafoaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($atalaparrafoa);
-            $editForm = $this->createForm('App\Form\AtalaparrafoaType', $atalaparrafoa);
+            $editForm = $this->createForm(AtalaParrafoaType::class, $atalaparrafoa);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {

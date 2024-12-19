@@ -15,6 +15,7 @@
         </div>
     </nav>
 {% endblock %}
+
 {% block body %}
     <table class="table" id="taulazerrenda">
         <thead>
@@ -36,7 +37,11 @@
                             <li><a href="{{ path('eraikina_edit', { 'id': eraikina.id }) }}" class="fa fa-pencil"></a></li>
                     {% if is_granted('ROLE_ADMIN') %}
                         <li>{{ form_start(deleteforms[eraikina.id],{'attr': {'id': eraikina.id}}) }}
-                            <a href="#" onclick="ezabatu({{ eraikina.id }},'{{ 'messages.ziurzaude'|trans }}');" ><i class="fa fa-trash text-danger"></i></a>
+                            <a href="#" {{ stimulus_controller('confirmation', {
+                                        id: eraikina.id,
+                                        mezua: 'messages.ziurzaude'|trans}) 
+                                    }} 
+                                    data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
                             {{ form_end(deleteforms[eraikina.id]) }}</li>
                     {% endif %}
                     </ul>
@@ -45,19 +50,4 @@
         {% endfor %}
         </tbody>
     </table>
-{% endblock %}
-{% block javascripts %}
-    {{ parent() }}
-    <script type="text/javascript">
-        function ezabatu (id,mezua)
-        {
-            var r = confirm(mezua);
-            if (r == true)
-            {
-                document.getElementById(id).submit()
-            }else
-            {
-            }
-        };
-    </script>
 {% endblock %}

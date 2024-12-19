@@ -7,7 +7,7 @@
     use Symfony\Component\OptionsResolver\OptionsResolver;
     use Symfony\Bridge\Doctrine\Form\Type\EntityType;
     use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-    use Ivory\CKEditorBundle\Form\Type\CKEditorType;
+    use FOS\CKEditorBundle\Form\Type\CKEditorType;
 //use App\Entity\FitxaProzedura;
     use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
@@ -273,7 +273,7 @@
                         'required'    => false,
                         'multiple'    => 'multiple',
                         'placeholder' => 'Aukeratu etiketak',
-                        'empty_data'  => null,
+                        'empty_data'  => [],
                     )
                 )
                 ->add(
@@ -374,7 +374,7 @@
                     array (
                         'entry_type'   => FitxaKostuaType::class,
                         'entry_options'  => array(
-                            'udala' => $user->getUdala()->getId(),
+                            'udala' => $user->getUdala() !== null ? $user->getUdala()->getId() : null,
                             'api_url' => $api_url
                         ),
                         'allow_add'    => true,

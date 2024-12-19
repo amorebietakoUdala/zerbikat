@@ -74,7 +74,7 @@ class ArruntaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $arruntum = new Arrunta();
-            $form = $this->createForm('App\Form\ArruntaType', $arruntum);
+            $form = $this->createForm(ArruntaType::class, $arruntum);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
@@ -132,7 +132,7 @@ class ArruntaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($arruntum);
-            $editForm = $this->createForm('App\Form\ArruntaType', $arruntum);
+            $editForm = $this->createForm(ArruntaType::class, $arruntum);
             $editForm->handleRequest($request);
     
             if ($editForm->isSubmitted() && $editForm->isValid()) {

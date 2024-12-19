@@ -168,105 +168,114 @@
 
 
     {% if (eremuak.kanalatext or eremuak.kanalatable) %}
-        <div class="row">
-        <span style="font-size: large; font-weight: bold">
-                    {% if app.request.locale == 'eu' %}{{ labelak.kanalalabeleu }}
-                    {% else %}{{ labelak.kanalalabeles }}
-                    {% endif %}
-                </span>
-            <span style="font-size: small;">
-                {% if eremuak.kanalatable %}
-                    {% for k in kanalmotak %}
-                        {% set aurkitua=0 %}
-                        <ul>
-                    {% for kanal in fitxa.kanalak if kanal.kanalmota == k %}
-                        {% if aurkitua==0 %}
-                            <b>{{ k.motaeu }}:</b>
-                            {% set aurkitua=1 %}
-                        {% endif %}
+        <table cellspacing="0" cellpadding="4">
+            <tr>
+                <th>
+                    <h4>
                         {% if app.request.locale == 'eu' %}
-                        {% if kanal.telematikoa %}
-                            {% if fitxa.zerbitzua %}
-                                <li><a href="{{ fitxa.zerbitzua.erroaeu }}{{ fitxa.udala.kodea }}{{ fitxa.parametroa }}">
-                                                {{ kanal.izenaeu }}
-                                            </a></li>
-                            {% endif %}
-                            {% else %}
-                            {% if k.esteka %}
-                                {#<li><a href='{{ kanal.estekaeu }}' target="_blank">{{ kanal.izenaeu }}</a></li>#}
-                                <li>{% if kanal.izenaeu %}
-                                            {#<a href="{{ kanal.estekaeu }}" target="_blank">{{ kanal.izenaeu }}</a><br />#}
-                                            {% if '@' in kanal.estekaeu and 'maps' not in kanal.estekaeu %}
-                                        <a href='mailto:{{ kanal.estekaeu }}'>{{ kanal.izenaeu }}</a><br/>
-                                            {% else %}
-                                        <a href="{{ kanal.estekaeu }}" target="_blank">{{ kanal.izenaeu }}</a><br/>
-                                    {% endif %}
-                                    {% endif %}
-                                    {% if kanal.eraikina %}{{ kanal.eraikina.izena }}<br/>{% endif %}
-                                    {% if kanal.kalea %}{{ kanal.kalea }}{% endif %}{% if kanal.kalezbkia %}&nbsp;{{ kanal.kalezbkia }}, {% endif %}
-                                    {% if kanal.postakodea %}{{ kanal.postakodea }} {{ fitxa.udala.izenaeu }}<br/>{% endif %}
-                                    {% if kanal.ordutegia %}Ordutegia: {{ kanal.ordutegia }}<br/>{% endif %}
-                                    {% if kanal.telefonoa %}{{ kanal.telefonoa }}<br/>{% endif %}
-                                    {% if kanal.fax %}Faxa: {{ kanal.fax }}<br/>{% endif %}
-                                        </li>
-                                {% else %}
-                                {#<li>{{ kanal.izenaeu }}</li>#}
-                                <li>{% if kanal.izenaeu %}{{ kanal.izenaeu }}<br/>{% endif %}
-                                    {% if kanal.kalea %}{{ kanal.kalea }}{% endif %}{% if kanal.kalezbkia %}&nbsp;{{ kanal.kalezbkia }}, {% endif %}
-                                    {% if kanal.postakodea %}{{ kanal.postakodea }} {{ fitxa.udala.izenaeu }}<br/>{% endif %}
-                                    {% if kanal.ordutegia %}Ordutegia: {{ kanal.ordutegia }}<br/>{% endif %}
-                                    {% if kanal.telefonoa %}{{ kanal.telefonoa }}<br/>{% endif %}
-                                    {% if kanal.fax %}Faxa: {{ kanal.fax }}<br/>{% endif %}
-                                        </li>
-                            {% endif %}
-                        {% endif %}
+                            {{ labelak.kanalalabeleu }}
                         {% else %}
-                        {% if kanal.telematikoa %}
-                            {% if fitxa.zerbitzua %}
-                                <li><a href="{{ fitxa.zerbitzua.erroaes }}{{ fitxa.udala.kodea }}{{ fitxa.parametroa }}">
-                                            {{ kanal.izenaes }}
-                                        </a></li>
-                            {% endif %}
-                            {% else %}
-                            {% if k.esteka %}
-                                {#<li><a href='{{ kanal.estekaes }}' target="_blank">{{ kanal.izenaes }}</a></li>#}
-                                <li>{% if kanal.izenaes %}
-                                            {#<a href="{{ kanal.estekaes }}" target="_blank">{{ kanal.izenaes }}</a><br /> #}
-                                            {% if '@' in kanal.estekaes and 'maps' not in kanal.estekaes %}
-                                        <a href='mailto:{{ kanal.estekaes }}'>{{ kanal.izenaes }}</a><br/>
-                                            {% else %}
-                                        <a href="{{ kanal.estekaes }}" target="_blank">{{ kanal.izenaes }}</a><br/>
+                            {{ labelak.kanalalabeles }}
+                        {% endif %}
+                    </h4>
+                </th>
+            </tr>
+            <tr>
+                <td style="font-size: small;">
+                    {% if eremuak.kanalatable %}
+                        {% for k in kanalmotak %}
+                            {% set aurkitua=0 %}
+                            <ul>
+                            {% for kanal in fitxa.kanalak if kanal.kanalmota == k %}
+                                {% if aurkitua==0 %}
+                                    <b>{{ k.motaeu }}:</b>
+                                    {% set aurkitua=1 %}
+                                {% endif %}
+                                {% if app.request.locale == 'eu' %}
+                                {% if kanal.telematikoa %}
+                                    {% if fitxa.zerbitzua %}
+                                        <li><a href="{{ fitxa.zerbitzua.erroaeu }}{{ fitxa.udala.kodea }}{{ fitxa.parametroa }}">
+                                                        {{ kanal.izenaeu }}
+                                                    </a></li>
                                     {% endif %}
+                                    {% else %}
+                                    {% if k.esteka %}
+                                        {#<li><a href='{{ kanal.estekaeu }}' target="_blank">{{ kanal.izenaeu }}</a></li>#}
+                                        <li>{% if kanal.izenaeu %}
+                                                    {#<a href="{{ kanal.estekaeu }}" target="_blank">{{ kanal.izenaeu }}</a><br />#}
+                                                    {% if '@' in kanal.estekaeu and 'maps' not in kanal.estekaeu %}
+                                                <a href='mailto:{{ kanal.estekaeu }}'>{{ kanal.izenaeu }}</a><br/>
+                                                    {% else %}
+                                                <a href="{{ kanal.estekaeu }}" target="_blank">{{ kanal.izenaeu }}</a><br/>
+                                            {% endif %}
+                                            {% endif %}
+                                            {% if kanal.eraikina %}{{ kanal.eraikina.izena }}<br/>{% endif %}
+                                            {% if kanal.kalea %}{{ kanal.kalea }}{% endif %}{% if kanal.kalezbkia %}&nbsp;{{ kanal.kalezbkia }}, {% endif %}
+                                            {% if kanal.postakodea %}{{ kanal.postakodea }} {{ fitxa.udala.izenaeu }}<br/>{% endif %}
+                                            {% if kanal.ordutegia %}Ordutegia: {{ kanal.ordutegia }}<br/>{% endif %}
+                                            {% if kanal.telefonoa %}{{ kanal.telefonoa }}<br/>{% endif %}
+                                            {% if kanal.fax %}Faxa: {{ kanal.fax }}<br/>{% endif %}
+                                                </li>
+                                        {% else %}
+                                        {#<li>{{ kanal.izenaeu }}</li>#}
+                                        <li>{% if kanal.izenaeu %}{{ kanal.izenaeu }}<br/>{% endif %}
+                                            {% if kanal.kalea %}{{ kanal.kalea }}{% endif %}{% if kanal.kalezbkia %}&nbsp;{{ kanal.kalezbkia }}, {% endif %}
+                                            {% if kanal.postakodea %}{{ kanal.postakodea }} {{ fitxa.udala.izenaeu }}<br/>{% endif %}
+                                            {% if kanal.ordutegia %}Ordutegia: {{ kanal.ordutegia }}<br/>{% endif %}
+                                            {% if kanal.telefonoa %}{{ kanal.telefonoa }}<br/>{% endif %}
+                                            {% if kanal.fax %}Faxa: {{ kanal.fax }}<br/>{% endif %}
+                                                </li>
                                     {% endif %}
-                                    {% if kanal.eraikina %}{{ kanal.eraikina.izena }}<br/>{% endif %}
-                                    {% if kanal.kalea %}{{ kanal.kalea }}{% endif %}{% if kanal.kalezbkia %}&nbsp;{{ kanal.kalezbkia }}, {% endif %}
-                                    {% if kanal.postakodea %}{{ kanal.postakodea }} {{ fitxa.udala.izenaes }}<br/>{% endif %}
-                                    {% if kanal.ordutegia %}Ordutegia: {{ kanal.ordutegia }}<br/>{% endif %}
-                                    {% if kanal.telefonoa %}{{ kanal.telefonoa }}<br/>{% endif %}
-                                    {% if kanal.fax %}Fax: {{ kanal.fax }}<br/>{% endif %}
-                                    </li>
+                                {% endif %}
                                 {% else %}
-                                {#<li>{{ kanal.izenaes }}</li>#}
-                                <li>{% if kanal.izenaes %}{{ kanal.izenaes }}<br/>{% endif %}
-                                    {% if kanal.kalea %}{{ kanal.kalea }}{% endif %}{% if kanal.kalezbkia %}&nbsp;{{ kanal.kalezbkia }}, {% endif %}
-                                    {% if kanal.postakodea %}{{ kanal.postakodea }} {{ fitxa.udala.izenaes }}<br/>{% endif %}
-                                    {% if kanal.ordutegia %}Ordutegia: {{ kanal.ordutegia }}<br/>{% endif %}
-                                    {% if kanal.telefonoa %}{{ kanal.telefonoa }}<br/>{% endif %}
-                                    </li>
+                                {% if kanal.telematikoa %}
+                                    {% if fitxa.zerbitzua %}
+                                        <li><a href="{{ fitxa.zerbitzua.erroaes }}{{ fitxa.udala.kodea }}{{ fitxa.parametroa }}">
+                                                    {{ kanal.izenaes }}
+                                                </a></li>
+                                    {% endif %}
+                                    {% else %}
+                                    {% if k.esteka %}
+                                        {#<li><a href='{{ kanal.estekaes }}' target="_blank">{{ kanal.izenaes }}</a></li>#}
+                                        <li>{% if kanal.izenaes %}
+                                                    {#<a href="{{ kanal.estekaes }}" target="_blank">{{ kanal.izenaes }}</a><br /> #}
+                                                    {% if '@' in kanal.estekaes and 'maps' not in kanal.estekaes %}
+                                                <a href='mailto:{{ kanal.estekaes }}'>{{ kanal.izenaes }}</a><br/>
+                                                    {% else %}
+                                                <a href="{{ kanal.estekaes }}" target="_blank">{{ kanal.izenaes }}</a><br/>
+                                            {% endif %}
+                                            {% endif %}
+                                            {% if kanal.eraikina %}{{ kanal.eraikina.izena }}<br/>{% endif %}
+                                            {% if kanal.kalea %}{{ kanal.kalea }}{% endif %}{% if kanal.kalezbkia %}&nbsp;{{ kanal.kalezbkia }}, {% endif %}
+                                            {% if kanal.postakodea %}{{ kanal.postakodea }} {{ fitxa.udala.izenaes }}<br/>{% endif %}
+                                            {% if kanal.ordutegia %}Ordutegia: {{ kanal.ordutegia }}<br/>{% endif %}
+                                            {% if kanal.telefonoa %}{{ kanal.telefonoa }}<br/>{% endif %}
+                                            {% if kanal.fax %}Fax: {{ kanal.fax }}<br/>{% endif %}
+                                            </li>
+                                        {% else %}
+                                        {#<li>{{ kanal.izenaes }}</li>#}
+                                        <li>{% if kanal.izenaes %}{{ kanal.izenaes }}<br/>{% endif %}
+                                            {% if kanal.kalea %}{{ kanal.kalea }}{% endif %}{% if kanal.kalezbkia %}&nbsp;{{ kanal.kalezbkia }}, {% endif %}
+                                            {% if kanal.postakodea %}{{ kanal.postakodea }} {{ fitxa.udala.izenaes }}<br/>{% endif %}
+                                            {% if kanal.ordutegia %}Ordutegia: {{ kanal.ordutegia }}<br/>{% endif %}
+                                            {% if kanal.telefonoa %}{{ kanal.telefonoa }}<br/>{% endif %}
+                                            </li>
+                                    {% endif %}
+                                {% endif %}
                             {% endif %}
+                            {% endfor %}
+                            </ul>
+                        {% endfor %}
+                    {% endif %}
+                    {% if eremuak.kanalatext %}
+                        {% if app.request.locale == 'eu' %}{{ fitxa.kanalaeu |raw }}
+                        {% else %}{{ fitxa.kanalaes |raw }}
                         {% endif %}
                     {% endif %}
-                    {% endfor %}
-                    </ul>
-                    {% endfor %}
-                {% endif %}
-                {% if eremuak.kanalatext %}
-                    {% if app.request.locale == 'eu' %}{{ fitxa.kanalaeu |raw }}
-                    {% else %}{{ fitxa.kanalaes |raw }}
-                    {% endif %}
-                {% endif %}
-        </span>
-        </div>
+                </td>
+            </tr>
+        </table>
+        {# </div> #}
     {% endif %}
 
     {% if (eremuak.kostuatext or eremuak.kostuatable) %}

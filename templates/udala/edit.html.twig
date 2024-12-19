@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+
 {% block menua %}
     {{ parent() }}
     <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
@@ -15,8 +16,8 @@
         </div>
     </nav>
 {% endblock %}
-{% block body %}
 
+{% block body %}
     {{ form_start(edit_form) }}
     <div class="row">
         <div class="col-sm-2">
@@ -47,15 +48,6 @@
                 {{ form_widget(edit_form.ifk, {'attr': {'class': 'c-checkbox'}}) }}
             </div>
         </div>
-        {#<div class="col-sm-3">#}
-            {#<div class="form-group">#}
-                {#<b>{{ 'messages.orrikatzekop'|trans }}</b>#}
-                {#<label class="control-label">Orrikatzeko lerro kopurua:</label>#}
-                {#{{ form_errors(edit_form.orrikatzea) }}#}
-                {#{{ form_widget(edit_form.orrikatzea, {'attr': {'class': 'form-control'}}) }}#}
-            {#</div>#}
-        {#</div>#}
-
         <div class="col-sm-5">
             <div class="form-group">
                 <b>{{ 'messages.espedientekudeaketa'|trans }}</b>
@@ -138,8 +130,6 @@
                 {#<label class="control-label">Logoa:</label>#}
                 {{ form_errors(edit_form.zergaor) }}
                 {{ form_widget(edit_form.zergaor, {'attr': {'class': 'c-checkbox'}}) }}
-                {{ 'messages.zergaorapp'|trans }}
-                {#Zerga ordenantzen aplikazioa erabiltzen du?#}
             </div>
         </div>
     </div>

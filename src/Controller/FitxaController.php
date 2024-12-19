@@ -550,7 +550,7 @@ class FitxaController extends AbstractController
                 'fitxa/edit.html.twig',
                 array(
                     'fitxa'            => $fitxa,
-                    'udala'            => $this->getUser()->getUdala()->getId(),
+                    'udala'            => $this->getUser()->getUdala() != null ? $this->getUser()->getUdala()->getId() : null,
                     'udal'             => $this->getUser()->getUdala(),
                     'edit_form'        => $editForm->createView(),
                     'delete_form'      => $deleteForm->createView(),

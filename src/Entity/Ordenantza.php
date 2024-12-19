@@ -10,7 +10,7 @@ use App\Repository\OrdenantzaRepository;
  * Ordenantza
  *
  * @ORM\Table(name="ordenantza", uniqueConstraints={@ORM\UniqueConstraint(name="kodea", columns={"kodea"})})
- * @ORM\Entity(repositoryClass=OrdenantzaRepository:class)
+ * @ORM\Entity(repositoryClass=OrdenantzaRepository::class)
  * @UdalaEgiaztatu(userFieldName="udala_id")
  */
 class Ordenantza

@@ -78,7 +78,7 @@ class AurreikusiController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $aurreikusi = new Aurreikusi();
-            $form = $this->createForm('App\Form\AurreikusiType', $aurreikusi);
+            $form = $this->createForm(AurreikusiType::class, $aurreikusi);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
@@ -136,7 +136,7 @@ class AurreikusiController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($aurreikusi);
-            $editForm = $this->createForm('App\Form\AurreikusiType', $aurreikusi);
+            $editForm = $this->createForm(AurreikusiType::class, $aurreikusi);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {

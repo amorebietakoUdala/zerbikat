@@ -21,7 +21,7 @@
         /**
          * Fitxa-Familiak ordena duen ikusi.
          *
-         * @Route("/api/fitxafamiliakordenadauka/{id}/{fitxa_id}/{familia_id}", name="api_fitxafamiliahasorden")
+         * @Route("/api/fitxafamiliakordenadauka/{id}/{fitxa_id}/{familia_id}", name="api_fitxafamiliahasorden", options={"expose"=true})
          * @Method("GET")
          */
         public function fitxafamiliahasordenAction ( $id, $fitxa_id, $familia_id )
@@ -51,7 +51,7 @@
         /**
          * Fitxa-Familiak datooren ordena eman.
          *
-         * @Route("/api/fitxafamilianextorden/{fitxa_id}/{familia_id}", name="api_fitxafamilianextorden")
+         * @Route("/api/fitxafamilianextorden/{fitxa_id}/{familia_id}", name="api_fitxafamilianextorden", options={"expose"=true})
          * @Method("GET")
          */
         public function fitxafamilianextordenAction ( $fitxa_id, $familia_id )
@@ -193,7 +193,7 @@
         /**
          * Displays a form to edit an existing Fitxafamilia entity.
          *
-         * @Route("/{id}/edit", name="fitxafamilia_edit")
+         * @Route("/{id}/edit", name="fitxafamilia_edit", options={"expose"=true})
          * @Method({"GET", "POST"})
          */
         public function editAction ( Request $request, Fitxafamilia $fitxafamilium )
@@ -239,7 +239,7 @@
         /**
          * Deletes a Fitxafamilia entity.
          *
-         * @Route("/{id}", name="fitxafamilia_delete")
+         * @Route("/{id}", name="fitxafamilia_delete", options={"expose"=true})
          * @Method("DELETE")
          */
         public function deleteAction ( Request $request, Fitxafamilia $fitxafamilium )

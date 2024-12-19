@@ -60,7 +60,7 @@ class AraudiaController extends AbstractController
     {
         if ($this->isGranted('ROLE_ADMIN')) {
             $araudium = new Araudia();
-            $form = $this->createForm('App\Form\AraudiaType', $araudium);
+            $form = $this->createForm(AraudiaType::class, $araudium);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
@@ -116,7 +116,7 @@ class AraudiaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($araudium);
-            $editForm = $this->createForm('App\Form\AraudiaType', $araudium);
+            $editForm = $this->createForm(AraudiaType::class, $araudium);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {

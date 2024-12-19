@@ -18,7 +18,6 @@
 {% endblock %}
 {% block body %}
     {{ form_start(form) }}
-        {#{{ form_widget(form) }}#}
 
     <div class="row">
         <div class="col-md-2 text-center">
@@ -49,9 +48,5 @@
         </div>
     </div>
 
-    {#<div style="display: none;">#}
-        {{ form_end(form) }}
-    {#</div>#}
-
-
+    {{ form_end(form) }}
 {% endblock %}

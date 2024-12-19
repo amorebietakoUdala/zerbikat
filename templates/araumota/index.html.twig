@@ -45,7 +45,11 @@
                                 {#<a href="#" onclick="document.getElementById({{ araumotum.id }}).submit();" ><i class="fa fa-trash text-danger"></i></a>#}
                                 {#{{ form_end(deleteforms[araumotum.id]) }}</li>#}
                             <li>{{ form_start(deleteforms[araumotum.id],{'attr': {'id': araumotum.id}}) }}
-                                <a href="#" onclick="ezabatu({{ araumotum.id }},'{{ 'messages.ziurzaude'|trans }}');" ><i class="fa fa-trash text-danger"></i></a>
+                                <a href="#" {{ stimulus_controller('confirmation', {
+                                        id: araumotum.id,
+                                        mezua: 'messages.ziurzaude'|trans}) 
+                                    }} 
+                                    data-action="confirmation#onClick" ><i class="fa fa-trash text-danger"></i></a>
                                 {{ form_end(deleteforms[araumotum.id]) }}</li>
                         {% endif %}
                     </ul>
@@ -64,19 +68,4 @@
         {% endif %}
     </div>
 {% endblock %}
-{% block javascripts %}
-    {{ parent() }}
-    <script type="text/javascript">
-        function ezabatu (id,mezua)
-        {
-//            var r = confirm("Arau-mota EZABATU. Ziur zaude?");
-            var r = confirm(mezua);
-            if (r == true)
-            {
-                document.getElementById(id).submit()
-            }else
-            {
-            }
-        };
-    </script>
-{% endblock %}
+

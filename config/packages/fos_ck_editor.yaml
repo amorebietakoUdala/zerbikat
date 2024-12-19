@@ -9,21 +9,21 @@ fos_ck_editor:
     default_config: simple_config
     configs:
         simple_config:
-        toolbar:
-            - {
-                name: "styles",
-                items:
-                [
-                    "Bold",
-                    "Italic",
-                    "Underline",
-                    "BulletedList",
-                    "NumberedList",
-                    "Outdent",
-                    "Indent",
-                    "Link",
-                    "PasteText",
-                ],
-            }
-        jquery: true
+            toolbar:
+                - {
+                    name: "styles",
+                    items:
+                    [
+                        "Bold",
+                        "Italic",
+                        "Underline",
+                        "BulletedList",
+                        "NumberedList",
+                        "Outdent",
+                        "Indent",
+                        "Link",
+                        "PasteText",
+                    ],
+                }
+            jquery: true
         # forcePasteAsPlainText: true

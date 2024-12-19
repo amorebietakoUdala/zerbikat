@@ -1,0 +1,39 @@
+{% extends "base.html.twig" %}
+
+{% trans_default_domain 'user_bundle' %}
+
+{% block title %}New User{% endblock %}
+
+{% block authenticated %}{% endblock %}
+
+{% block menua %}
+    {{ parent() }}
+    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand">{{ 'messages.erabiltzaileak'|trans }}</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse navbar-right">
+                <ul class="nav navbar-nav">
+                    <li><a href="javascript:document.forms[0].submit()" class="btnGorde fa fa-floppy-o"> {{ 'messages.gorde'|trans }}</a></li>
+                    <li><a href="{{ path('admin_user_list') }}" class="fa fa-undo"> {{ 'messages.utzi'|trans }}</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block body %}
+	<div id="messages">
+		{{ include('@User/_messages.html.twig') }}
+	</div>  
+	{{ include ('@User/user/_form.html.twig', {}) }}
+{% endblock body %}
+
+{% block stylesheets %}
+	{{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block javascripts %}
+	{{ encore_entry_script_tags('app') }}
+{% endblock %}

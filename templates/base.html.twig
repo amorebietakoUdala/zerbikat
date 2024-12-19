@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html base="{{ app.request.baseUrl }}" lang="{{ app.request.locale|split('_')[0] }}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,15 +8,7 @@
 
     <title>{% block title %}ZERBItzuen KATalogoa{% endblock %}</title>
     {% block stylesheets %}
-    {{ encore_entry_link_tags('app') }}
-	{# <link href="{{ asset('build/css/bootstrap.min.css') }}" rel="stylesheet"> #}
-        {# <link href="{{ asset('build/css/zerbikat.css') }}" rel="stylesheet"> #}
-        <link href="{{ asset('build/css/select2-bootstrap.min.css') }}" rel="stylesheet">
-        {# <link rel="stylesheet" type="text/css"
-              href="{{ asset('bundles/bmatznerfontawesome/css/font-awesome.min.css') }}"/> #}
-        <link rel="stylesheet" type="text/css" href="{{ asset('build/css/buttons.dataTables.min.css') }}" />
-        <link rel="stylesheet" type="text/css" href="{{ asset('build/css/datatables.min.css') }}" />
-        <link rel="stylesheet" type="text/css" href="{{ asset('build/css/jquery.dataTables.min.css') }}" />
+        {{ encore_entry_link_tags('app') }}
     {% endblock %}
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('build/images/favicon.ico') }}">
     <link rel="icon" sizes="192x192" href="{{ asset('build/images/touch-icon-192x192.png') }}">
@@ -28,55 +20,8 @@
     <meta name="msapplication-TileColor" content=" #FFFFFF" />
     <meta name="msapplication-square70x70logo" content="{{ asset('build/images/touch-icon-70x70.png') }}" />
     <meta name="msapplication-square150x150logo" content="{{ asset('build/images/touch-icon-150x150.png') }}" />
-{#    <meta name="msapplication-wide310x150logo" content="widetile.png" />
-    <meta name="msapplication-square310x310logo" content="largetile.png" />
-#}    
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="bundles/backend/js/html5shiv.min.js"></script>
-    <script src="bundles/backend/js/respond.min.js"></script>
 
-    <![endif]-->
-
-    {# <style>
-        .affix {
-            top: 2;
-            width: 100%;
-            /*-webkit-transition: all .5s ease-in-out;*/
-            /*transition: all .5s ease-in-out;*/
-            /*background-color: #F44336;*/
-            /*border-color: #F44336;*/
-            z-index: 1010;
-        }
-
-        /*.affix :hover*/
-        /*{*/
-        /*padding: 15px !important;*/
-        /*}*/
-        .affix a {
-            /*color: #777777 !important;*/
-            /*padding: 15px !important;*/
-            color: #777777;
-            padding: 15px;
-            /*-webkit-transition: all .5s ease-in-out;*/
-            /*transition: all .5s ease-in-out;*/
-        }
-
-        .affix a:hover {
-            /*color: #000 !important;*/
-            color: #000;
-        }
-
-        .affix-top a {
-            /*padding: 25px !important;*/
-        }
-
-        /*.affix + .container-fluid {*/
-        /*/*padding-top: 5px;*/
-        /*}*/
-    </style> #}
-    {# {{ include('google_analytics.html.twig') }} #}
+    {{ include('google_analytics.html.twig') }}
 </head>
 <body role="document">
 
@@ -104,7 +49,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ "messages.menu.admin" | trans }}<span class="caret"></span></a>
                                 <ul class="dropdown-menu" id="menuaAdmin">
                                     <li><a href="{{ path('udala_index') }}">{{ 'messages.udala'|trans }}</a></li>
-                                    <li><a href="{{ path('users_index') }}">{{ 'messages.erabiltzaileak'|trans }}</a>
+                                    <li><a href="{{ path('admin_user_list') }}">{{ 'messages.erabiltzaileak'|trans }}</a>
                                     </li>
                                     <li><a href="{{ path('eremuak_index') }}">{{ 'messages.eremuak'|trans }}</a></li>
                                     {% if is_granted('ROLE_SUPER_ADMIN') %}
@@ -181,7 +126,7 @@
                         <li class="list-inline"><a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'eu'})) }}">EU</a></li>
                     {% endblock %}
                     {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
-                        <li class="list-inline"><a href="{{ path('users_index', {'_switch_user': '_exit'}) }}">Modu arruntera itzuli</a></li>
+                        <li class="list-inline"><a href="{{ path('admin_user_list', {'_switch_user': '_exit'}) }}">Modu arruntera itzuli</a></li>
                     {% endif %}
                 </ul>
             </div><!--/.nav-collapse -->
@@ -200,78 +145,6 @@
 
 {% block javascripts %}
     {{ encore_entry_script_tags('app') }}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="{{ asset('build/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('build/js/select2.full.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('build/js/datatables.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('build/js/dataTables.buttons.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('build/js/jszip.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('build/js/pdfmake.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('build/js/pdfmake.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('build/js/vfs_fonts.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('build/js/buttons.html5.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('build/js/bootbox.min.js') }}"></script>
-    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
-
-    <script type="text/javascript">
-
-        $(document).ready(function () {
-            $('#taulazerrenda').DataTable({
-                "language": {
-                    "sProcessing": "Prozesatzen...",
-                    "sLengthMenu": "Erakutsi _MENU_ erregistro",
-                    "sZeroRecords": "Ez da emaitzarik aurkitu",
-                    "sEmptyTable": "Taula hontan ez dago inongo datu erabilgarririk",
-                    "sInfo": "_START_ -etik _END_ -erako erregistroak erakusten, guztira _TOTAL_ erregistro",
-                    "sInfoEmpty": "0tik 0rako erregistroak erakusten, guztira 0 erregistro",
-                    "sInfoFiltered": "(guztira _MAX_ erregistro iragazten)",
-                    "sInfoPostFix": "",
-                    "sSearch": "Aurkitu:",
-                    "sUrl": "",
-                    "sInfoThousands": ",",
-                    "sLoadingRecords": "Abiarazten...",
-                    "oPaginate": {
-                        "sFirst": "Lehena",
-                        "sLast": "Azkena",
-                        "sNext": "Hurrengoa",
-                        "sPrevious": "Aurrekoa"
-                    },
-                    "oAria": {
-                        "sSortAscending": ": Zutabea goranzko eran ordenatzeko aktibatu ",
-                        "sSortDescending": ": Zutabea beheranzko eran ordenatzeko aktibatu"
-                    },
-                    buttons: {
-                        pageLength: {
-                            _: "%d lerro erakutsi",
-                            '-1': "Lerro guztiak"
-                        }
-                    }
-                },
-
-                dom: 'Bfrtip',
-                lengthMenu: [
-                    [10, 25, 50, 100,  -1],
-                    ['10 lerro', '25 lerro', '50 lerro', '100 lerro', 'Guztiak']
-                ],
-                buttons: [
-                    'pageLength',
-                    'excelHtml5',
-                    'csvHtml5',
-                    'pdfHtml5'
-                ]
-            });
-        });
-
-        function ezabatu(id, mezua) {
-            var r = confirm(mezua);
-            if (r == true) {
-                document.getElementById(id).submit()
-            } else {
-            }
-        }
-        ;
-    </script>
 {% endblock %}
 </body>
 </html>

@@ -1,0 +1,18 @@
+security.login.remember_me: "Oroitu"
+security.login.title: "Hasi saioa"
+message.form.allData: __message.form.allData
+layout.logged_in_as: "Erabiltzailea %username% da"
+layout.logout: "Irten"
+layout.login: "Sartu"
+
+user.udala: "Udala"
+user.activated: "Aktibatua"
+user.firstName: "Izena"
+
+ROLE_SUPER_ADMIN: "Super Administratzailea"
+ROLE_KUDEAKETA: "Kudeatzailea"
+
+messages.erabiltzaileak: "Erabiltzaileak"
+messages.gorde: "Gorde"
+messages.utzi: "Utzi"
+messages.erabiltzaileberria: "Erabiltzaile berria"

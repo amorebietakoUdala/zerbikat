@@ -4,8 +4,55 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "815a9b4f0c921d2b071f2eff5082f939",
+    "content-hash": "f5bb3711f04cafd5e61779a8a57da94d",
     "packages": [
+        {
+            "name": "amorebietakoudala/user-bundle",
+            "version": "1.4.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/amorebietakoUdala/user-bundle.git",
+                "reference": "2d322412af4ac1ca80ee8f80230b24d76f8e36e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/amorebietakoUdala/user-bundle/zipball/2d322412af4ac1ca80ee8f80230b24d76f8e36e8",
+                "reference": "2d322412af4ac1ca80ee8f80230b24d76f8e36e8",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/doctrine-bundle": "^1.6||^2.1",
+                "php": "^7.2.5",
+                "symfony/form": "^4.4||^5.4",
+                "symfony/framework-bundle": "^4.4||^5.4",
+                "symfony/ldap": "^4.4||^5.4",
+                "symfony/security-bundle": "^4.4||^5.4"
+            },
+            "require-dev": {
+                "symfony/browser-kit": "^4.4||^5.4",
+                "symfony/css-selector": "^4.4||^5.4",
+                "symfony/phpunit-bridge": "^4.4||^5.4"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "AMREU\\UserBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Amorebietako Udala",
+                    "email": "informatika@amorebieta.eus"
+                }
+            ],
+            "description": "AmorebietakoUdala erabiltzaile bundlela",
+            "support": {
+                "issues": "https://github.com/amorebietakoUdala/user-bundle/issues",
+                "source": "https://github.com/amorebietakoUdala/user-bundle/tree/1.4.6"
+            },
+            "time": "2024-11-25T11:15:59+00:00"
+        },
         {
             "name": "bmatzner/fontawesome-bundle",
             "version": "4.7.0",
@@ -1806,21 +1853,21 @@
         },
         {
             "name": "friendsofsymfony/rest-bundle",
-            "version": "2.7.0",
+            "version": "2.8.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSRestBundle.git",
-                "reference": "42bdfed7db4e253fbd1b295ad06777f01a6d0450"
+                "reference": "369149f1de7f6519960fb1bb54c73e1b8c7dddcf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/42bdfed7db4e253fbd1b295ad06777f01a6d0450",
-                "reference": "42bdfed7db4e253fbd1b295ad06777f01a6d0450",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/369149f1de7f6519960fb1bb54c73e1b8c7dddcf",
+                "reference": "369149f1de7f6519960fb1bb54c73e1b8c7dddcf",
                 "shasum": ""
             },
             "require": {
                 "doctrine/inflector": "^1.0",
-                "php": "^7.1",
+                "php": "^7.1|^8.0",
                 "psr/log": "^1.0",
                 "symfony/config": "^3.4|^4.3",
                 "symfony/debug": "^3.4|^4.3",
@@ -1833,9 +1880,10 @@
                 "symfony/routing": "^3.4|^4.3",
                 "symfony/security-core": "^3.4|^4.3",
                 "willdurand/jsonp-callback-validator": "^1.0",
-                "willdurand/negotiation": "^2.0"
+                "willdurand/negotiation": "^2.0|^3.0"
             },
             "conflict": {
+                "doctrine/inflector": "1.4.0",
                 "jms/serializer": "<1.13.0",
                 "jms/serializer-bundle": "<2.0.0",
                 "sensio/framework-extra-bundle": "<3.0.13"
@@ -1852,7 +1900,7 @@
                 "symfony/css-selector": "^3.4|^4.3",
                 "symfony/expression-language": "^3.4|^4.3",
                 "symfony/form": "^3.4|^4.3",
-                "symfony/phpunit-bridge": "^4.1.8",
+                "symfony/phpunit-bridge": "^5.2",
                 "symfony/security-bundle": "^3.4|^4.3",
                 "symfony/serializer": "^3.4|^4.3",
                 "symfony/templating": "^3.4|^4.3",
@@ -1871,6 +1919,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
+                    "2.x-dev": "2.8-dev",
                     "dev-master": "2.7-dev"
                 }
             },
@@ -1879,6 +1928,7 @@
                     "FOS\\RestBundle\\": ""
                 },
                 "exclude-from-classmap": [
+                    "Resources/",
                     "Tests/"
                 ]
             },
@@ -1907,9 +1957,9 @@
             ],
             "support": {
                 "issues": "https://github.com/FriendsOfSymfony/FOSRestBundle/issues",
-                "source": "https://github.com/FriendsOfSymfony/FOSRestBundle/tree/2.7.0"
+                "source": "https://github.com/FriendsOfSymfony/FOSRestBundle/tree/2.8.6"
             },
-            "time": "2020-01-31T15:56:38+00:00"
+            "time": "2021-01-02T11:24:59+00:00"
         },
         {
             "name": "friendsofsymfony/user-bundle",

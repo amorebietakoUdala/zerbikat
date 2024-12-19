@@ -15,8 +15,23 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         public: false
         bind:
-            $allowedRoles: ["ROLE_USER", "ROLE_ADMIN"]
+            $allowedRoles: ["ROLE_USER","ROLE_KUDEAKETA", "ROLE_ADMIN"]
             $class: App\Entity\User
+
+    Symfony\Component\Ldap\Ldap:
+        arguments: ['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter']
+
+    ldap:
+        alias: Symfony\Component\Ldap\Ldap
+            
+    Symfony\Component\Ldap\Adapter\ExtLdap\Adapter:
+        arguments:
+            -   host: '%env(LDAP_HOST)%'
+                port: '%env(LDAP_PORT)%'
+                encryption: none
+                options:
+                    protocol_version: 3
+                    referrals: false    
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -49,18 +64,6 @@ services:
             - "@annotation_reader"
         tags:
             - { name: kernel.event_listener, event: kernel.request }
-
-    UserBundle\:
-        resource: '../src/UserBundle'
-        exclude: '../src/UserBundle/{DependencyInjection,Repository,Entity}/'
-#            - '../src/AppBundle/Kernel.php'
-
-    # controllers are imported separately to make sure services can be injected
-    # as action arguments even if you don't extend any base controller class
-    UserBundle\Controller\:
-        resource: '../src/UserBundle/Controller'
-        public: true
-        tags: ['controller.service_arguments']
 
 #    easycorp.easylog.handler:
     EasyCorp\EasyLog\EasyLogHandler:

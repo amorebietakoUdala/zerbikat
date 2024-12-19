@@ -179,6 +179,7 @@ class ApiController extends FOSRestController
      *
      * @Annotations\View()
      * @Get("/familiak/{udala}")
+     * @Route(name="get_familiak", options={"expose"=true})
      */
     public function getFamiliakAction( Request $request, $udala )
     {
@@ -206,6 +207,7 @@ class ApiController extends FOSRestController
      *
      * @Annotations\View()
      * @Get("/azpifamiliak/{id}")
+     * @Route(name="get_azpifamiliak", options={"expose"=true})
      */
     public function getAzpifamiliakAction( Request $request, $id )
     {
@@ -262,6 +264,7 @@ class ApiController extends FOSRestController
      *
      * @Annotations\View()
      * @Get("/fitxa/{id}")
+     * @Route(name="get_fitxa", options={"expose"=true})
      */
     public function getFitxaAction( Fitxa $fitxa )
     {

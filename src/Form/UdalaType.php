@@ -29,7 +29,7 @@ class UdalaType extends AbstractType
             ->add('espedientekudeaketa')
             ->add('orrikatzea')
             ->add('zergaor', CheckboxType::class, array(
-                'label'    => 'Zerga ordenantzen aplikazioa erabiltzen du?'))
+                'label'    => 'messages.zergaorapp'))
         ;
     }
     

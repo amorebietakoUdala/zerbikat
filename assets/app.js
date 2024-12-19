@@ -6,7 +6,7 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
-import './styles/app.css';
+import './css/app.css';
 
 // start the Stimulus application
 import './bootstrap';
@@ -14,3 +14,21 @@ import './bootstrap';
 import 'bootstrap';
 
 import $ from 'jquery';
+
+/* <script type="text/javascript" src="{{ asset('build/js/datatables.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('build/js/dataTables.buttons.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('build/js/jszip.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('build/js/pdfmake.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('build/js/pdfmake.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('build/js/vfs_fonts.js') }}"></script>
+<script type="text/javascript" src="{{ asset('build/js/buttons.html5.min.js') }}"></script> #} */
+
+import './js/common/datatables.js';
+
+global.$ = $;
+global.jQuery = $;
+const htmlElement = document.documentElement;
+const baseValue = htmlElement.getAttribute('base') || '';
+global.base = baseValue;
+global.locale = $('html').attr("lang");
+
