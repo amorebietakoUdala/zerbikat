@@ -22,7 +22,7 @@ return static function (RectorConfig $rectorConfig): void {
     // define sets of rules
        $rectorConfig->sets([
         LevelSetList::UP_TO_PHP_72,
-        SymfonyLevelSetList::UP_TO_SYMFONY_44,
+        SymfonyLevelSetList::UP_TO_SYMFONY_50,
         SymfonySetList::SYMFONY_CODE_QUALITY,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
     ]);

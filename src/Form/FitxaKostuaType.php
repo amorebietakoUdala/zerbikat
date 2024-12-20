@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\FitxaKostua;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -63,6 +64,10 @@ class FitxaKostuaType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(['data_class' => \App\Entity\FitxaKostua::class, 'udala' => null, 'api_url' => null]);
+        $resolver->setDefaults([
+            'data_class' => FitxaKostua::class, 
+            'udala' => null, 
+            'api_url' => null
+        ]);
     }
 }

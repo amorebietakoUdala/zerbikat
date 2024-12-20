@@ -32,7 +32,7 @@ security:
 
         main:
             anonymous: lazy
-            logout_on_user_change: true
+#            logout_on_user_change: true
             pattern: ^/
             guard:
                 authenticators:
