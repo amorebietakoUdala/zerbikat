@@ -25,6 +25,7 @@ class FrontendController extends AbstractController
     private $sailaRepo;
     private $kanalmotaRepo;
     private $eremuakRepo;
+    private $zzoo_aplikazioaren_API_url;
     
     public function __construct(
         TCPDFController $tcpdfController,
@@ -32,7 +33,8 @@ class FrontendController extends AbstractController
         FamiliaRepository $familiaRepo,
         SailaRepository $sailaRepo,
         KanalmotaRepository $kanalmotaRepo,
-        EremuakRepository $eremuakRepo
+        EremuakRepository $eremuakRepo,
+        $zzoo_aplikazioaren_API_url
 
     )
     {
@@ -42,6 +44,7 @@ class FrontendController extends AbstractController
         $this->sailaRepo = $sailaRepo;
         $this->kanalmotaRepo = $kanalmotaRepo;
         $this->eremuakRepo = $eremuakRepo;
+        $this->zzoo_aplikazioaren_API_url = $zzoo_aplikazioaren_API_url;
     }
 
     /**
@@ -93,8 +96,7 @@ class FrontendController extends AbstractController
         $kostuZerrenda = array();
         foreach ( $fitxa->getKostuak() as $kostu ) {
             $client = new GuzzleHttp\Client();
-            $api    = $this->getParameter( 'zzoo_aplikazioaren_API_url' );
-            $proba  = $client->request( 'GET', $api . '/zerga/' . $kostu->getKostua() . '.json' );
+            $proba  = $client->request( 'GET', $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '.json' );
 
             $fitxaKostua     = (string)$proba->getBody();
             $array           = json_decode( $fitxaKostua, true );
@@ -182,8 +184,7 @@ class FrontendController extends AbstractController
         $kostuZerrenda = array();
         foreach ( $fitxa->getKostuak() as $kostu ) {
             $client = new GuzzleHttp\Client();
-            $api    = $this->getParameter( 'zzoo_aplikazioaren_API_url' );
-            $proba  = $client->request( 'GET', $api . '/zerga/' . $kostu->getKostua() . '.json' );
+            $proba  = $client->request( 'GET', $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '.json' );
 
             $fitxaKostua     = (string)$proba->getBody();
             $array           = json_decode( $fitxaKostua, true );
@@ -222,9 +223,8 @@ class FrontendController extends AbstractController
         foreach ( $fitxa->getKostuak() as $kostu ) {
             $client = new GuzzleHttp\Client();
 
-            $api = $this->getParameter( 'zzoo_aplikazioaren_API_url' );
 //            $proba = $client->request( 'GET', 'http://zergaordenantzak.dev/app_dev.php/api/azpiatalas/'.$kostu->getKostua().'.json' );
-            $proba = $client->request( 'GET', $api . '/zerga/' . $kostu->getKostua() . '.json' );
+            $proba = $client->request( 'GET', $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '.json' );
 
             $fitxaKostua     = (string)$proba->getBody();
             $array           = json_decode( $fitxaKostua, true );

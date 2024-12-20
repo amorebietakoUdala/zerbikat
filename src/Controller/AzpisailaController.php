@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Azpisaila;
 use App\Form\AzpisailaType;
+use App\Repository\AzpisailaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,15 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class AzpisailaController extends AbstractController
 {
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, AzpisailaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Azpisaila entities.
      *
@@ -30,9 +41,7 @@ class AzpisailaController extends AbstractController
     {
         if ($this->isGranted('ROLE_KUDEAKETA'))
         {
-            $em = $this->getDoctrine()->getManager();
-            $azpisailas = $em->getRepository('App:Azpisaila')
-                ->findBy( array(), array('kodea'=>'ASC') );
+            $azpisailas = $this->repo->findBy( array(), array('kodea'=>'ASC') );
 
             $deleteForms = array();
             foreach ($azpisailas as $azpisaila) {
@@ -60,16 +69,15 @@ class AzpisailaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $azpisaila = new Azpisaila();
-            $form = $this->createForm('App\Form\AzpisailaType', $azpisaila);
+            $form = $this->createForm(AzpisailaType::class, $azpisaila);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($azpisaila);
-                $em->flush();
+                $this->em->persist($azpisaila);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('azpisaila_show', array('id' => $azpisaila->getId()));
                 return $this->redirectToRoute('azpisaila_index');
@@ -117,13 +125,12 @@ class AzpisailaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($azpisaila);
-            $editForm = $this->createForm('App\Form\AzpisailaType', $azpisaila);
+            $editForm = $this->createForm(AzpisailaType::class, $azpisaila);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($azpisaila);
-                $em->flush();
+                $this->em->persist($azpisaila);
+                $this->em->flush();
 
                 return $this->redirectToRoute('azpisaila_edit', array('id' => $azpisaila->getId()));
             }
@@ -153,9 +160,8 @@ class AzpisailaController extends AbstractController
             $form = $this->createDeleteForm($azpisaila);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($azpisaila);
-                $em->flush();
+                $this->em->remove($azpisaila);
+                $this->em->flush();
             }
             return $this->redirectToRoute('azpisaila_index');
         }else

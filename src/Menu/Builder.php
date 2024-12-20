@@ -57,23 +57,5 @@ use ContainerAwareTrait;
 
 
         return $menu;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        return $menu;
     }
 }

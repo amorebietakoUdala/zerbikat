@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Kontzeptua;
 use App\Form\KontzeptuaType;
+use App\Repository\KontzeptuaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Kontzeptua controller.
@@ -16,6 +18,15 @@ use App\Form\KontzeptuaType;
  */
 class KontzeptuaController extends AbstractController
 {
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, KontzeptuaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Kontzeptua entities.
      *
@@ -26,8 +37,7 @@ class KontzeptuaController extends AbstractController
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $em = $this->getDoctrine()->getManager();
-            $kontzeptuas = $em->getRepository('App:Kontzeptua')->findAll();
+            $kontzeptuas = $this->repo->findAll();
 
             $deleteForms = array();
             foreach ($kontzeptuas as $kontzeptua) {
@@ -56,7 +66,7 @@ class KontzeptuaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $kontzeptua = new Kontzeptua();
-            $form = $this->createForm('App\Form\KontzeptuaType', $kontzeptua);
+            $form = $this->createForm(KontzeptuaType::class, $kontzeptua);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
@@ -65,9 +75,8 @@ class KontzeptuaController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
 //                $kontzeptua->setCreatedAt(new \DateTime());
 //                $kontzeptua->setUpdatedAt(new \DateTime());
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($kontzeptua);
-                $em->flush();
+                $this->em->persist($kontzeptua);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('kontzeptua_show', array('id' => $kontzeptua->getId()));
                 return $this->redirectToRoute('kontzeptua_index');
@@ -116,13 +125,12 @@ class KontzeptuaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($kontzeptua);
-            $editForm = $this->createForm('App\Form\KontzeptuaType', $kontzeptua);
+            $editForm = $this->createForm(KontzeptuaType::class, $kontzeptua);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($kontzeptua);
-                $em->flush();
+                $this->em->persist($kontzeptua);
+                $this->em->flush();
 
                 return $this->redirectToRoute('kontzeptua_edit', array('id' => $kontzeptua->getId()));
             }
@@ -153,9 +161,8 @@ class KontzeptuaController extends AbstractController
             $form = $this->createDeleteForm($kontzeptua);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($kontzeptua);
-                $em->flush();
+                $this->em->remove($kontzeptua);
+                $this->em->flush();
             }
             return $this->redirectToRoute('kontzeptua_index');
         }else

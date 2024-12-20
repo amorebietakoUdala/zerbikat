@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Ordenantzaparrafoa;
 use App\Form\OrdenantzaparrafoaType;
+use App\Repository\OrdenantzaparrafoaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Ordenantzaparrafoa controller.
@@ -16,6 +18,15 @@ use App\Form\OrdenantzaparrafoaType;
  */
 class OrdenantzaparrafoaController extends AbstractController
 {
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, OrdenantzaparrafoaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Ordenantzaparrafoa entities.
      *
@@ -26,8 +37,7 @@ class OrdenantzaparrafoaController extends AbstractController
     {
 
         if ($this->isGranted('ROLE_ADMIN')) {
-            $em = $this->getDoctrine()->getManager();
-            $ordenantzaparrafoas = $em->getRepository('App:Ordenantzaparrafoa')->findAll();
+            $ordenantzaparrafoas = $this->repo->findAll();
 
             $deleteForms = array();
             foreach ($ordenantzaparrafoas as $ordenantzaparrafoa) {
@@ -56,7 +66,7 @@ class OrdenantzaparrafoaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $ordenantzaparrafoa = new Ordenantzaparrafoa();
-            $form = $this->createForm('App\Form\OrdenantzaparrafoaType', $ordenantzaparrafoa);
+            $form = $this->createForm(OrdenantzaparrafoaType::class, $ordenantzaparrafoa);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
@@ -65,9 +75,8 @@ class OrdenantzaparrafoaController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 $ordenantzaparrafoa->setCreatedAt(new \DateTime());
                 $ordenantzaparrafoa->setUpdatedAt(new \DateTime());
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($ordenantzaparrafoa);
-                $em->flush();
+                $this->em->persist($ordenantzaparrafoa);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('ordenantzaparrafoa_show', array('id' => $ordenantzaparrafoa->getId()));
                 return $this->redirectToRoute('ordenantzaparrafoa_index');
@@ -116,13 +125,12 @@ class OrdenantzaparrafoaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($ordenantzaparrafoa);
-            $editForm = $this->createForm('App\Form\OrdenantzaparrafoaType', $ordenantzaparrafoa);
+            $editForm = $this->createForm(OrdenantzaparrafoaType::class, $ordenantzaparrafoa);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($ordenantzaparrafoa);
-                $em->flush();
+                $this->em->persist($ordenantzaparrafoa);
+                $this->em->flush();
 
                 return $this->redirectToRoute('ordenantzaparrafoa_edit', array('id' => $ordenantzaparrafoa->getId()));
             }
@@ -153,9 +161,8 @@ class OrdenantzaparrafoaController extends AbstractController
             $form = $this->createDeleteForm($ordenantzaparrafoa);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($ordenantzaparrafoa);
-                $em->flush();
+                $this->em->remove($ordenantzaparrafoa);
+                $this->em->flush();
             }
             return $this->redirectToRoute('ordenantzaparrafoa_index');
         }else

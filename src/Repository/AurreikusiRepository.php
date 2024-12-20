@@ -47,32 +47,4 @@ class AurreikusiRepository extends ServiceEntityRepository
         }
     }
 
-    // /**
-    //  * @return Aurreikusi[] Returns an array of Aurreikusik objects
-    //  */
-
-    // public function findByAurreikusikByUdala($udala)
-    // {
-    //     return $this->createQueryBuilder('s')
-    //         ->innerJoin('App:Udala','u')
-    //         ->andWhere('u.kodea = :udala')
-    //         ->setParameter('udala', $udala)
-    //         ->orderBy('s.kodea', 'DESC')
-    //         ->getQuery()
-    //         ->getResult()
-    //     ;
-    // }
-
-
-    /*
-    public function findOneBySomeField($value): ?Aurreikusik
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

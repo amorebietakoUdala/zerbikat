@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Eremuak;
 use App\Form\EremuakType;
+use App\Repository\EremuakRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,15 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class EremuakController extends AbstractController
 {
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, EremuakRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Eremuak entities.
      *
@@ -31,8 +42,7 @@ class EremuakController extends AbstractController
 
         if ($this->isGranted('ROLE_SUPER_ADMIN'))
         {
-            $em = $this->getDoctrine()->getManager();
-            $eremuaks = $em->getRepository('App:Eremuak')->findAll();
+            $eremuaks = $this->repo->findAll();
 
             $adapter = new ArrayAdapter($eremuaks);
             $pagerfanta = new Pagerfanta($adapter);
@@ -65,14 +75,13 @@ class EremuakController extends AbstractController
         {
 
             $udala=$this->getUser()->getUdala()->getId();
-            $em2 = $this->getDoctrine()->getManager();
-            $query = $em2->createQuery('
+            $query = $this->em->createQuery('
               SELECT f.id
                 FROM App:Eremuak f
                 WHERE f.udala = :udala
               ');
-                $query->setParameter('udala', $udala);
-                $eremuid = $query->getSingleResult();
+            $query->setParameter('udala', $udala);
+            $eremuid = $query->getSingleResult();
 
             $eremuak=$this->getUser()->getUdala()->getEremuak();
 
@@ -95,13 +104,12 @@ class EremuakController extends AbstractController
         if ($this->isGranted('ROLE_SUPER_ADMIN'))
         {
             $eremuak = new Eremuak();
-            $form = $this->createForm('App\Form\EremuakType', $eremuak);
+            $form = $this->createForm(EremuakType::class, $eremuak);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($eremuak);
-                $em->flush();
+                $this->em->persist($eremuak);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('eremuak_show', array('id' => $eremuak->getId()));
                 return $this->redirectToRoute('eremuak_index');
@@ -146,13 +154,12 @@ class EremuakController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($eremuak);
-            $editForm = $this->createForm('App\Form\EremuakType', $eremuak);
+            $editForm = $this->createForm(EremuakType::class, $eremuak);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($eremuak);
-                $em->flush();
+                $this->em->persist($eremuak);
+                $this->em->flush();
 
                 return $this->redirectToRoute('eremuak_edit', array('id' => $eremuak->getId()));
             }
@@ -182,9 +189,8 @@ class EremuakController extends AbstractController
             $form = $this->createDeleteForm($eremuak);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($eremuak);
-                $em->flush();
+                $this->em->remove($eremuak);
+                $this->em->flush();
             }
             return $this->redirectToRoute('eremuak_index');
         }else

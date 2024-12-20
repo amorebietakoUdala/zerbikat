@@ -46,33 +46,4 @@ class FitxaAldaketaRepository extends ServiceEntityRepository
             $this->_em->flush();
         }
     }
-
-    // /**
-    //  * @return FitxaAldaketa[] Returns an array of FitxaAldaketak objects
-    //  */
-
-    // public function findByFitxaAldaketakByUdala($udala)
-    // {
-    //     return $this->createQueryBuilder('s')
-    //         ->innerJoin('App:Udala','u')
-    //         ->andWhere('u.kodea = :udala')
-    //         ->setParameter('udala', $udala)
-    //         ->orderBy('s.kodea', 'DESC')
-    //         ->getQuery()
-    //         ->getResult()
-    //     ;
-    // }
-
-
-    /*
-    public function findOneBySomeField($value): ?FitxaAldaketak
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

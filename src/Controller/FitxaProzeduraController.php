@@ -8,8 +8,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\FitxaProzedura;
 use App\Form\FitxaProzeduraType;
+use App\Repository\FitxaProzeduraRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * FitxaProzedura controller.
@@ -18,6 +19,15 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class FitxaProzeduraController extends AbstractController
 {
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, FitxaProzeduraRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all FitxaProzedura entities.
      *
@@ -26,9 +36,7 @@ class FitxaProzeduraController extends AbstractController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $fitxaProzeduras = $em->getRepository('App:FitxaProzedura')->findAll();
+        $fitxaProzeduras = $this->repo->findAll();
 
         return $this->render('fitxaprozedura/index.html.twig', array(
             'fitxaProzeduras' => $fitxaProzeduras,
@@ -44,13 +52,12 @@ class FitxaProzeduraController extends AbstractController
     public function newAction(Request $request)
     {
         $fitxaProzedura = new FitxaProzedura();
-        $form = $this->createForm('App\Form\FitxaProzeduraType', $fitxaProzedura);
+        $form = $this->createForm(FitxaProzeduraType::class, $fitxaProzedura);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($fitxaProzedura);
-            $em->flush();
+            $this->em->persist($fitxaProzedura);
+            $this->em->flush();
 
             return $this->redirectToRoute('fitxaprozedura_show', array('id' => $fitxaProzedura->getId()));
         } else
@@ -90,13 +97,12 @@ class FitxaProzeduraController extends AbstractController
     public function editAction(Request $request, FitxaProzedura $fitxaProzedura)
     {
         $deleteForm = $this->createDeleteForm($fitxaProzedura);
-        $editForm = $this->createForm('App\Form\FitxaProzeduraType', $fitxaProzedura);
+        $editForm = $this->createForm(FitxaProzeduraType::class, $fitxaProzedura);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($fitxaProzedura);
-            $em->flush();
+            $this->em->persist($fitxaProzedura);
+            $this->em->flush();
 
             return $this->redirectToRoute('fitxaprozedura_edit', array('id' => $fitxaProzedura->getId()));
         }
@@ -121,9 +127,8 @@ class FitxaProzeduraController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($fitxaProzedura);
-            $em->flush();
+            $this->em->remove($fitxaProzedura);
+            $this->em->flush();
         }
 
         return $this->redirectToRoute('fitxaprozedura_index');

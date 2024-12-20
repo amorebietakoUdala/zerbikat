@@ -52,16 +52,6 @@ class FamiliaRepository extends ServiceEntityRepository
     /**
      * @return Fitxa[] Returns an array of Fitxak objects
      */
-    // $query = $em->createQuery(
-    //     '
-    //   SELECT f
-    //     FROM App:Familia f
-    //       INNER JOIN f.udala u
-    //     WHERE u.kodea = :udala
-    // '
-    // );
-    // $query->setParameter( 'udala', $udala );
-
     public function findByUdala($udala)
     {
         return $this->createQueryBuilder('f')
@@ -73,24 +63,6 @@ class FamiliaRepository extends ServiceEntityRepository
         ;
     }
     
-    // $sqlFamiliak = 
-    // /** @lang text */
-    // '
-    //     SELECT f, COALESCE (f.ordena,0) as HIDDEN ezkutuan            
-    //     FROM App:Familia f
-    //     LEFT JOIN App:Udala u WITH f.udala=u.id
-    //     WHERE u.kodea = :udala AND f.parent is NULL';
-    // if (null !== $familia) {
-    //     $sqlFamiliak = $sqlFamiliak. ' AND f.id = :familia';
-    // }
-    // $sqlFamiliak = $sqlFamiliak.' ORDER BY f.familia'.$request->getLocale().' ASC';
-    // // dump($sqlFamiliak);die;
-    // $query = $em->createQuery($sqlFamiliak);
-    // $query->setParameter( 'udala', $udala );
-    // if (null !== $familia) {
-    //     $query->setParameter( 'familia', $familia );
-    // }
-
     public function findByUdalaAndParentAndFamiliaId($udala, $locale, $parent = null, $familiaId = null) {
         $qb = $this->createQueryBuilder('f')
             ->select('f, COALESCE (f.ordena, 0) as HIDDEN ezkutuan');
@@ -130,16 +102,4 @@ class FamiliaRepository extends ServiceEntityRepository
         }
         return $qb;
     }
-
-    /*
-    public function findOneBySomeField($value): ?Fitxak
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

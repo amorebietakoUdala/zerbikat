@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Azpiatalaparrafoa;
 use App\Form\AzpiatalaparrafoaType;
+use App\Repository\AzpiatalaparrafoaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Azpiatalaparrafoa controller.
@@ -16,6 +18,16 @@ use App\Form\AzpiatalaparrafoaType;
  */
 class AzpiatalaparrafoaController extends AbstractController
 {
+
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, AzpiatalaparrafoaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Azpiatalaparrafoa entities.
      *
@@ -24,8 +36,7 @@ class AzpiatalaparrafoaController extends AbstractController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $azpiatalaparrafoas = $em->getRepository('App:Azpiatalaparrafoa')->findAll();
+        $azpiatalaparrafoas = $this->repo->findAll();
 
         $deleteForms = array();
         foreach ($azpiatalaparrafoas as $azpiatalaparrafoa) {
@@ -49,7 +60,7 @@ class AzpiatalaparrafoaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN')) 
         {
             $azpiatalaparrafoa = new Azpiatalaparrafoa();
-            $form = $this->createForm('App\Form\AzpiatalaparrafoaType', $azpiatalaparrafoa);
+            $form = $this->createForm(AzpiatalaparrafoaType::class, $azpiatalaparrafoa);
             $form->handleRequest($request);
     
 //            $form->getData()->setUdala($this->getUser()->getUdala());
@@ -58,9 +69,8 @@ class AzpiatalaparrafoaController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
 //                $azpiatalaparrafoa->setCreatedAt(new \DateTime());
 //                $azpiatalaparrafoa->setUpdatedAt(new \DateTime());
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($azpiatalaparrafoa);
-                $em->flush();
+                $this->em->persist($azpiatalaparrafoa);
+                $this->em->flush();
     
                 return $this->redirectToRoute('azpiatalaparrafoa_show', array('id' => $azpiatalaparrafoa->getId()));
             } else
@@ -107,13 +117,12 @@ class AzpiatalaparrafoaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($azpiatalaparrafoa);
-            $editForm = $this->createForm('App\Form\AzpiatalaparrafoaType', $azpiatalaparrafoa);
+            $editForm = $this->createForm(AzpiatalaparrafoaType::class, $azpiatalaparrafoa);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($azpiatalaparrafoa);
-                $em->flush();
+                $this->em->persist($azpiatalaparrafoa);
+                $this->em->flush();
 
                 return $this->redirectToRoute('azpiatalaparrafoa_edit', array('id' => $azpiatalaparrafoa->getId()));
             }
@@ -143,9 +152,8 @@ class AzpiatalaparrafoaController extends AbstractController
             $form = $this->createDeleteForm($azpiatalaparrafoa);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($azpiatalaparrafoa);
-                $em->flush();
+                $this->em->remove($azpiatalaparrafoa);
+                $this->em->flush();
             }
             return $this->redirectToRoute('azpiatalaparrafoa_index');
         }else

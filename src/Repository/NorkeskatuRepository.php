@@ -46,33 +46,4 @@ class NorkeskatuRepository extends ServiceEntityRepository
             $this->_em->flush();
         }
     }
-
-    // /**
-    //  * @return Norkeskatu[] Returns an array of Norkeskatuk objects
-    //  */
-
-    // public function findByNorkeskatukByUdala($udala)
-    // {
-    //     return $this->createQueryBuilder('s')
-    //         ->innerJoin('App:Udala','u')
-    //         ->andWhere('u.kodea = :udala')
-    //         ->setParameter('udala', $udala)
-    //         ->orderBy('s.kodea', 'DESC')
-    //         ->getQuery()
-    //         ->getResult()
-    //     ;
-    // }
-
-
-    /*
-    public function findOneBySomeField($value): ?Norkeskatuk
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

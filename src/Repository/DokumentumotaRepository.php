@@ -46,33 +46,4 @@ class DokumentumotaRepository extends ServiceEntityRepository
             $this->_em->flush();
         }
     }
-
-    // /**
-    //  * @return Docklagun[] Returns an array of Docklagunk objects
-    //  */
-
-    // public function findByDocklagunkByUdala($udala)
-    // {
-    //     return $this->createQueryBuilder('s')
-    //         ->innerJoin('App:Udala','u')
-    //         ->andWhere('u.kodea = :udala')
-    //         ->setParameter('udala', $udala)
-    //         ->orderBy('s.kodea', 'DESC')
-    //         ->getQuery()
-    //         ->getResult()
-    //     ;
-    // }
-
-
-    /*
-    public function findOneBySomeField($value): ?Docklagunk
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

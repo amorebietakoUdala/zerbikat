@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Atalaparrafoa;
 use App\Form\AtalaparrafoaType;
+use App\Repository\AtalaparrafoaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Atalaparrafoa controller.
@@ -16,6 +18,16 @@ use App\Form\AtalaparrafoaType;
  */
 class AtalaparrafoaController extends AbstractController
 {
+
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, AtalaparrafoaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Atalaparrafoa entities.
      *
@@ -25,8 +37,7 @@ class AtalaparrafoaController extends AbstractController
     public function indexAction()
     {
         if ($this->isGranted('ROLE_ADMIN')) {
-            $em = $this->getDoctrine()->getManager();
-            $atalaparrafoas = $em->getRepository('App:Atalaparrafoa')->findAll();
+            $atalaparrafoas = $this->repo->findAll();
 
             $deleteForms = array();
             foreach ($atalaparrafoas as $parrafoa) {
@@ -61,9 +72,8 @@ class AtalaparrafoaController extends AbstractController
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($atalaparrafoa);
-                $em->flush();
+                $this->em->persist($atalaparrafoa);
+                $this->em->flush();
 
                 return $this->redirectToRoute('atalaparrafoa_show', array('id' => $atalaparrafoa->getId()));
             } else
@@ -115,9 +125,8 @@ class AtalaparrafoaController extends AbstractController
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($atalaparrafoa);
-                $em->flush();
+                $this->em->persist($atalaparrafoa);
+                $this->em->flush();
 
                 return $this->redirectToRoute('atalaparrafoa_edit', array('id' => $atalaparrafoa->getId()));
             }
@@ -148,9 +157,8 @@ class AtalaparrafoaController extends AbstractController
             $form = $this->createDeleteForm($atalaparrafoa);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($atalaparrafoa);
-                $em->flush();
+                $this->em->remove($atalaparrafoa);
+                $this->em->flush();
             }
             return $this->redirectToRoute('atalaparrafoa_index');
         }else

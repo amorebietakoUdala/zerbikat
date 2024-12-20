@@ -46,33 +46,4 @@ class ArruntaRepository extends ServiceEntityRepository
             $this->_em->flush();
         }
     }
-
-    // /**
-    //  * @return Arrunta[] Returns an array of Arruntak objects
-    //  */
-
-    // public function findByArruntakByUdala($udala)
-    // {
-    //     return $this->createQueryBuilder('s')
-    //         ->innerJoin('App:Udala','u')
-    //         ->andWhere('u.kodea = :udala')
-    //         ->setParameter('udala', $udala)
-    //         ->orderBy('s.kodea', 'DESC')
-    //         ->getQuery()
-    //         ->getResult()
-    //     ;
-    // }
-
-
-    /*
-    public function findOneBySomeField($value): ?Arruntak
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

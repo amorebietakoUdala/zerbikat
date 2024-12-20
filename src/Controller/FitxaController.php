@@ -15,6 +15,13 @@ use App\Entity\Fitxa;
 use App\Entity\Fitxafamilia;
 use \Symfony\Component\HttpFoundation\Response;
 use App\Entity\FitxaAldaketa;
+use App\Form\FitxafamiliaType;
+use App\Form\FitxanewType;
+use App\Form\FitxaType;
+use App\Repository\FamiliaRepository;
+use App\Repository\FitxaRepository;
+use App\Repository\KanalmotaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use WhiteOctober\TCPDFBundle\Controller\TCPDFController;
 
 /**
@@ -27,11 +34,21 @@ class FitxaController extends AbstractController
 
     private $logger;
     private $tcpdfController;
+    private $zzoo_aplikazioaren_API_url;
+    private $repo;
+    private $em;
+    private $familiaRepo;
+    private $kanalmotaRepo;
 
-    public function __construct(LoggerInterface $logger, TCPDFController $tcpdfController)
+    public function __construct(EntityManagerInterface $em, FitxaRepository $repo, FamiliaRepository $familiaRepo, KanalmotaRepository $kanalmotaRepo, LoggerInterface $logger, TCPDFController $tcpdfController, $zzoo_aplikazioaren_API_url)
     {
+        $this->em = $em;
+        $this->repo = $repo;
+        $this->familiaRepo = $familiaRepo;
+        $this->kanalmotaRepo = $kanalmotaRepo;
         $this->logger = $logger;
         $this->tcpdfController = $tcpdfController;
+        $this->zzoo_aplikazioaren_API_url = $zzoo_aplikazioaren_API_url;
     }
 
     /**
@@ -43,15 +60,7 @@ class FitxaController extends AbstractController
     public function indexAction()
     {
         if ( $this->isGranted( 'ROLE_USER' ) ) {
-            $em = $this->getDoctrine()->getManager();
-            /** @var Query $query */
-            $query = $em->createQuery(
-                'SELECT f 
-                      FROM App:Fitxa f
-                      LEFT JOIN f.azpisaila a
-                      ORDER BY a.saila ASC, f.azpisaila ASC        '
-            );
-            $fitxas = $query->getResult();
+            $fitxas = $this->repo->findAzpisailakOrderedBySailakAzpisailak();
 
             $deleteForms = array();
             /** @var Fitxa $fitxa */
@@ -86,16 +95,14 @@ class FitxaController extends AbstractController
             /** @var \App\Entity\Fitxa $fitxa */
             $fitxa = new Fitxa();
             $fitxa->setUdala( $this->getUser()->getUdala() );
-            $form = $this->createForm( 'App\Form\FitxanewType', $fitxa );
+            $form = $this->createForm( FitxanewType::class, $fitxa );
             $form->handleRequest( $request );
-
-            $em = $this->getDoctrine()->getManager();
 
             if ( $form->isSubmitted() && $form->isValid() ) {
                 $fitxa->setCreatedAt( new \DateTime() );
                 $fitxa->setNorkSortua($this->getUser());
-                $em->persist( $fitxa );
-                $em->flush();
+                $this->em->persist( $fitxa );
+                $this->em->flush();
                 $this->saveFitxaAldaketa($fitxa, 'Sortua');
 
                 return $this->redirectToRoute( 'fitxa_edit', array( 'id' => $fitxa->getId() ) );
@@ -130,21 +137,19 @@ class FitxaController extends AbstractController
     {
         $deleteForm = $this->createDeleteForm( $fitxa );
 
-        $em = $this->getDoctrine()->getManager();
-        $kanalmotak = $em->getRepository( 'App:Kanalmota' )->findAll();
+        $kanalmotak = $this->kanalmotaRepo->findAll();
 
         $kostuZerrenda = array();
         foreach ( $fitxa->getKostuak() as $kostu ) {
             $client = new GuzzleHttp\Client();
-            $api = $this->getParameter( 'zzoo_aplikazioaren_API_url' );
-            $proba = $client->request( 'GET', $api . '/zerga/' . $kostu->getKostua() . '.json' );
+            $proba = $client->request( 'GET', $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '.json' );
             $fitxaKostua = (string)$proba->getBody();
             $array = json_decode( $fitxaKostua, true );
             $kostuZerrenda[] = $array;
         }
 
         /** @var Query $query */
-        $query = $em->createQuery(
+        $query = $this->em->createQuery(
         /** @lang text */
             '
           SELECT f.oharraktext,f.helburuatext,f.ebazpensinpli,f.arduraaitorpena,f.aurreikusi,f.arrunta,f.isiltasunadmin,f.norkeskatutext,f.norkeskatutable,f.dokumentazioatext,f.dokumentazioatable,f.kostuatext,f.kostuatable,f.araudiatext,f.araudiatable,f.prozeduratext,f.prozeduratable,f.doklaguntext,f.doklaguntable,f.datuenbabesatext,f.datuenbabesatable,f.norkebatzitext,f.norkebatzitable,f.besteak1text,f.besteak1table,f.besteak2text,f.besteak2table,f.besteak3text,f.besteak3table,f.kanalatext,f.kanalatable,f.azpisailatable
@@ -155,7 +160,7 @@ class FitxaController extends AbstractController
         $query->setParameter( 'udala', $fitxa->getUdala() );
         $eremuak = $query->getSingleResult();
 
-        $query = $em->createQuery(
+        $query = $this->em->createQuery(
         /** @lang text */
             '
           SELECT f.oharraklabeleu,f.oharraklabeles,f.helburualabeleu,f.helburualabeles,f.ebazpensinplilabeleu,f.ebazpensinplilabeles,f.arduraaitorpenalabeleu,f.arduraaitorpenalabeles,f.aurreikusilabeleu,f.aurreikusilabeles,f.arruntalabeleu,f.arruntalabeles,f.isiltasunadminlabeleu,f.isiltasunadminlabeles,f.norkeskatulabeleu,f.norkeskatulabeles,f.dokumentazioalabeleu,f.dokumentazioalabeles,f.kostualabeleu,f.kostualabeles,f.araudialabeleu,f.araudialabeles,f.prozeduralabeleu,f.prozeduralabeles,f.doklagunlabeleu,f.doklagunlabeles,f.datuenbabesalabeleu,f.datuenbabesalabeles,f.norkebatzilabeleu,f.norkebatzilabeles,f.besteak1labeleu,f.besteak1labeles,f.besteak2labeleu,f.besteak2labeles,f.besteak3labeleu,f.besteak3labeles,f.kanalalabeleu,f.kanalalabeles,f.epealabeleu,f.epealabeles,f.doanlabeleu,f.doanlabeles,f.azpisailalabeleu,f.azpisailalabeles
@@ -190,8 +195,7 @@ class FitxaController extends AbstractController
 	$roles = $user->getRoles();
 	$isRoleSuperAdmin = in_array("ROLE_SUPER_ADMIN", $roles);
 	$udala = ( $isRoleSuperAdmin ? $id : $user->getUdala());
-	$em = $this->getDoctrine()->getManager();
-	$fitxak = $em->getRepository( 'App:Fitxa' )->findBy([
+	$fitxak = $this->repo->findBy([
 	    'udala' => $udala,
 //	    'espedientekodea' => 'IL01400'
 	    ],
@@ -215,8 +219,7 @@ class FitxaController extends AbstractController
 	$roles = $user->getRoles();
 	$isRoleSuperAdmin = in_array("ROLE_SUPER_ADMIN", $roles);
 	$udala = ( $isRoleSuperAdmin ? $id : $user->getUdala());
-	$em = $this->getDoctrine()->getManager();
-	$fitxak = $em->getRepository( 'App:Fitxa' )->findBy([
+	$fitxak = $this->repo->findBy([
 	    'udala' => $udala,
 //	    'espedientekodea' => 'IL01400'
 	    ],
@@ -236,10 +239,9 @@ class FitxaController extends AbstractController
      */
     
     private function __generateAllFitxaHTML( Array $fitxak, $plantilla = 'fitxa/pdf.html.twig' ) {
-	$em = $this->getDoctrine()->getManager();
 	$udala = $fitxak[0]->getUdala();
-	$kanalmotak = $em->getRepository( 'App:Kanalmota' )->findAll();
-        $query = $em->createQuery(
+	$kanalmotak = $this->kanalmotaRepo->findAll();
+        $query = $this->em->createQuery(
             /** @lang text */
             '
           SELECT f.oharraktext,f.helburuatext,f.ebazpensinpli,f.arduraaitorpena,f.aurreikusi,f.arrunta,f.isiltasunadmin,f.norkeskatutext,f.norkeskatutable,f.dokumentazioatext,f.dokumentazioatable,f.kostuatext,f.kostuatable,f.araudiatext,f.araudiatable,f.prozeduratext,f.prozeduratable,f.doklaguntext,f.doklaguntable,f.datuenbabesatext,f.datuenbabesatable,f.norkebatzitext,f.norkebatzitable,f.besteak1text,f.besteak1table,f.besteak2text,f.besteak2table,f.besteak3text,f.besteak3table,f.kanalatext,f.kanalatable,f.azpisailatable
@@ -250,7 +252,7 @@ class FitxaController extends AbstractController
         $query->setParameter( 'udala', $udala );
         $eremuak = $query->getSingleResult();
 
-	$query = $em->createQuery(
+	$query = $this->em->createQuery(
             /** @lang text */
             '
           SELECT f.oharraklabeleu,f.oharraklabeles,f.helburualabeleu,f.helburualabeles,f.ebazpensinplilabeleu,f.ebazpensinplilabeles,f.arduraaitorpenalabeleu,f.arduraaitorpenalabeles,f.aurreikusilabeleu,f.aurreikusilabeles,f.arruntalabeleu,f.arruntalabeles,f.isiltasunadminlabeleu,f.isiltasunadminlabeles,f.norkeskatulabeleu,f.norkeskatulabeles,f.dokumentazioalabeleu,f.dokumentazioalabeles,f.kostualabeleu,f.kostualabeles,f.araudialabeleu,f.araudialabeles,f.prozeduralabeleu,f.prozeduralabeles,f.doklagunlabeleu,f.doklagunlabeles,f.datuenbabesalabeleu,f.datuenbabesalabeles,f.norkebatzilabeleu,f.norkebatzilabeles,f.besteak1labeleu,f.besteak1labeles,f.besteak2labeleu,f.besteak2labeles,f.besteak3labeleu,f.besteak3labeles,f.kanalalabeleu,f.kanalalabeles,f.epealabeleu,f.epealabeles,f.doanlabeleu,f.doanlabeles,f.azpisailalabeleu,f.azpisailalabeles
@@ -276,9 +278,8 @@ class FitxaController extends AbstractController
 		$this->logger->info($kostu->getId());
 		$client = new GuzzleHttp\Client();
 
-		$api = $this->getParameter( 'zzoo_aplikazioaren_API_url' );
     //            $proba = $client->request( 'GET', 'http://zergaordenantzak.dev/app_dev.php/api/azpiatalas/'.$kostu->getKostua().'.json' );
-		$proba = $client->request( 'GET', $api . '/zerga/' . $kostu->getKostua() . '.json' );
+		$proba = $client->request( 'GET', $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '.json' );
 
 		$fitxaKostua = (string)$proba->getBody();
 		$array = json_decode( $fitxaKostua, true );
@@ -342,11 +343,10 @@ class FitxaController extends AbstractController
     {
         $deleteForm = $this->createDeleteForm( $fitxa );
 
-        $em = $this->getDoctrine()->getManager();
-        $kanalmotak = $em->getRepository( 'App:Kanalmota' )->findAll();
+        $kanalmotak = $this->kanalmotaRepo->findAll();
 
         /** @var Query $query */
-        $query = $em->createQuery(
+        $query = $this->em->createQuery(
             /** @lang text */
             '
           SELECT f.oharraktext,f.helburuatext,f.ebazpensinpli,f.arduraaitorpena,f.aurreikusi,f.arrunta,f.isiltasunadmin,f.norkeskatutext,f.norkeskatutable,f.dokumentazioatext,f.dokumentazioatable,f.kostuatext,f.kostuatable,f.araudiatext,f.araudiatable,f.prozeduratext,f.prozeduratable,f.doklaguntext,f.doklaguntable,f.datuenbabesatext,f.datuenbabesatable,f.norkebatzitext,f.norkebatzitable,f.besteak1text,f.besteak1table,f.besteak2text,f.besteak2table,f.besteak3text,f.besteak3table,f.kanalatext,f.kanalatable,f.azpisailatable
@@ -357,7 +357,7 @@ class FitxaController extends AbstractController
         $query->setParameter( 'udala', $fitxa->getUdala() );
         $eremuak = $query->getSingleResult();
 
-        $query = $em->createQuery(
+        $query = $this->em->createQuery(
             /** @lang text */
             '
           SELECT f.oharraklabeleu,f.oharraklabeles,f.helburualabeleu,f.helburualabeles,f.ebazpensinplilabeleu,f.ebazpensinplilabeles,f.arduraaitorpenalabeleu,f.arduraaitorpenalabeles,f.aurreikusilabeleu,f.aurreikusilabeles,f.arruntalabeleu,f.arruntalabeles,f.isiltasunadminlabeleu,f.isiltasunadminlabeles,f.norkeskatulabeleu,f.norkeskatulabeles,f.dokumentazioalabeleu,f.dokumentazioalabeles,f.kostualabeleu,f.kostualabeles,f.araudialabeleu,f.araudialabeles,f.prozeduralabeleu,f.prozeduralabeles,f.doklagunlabeleu,f.doklagunlabeles,f.datuenbabesalabeleu,f.datuenbabesalabeles,f.norkebatzilabeleu,f.norkebatzilabeles,f.besteak1labeleu,f.besteak1labeles,f.besteak2labeleu,f.besteak2labeles,f.besteak3labeleu,f.besteak3labeles,f.kanalalabeleu,f.kanalalabeles,f.epealabeleu,f.epealabeles,f.doanlabeleu,f.doanlabeles,f.azpisailalabeleu,f.azpisailalabeles
@@ -372,9 +372,8 @@ class FitxaController extends AbstractController
         foreach ( $fitxa->getKostuak() as $kostu ) {
             $client = new GuzzleHttp\Client();
 
-            $api = $this->getParameter( 'zzoo_aplikazioaren_API_url' );
 //            $proba = $client->request( 'GET', 'http://zergaordenantzak.dev/app_dev.php/api/azpiatalas/'.$kostu->getKostua().'.json' );
-            $proba = $client->request( 'GET', $api . '/zerga/' . $kostu->getKostua() . '.json' );
+            $proba = $client->request( 'GET', $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '.json' );
 
             $fitxaKostua = (string)$proba->getBody();
             $array = json_decode( $fitxaKostua, true );
@@ -447,12 +446,10 @@ class FitxaController extends AbstractController
         ) {
             $deleteForm = $this->createDeleteForm( $fitxa );
 
-            $api_url = $this->getParameter( 'zzoo_aplikazioaren_API_url' );
-
             $editForm = $this->createForm(
-                'App\Form\FitxaType',
+                FitxaType::class,
                 $fitxa,
-                array( 'user' => $this->getUser(), 'api_url' => $api_url )
+                array( 'user' => $this->getUser(), 'api_url' => $this->zzoo_aplikazioaren_API_url )
             );
 
             // Create an ArrayCollection of the current Kostuak objects in the database
@@ -472,40 +469,39 @@ class FitxaController extends AbstractController
             }
 
             $editForm->handleRequest( $request );
-            $em = $this->getDoctrine()->getManager();
 
             if ( $editForm->isSubmitted() && $editForm->isValid() ) {
                 foreach ( $originalKostuak as $kostu ) {
                     if ( false === $fitxa->getKostuak()->contains( $kostu ) ) {
                         $kostu->setFitxa( null );
-                        $em->remove( $kostu );
-                        $em->persist( $fitxa );
+                        $this->em->remove( $kostu );
+                        $this->em->persist( $fitxa );
                     }
                 }
                 foreach ( $originalAraudiak as $araudi ) {
                     if ( false === $fitxa->getAraudiak()->contains( $araudi ) ) {
                         $araudi->setFitxa( null );
-                        $em->remove( $araudi );
-                        $em->persist( $fitxa );
+                        $this->em->remove( $araudi );
+                        $this->em->persist( $fitxa );
                     }
                 }
                 foreach ( $originalProzedurak as $prozedura ) {
                     if ( false === $fitxa->getProzedurak()->contains( $prozedura ) ) {
                         $prozedura->setFitxa( null );
-                        $em->remove( $prozedura );
-                        $em->persist( $fitxa );
+                        $this->em->remove( $prozedura );
+                        $this->em->persist( $fitxa );
                     }
                 }
                 $fitxa->setUpdatedAt( new \DateTime() );
-                $em->persist( $fitxa );
-                $em->flush();
+                $this->em->persist( $fitxa );
+                $this->em->flush();
                 $this->saveFitxaAldaketa($fitxa, 'Aldatua');
 
                 return $this->redirectToRoute( 'fitxa_edit', array( 'id' => $fitxa->getId() ) );
             }
 
             /** @var Query $query */
-            $query = $em->createQuery(
+            $query = $this->em->createQuery(
             /** @lang text */
                 '
               SELECT f.oharraktext,f.helburuatext,f.ebazpensinpli,f.arduraaitorpena,f.aurreikusi,f.arrunta,f.isiltasunadmin,f.norkeskatutext,f.norkeskatutable,f.dokumentazioatext,f.dokumentazioatable,f.kostuatext,f.kostuatable,f.araudiatext,f.araudiatable,f.prozeduratext,f.prozeduratable,f.doklaguntext,f.doklaguntable,f.datuenbabesatext,f.datuenbabesatable,f.norkebatzitext,f.norkebatzitable,f.besteak1text,f.besteak1table,f.besteak2text,f.besteak2table,f.besteak3text,f.besteak3table,f.kanalatext,f.kanalatable,f.azpisailatable
@@ -516,7 +512,7 @@ class FitxaController extends AbstractController
             $query->setParameter( 'udala', $fitxa->getUdala() );
             $eremuak = $query->getSingleResult();
 
-            $query = $em->createQuery(
+            $query = $this->em->createQuery(
             /** @lang text */
                 '
               SELECT f.oharraklabeleu,f.oharraklabeles,f.helburualabeleu,f.helburualabeles,f.ebazpensinplilabeleu,f.ebazpensinplilabeles,f.arduraaitorpenalabeleu,f.arduraaitorpenalabeles,f.aurreikusilabeleu,f.aurreikusilabeles,f.arruntalabeleu,f.arruntalabeles,f.isiltasunadminlabeleu,f.isiltasunadminlabeles,f.norkeskatulabeleu,f.norkeskatulabeles,f.dokumentazioalabeleu,f.dokumentazioalabeles,f.kostualabeleu,f.kostualabeles,f.araudialabeleu,f.araudialabeles,f.prozeduralabeleu,f.prozeduralabeles,f.doklagunlabeleu,f.doklagunlabeles,f.datuenbabesalabeleu,f.datuenbabesalabeles,f.norkebatzilabeleu,f.norkebatzilabeles,f.besteak1labeleu,f.besteak1labeles,f.besteak2labeleu,f.besteak2labeles,f.besteak3labeleu,f.besteak3labeles,f.kanalalabeleu,f.kanalalabeles,f.epealabeleu,f.epealabeles,f.doanlabeleu,f.doanlabeles,f.azpisailalabeleu,f.azpisailalabeles
@@ -531,14 +527,14 @@ class FitxaController extends AbstractController
             $fitxafamilium->setFitxa( $fitxa );
             $fitxafamilium->setUdala( $this->getUser()->getUdala() );
             $form = $this->createForm(
-                'App\Form\FitxafamiliaType',
+                FitxafamiliaType::class,
                 $fitxafamilium,
                 [
                     'action' => $this->generateUrl( 'fitxafamilia_newfromfitxa' ),
                 ]
             );
 
-            $familiak = $em->getRepository( 'App:Familia' )->findBy(
+            $familiak = $this->familiaRepo->findBy(
                 array(
                     'udala'  => $fitxa->getUdala(),
                     'parent' => null,
@@ -585,8 +581,7 @@ class FitxaController extends AbstractController
             $form = $this->createDeleteForm( $fitxa );
             $form->handleRequest( $request );
             if ( $form->isSubmitted() ) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove( $fitxa );
+                $this->em->remove( $fitxa );
                 $this->saveFitxaAldaketa($fitxa, 'Ezabatua');
             }
 
@@ -622,15 +617,14 @@ class FitxaController extends AbstractController
     }
 
     private function saveFitxaAldaketa($fitxa, $aldaketaMota) {
-        $em = $this->getDoctrine()->getManager();
         $fitxaAldaketa = new FitxaAldaketa();
         $fitxaAldaketa->setNork($this->getUser());
         $fitxaAldaketa->setNoiz(new \DateTime());
         $fitxaAldaketa->setFitxaId($fitxa->getId());
         $fitxaAldaketa->setFitxaKodea($fitxa->getEspedientekodea());
         $fitxaAldaketa->setAldaketaMota($aldaketaMota);
-        $em->persist( $fitxaAldaketa );
-        $em->flush();
+        $this->em->persist( $fitxaAldaketa );
+        $this->em->flush();
 
     }
 

@@ -65,28 +65,6 @@ class SailaRepository extends ServiceEntityRepository
         ;
     }
 
-    // $sqlSailak =
-    // /** @lang text */
-    // '
-    //     SELECT s            
-    //       FROM App:Saila s
-    //       LEFT JOIN App:Udala u WITH s.udala=u.id ';
-    // if (null !== $azpisaila) {
-    //     $sqlSailak = $sqlSailak. 'LEFT JOIN App:Azpisaila az WITH az.saila=s.id ';
-    // }
-    // $sqlSailak = $sqlSailak.' WHERE u.kodea = :udala ';
-    // if (null !== $azpisaila) {
-    //     $sqlSailak = $sqlSailak.' AND az.id = :azpisaila ';
-    // }
-    // $sqlSailak = $sqlSailak.'ORDER BY s.saila'.$request->getLocale().' ASC';
-
-    // $query = $em->createQuery($sqlSailak);
-
-    // if (null !== $azpisaila) {
-    //     $query->setParameter( 'azpisaila', $azpisaila );
-    // }            
-    // $query->setParameter( 'udala', $udala );
-
     public function findByUdalaAndAzpisaila ($udala, $azpisaila) {
         $qb = $this->createQueryBuilder('s');
         $this->andWhereUdalaQB($qb, $udala);
@@ -120,29 +98,4 @@ class SailaRepository extends ServiceEntityRepository
         $qb->setParameter('azpisaila', $azpisaila);
         return $qb;
     }
-
-    // $query = $this->em->createQuery(
-    //     /** @lang text */
-    //     '
-    //     SELECT s         
-    //       FROM App:Saila s
-    //       INNER JOIN s.udala u
-    //     WHERE u.kodea = :udala
-    //     ORDER BY s.kodea DESC
-    //     '
-    // );
-    // $query->setParameter( 'udala', $udala );
-
-
-    /*
-    public function findOneBySomeField($value): ?Sailak
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

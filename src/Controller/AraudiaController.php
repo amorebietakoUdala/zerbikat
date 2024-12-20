@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Araudia;
 use App\Form\AraudiaType;
+use App\Repository\AraudiaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,15 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class AraudiaController extends AbstractController
 {
+
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, AraudiaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
     /**
      * Lists all Araudia entities.
      *
@@ -30,8 +41,7 @@ class AraudiaController extends AbstractController
     {
         if ($this->isGranted('ROLE_KUDEAKETA'))
         {
-            $em = $this->getDoctrine()->getManager();
-            $araudias = $em->getRepository(Araudia::class)->findBy( array(), array('kodea'=>'ASC') );
+            $araudias = $this->repo->findBy( array(), array('kodea'=>'ASC') );
 
             $deleteForms = array();
             foreach ($araudias as $araudia) {
@@ -64,9 +74,8 @@ class AraudiaController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($araudium);
-                $em->flush();
+                $this->em->persist($araudium);
+                $this->em->flush();
 
                 return $this->redirectToRoute('araudia_index');
             }else
@@ -120,9 +129,8 @@ class AraudiaController extends AbstractController
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($araudium);
-                $em->flush();
+                $this->em->persist($araudium);
+                $this->em->flush();
 
                 return $this->redirectToRoute('araudia_edit', array('id' => $araudium->getId()));
             }
@@ -153,9 +161,8 @@ class AraudiaController extends AbstractController
             $form = $this->createDeleteForm($araudium);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($araudium);
-                $em->flush();
+                $this->em->remove($araudium);
+                $this->em->flush();
             }
             return $this->redirectToRoute('araudia_index');
         }else

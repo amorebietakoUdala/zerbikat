@@ -8,6 +8,8 @@
     use Symfony\Component\Routing\Annotation\Route;
     use App\Entity\Ordenantza;
     use App\Form\OrdenantzaType;
+use App\Repository\OrdenantzaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
     /**
      * Ordenantza controller.
@@ -16,7 +18,15 @@
      */
     class OrdenantzaController extends AbstractController
     {
-
+        private $repo;
+        private $em;
+    
+        public function __construct(EntityManagerInterface $em, OrdenantzaRepository $repo)
+        {
+            $this->repo = $repo;
+            $this->em = $em;
+        }
+    
         /**
          * Lists all Ordenantza entities.
          *
@@ -27,8 +37,7 @@
         {
 
             if ( $this->isGranted( 'ROLE_ADMIN' ) ) {
-                $em = $this->getDoctrine()->getManager();
-                $ordenantzas = $em->getRepository( 'App:Ordenantza' )->findAll();
+                $ordenantzas = $this->repo->findAll();
 
                 $deleteForms = array ();
                 foreach ( $ordenantzas as $ordenantza ) {
@@ -58,15 +67,14 @@
 
             if ( $this->isGranted( 'ROLE_ADMIN' ) ) {
                 $ordenantza = new Ordenantza();
-                $form = $this->createForm( 'App\Form\OrdenantzaType', $ordenantza );
+                $form = $this->createForm( OrdenantzaType::class, $ordenantza );
                 $form->handleRequest( $request );
 
                 if ( $form->isSubmitted() && $form->isValid() ) {
                     $ordenantza->setCreatedAt( new \DateTime() );
                     $ordenantza->setUpdatedAt( new \DateTime() );
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist( $ordenantza );
-                    $em->flush();
+                    $this->em->persist( $ordenantza );
+                    $this->em->flush();
 
                     return $this->redirectToRoute( 'ordenantza_index' );
                 } else {
@@ -119,13 +127,12 @@
                 || ($this->isGranted( 'ROLE_SUPER_ADMIN' ))
             ) {
                 $deleteForm = $this->createDeleteForm( $ordenantza );
-                $editForm = $this->createForm( 'App\Form\OrdenantzaType', $ordenantza );
+                $editForm = $this->createForm( OrdenantzaType::class, $ordenantza );
                 $editForm->handleRequest( $request );
 
                 if ( $editForm->isSubmitted() && $editForm->isValid() ) {
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist( $ordenantza );
-                    $em->flush();
+                    $this->em->persist( $ordenantza );
+                    $this->em->flush();
 
                     return $this->redirectToRoute( 'ordenantza_edit', array ( 'id' => $ordenantza->getId() ) );
                 }
@@ -159,9 +166,8 @@
                 $form = $this->createDeleteForm( $ordenantza );
                 $form->handleRequest( $request );
                 if ( $form->isSubmitted() && $form->isValid() ) {
-                    $em = $this->getDoctrine()->getManager();
-                    $em->remove( $ordenantza );
-                    $em->flush();
+                    $this->em->remove( $ordenantza );
+                    $this->em->flush();
                 }
 
                 return $this->redirectToRoute( 'ordenantza_index' );

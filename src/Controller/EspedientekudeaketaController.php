@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Espedientekudeaketa;
 use App\Form\EspedientekudeaketaType;
+use App\Repository\EspedientekudeaketaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,15 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class EspedientekudeaketaController extends AbstractController
 {
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, EspedientekudeaketaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Espedientekudeaketa entities.
      *
@@ -30,8 +41,7 @@ class EspedientekudeaketaController extends AbstractController
     {
 
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-            $em = $this->getDoctrine()->getManager();
-            $espedientekudeaketas = $em->getRepository('App:Espedientekudeaketa')->findAll();
+            $espedientekudeaketas = $this->repo->findAll();
 
             $adapter = new ArrayAdapter($espedientekudeaketas);
             $pagerfanta = new Pagerfanta($adapter);
@@ -78,13 +88,12 @@ class EspedientekudeaketaController extends AbstractController
         if ($this->isGranted('ROLE_SUPER_ADMIN'))
         {
             $espedientekudeaketum = new Espedientekudeaketa();
-            $form = $this->createForm('App\Form\EspedientekudeaketaType', $espedientekudeaketum);
+            $form = $this->createForm(EspedientekudeaketaType::class, $espedientekudeaketum);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($espedientekudeaketum);
-                $em->flush();
+                $this->em->persist($espedientekudeaketum);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('espedientekudeaketa_show', array('id' => $espedientekudeaketum->getId()));
                 return $this->redirectToRoute('espedientekudeaketa_index');
@@ -128,13 +137,12 @@ class EspedientekudeaketaController extends AbstractController
         if ($this->isGranted('ROLE_SUPER_ADMIN'))
         {
             $deleteForm = $this->createDeleteForm($espedientekudeaketum);
-            $editForm = $this->createForm('App\Form\EspedientekudeaketaType', $espedientekudeaketum);
+            $editForm = $this->createForm(EspedientekudeaketaType::class, $espedientekudeaketum);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($espedientekudeaketum);
-                $em->flush();
+                $this->em->persist($espedientekudeaketum);
+                $this->em->flush();
 
                 return $this->redirectToRoute('espedientekudeaketa_edit', array('id' => $espedientekudeaketum->getId()));
             }
@@ -164,9 +172,8 @@ class EspedientekudeaketaController extends AbstractController
             $form = $this->createDeleteForm($espedientekudeaketum);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($espedientekudeaketum);
-                $em->flush();
+                $this->em->remove($espedientekudeaketum);
+                $this->em->flush();
             }
             return $this->redirectToRoute('espedientekudeaketa_index');
         }else

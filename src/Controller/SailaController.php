@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Saila;
 use App\Form\SailaType;
+use App\Repository\SailaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,15 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class SailaController extends AbstractController
 {
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, SailaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Saila entities.
      *
@@ -30,9 +41,7 @@ class SailaController extends AbstractController
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $em = $this->getDoctrine()->getManager();
-            $sailas = $em->getRepository('App:Saila')
-                ->findBy( array(), array('kodea'=>'ASC') );
+            $sailas = $this->repo->findBy( array(), array('kodea'=>'ASC') );
 
             $deleteForms = array();
             foreach ($sailas as $saila) {
@@ -61,16 +70,15 @@ class SailaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $saila = new Saila();
-            $form = $this->createForm('App\Form\SailaType', $saila);
+            $form = $this->createForm(SailaType::class, $saila);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($saila);
-                $em->flush();
+                $this->em->persist($saila);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('saila_show', array('id' => $saila->getId()));
                 return $this->redirectToRoute('saila_index');
@@ -119,13 +127,12 @@ class SailaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($saila);
-            $editForm = $this->createForm('App\Form\SailaType', $saila);
+            $editForm = $this->createForm(SailaType::class, $saila);
             $editForm->handleRequest($request);
     
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($saila);
-                $em->flush();
+                $this->em->persist($saila);
+                $this->em->flush();
     
                 return $this->redirectToRoute('saila_edit', array('id' => $saila->getId()));
             }
@@ -156,9 +163,8 @@ class SailaController extends AbstractController
             $form = $this->createDeleteForm($saila);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($saila);
-                $em->flush();
+                $this->em->remove($saila);
+                $this->em->flush();
             }
             return $this->redirectToRoute('saila_index');
         }else

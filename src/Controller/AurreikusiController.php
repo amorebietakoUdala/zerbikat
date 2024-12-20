@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Aurreikusi;
 use App\Form\AurreikusiType;
+use App\Repository\AurreikusiRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,16 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class AurreikusiController extends AbstractController
 {
+
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, AurreikusiRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Aurreikusi entities.
      *
@@ -30,8 +42,7 @@ class AurreikusiController extends AbstractController
     {
         if ($this->isGranted('ROLE_KUDEAKETA'))
         {
-            $em = $this->getDoctrine()->getManager();
-            $aurreikusis = $em->getRepository('App:Aurreikusi')->findAll();
+            $aurreikusis = $this->repo->findAll();
 
             $adapter = new ArrayAdapter($aurreikusis);
             $pagerfanta = new Pagerfanta($adapter);
@@ -85,9 +96,8 @@ class AurreikusiController extends AbstractController
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($aurreikusi);
-                $em->flush();
+                $this->em->persist($aurreikusi);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('aurreikusi_show', array('id' => $aurreikusi->getId()));
                 return $this->redirectToRoute('aurreikusi_index');                
@@ -140,9 +150,8 @@ class AurreikusiController extends AbstractController
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($aurreikusi);
-                $em->flush();
+                $this->em->persist($aurreikusi);
+                $this->em->flush();
 
                 return $this->redirectToRoute('aurreikusi_edit', array('id' => $aurreikusi->getId()));
             }
@@ -173,9 +182,8 @@ class AurreikusiController extends AbstractController
             $form = $this->createDeleteForm($aurreikusi);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($aurreikusi);
-                $em->flush();
+                $this->em->remove($aurreikusi);
+                $this->em->flush();
             }
             return $this->redirectToRoute('aurreikusi_index');
         }else

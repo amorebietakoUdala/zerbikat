@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Araumota;
 use App\Form\AraumotaType;
+use App\Repository\AraumotaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,16 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class AraumotaController extends AbstractController
 {
+
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, AraumotaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Araumota entities.
      *
@@ -30,12 +42,7 @@ class AraumotaController extends AbstractController
     {
         if ($this->isGranted('ROLE_KUDEAKETA')) 
         {
-            $em = $this->getDoctrine()->getManager();
-            $araumotas = $em->getRepository('App:Araumota')->findAll();
-            $araumotas = $em->getRepository('App:Araumota')
-                ->findBy( array(), array('kodea'=>'ASC') );
-
-
+            $araumotas = $this->repo->findBy( array(), array('kodea'=>'ASC') );
             $adapter = new ArrayAdapter($araumotas);
             $pagerfanta = new Pagerfanta($adapter);
 
@@ -86,9 +93,8 @@ class AraumotaController extends AbstractController
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($araumotum);
-                $em->flush();
+                $this->em->persist($araumotum);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('araumota_show', array('id' => $araumotum->getId()));
                 return $this->redirectToRoute('araumota_index');
@@ -141,9 +147,8 @@ class AraumotaController extends AbstractController
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($araumotum);
-                $em->flush();
+                $this->em->persist($araumotum);
+                $this->em->flush();
 
                 return $this->redirectToRoute('araumota_edit', array('id' => $araumotum->getId()));
             }
@@ -175,9 +180,8 @@ class AraumotaController extends AbstractController
             $form->handleRequest($request);
     
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($araumotum);
-                $em->flush();
+                $this->em->remove($araumotum);
+                $this->em->flush();
             }
             return $this->redirectToRoute('araumota_index');
         }else

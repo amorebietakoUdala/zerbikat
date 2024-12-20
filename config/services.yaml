@@ -17,6 +17,7 @@ services:
         bind:
             $allowedRoles: ["ROLE_USER","ROLE_KUDEAKETA", "ROLE_ADMIN"]
             $class: App\Entity\User
+            $zzoo_aplikazioaren_API_url: '%zzoo_aplikazioaren_API_url%'
 
     Symfony\Component\Ldap\Ldap:
         arguments: ['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter']

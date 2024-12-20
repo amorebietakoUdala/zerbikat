@@ -66,29 +66,4 @@ class UdalaRepository extends ServiceEntityRepository
     public function findOrderedByIdDesc() {
         return $this->createQueryBuilder('u')->orderBy('u.kodea', 'DESC');
     }
-
-    // $query = $this->em->createQuery(
-    //     /** @lang text */
-    //     '
-    //     SELECT s         
-    //       FROM App:Udala s
-    //       INNER JOIN s.udala u
-    //     WHERE u.kodea = :udala
-    //     ORDER BY s.kodea DESC
-    //     '
-    // );
-    // $query->setParameter( 'udala', $udala );
-
-
-    /*
-    public function findOneBySomeField($value): ?Udalak
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

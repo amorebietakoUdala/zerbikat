@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Kalea;
 use App\Form\KaleaType;
+use App\Repository\KaleaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,15 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class KaleaController extends AbstractController
 {
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, KaleaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Kalea entities.
      *
@@ -29,8 +40,7 @@ class KaleaController extends AbstractController
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $em = $this->getDoctrine()->getManager();
-            $kaleas = $em->getRepository('App:Kalea')->findAll();
+            $kaleas = $this->repo->findAll();
 
             $deleteForms = array();
             foreach ($kaleas as $kalea) {
@@ -60,16 +70,15 @@ class KaleaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN')) 
         {
             $kalea = new Kalea();
-            $form = $this->createForm('App\Form\KaleaType', $kalea);
+            $form = $this->createForm(KaleaType::class, $kalea);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
             
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($kalea);
-                $em->flush();
+                $this->em->persist($kalea);
+                $this->em->flush();
     
 //                return $this->redirectToRoute('kalea_show', array('id' => $kalea->getId()));
                 return $this->redirectToRoute('kalea_index');
@@ -118,13 +127,12 @@ class KaleaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($kalea);
-            $editForm = $this->createForm('App\Form\KaleaType', $kalea);
+            $editForm = $this->createForm(KaleaType::class, $kalea);
             $editForm->handleRequest($request);
     
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($kalea);
-                $em->flush();
+                $this->em->persist($kalea);
+                $this->em->flush();
     
                 return $this->redirectToRoute('kalea_edit', array('id' => $kalea->getId()));
             }
@@ -155,9 +163,8 @@ class KaleaController extends AbstractController
             $form = $this->createDeleteForm($kalea);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($kalea);
-                $em->flush();
+                $this->em->remove($kalea);
+                $this->em->flush();
             }
             return $this->redirectToRoute('kalea_index');
         }else

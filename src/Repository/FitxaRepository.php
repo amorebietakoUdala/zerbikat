@@ -49,10 +49,29 @@ class FitxaRepository extends ServiceEntityRepository
         }
     }
 
+
+    // $query = $this->em->createQuery(
+    //     'SELECT f 
+    //           FROM App:Fitxa f
+    //           LEFT JOIN f.azpisaila a
+    //           ORDER BY a.saila ASC, f.azpisaila ASC        '
+    // );
+
     /**
      * @return Fitxa[] Returns an array of Fitxak objects
      */
+    public function findAzpisailakOrderedBySailakAzpisailak() {
+        return $this->createQueryBuilder('f')
+            ->leftJoin('App:Azpisaila','a', Join::WITH, 'f.azpisaila = a.id')
+            ->addOrderBy('a.saila', 'ASC')
+            ->addOrderBy('f.azpisaila', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
+    /**
+     * @return Fitxa[] Returns an array of Fitxak objects
+     */
     public function findByAzpisaila($azpisailaid)
     {
         return $this->createQueryBuilder('f')
@@ -145,21 +164,8 @@ class FitxaRepository extends ServiceEntityRepository
     private function andWhereAzpisailaQB( QueryBuilder $qb, $azpisaila): QueryBuilder 
     {
         $qb->leftJoin('App:Azpisaila','az', Join::WITH, 'f.azpisaila = az.id');
-//        $qb->leftJoin('App:Familia','fam', Join::WITH, 'f.azpisaila = fam.id');
         $qb->andWhere('f.azpisaila = :azpisaila');
         $qb->setParameter('azpisaila', $azpisaila);
         return $qb;
     }
-
-    /*
-    public function findOneBySomeField($value): ?Fitxak
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Norkebatzi;
 use App\Form\NorkebatziType;
+use App\Repository\NorkebatziRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,16 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class NorkebatziController extends AbstractController
 {
+
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, NorkebatziRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Norkebatzi entities.
      *
@@ -30,8 +42,7 @@ class NorkebatziController extends AbstractController
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $em = $this->getDoctrine()->getManager();
-            $norkebatzis = $em->getRepository('App:Norkebatzi')->findAll();
+            $norkebatzis = $this->repo->findAll();
 
             $deleteForms = array();
             foreach ($norkebatzis as $norkebatzi) {
@@ -60,16 +71,15 @@ class NorkebatziController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $norkebatzi = new Norkebatzi();
-            $form = $this->createForm('App\Form\NorkebatziType', $norkebatzi);
+            $form = $this->createForm(NorkebatziType::class, $norkebatzi);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($norkebatzi);
-                $em->flush();
+                $this->em->persist($norkebatzi);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('norkebatzi_show', array('id' => $norkebatzi->getId()));
                 return $this->redirectToRoute('norkebatzi_index');
@@ -118,13 +128,12 @@ class NorkebatziController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($norkebatzi);
-            $editForm = $this->createForm('App\Form\NorkebatziType', $norkebatzi);
+            $editForm = $this->createForm(NorkebatziType::class, $norkebatzi);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($norkebatzi);
-                $em->flush();
+                $this->em->persist($norkebatzi);
+                $this->em->flush();
 
                 return $this->redirectToRoute('norkebatzi_edit', array('id' => $norkebatzi->getId()));
             }
@@ -155,9 +164,8 @@ class NorkebatziController extends AbstractController
             $form = $this->createDeleteForm($norkebatzi);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($norkebatzi);
-                $em->flush();
+                $this->em->remove($norkebatzi);
+                $this->em->flush();
             }
             return $this->redirectToRoute('norkebatzi_index');
         }else

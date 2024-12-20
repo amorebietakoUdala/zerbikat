@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Barrutia;
 use App\Form\BarrutiaType;
+use App\Repository\BarrutiaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,16 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class BarrutiaController extends AbstractController
 {
+
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, BarrutiaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Barrutia entities.
      *
@@ -29,8 +41,7 @@ class BarrutiaController extends AbstractController
     public function indexAction($page)
     {
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $em = $this->getDoctrine()->getManager();
-            $barrutias = $em->getRepository('App:Barrutia')->findAll();
+            $barrutias = $this->repo->findAll();
 
             $adapter = new ArrayAdapter($barrutias);
             $pagerfanta = new Pagerfanta($adapter);
@@ -76,16 +87,15 @@ class BarrutiaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $barrutium = new Barrutia();
-            $form = $this->createForm('App\Form\BarrutiaType', $barrutium);
+            $form = $this->createForm(BarrutiaType::class, $barrutium);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($barrutium);
-                $em->flush();
+                $this->em->persist($barrutium);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('barrutia_show', array('id' => $barrutium->getId()));
                 return $this->redirectToRoute('barrutia_index');
@@ -134,13 +144,12 @@ class BarrutiaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($barrutium);
-            $editForm = $this->createForm('App\Form\BarrutiaType', $barrutium);
+            $editForm = $this->createForm(BarrutiaType::class, $barrutium);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($barrutium);
-                $em->flush();
+                $this->em->persist($barrutium);
+                $this->em->flush();
 
                 return $this->redirectToRoute('barrutia_edit', array('id' => $barrutium->getId()));
             }
@@ -170,9 +179,8 @@ class BarrutiaController extends AbstractController
             $form = $this->createDeleteForm($barrutium);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($barrutium);
-                $em->flush();
+                $this->em->remove($barrutium);
+                $this->em->flush();
             }
             return $this->redirectToRoute('barrutia_index');
         }else

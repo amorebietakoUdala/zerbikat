@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Datuenbabesa;
 use App\Form\DatuenbabesaType;
+use App\Repository\DatuenbabesaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,16 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class DatuenbabesaController extends AbstractController
 {
+
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, DatuenbabesaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Datuenbabesa entities.
      *
@@ -30,9 +42,7 @@ class DatuenbabesaController extends AbstractController
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $em = $this->getDoctrine()->getManager();
-            $datuenbabesas = $em->getRepository('App:Datuenbabesa')
-                ->findBy( array(), array('kodea'=>'ASC') );
+            $datuenbabesas = $this->repo->findBy( array(), array('kodea'=>'ASC') );
 
             $deleteForms = array();
             foreach ($datuenbabesas as $datuenbabesa) {
@@ -61,16 +71,15 @@ class DatuenbabesaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN')) 
         {
             $datuenbabesa = new Datuenbabesa();
-            $form = $this->createForm('App\Form\DatuenbabesaType', $datuenbabesa);
+            $form = $this->createForm(DatuenbabesaType::class, $datuenbabesa);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
             
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($datuenbabesa);
-                $em->flush();
+                $this->em->persist($datuenbabesa);
+                $this->em->flush();
     
 //                return $this->redirectToRoute('datuenbabesa_show', array('id' => $datuenbabesa->getId()));
                 return $this->redirectToRoute('datuenbabesa_index');
@@ -119,13 +128,12 @@ class DatuenbabesaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($datuenbabesa);
-            $editForm = $this->createForm('App\Form\DatuenbabesaType', $datuenbabesa);
+            $editForm = $this->createForm(DatuenbabesaType::class, $datuenbabesa);
             $editForm->handleRequest($request);
     
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($datuenbabesa);
-                $em->flush();
+                $this->em->persist($datuenbabesa);
+                $this->em->flush();
     
                 return $this->redirectToRoute('datuenbabesa_edit', array('id' => $datuenbabesa->getId()));
             }
@@ -156,9 +164,8 @@ class DatuenbabesaController extends AbstractController
             $form = $this->createDeleteForm($datuenbabesa);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($datuenbabesa);
-                $em->flush();
+                $this->em->remove($datuenbabesa);
+                $this->em->flush();
             }
             return $this->redirectToRoute('datuenbabesa_index');
         }else

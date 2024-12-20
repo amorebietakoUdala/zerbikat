@@ -8,7 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Kontzeptumota;
 use App\Form\KontzeptumotaType;
-
+use App\Repository\KontzeptumotaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -20,6 +21,15 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class KontzeptumotaController extends AbstractController
 {
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, KontzeptumotaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Kontzeptumota entities.
      *
@@ -32,8 +42,7 @@ class KontzeptumotaController extends AbstractController
 
         if ($this->isGranted('ROLE_KUDEAKETA'))
         {
-            $em = $this->getDoctrine()->getManager();
-            $kontzeptumotas = $em->getRepository('App:Kontzeptumota')->findAll();
+            $kontzeptumotas = $this->repo->findAll();
 
             $adapter = new ArrayAdapter($kontzeptumotas);
             $pagerfanta = new Pagerfanta($adapter);
@@ -83,16 +92,15 @@ class KontzeptumotaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $kontzeptumotum = new Kontzeptumota();
-            $form = $this->createForm('App\Form\KontzeptumotaType', $kontzeptumotum);
+            $form = $this->createForm(KontzeptumotaType::class, $kontzeptumotum);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($kontzeptumotum);
-                $em->flush();
+                $this->em->persist($kontzeptumotum);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('kontzeptumota_show', array('id' => $kontzeptumotum->getId()));
                 return $this->redirectToRoute('kontzeptumota_index');
@@ -141,13 +149,12 @@ class KontzeptumotaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($kontzeptumotum);
-            $editForm = $this->createForm('App\Form\KontzeptumotaType', $kontzeptumotum);
+            $editForm = $this->createForm(KontzeptumotaType::class, $kontzeptumotum);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($kontzeptumotum);
-                $em->flush();
+                $this->em->persist($kontzeptumotum);
+                $this->em->flush();
 
                 return $this->redirectToRoute('kontzeptumota_edit', array('id' => $kontzeptumotum->getId()));
             }
@@ -178,9 +185,8 @@ class KontzeptumotaController extends AbstractController
             $form = $this->createDeleteForm($kontzeptumotum);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($kontzeptumotum);
-                $em->flush();
+                $this->em->remove($kontzeptumotum);
+                $this->em->flush();
             }
             return $this->redirectToRoute('kontzeptumota_index');
         }else

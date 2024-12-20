@@ -2,7 +2,17 @@
 
     namespace App\Form;
 
-    use Symfony\Component\Form\AbstractType;
+use App\Entity\Azpiatala;
+use App\Entity\Besteak1;
+use App\Entity\Besteak2;
+use App\Entity\Besteak3;
+use App\Entity\Doklagun;
+use App\Entity\Dokumentazioa;
+use App\Entity\Etiketa;
+use App\Entity\Fitxa;
+use App\Entity\Kanala;
+use App\Entity\Norkeskatu;
+use Symfony\Component\Form\AbstractType;
     use Symfony\Component\Form\FormBuilderInterface;
     use Symfony\Component\OptionsResolver\OptionsResolver;
     use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -258,7 +268,7 @@
                     'dokumentazioak',
                     EntityType::class,
                     array (
-                        'class'       => 'App:Dokumentazioa',
+                        'class'       => Dokumentazioa::class,
                         'required'    => false,
                         'multiple'    => 'multiple',
                         'placeholder' => 'Aukeratu dokumentuak',
@@ -269,7 +279,7 @@
                     'etiketak',
                     EntityType::class,
                     array (
-                        'class'       => 'App:Etiketa',
+                        'class'       => Etiketa::class,
                         'required'    => false,
                         'multiple'    => 'multiple',
                         'placeholder' => 'Aukeratu etiketak',
@@ -280,7 +290,7 @@
                     'kanalak',
                     EntityType::class,
                     array (
-                        'class'       => 'App:Kanala',
+                        'class'       => Kanala::class,
                         'required'    => false,
                         'multiple'    => 'multiple',
                         'placeholder' => 'Aukeratu kanalak',
@@ -291,7 +301,7 @@
                     'besteak1ak',
                     EntityType::class,
                     array (
-                        'class'       => 'App:Besteak1',
+                        'class'       => Besteak1::class,
                         'required'    => false,
                         'multiple'    => 'multiple',
                         'placeholder' => 'Aukeratu besteak1',
@@ -301,7 +311,7 @@
                     'besteak2ak',
                     EntityType::class,
                     array (
-                        'class'       => 'App:Besteak2',
+                        'class'       => Besteak2::class,
                         'required'    => false,
                         'multiple'    => 'multiple',
                         'placeholder' => 'Aukeratu besteak2',
@@ -311,7 +321,7 @@
                     'besteak3ak',
                     EntityType::class,
                     array (
-                        'class'       => 'App:Besteak3',
+                        'class'       => Besteak3::class,
                         'required'    => false,
                         'multiple'    => 'multiple',
                         'placeholder' => 'Aukeratu besteak3',
@@ -321,7 +331,7 @@
                     'norkeskatuak',
                     EntityType::class,
                     array (
-                        'class'       => 'App:Norkeskatu',
+                        'class'       => Norkeskatu::class,
                         'required'    => false,
                         'multiple'    => 'multiple',
                         'placeholder' => 'Aukeratu nork eska dezakeen',
@@ -331,7 +341,7 @@
                     'doklagunak',
                     EntityType::class,
                     array (
-                        'class'       => 'App:Doklagun',
+                        'class'       => Doklagun::class,
                         'required'    => false,
                         'multiple'    => 'multiple',
                         'placeholder' => 'Aukeratu dokumentazio lagungarria',
@@ -341,7 +351,7 @@
                     'azpiatalak',
                     EntityType::class,
                     array (
-                        'class'       => 'App:Azpiatala',
+                        'class'       => Azpiatala::class,
                         'required'    => false,
                         'multiple'    => 'multiple',
                         'placeholder' => 'Aukeratu kostu taulak',
@@ -393,7 +403,7 @@
         {
             $resolver->setDefaults(
                 array (
-                    'data_class' => 'App\Entity\Fitxa',
+                    'data_class' => Fitxa::class,
                     'user' => null,
                     'api_url' => null
                 )

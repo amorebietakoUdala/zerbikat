@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Zerbitzua;
 use App\Form\ZerbitzuaType;
+use App\Repository\ZerbitzuaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,16 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class ZerbitzuaController extends AbstractController
 {
+
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, ZerbitzuaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Zerbitzua entities.
      *
@@ -31,8 +43,7 @@ class ZerbitzuaController extends AbstractController
 
         if ($this->isGranted('ROLE_SUPER_ADMIN')) 
         {
-            $em = $this->getDoctrine()->getManager();
-            $zerbitzuas = $em->getRepository('App:Zerbitzua')->findAll();
+            $zerbitzuas = $this->repo->findAll();
 
             $adapter = new ArrayAdapter($zerbitzuas);
             $pagerfanta = new Pagerfanta($adapter);
@@ -79,13 +90,12 @@ class ZerbitzuaController extends AbstractController
         if ($this->isGranted('ROLE_SUPER_ADMIN'))
         {
             $zerbitzua = new Zerbitzua();
-            $form = $this->createForm('App\Form\ZerbitzuaType', $zerbitzua);
+            $form = $this->createForm(ZerbitzuaType::class, $zerbitzua);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($zerbitzua);
-                $em->flush();
+                $this->em->persist($zerbitzua);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('zerbitzua_show', array('id' => $zerbitzua->getId()));
                 return $this->redirectToRoute('zerbitzua_index');
@@ -128,13 +138,12 @@ class ZerbitzuaController extends AbstractController
         if ($this->isGranted('ROLE_SUPER_ADMIN'))
         {
             $deleteForm = $this->createDeleteForm($zerbitzua);
-            $editForm = $this->createForm('App\Form\ZerbitzuaType', $zerbitzua);
+            $editForm = $this->createForm(ZerbitzuaType::class, $zerbitzua);
             $editForm->handleRequest($request);
     
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($zerbitzua);
-                $em->flush();
+                $this->em->persist($zerbitzua);
+                $this->em->flush();
     
                 return $this->redirectToRoute('zerbitzua_edit', array('id' => $zerbitzua->getId()));
             }
@@ -164,9 +173,8 @@ class ZerbitzuaController extends AbstractController
             $form = $this->createDeleteForm($zerbitzua);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($zerbitzua);
-                $em->flush();
+                $this->em->remove($zerbitzua);
+                $this->em->flush();
             }
             return $this->redirectToRoute('zerbitzua_index');
         }else

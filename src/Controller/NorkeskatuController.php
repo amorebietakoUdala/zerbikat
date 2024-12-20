@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Norkeskatu;
 use App\Form\NorkeskatuType;
+use App\Repository\NorkeskatuRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,15 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class NorkeskatuController extends AbstractController
 {
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, NorkeskatuRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Norkeskatu entities.
      *
@@ -30,8 +41,7 @@ class NorkeskatuController extends AbstractController
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $em = $this->getDoctrine()->getManager();
-            $norkeskatus = $em->getRepository('App:Norkeskatu')->findAll();
+            $norkeskatus = $this->repo->findAll();
 
             $deleteForms = array();
             foreach ($norkeskatus as $norkeskatu) {
@@ -60,16 +70,15 @@ class NorkeskatuController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $norkeskatu = new Norkeskatu();
-            $form = $this->createForm('App\Form\NorkeskatuType', $norkeskatu);
+            $form = $this->createForm(NorkeskatuType::class, $norkeskatu);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($norkeskatu);
-                $em->flush();
+                $this->em->persist($norkeskatu);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('norkeskatu_show', array('id' => $norkeskatu->getId()));
                 return $this->redirectToRoute('norkeskatu_index');
@@ -118,13 +127,12 @@ class NorkeskatuController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($norkeskatu);
-            $editForm = $this->createForm('App\Form\NorkeskatuType', $norkeskatu);
+            $editForm = $this->createForm(NorkeskatuType::class, $norkeskatu);
             $editForm->handleRequest($request);
     
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($norkeskatu);
-                $em->flush();
+                $this->em->persist($norkeskatu);
+                $this->em->flush();
     
                 return $this->redirectToRoute('norkeskatu_edit', array('id' => $norkeskatu->getId()));
             }
@@ -155,9 +163,8 @@ class NorkeskatuController extends AbstractController
             $form = $this->createDeleteForm($norkeskatu);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($norkeskatu);
-                $em->flush();
+                $this->em->remove($norkeskatu);
+                $this->em->flush();
             }
             return $this->redirectToRoute('norkeskatu_index');
         }else

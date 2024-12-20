@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Dokumentazioa;
 use App\Form\DokumentazioaType;
+use App\Repository\DokumentazioaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,16 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class DokumentazioaController extends AbstractController
 {
+
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, DokumentazioaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Dokumentazioa entities.
      *
@@ -30,9 +42,7 @@ class DokumentazioaController extends AbstractController
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $em = $this->getDoctrine()->getManager();
-            $dokumentazioas = $em->getRepository('App:Dokumentazioa')
-                ->findBy( array(), array('kodea'=>'ASC') );
+            $dokumentazioas = $this->repo->findBy( array(), array('kodea'=>'ASC') );
 
             $deleteForms = array();
             foreach ($dokumentazioas as $dokumentazioa) {
@@ -61,16 +71,15 @@ class DokumentazioaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN')) 
         {
             $dokumentazioa = new Dokumentazioa();
-            $form = $this->createForm('App\Form\DokumentazioaType', $dokumentazioa);
+            $form = $this->createForm(DokumentazioaType::class, $dokumentazioa);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
     
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($dokumentazioa);
-                $em->flush();
+                $this->em->persist($dokumentazioa);
+                $this->em->flush();
     
 //                return $this->redirectToRoute('dokumentazioa_show', array('id' => $dokumentazioa->getId()));
                 return $this->redirectToRoute('dokumentazioa_index');
@@ -119,13 +128,12 @@ class DokumentazioaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($dokumentazioa);
-            $editForm = $this->createForm('App\Form\DokumentazioaType', $dokumentazioa);
+            $editForm = $this->createForm(DokumentazioaType::class, $dokumentazioa);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($dokumentazioa);
-                $em->flush();
+                $this->em->persist($dokumentazioa);
+                $this->em->flush();
 
                 return $this->redirectToRoute('dokumentazioa_edit', array('id' => $dokumentazioa->getId()));
             }
@@ -156,9 +164,8 @@ class DokumentazioaController extends AbstractController
             $form = $this->createDeleteForm($dokumentazioa);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($dokumentazioa);
-                $em->flush();
+                $this->em->remove($dokumentazioa);
+                $this->em->flush();
             }
             return $this->redirectToRoute('dokumentazioa_index');
         }else

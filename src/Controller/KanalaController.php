@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Kanala;
 use App\Form\KanalaType;
+use App\Repository\KanalaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,15 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class KanalaController extends AbstractController
 {
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, KanalaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Kanala entities.
      *
@@ -30,9 +41,7 @@ class KanalaController extends AbstractController
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $em = $this->getDoctrine()->getManager();
-            $kanalas = $em->getRepository('App:Kanala')
-                ->findBy( array(), array('kanalmota'=>'ASC') );
+            $kanalas = $this->repo->findBy( array(), array('kanalmota'=>'ASC') );
 
             $deleteForms = array();
             foreach ($kanalas as $kanala) {
@@ -61,16 +70,15 @@ class KanalaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $kanala = new Kanala();
-            $form = $this->createForm('App\Form\KanalaType', $kanala);
+            $form = $this->createForm(KanalaType::class, $kanala);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($kanala);
-                $em->flush();
+                $this->em->persist($kanala);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('kanala_show', array('id' => $kanala->getId()));
                 return $this->redirectToRoute('kanala_index');
@@ -119,13 +127,12 @@ class KanalaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($kanala);
-            $editForm = $this->createForm('App\Form\KanalaType', $kanala);
+            $editForm = $this->createForm(KanalaType::class, $kanala);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($kanala);
-                $em->flush();
+                $this->em->persist($kanala);
+                $this->em->flush();
 
                 return $this->redirectToRoute('kanala_edit', array('id' => $kanala->getId()));
             }
@@ -156,9 +163,8 @@ class KanalaController extends AbstractController
             $form = $this->createDeleteForm($kanala);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($kanala);
-                $em->flush();
+                $this->em->remove($kanala);
+                $this->em->flush();
             }
             return $this->redirectToRoute('kanala_index');
         }else

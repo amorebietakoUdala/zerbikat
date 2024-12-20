@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Dokumentumota;
 use App\Form\DokumentumotaType;
+use App\Repository\DokumentumotaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,16 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class DokumentumotaController extends AbstractController
 {
+
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, DokumentumotaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Dokumentumota entities.
      *
@@ -30,10 +42,7 @@ class DokumentumotaController extends AbstractController
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $em = $this->getDoctrine()->getManager();
-//            $dokumentumotas = $em->getRepository('App:Dokumentumota')->findAll();
-            $dokumentumotas = $em->getRepository('App:Dokumentumota')
-                ->findBy( array(), array('kodea'=>'ASC') );
+            $dokumentumotas = $this->repo->findBy( array(), array('kodea'=>'ASC') );
 
             $adapter = new ArrayAdapter($dokumentumotas);
             $pagerfanta = new Pagerfanta($adapter);            
@@ -79,16 +88,15 @@ class DokumentumotaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $dokumentumotum = new Dokumentumota();
-            $form = $this->createForm('App\Form\DokumentumotaType', $dokumentumotum);
+            $form = $this->createForm(DokumentumotaType::class, $dokumentumotum);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($dokumentumotum);
-                $em->flush();
+                $this->em->persist($dokumentumotum);
+                $this->em->flush();
 //                return $this->redirectToRoute('dokumentumota_show', array('id' => $dokumentumotum->getId()));
                 return $this->redirectToRoute('dokumentumota_index');
             } else
@@ -136,13 +144,12 @@ class DokumentumotaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($dokumentumotum);
-            $editForm = $this->createForm('App\Form\DokumentumotaType', $dokumentumotum);
+            $editForm = $this->createForm(DokumentumotaType::class, $dokumentumotum);
             $editForm->handleRequest($request);
     
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($dokumentumotum);
-                $em->flush();
+                $this->em->persist($dokumentumotum);
+                $this->em->flush();
     
                 return $this->redirectToRoute('dokumentumota_edit', array('id' => $dokumentumotum->getId()));
             }
@@ -173,9 +180,8 @@ class DokumentumotaController extends AbstractController
             $form = $this->createDeleteForm($dokumentumotum);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($dokumentumotum);
-                $em->flush();
+                $this->em->remove($dokumentumotum);
+                $this->em->flush();
             }
             return $this->redirectToRoute('dokumentumota_index');
         }else

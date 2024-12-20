@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Arrunta;
 use App\Form\ArruntaType;
+use App\Repository\ArruntaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,16 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class ArruntaController extends AbstractController
 {
+
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, ArruntaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Arrunta entities.
      *
@@ -29,8 +41,7 @@ class ArruntaController extends AbstractController
     public function indexAction($page)
     {
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $em = $this->getDoctrine()->getManager();
-            $arruntas = $em->getRepository('App:Arrunta')->findAll();
+            $arruntas = $this->repo->findAll();
 
             $adapter = new ArrayAdapter($arruntas);
             $pagerfanta = new Pagerfanta($adapter);
@@ -81,9 +92,8 @@ class ArruntaController extends AbstractController
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($arruntum);
-                $em->flush();
+                $this->em->persist($arruntum);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('arrunta_show', array('id' => $arruntum->getId()));
                 return $this->redirectToRoute('arrunta_index');
@@ -136,9 +146,8 @@ class ArruntaController extends AbstractController
             $editForm->handleRequest($request);
     
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($arruntum);
-                $em->flush();
+                $this->em->persist($arruntum);
+                $this->em->flush();
     
                 return $this->redirectToRoute('arrunta_edit', array('id' => $arruntum->getId()));
             }
@@ -170,9 +179,8 @@ class ArruntaController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($arruntum);
-                $em->flush();
+                $this->em->remove($arruntum);
+                $this->em->flush();
             }
             return $this->redirectToRoute('arrunta_index');
         }else

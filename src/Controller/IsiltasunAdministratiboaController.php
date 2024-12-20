@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\IsiltasunAdministratiboa;
 use App\Form\IsiltasunAdministratiboaType;
+use App\Repository\IsiltasunAdministratiboaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,15 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class IsiltasunAdministratiboaController extends AbstractController
 {
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, IsiltasunAdministratiboaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all IsiltasunAdministratiboa entities.
      *
@@ -32,8 +43,7 @@ class IsiltasunAdministratiboaController extends AbstractController
 
         if ($this->isGranted('ROLE_KUDEAKETA'))
         {
-            $em = $this->getDoctrine()->getManager();
-            $isiltasunAdministratiboas = $em->getRepository('App:IsiltasunAdministratiboa')->findAll();
+            $isiltasunAdministratiboas = $this->repo->findAll();
 
             $adapter = new ArrayAdapter($isiltasunAdministratiboas);
             $pagerfanta = new Pagerfanta($adapter);
@@ -79,16 +89,15 @@ class IsiltasunAdministratiboaController extends AbstractController
 
         if ($this->isGranted('ROLE_ADMIN')) {
             $isiltasunAdministratiboa = new IsiltasunAdministratiboa();
-            $form = $this->createForm('App\Form\IsiltasunAdministratiboaType', $isiltasunAdministratiboa);
+            $form = $this->createForm(IsiltasunAdministratiboaType::class, $isiltasunAdministratiboa);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($isiltasunAdministratiboa);
-                $em->flush();
+                $this->em->persist($isiltasunAdministratiboa);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('isiltasunadministratiboa_show', array('id' => $isiltasunAdministratiboa->getId()));
                 return $this->redirectToRoute('isiltasunadministratiboa_index');
@@ -137,13 +146,12 @@ class IsiltasunAdministratiboaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($isiltasunAdministratiboa);
-            $editForm = $this->createForm('App\Form\IsiltasunAdministratiboaType', $isiltasunAdministratiboa);
+            $editForm = $this->createForm(IsiltasunAdministratiboaType::class, $isiltasunAdministratiboa);
             $editForm->handleRequest($request);
     
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($isiltasunAdministratiboa);
-                $em->flush();
+                $this->em->persist($isiltasunAdministratiboa);
+                $this->em->flush();
     
                 return $this->redirectToRoute('isiltasunadministratiboa_edit', array('id' => $isiltasunAdministratiboa->getId()));
             }
@@ -174,9 +182,8 @@ class IsiltasunAdministratiboaController extends AbstractController
             $form = $this->createDeleteForm($isiltasunAdministratiboa);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($isiltasunAdministratiboa);
-                $em->flush();
+                $this->em->remove($isiltasunAdministratiboa);
+                $this->em->flush();
             }
             return $this->redirectToRoute('isiltasunadministratiboa_index');
         }else

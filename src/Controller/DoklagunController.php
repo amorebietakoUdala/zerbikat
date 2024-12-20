@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Doklagun;
 use App\Form\DoklagunType;
+use App\Repository\DoklagunRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,16 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class DoklagunController extends AbstractController
 {
+
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, DoklagunRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Doklagun entities.
      *
@@ -31,9 +43,7 @@ class DoklagunController extends AbstractController
 
         if ($this->isGranted('ROLE_KUDEAKETA'))
         {
-            $em = $this->getDoctrine()->getManager();
-            $doklaguns = $em->getRepository('App:Doklagun')
-                ->findBy( array(), array('kodea'=>'ASC') );
+            $doklaguns = $this->repo->findBy( array(), array('kodea'=>'ASC') );
 
             $deleteForms = array();
             foreach ($doklaguns as $doklagun) {
@@ -62,16 +72,15 @@ class DoklagunController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $doklagun = new Doklagun();
-            $form = $this->createForm('App\Form\DoklagunType', $doklagun);
+            $form = $this->createForm(DoklagunType::class, $doklagun);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($doklagun);
-                $em->flush();
+                $this->em->persist($doklagun);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('doklagun_show', array('id' => $doklagun->getId()));
                 return $this->redirectToRoute('doklagun_index');
@@ -120,13 +129,12 @@ class DoklagunController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($doklagun);
-            $editForm = $this->createForm('App\Form\DoklagunType', $doklagun);
+            $editForm = $this->createForm(DoklagunType::class, $doklagun);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($doklagun);
-                $em->flush();
+                $this->em->persist($doklagun);
+                $this->em->flush();
 
                 return $this->redirectToRoute('doklagun_edit', array('id' => $doklagun->getId()));
             }
@@ -158,9 +166,8 @@ class DoklagunController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($doklagun);
-                $em->flush();
+                $this->em->remove($doklagun);
+                $this->em->flush();
             }
 
             return $this->redirectToRoute('doklagun_index');

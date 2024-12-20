@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Eraikina;
 use App\Form\EraikinaType;
+use App\Repository\EraikinaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,16 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class EraikinaController extends AbstractController
 {
+
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, EraikinaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Eraikina entities.
      *
@@ -31,8 +43,7 @@ class EraikinaController extends AbstractController
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $em = $this->getDoctrine()->getManager();
-            $eraikinas = $em->getRepository('App:Eraikina')->findAll();
+            $eraikinas = $this->repo->findAll();
 
             $deleteForms = array();
             foreach ($eraikinas as $eraikina) {
@@ -61,16 +72,15 @@ class EraikinaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $eraikina = new Eraikina();
-            $form = $this->createForm('App\Form\EraikinaType', $eraikina);
+            $form = $this->createForm(EraikinaType::class, $eraikina);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($eraikina);
-                $em->flush();
+                $this->em->persist($eraikina);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('eraikina_show', array('id' => $eraikina->getId()));
                 return $this->redirectToRoute('eraikina_index');
@@ -123,13 +133,12 @@ class EraikinaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($eraikina);
-            $editForm = $this->createForm('App\Form\EraikinaType', $eraikina);
+            $editForm = $this->createForm(EraikinaType::class, $eraikina);
             $editForm->handleRequest($request);
     
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($eraikina);
-                $em->flush();
+                $this->em->persist($eraikina);
+                $this->em->flush();
     
                 return $this->redirectToRoute('eraikina_edit', array('id' => $eraikina->getId()));
             }
@@ -160,9 +169,8 @@ class EraikinaController extends AbstractController
             $form = $this->createDeleteForm($eraikina);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($eraikina);
-                $em->flush();
+                $this->em->remove($eraikina);
+                $this->em->flush();
             }
             return $this->redirectToRoute('eraikina_index');
         }else

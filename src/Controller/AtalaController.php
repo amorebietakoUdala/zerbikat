@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Atala;
 use App\Form\AtalaType;
+use App\Repository\AtalaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,16 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class AtalaController extends AbstractController
 {
+
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, AtalaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Atala entities.
      *
@@ -30,8 +42,7 @@ class AtalaController extends AbstractController
     public function indexAction($page)
     {
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $em = $this->getDoctrine()->getManager();
-            $atalas = $em->getRepository('App:Atala')->findAll();
+            $atalas = $this->repo->findAll();
 
             $adapter = new ArrayAdapter($atalas);
             $pagerfanta = new Pagerfanta($adapter);
@@ -85,9 +96,8 @@ class AtalaController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 $atala->setCreatedAt(new \DateTime());
                 $atala->setUpdatedAt(new \DateTime());
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($atala);
-                $em->flush();
+                $this->em->persist($atala);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('atala_show', array('id' => $atala->getId()));
                 return $this->redirectToRoute('atala_index');
@@ -141,9 +151,8 @@ class AtalaController extends AbstractController
             $editForm->handleRequest($request);
     
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($atala);
-                $em->flush();
+                $this->em->persist($atala);
+                $this->em->flush();
     
                 return $this->redirectToRoute('atala_edit', array('id' => $atala->getId()));
             }
@@ -175,9 +184,8 @@ class AtalaController extends AbstractController
             $form->handleRequest($request);
     
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($atala);
-                $em->flush();
+                $this->em->remove($atala);
+                $this->em->flush();
             }
             return $this->redirectToRoute('atala_index');
         }else

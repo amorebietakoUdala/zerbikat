@@ -8,12 +8,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Azpiatala;
 use App\Form\AzpiatalaType;
-
+use App\Repository\AzpiatalaRepository;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Azpiatala controller.
@@ -22,6 +23,16 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class AzpiatalaController extends AbstractController
 {
+
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, AzpiatalaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Azpiatala entities.
      *
@@ -32,10 +43,7 @@ class AzpiatalaController extends AbstractController
     public function indexAction($page)
     {
         if ($this->isGranted('ROLE_ADMIN')) {
-            $em = $this->getDoctrine()->getManager();
-//            $azpiatalas = $em->getRepository('App:Azpiatala')->findAll();
-            $azpiatalas = $em->getRepository('App:Azpiatala')
-                ->findBy( array(), array('kodea'=>'ASC') );
+            $azpiatalas = $this->repo->findBy( array(), array('kodea'=>'ASC') );
 
             $adapter = new ArrayAdapter($azpiatalas);
             $pagerfanta = new Pagerfanta($adapter);
@@ -89,7 +97,7 @@ class AzpiatalaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $azpiatala = new Azpiatala();
-            $form = $this->createForm('App\Form\AzpiatalaType', $azpiatala);
+            $form = $this->createForm(AzpiatalaType::class, $azpiatala);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
@@ -98,9 +106,8 @@ class AzpiatalaController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
 //                $azpiatala->setCreatedAt(new \DateTime());
 //                $azpiatala->setUpdatedAt(new \DateTime());
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($azpiatala);
-                $em->flush();
+                $this->em->persist($azpiatala);
+                $this->em->flush();
 
                 return $this->redirectToRoute('azpiatala_show', array('id' => $azpiatala->getId()));
             } else
@@ -159,10 +166,8 @@ class AzpiatalaController extends AbstractController
             }
 
             $deleteForm = $this->createDeleteForm($azpiatala);
-            $editForm = $this->createForm('App\Form\AzpiatalaType', $azpiatala);
+            $editForm = $this->createForm(AzpiatalaType::class, $azpiatala);
             $editForm->handleRequest($request);
-
-            $em = $this->getDoctrine()->getManager();
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
                 foreach ($originalKontzeptuak as $kontzeptu)
@@ -170,8 +175,8 @@ class AzpiatalaController extends AbstractController
                     if (false === $azpiatala->getKontzeptuak()->contains($kontzeptu))
                     {
                         $kontzeptu->setAzpiatala(null);
-                        $em->remove($kontzeptu);
-                        $em->persist($azpiatala);
+                        $this->em->remove($kontzeptu);
+                        $this->em->persist($azpiatala);
                     }
                 }
                 foreach ($originalParrafoak as $parrafo)
@@ -179,14 +184,14 @@ class AzpiatalaController extends AbstractController
                     if (false === $azpiatala->getParrafoak()->contains($parrafo))
                     {
                         $parrafo->setAzpiatala(null);
-                        $em->remove($parrafo);
+                        $this->em->remove($parrafo);
 
-                        $em->persist($azpiatala);
+                        $this->em->persist($azpiatala);
                     }
                 }
 
-                $em->persist($azpiatala);
-                $em->flush();
+                $this->em->persist($azpiatala);
+                $this->em->flush();
 
                 return $this->redirectToRoute('azpiatala_edit', array('id' => $azpiatala->getId()));
             }
@@ -217,9 +222,8 @@ class AzpiatalaController extends AbstractController
             $form = $this->createDeleteForm($azpiatala);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($azpiatala);
-                $em->flush();
+                $this->em->remove($azpiatala);
+                $this->em->flush();
             }
             return $this->redirectToRoute('azpiatala_index');
         }else

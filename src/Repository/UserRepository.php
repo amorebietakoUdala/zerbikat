@@ -62,30 +62,4 @@ class UserRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-
-
-    // $query = $this->em->createQuery(
-    //     /** @lang text */
-    //     '
-    //     SELECT s         
-    //       FROM App:User s
-    //       INNER JOIN s.User u
-    //     WHERE u.kodea = :User
-    //     ORDER BY s.kodea DESC
-    //     '
-    // );
-    // $query->setParameter( 'User', $User );
-
-
-    /*
-    public function findOneBySomeField($value): ?Userk
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

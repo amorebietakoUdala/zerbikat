@@ -18,16 +18,6 @@ class FitxafamiliaType extends AbstractType
         $builder
             ->add('ordena')
             ->add('familia')
-//                ,
-//                EntityType::class,
-//                array (
-//                    'class'       => 'App:Familia',
-//                    'required'    => false,
-//                    'multiple'    => 'multiple',
-//                    'placeholder' => 'Aukeratu kostu taulak',
-//
-//                )
-//            )
             ->add('fitxa')
             ->add('udala')
         ;

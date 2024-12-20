@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Besteak1;
 use App\Form\Besteak1Type;
+use App\Repository\Besteak1Repository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,16 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class Besteak1Controller extends AbstractController
 {
+
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, Besteak1Repository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Besteak1 entities.
      *
@@ -29,10 +41,7 @@ class Besteak1Controller extends AbstractController
     public function indexAction($page)
     {
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $em = $this->getDoctrine()->getManager();
-
-            $besteak1s = $em->getRepository('App:Besteak1')
-                ->findBy( array(), array('kodea'=>'ASC') );
+            $besteak1s = $this->repo->findBy( array(), array('kodea'=>'ASC') );
             
             $deleteForms = array();
             foreach ($besteak1s as $besteak1) {
@@ -60,16 +69,15 @@ class Besteak1Controller extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $besteak1 = new Besteak1();
-            $form = $this->createForm('App\Form\Besteak1Type', $besteak1);
+            $form = $this->createForm(Besteak1Type::class, $besteak1);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($besteak1);
-                $em->flush();
+                $this->em->persist($besteak1);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('besteak1_show', array('id' => $besteak1->getId()));
                 return $this->redirectToRoute('besteak1_index');                
@@ -117,13 +125,12 @@ class Besteak1Controller extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($besteak1);
-            $editForm = $this->createForm('App\Form\Besteak1Type', $besteak1);
+            $editForm = $this->createForm(Besteak1Type::class, $besteak1);
             $editForm->handleRequest($request);
     
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($besteak1);
-                $em->flush();
+                $this->em->persist($besteak1);
+                $this->em->flush();
     
                 return $this->redirectToRoute('besteak1_edit', array('id' => $besteak1->getId()));
             }
@@ -153,9 +160,8 @@ class Besteak1Controller extends AbstractController
             $form = $this->createDeleteForm($besteak1);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($besteak1);
-                $em->flush();
+                $this->em->remove($besteak1);
+                $this->em->flush();
             }
             return $this->redirectToRoute('besteak1_index');
         }else

@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Prozedura;
 use App\Form\ProzeduraType;
+use App\Repository\ProzeduraRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,15 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class ProzeduraController extends AbstractController
 {
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, ProzeduraRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Prozedura entities.
      *
@@ -30,8 +41,7 @@ class ProzeduraController extends AbstractController
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $em = $this->getDoctrine()->getManager();
-            $prozeduras = $em->getRepository('App:Prozedura')->findAll();
+            $prozeduras = $this->repo->findAll();
 
             $deleteForms = array();
             foreach ($prozeduras as $prozedura) {
@@ -60,16 +70,15 @@ class ProzeduraController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $prozedura = new Prozedura();
-            $form = $this->createForm('App\Form\ProzeduraType', $prozedura);
+            $form = $this->createForm(ProzeduraType::class, $prozedura);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($prozedura);
-                $em->flush();
+                $this->em->persist($prozedura);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('prozedura_show', array('id' => $prozedura->getId()));
                 return $this->redirectToRoute('prozedura_index');
@@ -118,13 +127,12 @@ class ProzeduraController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($prozedura);
-            $editForm = $this->createForm('App\Form\ProzeduraType', $prozedura);
+            $editForm = $this->createForm(ProzeduraType::class, $prozedura);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($prozedura);
-                $em->flush();
+                $this->em->persist($prozedura);
+                $this->em->flush();
 
                 return $this->redirectToRoute('prozedura_edit', array('id' => $prozedura->getId()));
             }
@@ -155,9 +163,8 @@ class ProzeduraController extends AbstractController
             $form = $this->createDeleteForm($prozedura);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($prozedura);
-                $em->flush();
+                $this->em->remove($prozedura);
+                $this->em->flush();
             }
             return $this->redirectToRoute('prozedura_index');
         }else

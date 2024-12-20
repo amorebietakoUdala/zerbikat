@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Kanalmota;
 use App\Form\KanalmotaType;
+use App\Repository\KanalmotaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,15 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class KanalmotaController extends AbstractController
 {
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, KanalmotaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Kanalmota entities.
      *
@@ -30,8 +41,7 @@ class KanalmotaController extends AbstractController
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $em = $this->getDoctrine()->getManager();
-            $kanalmotas = $em->getRepository('App:Kanalmota')->findAll();
+            $kanalmotas = $this->repo->findAll();
 
             $adapter = new ArrayAdapter($kanalmotas);
             $pagerfanta = new Pagerfanta($adapter);
@@ -78,16 +88,15 @@ class KanalmotaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $kanalmotum = new Kanalmota();
-            $form = $this->createForm('App\Form\KanalmotaType', $kanalmotum);
+            $form = $this->createForm(KanalmotaType::class, $kanalmotum);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($kanalmotum);
-                $em->flush();
+                $this->em->persist($kanalmotum);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('kanalmota_show', array('id' => $kanalmotum->getId()));
                 return $this->redirectToRoute('kanalmota_index');
@@ -136,13 +145,12 @@ class KanalmotaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($kanalmotum);
-            $editForm = $this->createForm('App\Form\KanalmotaType', $kanalmotum);
+            $editForm = $this->createForm(KanalmotaType::class, $kanalmotum);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($kanalmotum);
-                $em->flush();
+                $this->em->persist($kanalmotum);
+                $this->em->flush();
 
                 return $this->redirectToRoute('kanalmota_edit', array('id' => $kanalmotum->getId()));
             }
@@ -173,9 +181,8 @@ class KanalmotaController extends AbstractController
             $form = $this->createDeleteForm($kanalmotum);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($kanalmotum);
-                $em->flush();
+                $this->em->remove($kanalmotum);
+                $this->em->flush();
             }
             return $this->redirectToRoute('kanalmota_index');
         }else

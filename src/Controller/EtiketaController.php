@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Etiketa;
 use App\Form\EtiketaType;
+use App\Repository\EtiketaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -19,6 +21,15 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class EtiketaController extends AbstractController
 {
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, EtiketaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Etiketa entities.
      *
@@ -30,18 +41,12 @@ class EtiketaController extends AbstractController
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $em = $this->getDoctrine()->getManager();
-
-            $etiketas = $em->getRepository('App:Etiketa')
-                ->findBy( array(), array('etiketaeu'=>'ASC') );
-
+            $etiketas = $this->repo->findBy( array(), array('etiketaeu'=>'ASC') );
 
             $deleteForms = array();
             foreach ($etiketas as $etiketa) {
                 $deleteForms[$etiketa->getId()] = $this->createDeleteForm($etiketa)->createView();
             }
-
-
 
             return $this->render('etiketa/index.html.twig', array(
                 'etiketas' => $etiketas,
@@ -65,16 +70,15 @@ class EtiketaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $etiketum = new Etiketa();
-            $form = $this->createForm('App\Form\EtiketaType', $etiketum);
+            $form = $this->createForm(EtiketaType::class, $etiketum);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($etiketum);
-                $em->flush();
+                $this->em->persist($etiketum);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('etiketa_show', array('id' => $etiketum->getId()));
                 return $this->redirectToRoute('etiketa_index');
@@ -123,13 +127,12 @@ class EtiketaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($etiketum);
-            $editForm = $this->createForm('App\Form\EtiketaType', $etiketum);
+            $editForm = $this->createForm(EtiketaType::class, $etiketum);
             $editForm->handleRequest($request);
     
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($etiketum);
-                $em->flush();
+                $this->em->persist($etiketum);
+                $this->em->flush();
     
                 return $this->redirectToRoute('etiketa_edit', array('id' => $etiketum->getId()));
             }
@@ -160,9 +163,8 @@ class EtiketaController extends AbstractController
             $form = $this->createDeleteForm($etiketum);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($etiketum);
-                $em->flush();
+                $this->em->remove($etiketum);
+                $this->em->flush();
             }
             return $this->redirectToRoute('etiketa_index');
         }else

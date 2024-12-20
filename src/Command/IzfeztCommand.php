@@ -2,8 +2,11 @@
 
 namespace App\Command;
 
+use App\Entity\Kanalmota;
+use App\Entity\Udala;
+use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,10 +15,22 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-class IzfeztCommand extends ContainerAwareCommand
+class IzfeztCommand extends Command
 {
 
     protected $unekoFitxaKodea = "";
+    protected $zzoo_aplikazioaren_API_url;
+    protected static $defaultName = 'api:izfezt';
+    protected static $defaultDescription = 'Zerbitzu telematikoen fitxategia sortu. Familia <-> Azpifamilia erabiliz';
+
+    protected $em;
+
+    public function __construct(EntityManagerInterface $em, $zzoo_aplikazioaren_API_url)
+    {
+        $this->em = $em;
+        $this->zzoo_aplikazioaren_API_url = $zzoo_aplikazioaren_API_url;
+        parent::__construct();
+    }
 
     /**
      * {@inheritdoc}
@@ -23,8 +38,6 @@ class IzfeztCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName( 'api:izfezt' )
-            ->setDescription( 'Zerbitzu telematikoen fitxategia sortu. Familia <-> Azpifamilia erabiliz' )
             ->addArgument( 'udalKodea', InputArgument::REQUIRED, 'Udal kodea, adibidez pasaiarentzat 064.' )
             ->addArgument( 'debug', InputArgument::OPTIONAL, 'Informazio areagotua bistaratu.' );
     }
@@ -313,10 +326,7 @@ class IzfeztCommand extends ContainerAwareCommand
         $debug = $input->getArgument( 'debug' );
 
         $filename = "web/doc/$udalKodea/izfesql.sql";
-
-        $em = $this->getContainer()->get( 'doctrine' )->getManager();
-
-        $udala = $em->getRepository( 'App:Udala' )->findOneBy(
+        $udala = $this->em->getRepository( Udala::class )->findOneBy(
             array(
                 'kodea' => $udalKodea,
             )
@@ -334,7 +344,7 @@ class IzfeztCommand extends ContainerAwareCommand
             ]
         );
 
-        $query = $em->createQuery(
+        $query = $this->em->createQuery(
             '
                     SELECT f
                     FROM App:Fitxa f
@@ -396,9 +406,9 @@ class IzfeztCommand extends ContainerAwareCommand
         }
 
 
-        $kanalmotak = $em->getRepository( 'App:Kanalmota' )->findAll();
+        $kanalmotak = $this->em->getRepository( Kanalmota::class )->findAll();
 
-        $query = $em->createQuery(
+        $query = $this->em->createQuery(
             '
                     SELECT f.oharraktext,f.helburuatext,f.ebazpensinpli,f.arduraaitorpena,f.aurreikusi,f.arrunta,f.isiltasunadmin,f.norkeskatutext,f.norkeskatutable,f.dokumentazioatext,f.dokumentazioatable,f.kostuatext,f.kostuatable,f.araudiatext,f.araudiatable,f.prozeduratext,f.prozeduratable,f.doklaguntext,f.doklaguntable,f.datuenbabesatext,f.datuenbabesatable,f.norkebatzitext,f.norkebatzitable,f.besteak1text,f.besteak1table,f.besteak2text,f.besteak2table,f.besteak3text,f.besteak3table,f.kanalatext,f.kanalatable,f.azpisailatable
                       FROM App:Eremuak f
@@ -408,7 +418,7 @@ class IzfeztCommand extends ContainerAwareCommand
         $query->setParameter( 'udala', $udala->getId() );
         $eremuak = $query->getSingleResult();
 
-        $query = $em->createQuery(
+        $query = $this->em->createQuery(
             '
                   SELECT f.oharraklabeleu,f.oharraklabeles,f.helburualabeleu,f.helburualabeles,f.ebazpensinplilabeleu,f.ebazpensinplilabeles,f.arduraaitorpenalabeleu,f.arduraaitorpenalabeles,f.aurreikusilabeleu,f.aurreikusilabeles,f.arruntalabeleu,f.arruntalabeles,f.isiltasunadminlabeleu,f.isiltasunadminlabeles,f.norkeskatulabeleu,f.norkeskatulabeles,f.dokumentazioalabeleu,f.dokumentazioalabeles,f.kostualabeleu,f.kostualabeles,f.araudialabeleu,f.araudialabeles,f.prozeduralabeleu,f.prozeduralabeles,f.doklagunlabeleu,f.doklagunlabeles,f.datuenbabesalabeleu,f.datuenbabesalabeles,f.norkebatzilabeleu,f.norkebatzilabeles,f.besteak1labeleu,f.besteak1labeles,f.besteak2labeleu,f.besteak2labeles,f.besteak3labeleu,f.besteak3labeles,f.kanalalabeleu,f.kanalalabeles,f.epealabeleu,f.epealabeles,f.doanlabeleu,f.doanlabeles,f.azpisailalabeleu,f.azpisailalabeles
                     FROM App:Eremuak f
@@ -418,7 +428,7 @@ class IzfeztCommand extends ContainerAwareCommand
         $query->setParameter( 'udala', $udala->getId() );
         $labelak = $query->getSingleResult();
 
-        $query = $em->createQuery(
+        $query = $this->em->createQuery(
             '
                   SELECT f 
                     FROM App:Familia f 
@@ -453,7 +463,7 @@ class IzfeztCommand extends ContainerAwareCommand
         /*******************************************************************/
         /**** Home-an familiak sortu  **************************************/
         /*******************************************************************/
-        /** @var  $familia \App\Entity\Familia */
+        /** @var Familia $familia */
         foreach ( $familiak as $familia ) {
 
             $sql = $sql . $this->addBloque(
@@ -488,7 +498,7 @@ class IzfeztCommand extends ContainerAwareCommand
                 if ( $debug ) {
                     echo "|__" . $fitxafamilia->getFitxa() . "\n";
                 }
-                /** @var $fitxa \App\Entity\Fitxa */
+                /** @var Fitxa $fitxa */
                 $fitxa = $fitxafamilia->getFitxa();
                 $this->unekoFitxaKodea = $fitxa->getExpedientes();
                 //$mapa[$familia->getId()] = $idBlokea;
@@ -507,12 +517,11 @@ class IzfeztCommand extends ContainerAwareCommand
                     ) { // Begiratu ea aldez aurretik sortu dugun...
                         $kostuZerrenda = array();
                         foreach ( $fitxa->getKostuak() as $kostu ) {
-                            $api = $this->getContainer()->getParameter( 'zzoo_aplikazioaren_API_url' );
-                            if ( ( strlen( $api ) > 0 ) && ( $kostu->getKostua() ) ) {
+                            if ( ( strlen( $this->zzoo_aplikazioaren_API_url ) > 0 ) && ( $kostu->getKostua() ) ) {
                                 $client = new GuzzleHttp\Client();
                                 $proba = $client->request(
                                     'GET',
-                                    $api . '/zerga/' . $kostu->getKostua() . '.json'
+                                    $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '.json'
                                 );
                                 $fitxaKostua = (string)$proba->getBody();
                                 $array = json_decode( $fitxaKostua, true );
@@ -862,7 +871,7 @@ class IzfeztCommand extends ContainerAwareCommand
                                     $textes = "<ul>";
                                     $texteu = "<ul>";
 
-                                    /** @var  $kanala \App\Entity\Kanala */
+                                    /** @var Kanala $kanala */
                                     foreach ( $fitxa->getKanalak() as $kanala ) {
                                         if ( ( $kanala->getKanalmota() == $k ) && ( $kanala->getErakutsi() == 1 ) ) {
                                             if ( $aurkitua == 0 ) {
@@ -1066,7 +1075,7 @@ class IzfeztCommand extends ContainerAwareCommand
                                             $texteu = $texteu . "<table  class='table table-bordered table-condensed table-hover'><tr><th colspan='2' class='text-center'>" . $kostutaula[ "kodea_prod" ] . " - " . $kostutaula[ "izenburuaeu_prod" ] . "</th></tr>";
 
                                             foreach ( $kostutaula[ "parrafoak" ] as $parrafo ) {
-                                                if ( array_key_exists( "kontzeptuaes_prod", $kontzeptu ) ) {
+                                                if ( array_key_exists( "kontzeptuaes_prod", $parrafo ) ) {
                                                     $textes = $textes . "<tr><td colspan='2'>" . $parrafo[ "kontzeptuaes_prod" ] . "</td></tr>";
                                                     $texteu = $texteu . "<tr><td colspan='2'>" . $parrafo[ "kontzeptuaeu_prod" ] . "</td></tr>";
                                                 }
@@ -2158,12 +2167,11 @@ class IzfeztCommand extends ContainerAwareCommand
                         ) { // Begiratu ea aldez aurretik sortu dugun...
                             $kostuZerrenda = array();
                             foreach ( $fitxa->getKostuak() as $kostu ) {
-                                $api = $this->getContainer()->getParameter( 'zzoo_aplikazioaren_API_url' );
-                                if ( ( strlen( $api ) > 0 ) && ( $kostu->getKostua() ) ) {
+                                if ( ( strlen( $this->zzoo_aplikazioaren_API_url ) > 0 ) && ( $kostu->getKostua() ) ) {
                                     $client = new GuzzleHttp\Client();
                                     $proba = $client->request(
                                         'GET',
-                                        $api . '/zerga/' . $kostu->getKostua() . '.json'
+                                        $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '.json'
                                     );
                                     $fitxaKostua = (string)$proba->getBody();
                                     $array = json_decode( $fitxaKostua, true );
@@ -2513,7 +2521,7 @@ class IzfeztCommand extends ContainerAwareCommand
                                         $textes = "<ul>";
                                         $texteu = "<ul>";
 
-                                        /** @var  $kanala \App\Entity\Kanala */
+                                        /** @var Kanala $kanala */
                                         foreach ( $fitxa->getKanalak() as $kanala ) {
                                             if ( ( $kanala->getKanalmota() == $k ) && ( $kanala->getErakutsi() == 1 )
                                             ) {

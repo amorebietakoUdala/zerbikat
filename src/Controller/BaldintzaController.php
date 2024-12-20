@@ -8,7 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Baldintza;
 use App\Form\BaldintzaType;
-
+use App\Repository\BaldintzaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -20,6 +21,16 @@ use Pagerfanta\Adapter\ArrayAdapter;
  */
 class BaldintzaController extends AbstractController
 {
+
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, BaldintzaRepository $repo)
+    {
+        $this->repo = $repo;
+        $this->em = $em;
+    }
+
     /**
      * Lists all Baldintza entities.
      *
@@ -30,8 +41,7 @@ class BaldintzaController extends AbstractController
     public function indexAction($page)
     {
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $em = $this->getDoctrine()->getManager();
-            $baldintzas = $em->getRepository('App:Baldintza')->findAll();
+            $baldintzas = $this->repo->findAll();
 
             $deleteForms = array();
             foreach ($baldintzas as $baldintza) {
@@ -59,16 +69,15 @@ class BaldintzaController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN'))
         {
             $baldintza = new Baldintza();
-            $form = $this->createForm('App\Form\BaldintzaType', $baldintza);
+            $form = $this->createForm(BaldintzaType::class, $baldintza);
             $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($baldintza);
-                $em->flush();
+                $this->em->persist($baldintza);
+                $this->em->flush();
 
 //                return $this->redirectToRoute('baldintza_show', array('id' => $baldintza->getId()));
                 return $this->redirectToRoute('baldintza_index');
@@ -117,13 +126,12 @@ class BaldintzaController extends AbstractController
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($baldintza);
-            $editForm = $this->createForm('App\Form\BaldintzaType', $baldintza);
+            $editForm = $this->createForm(BaldintzaType::class, $baldintza);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($baldintza);
-                $em->flush();
+                $this->em->persist($baldintza);
+                $this->em->flush();
 
                 return $this->redirectToRoute('baldintza_edit', array('id' => $baldintza->getId()));
             }
@@ -153,9 +161,8 @@ class BaldintzaController extends AbstractController
             $form = $this->createDeleteForm($baldintza);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($baldintza);
-                $em->flush();
+                $this->em->remove($baldintza);
+                $this->em->flush();
             }
             return $this->redirectToRoute('baldintza_index');
         }else
