@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Prozedura;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -26,8 +27,8 @@ class ProzeduraType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\Prozedura'
-        ));
+        $resolver->setDefaults([
+            'data_class' => Prozedura::class
+        ]);
     }
 }

@@ -10,6 +10,8 @@ use App\Entity\Azpiatalaparrafoa;
 use App\Form\AzpiatalaparrafoaType;
 use App\Repository\AzpiatalaparrafoaRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Azpiatalaparrafoa controller.
@@ -34,19 +36,16 @@ class AzpiatalaparrafoaController extends AbstractController
      * @Route("/", name="azpiatalaparrafoa_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function index(): Response
     {
         $azpiatalaparrafoas = $this->repo->findAll();
 
-        $deleteForms = array();
+        $deleteForms = [];
         foreach ($azpiatalaparrafoas as $azpiatalaparrafoa) {
             $deleteForms[$azpiatalaparrafoa->getId()] = $this->createDeleteForm($azpiatalaparrafoa)->createView();
         }
 
-        return $this->render('azpiatalaparrafoa/index.html.twig', array(
-            'azpiatalaparrafoas' => $azpiatalaparrafoas,
-            'deleteforms' => $deleteForms
-        ));
+        return $this->render('azpiatalaparrafoa/index.html.twig', ['azpiatalaparrafoas' => $azpiatalaparrafoas, 'deleteforms' => $deleteForms]);
     }
 
     /**
@@ -55,7 +54,7 @@ class AzpiatalaparrafoaController extends AbstractController
      * @Route("/new", name="azpiatalaparrafoa_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
         if ($this->isGranted('ROLE_ADMIN')) 
         {
@@ -72,17 +71,14 @@ class AzpiatalaparrafoaController extends AbstractController
                 $this->em->persist($azpiatalaparrafoa);
                 $this->em->flush();
     
-                return $this->redirectToRoute('azpiatalaparrafoa_show', array('id' => $azpiatalaparrafoa->getId()));
+                return $this->redirectToRoute('azpiatalaparrafoa_show', ['id' => $azpiatalaparrafoa->getId()]);
             } else
             {
                 $form->getData()->setUdala($this->getUser()->getUdala());
                 $form->setData($form->getData());
             }
     
-            return $this->render('azpiatalaparrafoa/new.html.twig', array(
-                'azpiatalaparrafoa' => $azpiatalaparrafoa,
-                'form' => $form->createView(),
-            ));
+            return $this->render('azpiatalaparrafoa/new.html.twig', ['azpiatalaparrafoa' => $azpiatalaparrafoa, 'form' => $form->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -95,14 +91,11 @@ class AzpiatalaparrafoaController extends AbstractController
      * @Route("/{id}", name="azpiatalaparrafoa_show")
      * @Method("GET")
      */
-    public function showAction(Azpiatalaparrafoa $azpiatalaparrafoa)
+    public function show(Azpiatalaparrafoa $azpiatalaparrafoa): Response
     {
         $deleteForm = $this->createDeleteForm($azpiatalaparrafoa);
 
-        return $this->render('azpiatalaparrafoa/show.html.twig', array(
-            'azpiatalaparrafoa' => $azpiatalaparrafoa,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('azpiatalaparrafoa/show.html.twig', ['azpiatalaparrafoa' => $azpiatalaparrafoa, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -111,7 +104,7 @@ class AzpiatalaparrafoaController extends AbstractController
      * @Route("/{id}/edit", name="azpiatalaparrafoa_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Azpiatalaparrafoa $azpiatalaparrafoa)
+    public function edit(Request $request, Azpiatalaparrafoa $azpiatalaparrafoa)
     {
         if((($this->isGranted('ROLE_ADMIN')) && ($azpiatalaparrafoa->getUdala()==$this->getUser()->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
@@ -124,14 +117,10 @@ class AzpiatalaparrafoaController extends AbstractController
                 $this->em->persist($azpiatalaparrafoa);
                 $this->em->flush();
 
-                return $this->redirectToRoute('azpiatalaparrafoa_edit', array('id' => $azpiatalaparrafoa->getId()));
+                return $this->redirectToRoute('azpiatalaparrafoa_edit', ['id' => $azpiatalaparrafoa->getId()]);
             }
 
-            return $this->render('azpiatalaparrafoa/edit.html.twig', array(
-                'azpiatalaparrafoa' => $azpiatalaparrafoa,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('azpiatalaparrafoa/edit.html.twig', ['azpiatalaparrafoa' => $azpiatalaparrafoa, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -144,7 +133,7 @@ class AzpiatalaparrafoaController extends AbstractController
      * @Route("/{id}", name="azpiatalaparrafoa_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Azpiatalaparrafoa $azpiatalaparrafoa)
+    public function delete(Request $request, Azpiatalaparrafoa $azpiatalaparrafoa): RedirectResponse
     {
         if((($this->isGranted('ROLE_ADMIN')) && ($azpiatalaparrafoa->getUdala()==$this->getUser()->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
@@ -173,8 +162,8 @@ class AzpiatalaparrafoaController extends AbstractController
     private function createDeleteForm(Azpiatalaparrafoa $azpiatalaparrafoa)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('azpiatalaparrafoa_delete', array('id' => $azpiatalaparrafoa->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('azpiatalaparrafoa_delete', ['id' => $azpiatalaparrafoa->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

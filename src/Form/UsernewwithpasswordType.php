@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -29,30 +30,28 @@ class UsernewwithpasswordType extends AbstractType
             ->add('udala')
             ->add('azpisaila')
             ->add('enabled')
-            ->add('email', EmailType::class, array(
-                'required' => true
-            ))
+            ->add('email', EmailType::class, ['required' => true])
 //            ->add('roles')
 //            ->add('password')
-            ->add('roles',  ChoiceType::class, array(
-                'multiple' => true,
-                'choices'  => array(
-                    'Admin' => 'ROLE_ADMIN',
-                    'Kudeaketa' => 'ROLE_KUDEAKETA',
+            ->add('roles',  ChoiceType::class, [
+                'multiple' => true, 
+                'choices'  => [
+                    'Admin' => 'ROLE_ADMIN', 
+                    'Kudeaketa' => 'ROLE_KUDEAKETA', 
                     'Erabiltzailea' => 'ROLE_USER'
-                ),
-            ))
-            ->add('password', RepeatedType::class, array(
-                'type' => PasswordType::class,
-                'first_options'  => array(
+                    ]
+            ])
+            ->add('password', RepeatedType::class, [
+                'type' => PasswordType::class, 
+                'first_options'  => [
                     'label' => 'messages.pasahitza',
-                    'translation_domain' => 'messages',
-                ),
-                'second_options' => array(
-                    'label' => 'messages.pasahitzaerrepikatu',
-                    'translation_domain' => 'messages',
-                ),
-            ))
+                    'translation_domain' => 'messages'
+                ], 
+                'second_options' => [
+                    'label' => 'messages.pasahitzaerrepikatu', 
+                    'translation_domain' => 'messages'
+                ]
+            ])
         ;
     }
     
@@ -61,8 +60,8 @@ class UsernewwithpasswordType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\User'
-        ));
+        $resolver->setDefaults([
+            'data_class' => User::class
+        ]);
     }
 }

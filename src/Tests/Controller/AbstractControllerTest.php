@@ -35,7 +35,7 @@ abstract class AbstractControllerTest extends WebTestCase
         $loginManager = $container->get('fos_user.security.login_manager');
         $firewallName = $container->getParameter('fos_user.firewall_name');
 
-        $user = $userManager->findUserBy(array('username' => 'pasaia'));
+        $user = $userManager->findUserBy(['username' => 'pasaia']);
         $loginManager->loginUser($firewallName, $user);
 
         // save the login token into the session and put it in a cookie

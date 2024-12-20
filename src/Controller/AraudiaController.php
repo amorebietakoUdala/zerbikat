@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Araudia controller.
@@ -37,21 +38,18 @@ class AraudiaController extends AbstractController
      * @Route("/page{page}", name="araudia_index_paginated")
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
         if ($this->isGranted('ROLE_KUDEAKETA'))
         {
-            $araudias = $this->repo->findBy( array(), array('kodea'=>'ASC') );
+            $araudias = $this->repo->findBy( [], ['kodea'=>'ASC'] );
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($araudias as $araudia) {
                 $deleteForms[$araudia->getId()] = $this->createDeleteForm($araudia)->createView();
             }
 
-            return $this->render('araudia/index.html.twig', array(
-                'araudias' => $araudias,
-                'deleteforms' => $deleteForms
-            ));
+            return $this->render('araudia/index.html.twig', ['araudias' => $araudias, 'deleteforms' => $deleteForms]);
         }else
         {
 //            return $this->redirectToRoute('fitxa_index');
@@ -66,7 +64,7 @@ class AraudiaController extends AbstractController
      * @Route("/new", name="araudia_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
         if ($this->isGranted('ROLE_ADMIN')) {
             $araudium = new Araudia();
@@ -85,10 +83,7 @@ class AraudiaController extends AbstractController
             }
             
 
-            return $this->render('araudia/new.html.twig', array(
-                'araudium' => $araudium,
-                'form' => $form->createView(),
-            ));
+            return $this->render('araudia/new.html.twig', ['araudium' => $araudium, 'form' => $form->createView()]);
         }else
         {
             //Baimenik ez
@@ -103,14 +98,11 @@ class AraudiaController extends AbstractController
      * @Route("/{id}", name="araudia_show")
      * @Method("GET")
      */
-    public function showAction(Araudia $araudium)
+    public function show(Araudia $araudium): Response
     {
         $deleteForm = $this->createDeleteForm($araudium);
 
-        return $this->render('araudia/show.html.twig', array(
-            'araudium' => $araudium,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('araudia/show.html.twig', ['araudium' => $araudium, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -119,7 +111,7 @@ class AraudiaController extends AbstractController
      * @Route("/{id}/edit", name="araudia_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Araudia $araudium)
+    public function edit(Request $request, Araudia $araudium)
     {
         if((($this->isGranted('ROLE_ADMIN')) && ($araudium->getUdala()==$this->getUser()->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
@@ -132,14 +124,10 @@ class AraudiaController extends AbstractController
                 $this->em->persist($araudium);
                 $this->em->flush();
 
-                return $this->redirectToRoute('araudia_edit', array('id' => $araudium->getId()));
+                return $this->redirectToRoute('araudia_edit', ['id' => $araudium->getId()]);
             }
 
-            return $this->render('araudia/edit.html.twig', array(
-                'araudium' => $araudium,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('araudia/edit.html.twig', ['araudium' => $araudium, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
 //            return $this->redirectToRoute('fitxa_index');
@@ -153,7 +141,7 @@ class AraudiaController extends AbstractController
      * @Route("/{id}", name="araudia_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Araudia $araudium)
+    public function delete(Request $request, Araudia $araudium): RedirectResponse
     {
         if((($this->isGranted('ROLE_ADMIN')) && ($araudium->getUdala()==$this->getUser()->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
@@ -183,8 +171,8 @@ class AraudiaController extends AbstractController
     private function createDeleteForm(Araudia $araudium)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('araudia_delete', array('id' => $araudium->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('araudia_delete', ['id' => $araudium->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

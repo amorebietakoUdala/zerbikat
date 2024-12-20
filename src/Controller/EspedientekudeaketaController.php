@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Espedientekudeaketa controller.
@@ -37,7 +39,7 @@ class EspedientekudeaketaController extends AbstractController
      * @Route("/page{page}", name="espedientekudeaketa_index_paginated")
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
 
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
@@ -46,7 +48,7 @@ class EspedientekudeaketaController extends AbstractController
             $adapter = new ArrayAdapter($espedientekudeaketas);
             $pagerfanta = new Pagerfanta($adapter);
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($espedientekudeaketas as $espedientekudeaketa) {
                 $deleteForms[$espedientekudeaketa->getId()] = $this->createDeleteForm($espedientekudeaketa)->createView();
             }
@@ -65,11 +67,7 @@ class EspedientekudeaketaController extends AbstractController
                 throw $this->createNotFoundException("Orria ez da existitzen");
             }
 
-            return $this->render('espedientekudeaketa/index.html.twig', array(
-                'espedientekudeaketas' => $entities,
-                'deleteforms' => $deleteForms,
-                'pager' => $pagerfanta,
-            ));
+            return $this->render('espedientekudeaketa/index.html.twig', ['espedientekudeaketas' => $entities, 'deleteforms' => $deleteForms, 'pager' => $pagerfanta]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -82,7 +80,7 @@ class EspedientekudeaketaController extends AbstractController
      * @Route("/new", name="espedientekudeaketa_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
 
         if ($this->isGranted('ROLE_SUPER_ADMIN'))
@@ -99,10 +97,7 @@ class EspedientekudeaketaController extends AbstractController
                 return $this->redirectToRoute('espedientekudeaketa_index');
             }
 
-            return $this->render('espedientekudeaketa/new.html.twig', array(
-                'espedientekudeaketum' => $espedientekudeaketum,
-                'form' => $form->createView(),
-            ));
+            return $this->render('espedientekudeaketa/new.html.twig', ['espedientekudeaketum' => $espedientekudeaketum, 'form' => $form->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -115,14 +110,11 @@ class EspedientekudeaketaController extends AbstractController
      * @Route("/{id}", name="espedientekudeaketa_show")
      * @Method("GET")
      */
-    public function showAction(Espedientekudeaketa $espedientekudeaketum)
+    public function show(Espedientekudeaketa $espedientekudeaketum): Response
     {
         $deleteForm = $this->createDeleteForm($espedientekudeaketum);
 
-        return $this->render('espedientekudeaketa/show.html.twig', array(
-            'espedientekudeaketum' => $espedientekudeaketum,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('espedientekudeaketa/show.html.twig', ['espedientekudeaketum' => $espedientekudeaketum, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -131,7 +123,7 @@ class EspedientekudeaketaController extends AbstractController
      * @Route("/{id}/edit", name="espedientekudeaketa_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Espedientekudeaketa $espedientekudeaketum)
+    public function edit(Request $request, Espedientekudeaketa $espedientekudeaketum)
     {
 
         if ($this->isGranted('ROLE_SUPER_ADMIN'))
@@ -144,14 +136,10 @@ class EspedientekudeaketaController extends AbstractController
                 $this->em->persist($espedientekudeaketum);
                 $this->em->flush();
 
-                return $this->redirectToRoute('espedientekudeaketa_edit', array('id' => $espedientekudeaketum->getId()));
+                return $this->redirectToRoute('espedientekudeaketa_edit', ['id' => $espedientekudeaketum->getId()]);
             }
 
-            return $this->render('espedientekudeaketa/edit.html.twig', array(
-                'espedientekudeaketum' => $espedientekudeaketum,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('espedientekudeaketa/edit.html.twig', ['espedientekudeaketum' => $espedientekudeaketum, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -164,7 +152,7 @@ class EspedientekudeaketaController extends AbstractController
      * @Route("/{id}", name="espedientekudeaketa_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Espedientekudeaketa $espedientekudeaketum)
+    public function delete(Request $request, Espedientekudeaketa $espedientekudeaketum): RedirectResponse
     {
 
         if($this->isGranted('ROLE_SUPER_ADMIN'))
@@ -193,8 +181,8 @@ class EspedientekudeaketaController extends AbstractController
     private function createDeleteForm(Espedientekudeaketa $espedientekudeaketum)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('espedientekudeaketa_delete', array('id' => $espedientekudeaketum->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('espedientekudeaketa_delete', ['id' => $espedientekudeaketum->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

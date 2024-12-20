@@ -2,7 +2,8 @@
 
     namespace App\Form;
 
-    use Symfony\Component\Form\AbstractType;
+use App\Entity\Fitxa;
+use Symfony\Component\Form\AbstractType;
     use Symfony\Component\Form\FormBuilderInterface;
     use Symfony\Component\OptionsResolver\OptionsResolver;
     use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -33,10 +34,8 @@
          */
         public function configureOptions ( OptionsResolver $resolver )
         {
-            $resolver->setDefaults(
-                array (
-                    'data_class' => 'App\Entity\Fitxa'
-                )
-            );
+            $resolver->setDefaults([
+                'data_class' => Fitxa::class
+            ]);
         }
     }

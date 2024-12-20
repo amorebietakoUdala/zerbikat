@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Datuenbabesa;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -32,8 +33,8 @@ class DatuenbabesaType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\Datuenbabesa'
-        ));
+        $resolver->setDefaults([
+            'data_class' => Datuenbabesa::class
+        ]);
     }
 }

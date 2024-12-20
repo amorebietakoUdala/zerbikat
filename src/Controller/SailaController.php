@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Saila controller.
@@ -37,21 +39,18 @@ class SailaController extends AbstractController
      * @Route("/page{page}", name="saila_index_paginated") 
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $sailas = $this->repo->findBy( array(), array('kodea'=>'ASC') );
+            $sailas = $this->repo->findBy( [], ['kodea'=>'ASC'] );
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($sailas as $saila) {
                 $deleteForms[$saila->getId()] = $this->createDeleteForm($saila)->createView();
             }
 
-            return $this->render('saila/index.html.twig', array(
-                'sailas' => $sailas,
-                'deleteforms' => $deleteForms
-            ));
+            return $this->render('saila/index.html.twig', ['sailas' => $sailas, 'deleteforms' => $deleteForms]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -64,7 +63,7 @@ class SailaController extends AbstractController
      * @Route("/new", name="saila_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
 
         if ($this->isGranted('ROLE_ADMIN'))
@@ -88,10 +87,7 @@ class SailaController extends AbstractController
                 $form->setData($form->getData());
             }
 
-            return $this->render('saila/new.html.twig', array(
-                'saila' => $saila,
-                'form' => $form->createView(),
-            ));
+            return $this->render('saila/new.html.twig', ['saila' => $saila, 'form' => $form->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -104,14 +100,11 @@ class SailaController extends AbstractController
      * @Route("/{id}", name="saila_show")
      * @Method("GET")
      */
-    public function showAction(Saila $saila)
+    public function show(Saila $saila): Response
     {
         $deleteForm = $this->createDeleteForm($saila);
 
-        return $this->render('saila/show.html.twig', array(
-            'saila' => $saila,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('saila/show.html.twig', ['saila' => $saila, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -120,7 +113,7 @@ class SailaController extends AbstractController
      * @Route("/{id}/edit", name="saila_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Saila $saila)
+    public function edit(Request $request, Saila $saila)
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($saila->getUdala()==$this->getUser()->getUdala()))
@@ -134,14 +127,10 @@ class SailaController extends AbstractController
                 $this->em->persist($saila);
                 $this->em->flush();
     
-                return $this->redirectToRoute('saila_edit', array('id' => $saila->getId()));
+                return $this->redirectToRoute('saila_edit', ['id' => $saila->getId()]);
             }
     
-            return $this->render('saila/edit.html.twig', array(
-                'saila' => $saila,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('saila/edit.html.twig', ['saila' => $saila, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -154,7 +143,7 @@ class SailaController extends AbstractController
      * @Route("/{id}", name="saila_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Saila $saila)
+    public function delete(Request $request, Saila $saila): RedirectResponse
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($saila->getUdala()==$this->getUser()->getUdala()))
@@ -184,8 +173,8 @@ class SailaController extends AbstractController
     private function createDeleteForm(Saila $saila)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('saila_delete', array('id' => $saila->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('saila_delete', ['id' => $saila->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

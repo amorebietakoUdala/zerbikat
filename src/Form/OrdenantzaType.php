@@ -30,8 +30,8 @@ class OrdenantzaType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\Ordenantza'
-        ));
+        $resolver->setDefaults([
+            'data_class' => Ordenantza::class
+        ]);
     }
 }

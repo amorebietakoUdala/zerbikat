@@ -10,6 +10,8 @@ use App\Entity\Atalaparrafoa;
 use App\Form\AtalaparrafoaType;
 use App\Repository\AtalaparrafoaRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Atalaparrafoa controller.
@@ -34,20 +36,17 @@ class AtalaparrafoaController extends AbstractController
      * @Route("/", name="atalaparrafoa_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function index()
     {
         if ($this->isGranted('ROLE_ADMIN')) {
             $atalaparrafoas = $this->repo->findAll();
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($atalaparrafoas as $parrafoa) {
                 $deleteForms[$parrafoa->getId()] = $this->createDeleteForm($parrafoa)->createView();
             }
 
-            return $this->render('atalaparrafoa/index.html.twig', array(
-                'atalaparrafoas' => $atalaparrafoas,
-                'deleteforms' => $deleteForms
-            ));
+            return $this->render('atalaparrafoa/index.html.twig', ['atalaparrafoas' => $atalaparrafoas, 'deleteforms' => $deleteForms]);
         }else
         {
 //            return $this->redirectToRoute('fitxa_index');
@@ -61,7 +60,7 @@ class AtalaparrafoaController extends AbstractController
      * @Route("/new", name="atalaparrafoa_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
         if ($this->isGranted('ROLE_ADMIN')) {
             $atalaparrafoa = new Atalaparrafoa();
@@ -75,17 +74,14 @@ class AtalaparrafoaController extends AbstractController
                 $this->em->persist($atalaparrafoa);
                 $this->em->flush();
 
-                return $this->redirectToRoute('atalaparrafoa_show', array('id' => $atalaparrafoa->getId()));
+                return $this->redirectToRoute('atalaparrafoa_show', ['id' => $atalaparrafoa->getId()]);
             } else
             {
                 $form->getData()->setUdala($this->getUser()->getUdala());
                 $form->setData($form->getData());
             }
 
-            return $this->render('atalaparrafoa/new.html.twig', array(
-                'atalaparrafoa' => $atalaparrafoa,
-                'form' => $form->createView(),
-            ));
+            return $this->render('atalaparrafoa/new.html.twig', ['atalaparrafoa' => $atalaparrafoa, 'form' => $form->createView()]);
         }else
         {
 //            return $this->redirectToRoute('fitxa_index');
@@ -99,14 +95,11 @@ class AtalaparrafoaController extends AbstractController
      * @Route("/{id}", name="atalaparrafoa_show")
      * @Method("GET")
      */
-    public function showAction(Atalaparrafoa $atalaparrafoa)
+    public function show(Atalaparrafoa $atalaparrafoa): Response
     {
         $deleteForm = $this->createDeleteForm($atalaparrafoa);
 
-        return $this->render('atalaparrafoa/show.html.twig', array(
-            'atalaparrafoa' => $atalaparrafoa,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('atalaparrafoa/show.html.twig', ['atalaparrafoa' => $atalaparrafoa, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -115,7 +108,7 @@ class AtalaparrafoaController extends AbstractController
      * @Route("/{id}/edit", name="atalaparrafoa_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Atalaparrafoa $atalaparrafoa)
+    public function edit(Request $request, Atalaparrafoa $atalaparrafoa)
     {
         if((($this->isGranted('ROLE_ADMIN')) && ($atalaparrafoa->getUdala()==$this->getUser()->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
@@ -128,14 +121,10 @@ class AtalaparrafoaController extends AbstractController
                 $this->em->persist($atalaparrafoa);
                 $this->em->flush();
 
-                return $this->redirectToRoute('atalaparrafoa_edit', array('id' => $atalaparrafoa->getId()));
+                return $this->redirectToRoute('atalaparrafoa_edit', ['id' => $atalaparrafoa->getId()]);
             }
 
-            return $this->render('atalaparrafoa/edit.html.twig', array(
-                'atalaparrafoa' => $atalaparrafoa,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('atalaparrafoa/edit.html.twig', ['atalaparrafoa' => $atalaparrafoa, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
 //            return $this->redirectToRoute('fitxa_index');
@@ -149,7 +138,7 @@ class AtalaparrafoaController extends AbstractController
      * @Route("/{id}", name="atalaparrafoa_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Atalaparrafoa $atalaparrafoa)
+    public function delete(Request $request, Atalaparrafoa $atalaparrafoa): RedirectResponse
     {
         if((($this->isGranted('ROLE_ADMIN')) && ($atalaparrafoa->getUdala()==$this->getUser()->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
@@ -179,8 +168,8 @@ class AtalaparrafoaController extends AbstractController
     private function createDeleteForm(Atalaparrafoa $atalaparrafoa)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('atalaparrafoa_delete', array('id' => $atalaparrafoa->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('atalaparrafoa_delete', ['id' => $atalaparrafoa->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

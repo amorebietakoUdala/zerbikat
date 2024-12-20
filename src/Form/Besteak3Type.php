@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Besteak3;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -30,8 +31,8 @@ class Besteak3Type extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\Besteak3'
-        ));
+        $resolver->setDefaults([
+            'data_class' => Besteak3::class
+        ]);
     }
 }

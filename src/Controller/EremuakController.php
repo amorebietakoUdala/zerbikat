@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Eremuak controller.
@@ -37,7 +39,7 @@ class EremuakController extends AbstractController
      * @Route("/page{page}", name="eremuak_index_paginated")
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
 
         if ($this->isGranted('ROLE_SUPER_ADMIN'))
@@ -47,7 +49,7 @@ class EremuakController extends AbstractController
             $adapter = new ArrayAdapter($eremuaks);
             $pagerfanta = new Pagerfanta($adapter);
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($eremuaks as $eremuak) {
                 $deleteForms[$eremuak->getId()] = $this->createDeleteForm($eremuak)->createView();
             }
@@ -66,11 +68,7 @@ class EremuakController extends AbstractController
                 throw $this->createNotFoundException("Orria ez da existitzen");
             }
 
-            return $this->render('eremuak/index.html.twig', array(
-                'eremuaks' => $entities,
-                'deleteforms' => $deleteForms,
-                'pager' => $pagerfanta,
-            ));
+            return $this->render('eremuak/index.html.twig', ['eremuaks' => $entities, 'deleteforms' => $deleteForms, 'pager' => $pagerfanta]);
         }else if ($this->isGranted('ROLE_ADMIN'))
         {
 
@@ -85,7 +83,7 @@ class EremuakController extends AbstractController
 
             $eremuak=$this->getUser()->getUdala()->getEremuak();
 
-            return $this->redirectToRoute('eremuak_edit', array('id' => $eremuid['id']));
+            return $this->redirectToRoute('eremuak_edit', ['id' => $eremuid['id']]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -98,7 +96,7 @@ class EremuakController extends AbstractController
      * @Route("/new", name="eremuak_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
 
         if ($this->isGranted('ROLE_SUPER_ADMIN'))
@@ -115,10 +113,7 @@ class EremuakController extends AbstractController
                 return $this->redirectToRoute('eremuak_index');
             }
 
-            return $this->render('eremuak/new.html.twig', array(
-                'eremuak' => $eremuak,
-                'form' => $form->createView(),
-            ));
+            return $this->render('eremuak/new.html.twig', ['eremuak' => $eremuak, 'form' => $form->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -131,14 +126,11 @@ class EremuakController extends AbstractController
      * @Route("/{id}", name="eremuak_show")
      * @Method("GET")
      */
-    public function showAction(Eremuak $eremuak)
+    public function show(Eremuak $eremuak): Response
     {
         $deleteForm = $this->createDeleteForm($eremuak);
 
-        return $this->render('eremuak/show.html.twig', array(
-            'eremuak' => $eremuak,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('eremuak/show.html.twig', ['eremuak' => $eremuak, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -147,7 +139,7 @@ class EremuakController extends AbstractController
      * @Route("/{id}/edit", name="eremuak_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Eremuak $eremuak)
+    public function edit(Request $request, Eremuak $eremuak)
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($eremuak->getUdala()==$this->getUser()->getUdala()))
@@ -161,14 +153,10 @@ class EremuakController extends AbstractController
                 $this->em->persist($eremuak);
                 $this->em->flush();
 
-                return $this->redirectToRoute('eremuak_edit', array('id' => $eremuak->getId()));
+                return $this->redirectToRoute('eremuak_edit', ['id' => $eremuak->getId()]);
             }
 
-            return $this->render('eremuak/edit.html.twig', array(
-                'eremuak' => $eremuak,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('eremuak/edit.html.twig', ['eremuak' => $eremuak, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -181,7 +169,7 @@ class EremuakController extends AbstractController
      * @Route("/{id}", name="eremuak_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Eremuak $eremuak)
+    public function delete(Request $request, Eremuak $eremuak): RedirectResponse
     {
 
         if($this->isGranted('ROLE_SUPER_ADMIN'))
@@ -210,8 +198,8 @@ class EremuakController extends AbstractController
     private function createDeleteForm(Eremuak $eremuak)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('eremuak_delete', array('id' => $eremuak->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('eremuak_delete', ['id' => $eremuak->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

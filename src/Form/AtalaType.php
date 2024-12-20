@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Atala;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -31,8 +32,8 @@ class AtalaType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\Atala'
-        ));
+        $resolver->setDefaults([
+            'data_class' => Atala::class
+        ]);
     }
 }

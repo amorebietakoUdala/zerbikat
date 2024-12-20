@@ -34,7 +34,7 @@ class FitxaKostuaType extends AbstractType
         $valftp = (string)$proba->getBody();
         $array = json_decode($valftp, true);
 
-        $resp=array("Aukeratu bat" => "-1");
+        $resp=["Aukeratu bat" => "-1"];
         foreach ($array as $a)
         {
             $txt ="";
@@ -52,9 +52,7 @@ class FitxaKostuaType extends AbstractType
         $builder
             ->add('udala')
             ->add('fitxa')
-            ->add('kostua', ChoiceType::class, array(
-                'choices' => $resp
-                )
+            ->add('kostua', ChoiceType::class, ['choices' => $resp]
 
             )
         ;
@@ -65,10 +63,6 @@ class FitxaKostuaType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\FitxaKostua',
-            'udala' => null,
-            'api_url' => null
-        ));
+        $resolver->setDefaults(['data_class' => \App\Entity\FitxaKostua::class, 'udala' => null, 'api_url' => null]);
     }
 }

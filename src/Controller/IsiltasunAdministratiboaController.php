@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * IsiltasunAdministratiboa controller.
@@ -38,7 +40,7 @@ class IsiltasunAdministratiboaController extends AbstractController
      * @Route("/page{page}", name="isiltasunadministratiboa_index_paginated")
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA'))
@@ -48,7 +50,7 @@ class IsiltasunAdministratiboaController extends AbstractController
             $adapter = new ArrayAdapter($isiltasunAdministratiboas);
             $pagerfanta = new Pagerfanta($adapter);
             
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($isiltasunAdministratiboas as $isiltasunAdministratiboa) {
                 $deleteForms[$isiltasunAdministratiboa->getId()] = $this->createDeleteForm($isiltasunAdministratiboa)->createView();
             }
@@ -67,11 +69,7 @@ class IsiltasunAdministratiboaController extends AbstractController
                 throw $this->createNotFoundException("Orria ez da existitzen");
             }
             
-            return $this->render('isiltasunadministratiboa/index.html.twig', array(
-                'isiltasunAdministratiboas' => $entities,
-                'deleteforms' => $deleteForms,
-                'pager' => $pagerfanta,
-            ));
+            return $this->render('isiltasunadministratiboa/index.html.twig', ['isiltasunAdministratiboas' => $entities, 'deleteforms' => $deleteForms, 'pager' => $pagerfanta]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -84,7 +82,7 @@ class IsiltasunAdministratiboaController extends AbstractController
      * @Route("/new", name="isiltasunadministratiboa_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
 
         if ($this->isGranted('ROLE_ADMIN')) {
@@ -107,10 +105,7 @@ class IsiltasunAdministratiboaController extends AbstractController
                 $form->setData($form->getData());
             }
 
-            return $this->render('isiltasunadministratiboa/new.html.twig', array(
-                'isiltasunAdministratiboa' => $isiltasunAdministratiboa,
-                'form' => $form->createView(),
-            ));
+            return $this->render('isiltasunadministratiboa/new.html.twig', ['isiltasunAdministratiboa' => $isiltasunAdministratiboa, 'form' => $form->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -123,14 +118,11 @@ class IsiltasunAdministratiboaController extends AbstractController
      * @Route("/{id}", name="isiltasunadministratiboa_show")
      * @Method("GET")
      */
-    public function showAction(IsiltasunAdministratiboa $isiltasunAdministratiboa)
+    public function show(IsiltasunAdministratiboa $isiltasunAdministratiboa): Response
     {
         $deleteForm = $this->createDeleteForm($isiltasunAdministratiboa);
 
-        return $this->render('isiltasunadministratiboa/show.html.twig', array(
-            'isiltasunAdministratiboa' => $isiltasunAdministratiboa,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('isiltasunadministratiboa/show.html.twig', ['isiltasunAdministratiboa' => $isiltasunAdministratiboa, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -139,7 +131,7 @@ class IsiltasunAdministratiboaController extends AbstractController
      * @Route("/{id}/edit", name="isiltasunadministratiboa_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, IsiltasunAdministratiboa $isiltasunAdministratiboa)
+    public function edit(Request $request, IsiltasunAdministratiboa $isiltasunAdministratiboa)
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($isiltasunAdministratiboa->getUdala()==$this->getUser()->getUdala()))
@@ -153,14 +145,10 @@ class IsiltasunAdministratiboaController extends AbstractController
                 $this->em->persist($isiltasunAdministratiboa);
                 $this->em->flush();
     
-                return $this->redirectToRoute('isiltasunadministratiboa_edit', array('id' => $isiltasunAdministratiboa->getId()));
+                return $this->redirectToRoute('isiltasunadministratiboa_edit', ['id' => $isiltasunAdministratiboa->getId()]);
             }
     
-            return $this->render('isiltasunadministratiboa/edit.html.twig', array(
-                'isiltasunAdministratiboa' => $isiltasunAdministratiboa,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('isiltasunadministratiboa/edit.html.twig', ['isiltasunAdministratiboa' => $isiltasunAdministratiboa, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -173,7 +161,7 @@ class IsiltasunAdministratiboaController extends AbstractController
      * @Route("/{id}", name="isiltasunadministratiboa_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, IsiltasunAdministratiboa $isiltasunAdministratiboa)
+    public function delete(Request $request, IsiltasunAdministratiboa $isiltasunAdministratiboa): RedirectResponse
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($isiltasunAdministratiboa->getUdala()==$this->getUser()->getUdala()))
@@ -203,8 +191,8 @@ class IsiltasunAdministratiboaController extends AbstractController
     private function createDeleteForm(IsiltasunAdministratiboa $isiltasunAdministratiboa)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('isiltasunadministratiboa_delete', array('id' => $isiltasunAdministratiboa->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('isiltasunadministratiboa_delete', ['id' => $isiltasunAdministratiboa->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

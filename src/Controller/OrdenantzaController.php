@@ -10,6 +10,8 @@
     use App\Form\OrdenantzaType;
 use App\Repository\OrdenantzaRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
     /**
      * Ordenantza controller.
@@ -33,23 +35,20 @@ use Doctrine\ORM\EntityManagerInterface;
          * @Route("/", name="ordenantza_index")
          * @Method("GET")
          */
-        public function indexAction ()
+        public function index ()
         {
 
             if ( $this->isGranted( 'ROLE_ADMIN' ) ) {
                 $ordenantzas = $this->repo->findAll();
 
-                $deleteForms = array ();
+                $deleteForms = [];
                 foreach ( $ordenantzas as $ordenantza ) {
                     $deleteForms[ $ordenantza->getId() ] = $this->createDeleteForm( $ordenantza )->createView();
                 }
 
                 return $this->render(
                     'ordenantza/index.html.twig',
-                    array (
-                        'ordenantzas' => $ordenantzas,
-                        'deleteforms' => $deleteForms,
-                    )
+                    ['ordenantzas' => $ordenantzas, 'deleteforms' => $deleteForms]
                 );
             } else {
                 return $this->redirectToRoute( 'backend_errorea' );
@@ -62,7 +61,7 @@ use Doctrine\ORM\EntityManagerInterface;
          * @Route("/new", name="ordenantza_new")
          * @Method({"GET", "POST"})
          */
-        public function newAction ( Request $request )
+        public function new ( Request $request )
         {
 
             if ( $this->isGranted( 'ROLE_ADMIN' ) ) {
@@ -84,10 +83,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
                 return $this->render(
                     'ordenantza/new.html.twig',
-                    array (
-                        'ordenantza' => $ordenantza,
-                        'form'       => $form->createView(),
-                    )
+                    ['ordenantza' => $ordenantza, 'form'       => $form->createView()]
                 );
             } else {
                 return $this->redirectToRoute( 'backend_errorea' );
@@ -100,16 +96,13 @@ use Doctrine\ORM\EntityManagerInterface;
          * @Route("/{id}", name="ordenantza_show")
          * @Method("GET")
          */
-        public function showAction ( Ordenantza $ordenantza )
+        public function show ( Ordenantza $ordenantza ): Response
         {
             $deleteForm = $this->createDeleteForm( $ordenantza );
 
             return $this->render(
                 'ordenantza/show.html.twig',
-                array (
-                    'ordenantza'  => $ordenantza,
-                    'delete_form' => $deleteForm->createView(),
-                )
+                ['ordenantza'  => $ordenantza, 'delete_form' => $deleteForm->createView()]
             );
         }
 
@@ -119,7 +112,7 @@ use Doctrine\ORM\EntityManagerInterface;
          * @Route("/{id}/edit", name="ordenantza_edit")
          * @Method({"GET", "POST"})
          */
-        public function editAction ( Request $request, Ordenantza $ordenantza )
+        public function edit ( Request $request, Ordenantza $ordenantza )
         {
 
             if ( (($this->isGranted( 'ROLE_ADMIN' )) && ($ordenantza->getUdala() == $this->getUser()->getUdala(
@@ -134,16 +127,12 @@ use Doctrine\ORM\EntityManagerInterface;
                     $this->em->persist( $ordenantza );
                     $this->em->flush();
 
-                    return $this->redirectToRoute( 'ordenantza_edit', array ( 'id' => $ordenantza->getId() ) );
+                    return $this->redirectToRoute( 'ordenantza_edit', ['id' => $ordenantza->getId()] );
                 }
 
                 return $this->render(
                     'ordenantza/edit.html.twig',
-                    array (
-                        'ordenantza'  => $ordenantza,
-                        'edit_form'   => $editForm->createView(),
-                        'delete_form' => $deleteForm->createView(),
-                    )
+                    ['ordenantza'  => $ordenantza, 'edit_form'   => $editForm->createView(), 'delete_form' => $deleteForm->createView()]
                 );
             } else {
                 return $this->redirectToRoute( 'backend_errorea' );
@@ -156,7 +145,7 @@ use Doctrine\ORM\EntityManagerInterface;
          * @Route("/{id}", name="ordenantza_delete")
          * @Method("DELETE")
          */
-        public function deleteAction ( Request $request, Ordenantza $ordenantza )
+        public function delete ( Request $request, Ordenantza $ordenantza ): RedirectResponse
         {
 
             if ( (($this->isGranted( 'ROLE_ADMIN' )) && ($ordenantza->getUdala() == $this->getUser()->getUdala(
@@ -187,8 +176,8 @@ use Doctrine\ORM\EntityManagerInterface;
         private function createDeleteForm ( Ordenantza $ordenantza )
         {
             return $this->createFormBuilder()
-                ->setAction( $this->generateUrl( 'ordenantza_delete', array ( 'id' => $ordenantza->getId() ) ) )
-                ->setMethod( 'DELETE' )
+                ->setAction( $this->generateUrl( 'ordenantza_delete', ['id' => $ordenantza->getId()] ) )
+                ->setMethod( Request::METHOD_DELETE )
                 ->getForm();
         }
     }

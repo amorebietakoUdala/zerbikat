@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Atala controller.
@@ -39,7 +41,7 @@ class AtalaController extends AbstractController
      * @Route("/page{page}", name="atala_index_paginated")
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
         if ($this->isGranted('ROLE_KUDEAKETA')) {
             $atalas = $this->repo->findAll();
@@ -47,7 +49,7 @@ class AtalaController extends AbstractController
             $adapter = new ArrayAdapter($atalas);
             $pagerfanta = new Pagerfanta($adapter);
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($atalas as $atala) {
                 $deleteForms[$atala->getId()] = $this->createDeleteForm($atala)->createView();
             }
@@ -64,11 +66,7 @@ class AtalaController extends AbstractController
             } catch (\Pagerfanta\Exception\NotValidCurrentPageException $e) {
                 throw $this->createNotFoundException("Orria ez da existitzen");
             }
-            return $this->render('atala/index.html.twig', array(
-                'atalas' => $entities,
-                'deleteforms' => $deleteForms,
-                'pager' => $pagerfanta,
-            ));
+            return $this->render('atala/index.html.twig', ['atalas' => $entities, 'deleteforms' => $deleteForms, 'pager' => $pagerfanta]);
         }else
         {
 //            return $this->redirectToRoute('fitxa_index');
@@ -82,7 +80,7 @@ class AtalaController extends AbstractController
      * @Route("/new", name="atala_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
         if ($this->isGranted('ROLE_ADMIN'))
         {
@@ -107,10 +105,7 @@ class AtalaController extends AbstractController
                 $form->setData($form->getData());
             }
 
-            return $this->render('atala/new.html.twig', array(
-                'atala' => $atala,
-                'form' => $form->createView(),
-            ));
+            return $this->render('atala/new.html.twig', ['atala' => $atala, 'form' => $form->createView()]);
         }else
         {
 //            return $this->redirectToRoute('fitxa_index');
@@ -125,14 +120,11 @@ class AtalaController extends AbstractController
      * @Route("/{id}", name="atala_show")
      * @Method("GET")
      */
-    public function showAction(Atala $atala)
+    public function show(Atala $atala): Response
     {
         $deleteForm = $this->createDeleteForm($atala);
 
-        return $this->render('atala/show.html.twig', array(
-            'atala' => $atala,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('atala/show.html.twig', ['atala' => $atala, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -141,7 +133,7 @@ class AtalaController extends AbstractController
      * @Route("/{id}/edit", name="atala_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Atala $atala)
+    public function edit(Request $request, Atala $atala)
     {
         if((($this->isGranted('ROLE_ADMIN')) && ($atala->getUdala()==$this->getUser()->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
@@ -154,14 +146,10 @@ class AtalaController extends AbstractController
                 $this->em->persist($atala);
                 $this->em->flush();
     
-                return $this->redirectToRoute('atala_edit', array('id' => $atala->getId()));
+                return $this->redirectToRoute('atala_edit', ['id' => $atala->getId()]);
             }
     
-            return $this->render('atala/edit.html.twig', array(
-                'atala' => $atala,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('atala/edit.html.twig', ['atala' => $atala, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
 //            return $this->redirectToRoute('fitxa_index');
@@ -175,7 +163,7 @@ class AtalaController extends AbstractController
      * @Route("/{id}", name="atala_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Atala $atala)
+    public function delete(Request $request, Atala $atala): RedirectResponse
     {
         if((($this->isGranted('ROLE_ADMIN')) && ($atala->getUdala()==$this->getUser()->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
@@ -206,8 +194,8 @@ class AtalaController extends AbstractController
     private function createDeleteForm(Atala $atala)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('atala_delete', array('id' => $atala->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('atala_delete', ['id' => $atala->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

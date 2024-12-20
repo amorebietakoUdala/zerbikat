@@ -10,12 +10,8 @@ namespace App\Controller;
 use App\Entity\Familia;
 use App\Form\AtalaType;
 
-use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
 use FOS\RestBundle\Controller\Annotations;
 use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\View\View;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -23,22 +19,19 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Form\FormTypeInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Entity\Fitxa;
 use App\Repository\EremuakRepository;
-use App\Repository\EremuaRepository;
 use App\Repository\FamiliaRepository;
 use App\Repository\FitxaRepository;
 use App\Repository\KanalmotaRepository;
 use App\Repository\SailaRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use FOS\RestBundle\Validator\Constraints\Regex;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 
 /**
  * @Route("/api")
  */
-class ApiController extends FOSRestController
+class ApiController extends AbstractFOSRestController
 {
 
 //    private $em;
@@ -49,7 +42,6 @@ class ApiController extends FOSRestController
     private $kanalmotaRepo;
 
     public function __construct(
-        EntityManagerInterface $em,
         SailaRepository $sailaRepo,
         FitxaRepository $fitxaRepo,
         FamiliaRepository $familiaRepo,
@@ -90,7 +82,7 @@ class ApiController extends FOSRestController
      *
      * @Get("/sailak/{udala}")
      */
-    public function getSailakAction( Request $request, $udala )
+    public function getSailak( Request $request, $udala )
     {
         $_format = $request->get('_format','json');
         $sailak = $this->sailaRepo->findByUdala($udala);
@@ -119,7 +111,7 @@ class ApiController extends FOSRestController
      *
      * @Get("/azpisailenfitxak/{azpisailaid}")
      */
-    public function getAzpisailenfitxakAction( Request $request, $azpisailaid)
+    public function getAzpisailenfitxak( Request $request, $azpisailaid)
     {
         $_format = $request->get('_format','json');
         $fitxak = $this->fitxaRepo->findByAzpisaila($azpisailaid);
@@ -149,9 +141,9 @@ class ApiController extends FOSRestController
      *
      * @Get("/familisarea/{udala}")
      */
-    public function getFamilisareaAction( Request $request, $udala )
+    public function getFamilisarea( Request $request, $udala )
     {
-        return $this->getSailakAction($request, $udala);
+        return $this->getSailak($request, $udala);
     }
 
 
@@ -181,7 +173,7 @@ class ApiController extends FOSRestController
      * @Get("/familiak/{udala}")
      * @Route(name="get_familiak", options={"expose"=true})
      */
-    public function getFamiliakAction( Request $request, $udala )
+    public function getFamiliak( Request $request, $udala )
     {
         $_format = $request->get('_format','json');
         $familiak = $this->familiaRepo->findByUdala($udala);
@@ -209,7 +201,7 @@ class ApiController extends FOSRestController
      * @Get("/azpifamiliak/{id}")
      * @Route(name="get_azpifamiliak", options={"expose"=true})
      */
-    public function getAzpifamiliakAction( Request $request, $id )
+    public function getAzpifamiliak( Request $request, $id )
     {
         $_format = $request->get('_format','json');
         $azpifamiliak = $this->familiaRepo->findBy([ 'parent' => $id ]);
@@ -238,7 +230,7 @@ class ApiController extends FOSRestController
      * @Annotations\View()
      * @Get("/fitxakbyfamilia/{id}")
      */
-    public function getFitxakByFamiliaAction( Request $request, $id )
+    public function getFitxakByFamilia( Request $request, $id )
     {
         $_format = $request->get('_format','json');
         $fitxak = $this->fitxaRepo->findByFamilia($id);
@@ -266,7 +258,7 @@ class ApiController extends FOSRestController
      * @Get("/fitxa/{id}")
      * @Route(name="get_fitxa", options={"expose"=true})
      */
-    public function getFitxaAction( Fitxa $fitxa )
+    public function getFitxa( Fitxa $fitxa ): Response
     {
         $eremuak = $this->eremuakRepo->findOneByUdala($fitxa->getUdala());
         $labelak = $this->eremuakRepo->findLabelakByUdala($fitxa->getUdala());
@@ -275,14 +267,12 @@ class ApiController extends FOSRestController
         $response = new Response();
         $response->headers->set( 'Content-Type', 'application/xml; charset=utf-8' );
 
-        return $this->render(
-            'fitxapi.xml.twig',
-            array(
-                'fitxa'      => $fitxa,
-                'eremuak'    => $eremuak,
-                'labelak'    => $labelak,
-                'kanalmotak' => $kanalmotak,
-            ),
+        return $this->render('fitxapi.xml.twig',[
+                'fitxa'      => $fitxa, 
+                'eremuak'    => $eremuak, 
+                'labelak'    => $labelak, 
+                'kanalmotak' => $kanalmotak
+            ],
             $response
         );
     }// "get_fitxa"            [GET] /fitxa/{id}
@@ -304,7 +294,7 @@ class ApiController extends FOSRestController
      * @Annotations\View()
      * @Get("/familiaorden/{id}")
      */
-    public function getFamiliaordenaAction( Request $request, $id )
+    public function getFamiliaordena( Request $request, $id )
     {
         $_format = $request->get('_format','json');
         $familia = $this->familiaRepo->find($id);

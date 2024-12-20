@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -28,15 +29,15 @@ class SuperuserType extends AbstractType
             ->add('azpisaila')
             ->add('enabled')
             ->add('email')
-            ->add('roles',  ChoiceType::class, array(
-                'multiple' => true,
-                'choices'  => array(
-                    'Super Admin' => 'ROLE_SUPER_ADMIN',
-                    'Admin' => 'ROLE_ADMIN',
-                    'Kudeaketa' => 'ROLE_KUDEAKETA',
+            ->add('roles',  ChoiceType::class, [
+                'multiple' => true, 
+                'choices'  => [
+                    'Super Admin' => 'ROLE_SUPER_ADMIN', 
+                    'Admin' => 'ROLE_ADMIN', 
+                    'Kudeaketa' => 'ROLE_KUDEAKETA', 
                     'Erabiltzailea' => 'ROLE_USER'
-                ),
-            ))
+                ]
+            ])
 //            ->add('password', RepeatedType::class, array(
 //                'type' => PasswordType::class,
 //                'first_options'  => array(
@@ -56,8 +57,8 @@ class SuperuserType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\User'
-        ));
+        $resolver->setDefaults([
+            'data_class' => User::class
+        ]);
     }
 }

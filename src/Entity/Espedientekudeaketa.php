@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\EspedientekudeaketaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Espedientekudeaketa
@@ -53,7 +54,7 @@ class Espedientekudeaketa
      */
     private $urles;
 
-    
+
     /**
      *          TOSTRING
      */
@@ -187,7 +188,7 @@ class Espedientekudeaketa
      */
     public function __construct()
     {
-        $this->zerbitzuak = new \Doctrine\Common\Collections\ArrayCollection();
+//        $this->zerbitzuak = new ArrayCollection();
     }
 
     // /**

@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Eraikina controller.
@@ -39,21 +40,18 @@ class EraikinaController extends AbstractController
      * @Route("/page{page}", name="eraikina_index_paginated")
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
             $eraikinas = $this->repo->findAll();
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($eraikinas as $eraikina) {
                 $deleteForms[$eraikina->getId()] = $this->createDeleteForm($eraikina)->createView();
             }
 
-            return $this->render('eraikina/index.html.twig', array(
-                'eraikinas' => $eraikinas,
-                'deleteforms' => $deleteForms,
-            ));
+            return $this->render('eraikina/index.html.twig', ['eraikinas' => $eraikinas, 'deleteforms' => $deleteForms]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -66,7 +64,7 @@ class EraikinaController extends AbstractController
      * @Route("/new", name="eraikina_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
 
         if ($this->isGranted('ROLE_ADMIN'))
@@ -90,10 +88,7 @@ class EraikinaController extends AbstractController
                 $form->setData($form->getData());
             }
 
-            return $this->render('eraikina/new.html.twig', array(
-                'eraikina' => $eraikina,
-                'form' => $form->createView(),
-            ));
+            return $this->render('eraikina/new.html.twig', ['eraikina' => $eraikina, 'form' => $form->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -106,14 +101,11 @@ class EraikinaController extends AbstractController
      * @Route("/{id}", name="eraikina_show")
      * @Method("GET")
      */
-    public function showAction(Eraikina $eraikina)
+    public function show(Eraikina $eraikina): Response
     {
         $deleteForm = $this->createDeleteForm($eraikina);
 
-        return $this->render('eraikina/show.html.twig', array(
-            'eraikina' => $eraikina,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('eraikina/show.html.twig', ['eraikina' => $eraikina, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -124,9 +116,9 @@ class EraikinaController extends AbstractController
      * @param Request  $request
      * @param Eraikina $eraikina
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function editAction(Request $request, Eraikina $eraikina)
+    public function edit(Request $request, Eraikina $eraikina)
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($eraikina->getUdala()==$this->getUser()->getUdala()))
@@ -140,14 +132,10 @@ class EraikinaController extends AbstractController
                 $this->em->persist($eraikina);
                 $this->em->flush();
     
-                return $this->redirectToRoute('eraikina_edit', array('id' => $eraikina->getId()));
+                return $this->redirectToRoute('eraikina_edit', ['id' => $eraikina->getId()]);
             }
     
-            return $this->render('eraikina/edit.html.twig', array(
-                'eraikina' => $eraikina,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('eraikina/edit.html.twig', ['eraikina' => $eraikina, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -160,7 +148,7 @@ class EraikinaController extends AbstractController
      * @Route("/{id}", name="eraikina_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Eraikina $eraikina)
+    public function delete(Request $request, Eraikina $eraikina): RedirectResponse
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($eraikina->getUdala()==$this->getUser()->getUdala()))
@@ -190,8 +178,8 @@ class EraikinaController extends AbstractController
     private function createDeleteForm(Eraikina $eraikina)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('eraikina_delete', array('id' => $eraikina->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('eraikina_delete', ['id' => $eraikina->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

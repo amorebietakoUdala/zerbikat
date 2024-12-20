@@ -37,7 +37,7 @@ class KontzeptumotaController extends AbstractController
      * @Route("/page{page}", name="kontzeptumota_index_paginated")
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA'))
@@ -47,7 +47,7 @@ class KontzeptumotaController extends AbstractController
             $adapter = new ArrayAdapter($kontzeptumotas);
             $pagerfanta = new Pagerfanta($adapter);
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($kontzeptumotas as $kontzeptua) {
                 $deleteForms[$kontzeptua->getId()] = $this->createDeleteForm($kontzeptua)->createView();
             }
@@ -67,12 +67,12 @@ class KontzeptumotaController extends AbstractController
                 throw $this->createNotFoundException("Orria ez da existitzen");
             }
 
-            return $this->render('kontzeptumota/index.html.twig', array(
-//                'kontzeptumotas' => $kontzeptumotas,
+            return $this->render('kontzeptumota/index.html.twig', [
+                //                'kontzeptumotas' => $kontzeptumotas,
                 'kontzeptumotas' => $entities,
                 'deleteforms' => $deleteForms,
                 'pager' => $pagerfanta,
-            ));
+            ]);
 
         }else
         {
@@ -86,7 +86,7 @@ class KontzeptumotaController extends AbstractController
      * @Route("/new", name="kontzeptumota_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
 
         if ($this->isGranted('ROLE_ADMIN'))
@@ -110,10 +110,7 @@ class KontzeptumotaController extends AbstractController
                 $form->setData($form->getData());
             }
 
-            return $this->render('kontzeptumota/new.html.twig', array(
-                'kontzeptumotum' => $kontzeptumotum,
-                'form' => $form->createView(),
-            ));
+            return $this->render('kontzeptumota/new.html.twig', ['kontzeptumotum' => $kontzeptumotum, 'form' => $form->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -126,14 +123,11 @@ class KontzeptumotaController extends AbstractController
      * @Route("/{id}", name="kontzeptumota_show")
      * @Method("GET")
      */
-    public function showAction(Kontzeptumota $kontzeptumotum)
+    public function show(Kontzeptumota $kontzeptumotum): \Symfony\Component\HttpFoundation\Response
     {
         $deleteForm = $this->createDeleteForm($kontzeptumotum);
 
-        return $this->render('kontzeptumota/show.html.twig', array(
-            'kontzeptumotum' => $kontzeptumotum,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('kontzeptumota/show.html.twig', ['kontzeptumotum' => $kontzeptumotum, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -142,7 +136,7 @@ class KontzeptumotaController extends AbstractController
      * @Route("/{id}/edit", name="kontzeptumota_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Kontzeptumota $kontzeptumotum)
+    public function edit(Request $request, Kontzeptumota $kontzeptumotum)
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($kontzeptumotum->getUdala()==$this->getUser()->getUdala()))
@@ -156,14 +150,10 @@ class KontzeptumotaController extends AbstractController
                 $this->em->persist($kontzeptumotum);
                 $this->em->flush();
 
-                return $this->redirectToRoute('kontzeptumota_edit', array('id' => $kontzeptumotum->getId()));
+                return $this->redirectToRoute('kontzeptumota_edit', ['id' => $kontzeptumotum->getId()]);
             }
 
-            return $this->render('kontzeptumota/edit.html.twig', array(
-                'kontzeptumotum' => $kontzeptumotum,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('kontzeptumota/edit.html.twig', ['kontzeptumotum' => $kontzeptumotum, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -176,7 +166,7 @@ class KontzeptumotaController extends AbstractController
      * @Route("/{id}", name="kontzeptumota_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Kontzeptumota $kontzeptumotum)
+    public function delete(Request $request, Kontzeptumota $kontzeptumotum): \Symfony\Component\HttpFoundation\RedirectResponse
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($kontzeptumotum->getUdala()==$this->getUser()->getUdala()))
@@ -206,8 +196,8 @@ class KontzeptumotaController extends AbstractController
     private function createDeleteForm(Kontzeptumota $kontzeptumotum)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('kontzeptumota_delete', array('id' => $kontzeptumotum->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('kontzeptumota_delete', ['id' => $kontzeptumotum->getId()]))
+            ->setMethod(\Symfony\Component\HttpFoundation\Request::METHOD_DELETE)
             ->getForm()
         ;
     }

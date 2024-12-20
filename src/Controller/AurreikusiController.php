@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Aurreikusi controller.
@@ -38,7 +40,7 @@ class AurreikusiController extends AbstractController
      * @Route("/page{page}", name="aurreikusi_index_paginated")
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
         if ($this->isGranted('ROLE_KUDEAKETA'))
         {
@@ -47,7 +49,7 @@ class AurreikusiController extends AbstractController
             $adapter = new ArrayAdapter($aurreikusis);
             $pagerfanta = new Pagerfanta($adapter);
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($aurreikusis as $aurreikusi) {
                 $deleteForms[$aurreikusi->getId()] = $this->createDeleteForm($aurreikusi)->createView();
             }
@@ -66,11 +68,7 @@ class AurreikusiController extends AbstractController
                 throw $this->createNotFoundException("Orria ez da existitzen");
             }
 
-            return $this->render('aurreikusi/index.html.twig', array(
-                'aurreikusis' => $entities,
-                'deleteforms' => $deleteForms,
-                'pager' => $pagerfanta,
-            ));
+            return $this->render('aurreikusi/index.html.twig', ['aurreikusis' => $entities, 'deleteforms' => $deleteForms, 'pager' => $pagerfanta]);
         }else
         {
 //            return $this->redirectToRoute('fitxa_index');
@@ -84,7 +82,7 @@ class AurreikusiController extends AbstractController
      * @Route("/new", name="aurreikusi_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
         if ($this->isGranted('ROLE_ADMIN'))
         {
@@ -107,10 +105,7 @@ class AurreikusiController extends AbstractController
                 $form->setData($form->getData());
             }
 
-            return $this->render('aurreikusi/new.html.twig', array(
-                'aurreikusi' => $aurreikusi,
-                'form' => $form->createView(),
-            ));
+            return $this->render('aurreikusi/new.html.twig', ['aurreikusi' => $aurreikusi, 'form' => $form->createView()]);
         }else
         {
 //            return $this->redirectToRoute('fitxa_index');
@@ -124,14 +119,11 @@ class AurreikusiController extends AbstractController
      * @Route("/{id}", name="aurreikusi_show")
      * @Method("GET")
      */
-    public function showAction(Aurreikusi $aurreikusi)
+    public function show(Aurreikusi $aurreikusi): Response
     {
         $deleteForm = $this->createDeleteForm($aurreikusi);
 
-        return $this->render('aurreikusi/show.html.twig', array(
-            'aurreikusi' => $aurreikusi,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('aurreikusi/show.html.twig', ['aurreikusi' => $aurreikusi, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -140,7 +132,7 @@ class AurreikusiController extends AbstractController
      * @Route("/{id}/edit", name="aurreikusi_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Aurreikusi $aurreikusi)
+    public function edit(Request $request, Aurreikusi $aurreikusi)
     {
         if((($this->isGranted('ROLE_ADMIN')) && ($aurreikusi->getUdala()==$this->getUser()->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
@@ -153,14 +145,10 @@ class AurreikusiController extends AbstractController
                 $this->em->persist($aurreikusi);
                 $this->em->flush();
 
-                return $this->redirectToRoute('aurreikusi_edit', array('id' => $aurreikusi->getId()));
+                return $this->redirectToRoute('aurreikusi_edit', ['id' => $aurreikusi->getId()]);
             }
 
-            return $this->render('aurreikusi/edit.html.twig', array(
-                'aurreikusi' => $aurreikusi,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('aurreikusi/edit.html.twig', ['aurreikusi' => $aurreikusi, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
 //            return $this->redirectToRoute('fitxa_index');
@@ -174,7 +162,7 @@ class AurreikusiController extends AbstractController
      * @Route("/{id}", name="aurreikusi_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Aurreikusi $aurreikusi)
+    public function delete(Request $request, Aurreikusi $aurreikusi): RedirectResponse
     {
         if((($this->isGranted('ROLE_ADMIN')) && ($aurreikusi->getUdala()==$this->getUser()->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
@@ -204,8 +192,8 @@ class AurreikusiController extends AbstractController
     private function createDeleteForm(Aurreikusi $aurreikusi)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('aurreikusi_delete', array('id' => $aurreikusi->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('aurreikusi_delete', ['id' => $aurreikusi->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

@@ -38,20 +38,17 @@ class Besteak3Controller extends AbstractController
      * @Route("/page{page}", name="besteak3_index_paginated")
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $besteak3s = $this->repo->findBy( array(), array('kodea'=>'ASC') );
+            $besteak3s = $this->repo->findBy( [], ['kodea'=>'ASC'] );
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($besteak3s as $besteak3) {
                 $deleteForms[$besteak3->getId()] = $this->createDeleteForm($besteak3)->createView();
             }
 
-            return $this->render('besteak3/index.html.twig', array(
-                'besteak3s' => $besteak3s,
-                'deleteforms' => $deleteForms
-            ));
+            return $this->render('besteak3/index.html.twig', ['besteak3s' => $besteak3s, 'deleteforms' => $deleteForms]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -64,7 +61,7 @@ class Besteak3Controller extends AbstractController
      * @Route("/new", name="besteak3_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
 
         if ($this->isGranted('ROLE_ADMIN'))
@@ -85,10 +82,7 @@ class Besteak3Controller extends AbstractController
                 $form->setData($form->getData());
             }
 
-            return $this->render('besteak3/new.html.twig', array(
-                'besteak3' => $besteak3,
-                'form' => $form->createView(),
-            ));
+            return $this->render('besteak3/new.html.twig', ['besteak3' => $besteak3, 'form' => $form->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -101,14 +95,11 @@ class Besteak3Controller extends AbstractController
      * @Route("/{id}", name="besteak3_show")
      * @Method("GET")
      */
-    public function showAction(Besteak3 $besteak3)
+    public function show(Besteak3 $besteak3): \Symfony\Component\HttpFoundation\Response
     {
         $deleteForm = $this->createDeleteForm($besteak3);
 
-        return $this->render('besteak3/show.html.twig', array(
-            'besteak3' => $besteak3,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('besteak3/show.html.twig', ['besteak3' => $besteak3, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -117,7 +108,7 @@ class Besteak3Controller extends AbstractController
      * @Route("/{id}/edit", name="besteak3_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Besteak3 $besteak3)
+    public function edit(Request $request, Besteak3 $besteak3)
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($besteak3->getUdala()==$this->getUser()->getUdala()))
@@ -131,14 +122,10 @@ class Besteak3Controller extends AbstractController
                 $this->em->persist($besteak3);
                 $this->em->flush();
 
-                return $this->redirectToRoute('besteak3_edit', array('id' => $besteak3->getId()));
+                return $this->redirectToRoute('besteak3_edit', ['id' => $besteak3->getId()]);
             }
 
-            return $this->render('besteak3/edit.html.twig', array(
-                'besteak3' => $besteak3,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('besteak3/edit.html.twig', ['besteak3' => $besteak3, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -151,7 +138,7 @@ class Besteak3Controller extends AbstractController
      * @Route("/{id}", name="besteak3_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Besteak3 $besteak3)
+    public function delete(Request $request, Besteak3 $besteak3): \Symfony\Component\HttpFoundation\RedirectResponse
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($besteak3->getUdala()==$this->getUser()->getUdala()))
@@ -181,8 +168,8 @@ class Besteak3Controller extends AbstractController
     private function createDeleteForm(Besteak3 $besteak3)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('besteak3_delete', array('id' => $besteak3->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('besteak3_delete', ['id' => $besteak3->getId()]))
+            ->setMethod(\Symfony\Component\HttpFoundation\Request::METHOD_DELETE)
             ->getForm()
         ;
     }

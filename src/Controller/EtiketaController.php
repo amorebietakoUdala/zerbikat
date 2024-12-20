@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Etiketa controller.
@@ -37,21 +39,18 @@ class EtiketaController extends AbstractController
      * @Route("/page{page}", name="etiketa_index_paginated")
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $etiketas = $this->repo->findBy( array(), array('etiketaeu'=>'ASC') );
+            $etiketas = $this->repo->findBy( [], ['etiketaeu'=>'ASC'] );
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($etiketas as $etiketa) {
                 $deleteForms[$etiketa->getId()] = $this->createDeleteForm($etiketa)->createView();
             }
 
-            return $this->render('etiketa/index.html.twig', array(
-                'etiketas' => $etiketas,
-                'deleteforms' => $deleteForms,
-            ));
+            return $this->render('etiketa/index.html.twig', ['etiketas' => $etiketas, 'deleteforms' => $deleteForms]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -64,7 +63,7 @@ class EtiketaController extends AbstractController
      * @Route("/new", name="etiketa_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
 
         if ($this->isGranted('ROLE_ADMIN'))
@@ -88,10 +87,7 @@ class EtiketaController extends AbstractController
                 $form->setData($form->getData());
             }
 
-            return $this->render('etiketa/new.html.twig', array(
-                'etiketum' => $etiketum,
-                'form' => $form->createView(),
-            ));
+            return $this->render('etiketa/new.html.twig', ['etiketum' => $etiketum, 'form' => $form->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -104,14 +100,11 @@ class EtiketaController extends AbstractController
      * @Route("/{id}", name="etiketa_show")
      * @Method("GET")
      */
-    public function showAction(Etiketa $etiketum)
+    public function show(Etiketa $etiketum): Response
     {
         $deleteForm = $this->createDeleteForm($etiketum);
 
-        return $this->render('etiketa/show.html.twig', array(
-            'etiketum' => $etiketum,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('etiketa/show.html.twig', ['etiketum' => $etiketum, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -120,7 +113,7 @@ class EtiketaController extends AbstractController
      * @Route("/{id}/edit", name="etiketa_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Etiketa $etiketum)
+    public function edit(Request $request, Etiketa $etiketum)
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($etiketum->getUdala()==$this->getUser()->getUdala()))
@@ -134,14 +127,10 @@ class EtiketaController extends AbstractController
                 $this->em->persist($etiketum);
                 $this->em->flush();
     
-                return $this->redirectToRoute('etiketa_edit', array('id' => $etiketum->getId()));
+                return $this->redirectToRoute('etiketa_edit', ['id' => $etiketum->getId()]);
             }
     
-            return $this->render('etiketa/edit.html.twig', array(
-                'etiketum' => $etiketum,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('etiketa/edit.html.twig', ['etiketum' => $etiketum, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -154,7 +143,7 @@ class EtiketaController extends AbstractController
      * @Route("/{id}", name="etiketa_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Etiketa $etiketum)
+    public function delete(Request $request, Etiketa $etiketum): RedirectResponse
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($etiketum->getUdala()==$this->getUser()->getUdala()))
@@ -184,8 +173,8 @@ class EtiketaController extends AbstractController
     private function createDeleteForm(Etiketa $etiketum)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('etiketa_delete', array('id' => $etiketum->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('etiketa_delete', ['id' => $etiketum->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

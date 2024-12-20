@@ -105,7 +105,7 @@ class Udala
      * @var integer
      * @ORM\Column(name="orrikatzea", type="bigint", nullable=false)
      */
-    private $orrikatzea;
+    private $orrikatzea = 25;
 
 
     /**
@@ -162,9 +162,6 @@ class Udala
      */
     public function __construct()
     {
-        $this->orrikatzea=25;
-
-
         $this->fitxak = new ArrayCollection();
     }
 

@@ -11,6 +11,7 @@ use App\Entity\Fitxafamilia;
 use App\Form\FitxafamiliaType;
 use App\Repository\FitxafamiliaRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Fitxafamilia controller.
@@ -36,12 +37,12 @@ class FitxafamiliaController extends AbstractController
      * @Route("/api/fitxafamiliakordenadauka/{id}/{fitxa_id}/{familia_id}", name="api_fitxafamiliahasorden", options={"expose"=true})
      * @Method("GET")
      */
-    public function fitxafamiliahasordenAction ( $id, $fitxa_id, $familia_id )
+    public function fitxafamiliahasorden ( $id, $fitxa_id, $familia_id )
     {
         /** @var Fitxafamilia $fitxafamilia */
         $fitxafamilia = $this->repo->find( $id );
         if ( $fitxafamilia ) {
-            $resp = array ('ordena' => $fitxafamilia->getOrdena());
+            $resp = ['ordena' => $fitxafamilia->getOrdena()];
         } else {
             $query = $this->em->createQuery(
                 '
@@ -66,16 +67,16 @@ class FitxafamiliaController extends AbstractController
      * @Route("/api/fitxafamilianextorden/{fitxa_id}/{familia_id}", name="api_fitxafamilianextorden", options={"expose"=true})
      * @Method("GET")
      */
-    public function fitxafamilianextordenAction ( $fitxa_id, $familia_id )
+    public function fitxafamilianextorden ( $fitxa_id, $familia_id )
     {
         // 1-. Badagoen begiratu
 
         $fitxafamilia = $this->repo->findOneBy(
-            array ('fitxa' => $fitxa_id, 'familia' => $familia_id)
+            ['fitxa' => $fitxa_id, 'familia' => $familia_id]
         );
 
         if ($fitxafamilia) {
-            return new JsonResponse(array('ordena'=>-1));
+            return new JsonResponse(['ordena'=>-1]);
         }
 
         $query = $this->em->createQuery(
@@ -101,15 +102,13 @@ class FitxafamiliaController extends AbstractController
      * @Route("/", name="fitxafamilia_index")
      * @Method("GET")
      */
-    public function indexAction ()
+    public function index (): Response
     {
         $fitxafamilias = $this->repo->findAll();
 
         return $this->render(
             'fitxafamilia/index.html.twig',
-            array (
-                'fitxafamilias' => $fitxafamilias,
-            )
+            ['fitxafamilias' => $fitxafamilias]
         );
     }
 
@@ -119,7 +118,7 @@ class FitxafamiliaController extends AbstractController
      * @Route("/newfromfitxa", name="fitxafamilia_newfromfitxa")
      * @Method({"GET", "POST"})
      */
-    public function newfromfitxaAction ( Request $request )
+    public function newfromfitxa ( Request $request )
     {
         $fitxafamilium = new Fitxafamilia();
         $fitxafamilium->setUdala( $this->getUser()->getUdala() );
@@ -133,17 +132,14 @@ class FitxafamiliaController extends AbstractController
             return $this->redirect(
                 $this->generateUrl(
                     'fitxa_edit',
-                    array ('id' => $fitxafamilium->getFitxa()->getId())
+                    ['id' => $fitxafamilium->getFitxa()->getId()]
                 ).'#gehituFamilia'
             );
         }
 
         return $this->render(
             'fitxafamilia/new.html.twig',
-            array (
-                'fitxafamilium' => $fitxafamilium,
-                'form'          => $form->createView(),
-            )
+            ['fitxafamilium' => $fitxafamilium, 'form'          => $form->createView()]
         );
     }
 
@@ -153,7 +149,7 @@ class FitxafamiliaController extends AbstractController
      * @Route("/new", name="fitxafamilia_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction ( Request $request )
+    public function new ( Request $request )
     {
         $fitxafamilium = new Fitxafamilia();
         $fitxafamilium->setUdala( $this->getUser()->getUdala() );
@@ -164,15 +160,12 @@ class FitxafamiliaController extends AbstractController
             $this->em->persist( $fitxafamilium );
             $this->em->flush();
 
-            return $this->redirectToRoute( 'fitxafamilia_show', array ('id' => $fitxafamilium->getId()) );
+            return $this->redirectToRoute( 'fitxafamilia_show', ['id' => $fitxafamilium->getId()] );
         }
 
         return $this->render(
             'fitxafamilia/new.html.twig',
-            array (
-                'fitxafamilium' => $fitxafamilium,
-                'form'          => $form->createView(),
-            )
+            ['fitxafamilium' => $fitxafamilium, 'form'          => $form->createView()]
         );
     }
 
@@ -182,16 +175,13 @@ class FitxafamiliaController extends AbstractController
      * @Route("/{id}", name="fitxafamilia_show")
      * @Method("GET")
      */
-    public function showAction ( Fitxafamilia $fitxafamilium )
+    public function show ( Fitxafamilia $fitxafamilium ): Response
     {
         $deleteForm = $this->createDeleteForm( $fitxafamilium );
 
         return $this->render(
             'fitxafamilia/show.html.twig',
-            array (
-                'fitxafamilium' => $fitxafamilium,
-                'delete_form'   => $deleteForm->createView(),
-            )
+            ['fitxafamilium' => $fitxafamilium, 'delete_form'   => $deleteForm->createView()]
         );
     }
 
@@ -201,16 +191,16 @@ class FitxafamiliaController extends AbstractController
      * @Route("/{id}/edit", name="fitxafamilia_edit", options={"expose"=true})
      * @Method({"GET", "POST"})
      */
-    public function editAction ( Request $request, Fitxafamilia $fitxafamilium )
+    public function edit ( Request $request, Fitxafamilia $fitxafamilium )
     {
         $deleteForm = $this->createDeleteForm( $fitxafamilium );
         $editForm = $this->createForm(
-            'App\Form\FitxafamiliaType',
+            \App\Form\FitxafamiliaType::class,
             $fitxafamilium,
             [
                 'action' => $this->generateUrl(
                     'fitxafamilia_edit',
-                    array ('id' => $fitxafamilium->getFitxa()->getId())
+                    ['id' => $fitxafamilium->getFitxa()->getId()]
                 ),
                 'method' => "POST",
             ]
@@ -225,18 +215,14 @@ class FitxafamiliaController extends AbstractController
             return $this->redirect(
                 $this->generateUrl(
                     'fitxa_edit',
-                    array ('id' => $fitxafamilium->getFitxa()->getId())
+                    ['id' => $fitxafamilium->getFitxa()->getId()]
                 ).'#gehituFamilia'
             );
         }
 
         return $this->render(
             'fitxafamilia/edit.html.twig',
-            array (
-                'fitxafamilium' => $fitxafamilium,
-                'edit_form'     => $editForm->createView(),
-                'delete_form'   => $deleteForm->createView(),
-            )
+            ['fitxafamilium' => $fitxafamilium, 'edit_form'     => $editForm->createView(), 'delete_form'   => $deleteForm->createView()]
         );
     }
 
@@ -246,12 +232,12 @@ class FitxafamiliaController extends AbstractController
      * @Route("/{id}", name="fitxafamilia_delete", options={"expose"=true})
      * @Method("DELETE")
      */
-    public function deleteAction ( Request $request, Fitxafamilia $fitxafamilium )
+    public function delete ( Request $request, Fitxafamilia $fitxafamilium )
     {
         if($request->isXmlHttpRequest()) {
             $this->em->remove( $fitxafamilium );
             $this->em->flush();
-            return New JsonResponse(array('result' => 'ok'));
+            return New JsonResponse(['result' => 'ok']);
         }
         $form = $this->createDeleteForm( $fitxafamilium );
         $form->handleRequest( $request );
@@ -274,8 +260,8 @@ class FitxafamiliaController extends AbstractController
     private function createDeleteForm ( Fitxafamilia $fitxafamilium )
     {
         return $this->createFormBuilder()
-            ->setAction( $this->generateUrl( 'fitxafamilia_delete', array ('id' => $fitxafamilium->getId()) ) )
-            ->setMethod( 'DELETE' )
+            ->setAction( $this->generateUrl( 'fitxafamilia_delete', ['id' => $fitxafamilium->getId()] ) )
+            ->setMethod( Request::METHOD_DELETE )
             ->getForm();
     }
 }

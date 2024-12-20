@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Etiketa;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -27,8 +28,8 @@ class EtiketaType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\Etiketa'
-        ));
+        $resolver->setDefaults([
+            'data_class' => Etiketa::class
+        ]);
     }
 }

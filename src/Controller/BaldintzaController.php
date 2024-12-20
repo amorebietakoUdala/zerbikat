@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Baldintza controller.
@@ -38,20 +40,17 @@ class BaldintzaController extends AbstractController
      * @Route("/page{page}", name="baldintza_index_paginated")
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
         if ($this->isGranted('ROLE_KUDEAKETA')) {
             $baldintzas = $this->repo->findAll();
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($baldintzas as $baldintza) {
                 $deleteForms[$baldintza->getId()] = $this->createDeleteForm($baldintza)->createView();
             }
 
-            return $this->render('baldintza/index.html.twig', array(
-                'baldintzas' => $baldintzas,
-                'deleteforms' => $deleteForms,
-            ));
+            return $this->render('baldintza/index.html.twig', ['baldintzas' => $baldintzas, 'deleteforms' => $deleteForms]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -64,7 +63,7 @@ class BaldintzaController extends AbstractController
      * @Route("/new", name="baldintza_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
         if ($this->isGranted('ROLE_ADMIN'))
         {
@@ -88,10 +87,7 @@ class BaldintzaController extends AbstractController
                 $form->setData($form->getData());
             }
 
-            return $this->render('baldintza/new.html.twig', array(
-                'baldintza' => $baldintza,
-                'form' => $form->createView(),
-            ));
+            return $this->render('baldintza/new.html.twig', ['baldintza' => $baldintza, 'form' => $form->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -104,14 +100,11 @@ class BaldintzaController extends AbstractController
      * @Route("/{id}", name="baldintza_show")
      * @Method("GET")
      */
-    public function showAction(Baldintza $baldintza)
+    public function show(Baldintza $baldintza): Response
     {
         $deleteForm = $this->createDeleteForm($baldintza);
 
-        return $this->render('baldintza/show.html.twig', array(
-            'baldintza' => $baldintza,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('baldintza/show.html.twig', ['baldintza' => $baldintza, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -120,7 +113,7 @@ class BaldintzaController extends AbstractController
      * @Route("/{id}/edit", name="baldintza_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Baldintza $baldintza)
+    public function edit(Request $request, Baldintza $baldintza)
     {
         if((($this->isGranted('ROLE_ADMIN')) && ($baldintza->getUdala()==$this->getUser()->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
@@ -133,14 +126,10 @@ class BaldintzaController extends AbstractController
                 $this->em->persist($baldintza);
                 $this->em->flush();
 
-                return $this->redirectToRoute('baldintza_edit', array('id' => $baldintza->getId()));
+                return $this->redirectToRoute('baldintza_edit', ['id' => $baldintza->getId()]);
             }
 
-            return $this->render('baldintza/edit.html.twig', array(
-                'baldintza' => $baldintza,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('baldintza/edit.html.twig', ['baldintza' => $baldintza, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -153,7 +142,7 @@ class BaldintzaController extends AbstractController
      * @Route("/{id}", name="baldintza_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Baldintza $baldintza)
+    public function delete(Request $request, Baldintza $baldintza): RedirectResponse
     {
         if((($this->isGranted('ROLE_ADMIN')) && ($baldintza->getUdala()==$this->getUser()->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
@@ -182,8 +171,8 @@ class BaldintzaController extends AbstractController
     private function createDeleteForm(Baldintza $baldintza)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('baldintza_delete', array('id' => $baldintza->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('baldintza_delete', ['id' => $baldintza->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

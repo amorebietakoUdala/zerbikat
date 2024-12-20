@@ -14,6 +14,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Udala controller.
@@ -38,7 +40,7 @@ class UdalaController extends AbstractController
      * @Route("/page{page}", name="udala_index_paginated")
      * @Method("GET")
      */
-    public function indexAction ( $page )
+    public function index ( $page )
     {
 
         if ( $this->isGranted( 'ROLE_SUPER_ADMIN' ) ) {
@@ -47,7 +49,7 @@ class UdalaController extends AbstractController
             $adapter = new ArrayAdapter( $udalas );
             $pagerfanta = new Pagerfanta( $adapter );
 
-            $deleteForms = array ();
+            $deleteForms = [];
             foreach ( $udalas as $udala ) {
                 $deleteForms[$udala->getId()] = $this->createDeleteForm( $udala )->createView();
             }
@@ -67,11 +69,7 @@ class UdalaController extends AbstractController
 
             return $this->render(
                 'udala/index.html.twig',
-                array (
-                    'udalas'      => $entities,
-                    'deleteforms' => $deleteForms,
-                    'pager'       => $pagerfanta,
-                )
+                ['udalas'      => $entities, 'deleteforms' => $deleteForms, 'pager'       => $pagerfanta]
             );
         } else {
             if ( $this->isGranted( 'ROLE_ADMIN' ) ) {
@@ -79,7 +77,7 @@ class UdalaController extends AbstractController
                 if ($this->getUser()->getUdala()) {
                     return $this->redirectToRoute(
                         'udala_show',
-                        array ('id' => $this->getUser()->getUdala()->getId())
+                        ['id' => $this->getUser()->getUdala()->getId()]
                     );
                 } else {
                     return $this->redirectToRoute(
@@ -99,7 +97,7 @@ class UdalaController extends AbstractController
      * @Route("/udala/errorea", defaults={"page" = 1}, name="udala_ez")
      * @Method("GET")
      */
-    public function udalaezAction ( $page )
+    public function udalaez ( $page ): Response
     {
         return $this->render(
             'udala/index.html.twig'
@@ -112,7 +110,7 @@ class UdalaController extends AbstractController
      * @Route("/new", name="udala_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction ( Request $request )
+    public function new ( Request $request )
     {
 
         if ( $this->isGranted( 'ROLE_SUPER_ADMIN' ) ) {
@@ -124,15 +122,12 @@ class UdalaController extends AbstractController
                 $this->em->persist( $udala );
                 $this->em->flush();
 
-                return $this->redirectToRoute( 'udala_show', array ('id' => $udala->getId()) );
+                return $this->redirectToRoute( 'udala_show', ['id' => $udala->getId()] );
             }
 
             return $this->render(
                 'udala/new.html.twig',
-                array (
-                    'udala' => $udala,
-                    'form'  => $form->createView(),
-                )
+                ['udala' => $udala, 'form'  => $form->createView()]
             );
         } else {
             return $this->redirectToRoute( 'backend_errorea' );
@@ -145,16 +140,13 @@ class UdalaController extends AbstractController
      * @Route("/{id}", name="udala_show")
      * @Method("GET")
      */
-    public function showAction ( Udala $udala )
+    public function show ( Udala $udala ): Response
     {
         $deleteForm = $this->createDeleteForm( $udala );
 
         return $this->render(
             'udala/show.html.twig',
-            array (
-                'udala'       => $udala,
-                'delete_form' => $deleteForm->createView(),
-            )
+            ['udala'       => $udala, 'delete_form' => $deleteForm->createView()]
         );
     }
 
@@ -164,7 +156,7 @@ class UdalaController extends AbstractController
      * @Route("/{id}/edit", name="udala_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction ( Request $request, Udala $udala )
+    public function edit ( Request $request, Udala $udala )
     {
 
         if ( (($this->isGranted( 'ROLE_ADMIN' )) && ($udala == $this->getUser()->getUdala()))
@@ -178,16 +170,12 @@ class UdalaController extends AbstractController
                 $this->em->persist( $udala );
                 $this->em->flush();
 
-                return $this->redirectToRoute( 'udala_edit', array ('id' => $udala->getId()) );
+                return $this->redirectToRoute( 'udala_edit', ['id' => $udala->getId()] );
             }
 
             return $this->render(
                 'udala/edit.html.twig',
-                array (
-                    'udala'       => $udala,
-                    'edit_form'   => $editForm->createView(),
-                    'delete_form' => $deleteForm->createView(),
-                )
+                ['udala'       => $udala, 'edit_form'   => $editForm->createView(), 'delete_form' => $deleteForm->createView()]
             );
         } else {
             return $this->redirectToRoute( 'backend_errorea' );
@@ -200,7 +188,7 @@ class UdalaController extends AbstractController
      * @Route("/{id}", name="udala_delete")
      * @Method("DELETE")
      */
-    public function deleteAction ( Request $request, Udala $udala )
+    public function delete ( Request $request, Udala $udala ): RedirectResponse
     {
 
         if ( $this->isGranted( 'ROLE_SUPER_ADMIN' ) ) {
@@ -228,8 +216,8 @@ class UdalaController extends AbstractController
     private function createDeleteForm ( Udala $udala )
     {
         return $this->createFormBuilder()
-            ->setAction( $this->generateUrl( 'udala_delete', array ('id' => $udala->getId()) ) )
-            ->setMethod( 'DELETE' )
+            ->setAction( $this->generateUrl( 'udala_delete', ['id' => $udala->getId()] ) )
+            ->setMethod( Request::METHOD_DELETE )
             ->getForm();
     }
 }

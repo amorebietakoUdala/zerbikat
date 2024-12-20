@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Aurreikusi;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -26,8 +27,8 @@ class AurreikusiType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\Aurreikusi'
-        ));
+        $resolver->setDefaults([
+            'data_class' => Aurreikusi::class
+        ]);
     }
 }

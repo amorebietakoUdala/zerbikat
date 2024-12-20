@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Doklagun controller.
@@ -38,22 +40,19 @@ class DoklagunController extends AbstractController
      * @Route("/page{page}", name="doklagun_index_paginated")
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA'))
         {
-            $doklaguns = $this->repo->findBy( array(), array('kodea'=>'ASC') );
+            $doklaguns = $this->repo->findBy( [], ['kodea'=>'ASC'] );
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($doklaguns as $doklagun) {
                 $deleteForms[$doklagun->getId()] = $this->createDeleteForm($doklagun)->createView();
             }
 
-            return $this->render('doklagun/index.html.twig', array(
-                'doklaguns' => $doklaguns,
-                'deleteforms' => $deleteForms
-            ));
+            return $this->render('doklagun/index.html.twig', ['doklaguns' => $doklaguns, 'deleteforms' => $deleteForms]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -66,7 +65,7 @@ class DoklagunController extends AbstractController
      * @Route("/new", name="doklagun_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
 
         if ($this->isGranted('ROLE_ADMIN'))
@@ -90,10 +89,7 @@ class DoklagunController extends AbstractController
                 $form->setData($form->getData());
             }
 
-            return $this->render('doklagun/new.html.twig', array(
-                'doklagun' => $doklagun,
-                'form' => $form->createView(),
-            ));
+            return $this->render('doklagun/new.html.twig', ['doklagun' => $doklagun, 'form' => $form->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -106,14 +102,11 @@ class DoklagunController extends AbstractController
      * @Route("/{id}", name="doklagun_show")
      * @Method("GET")
      */
-    public function showAction(Doklagun $doklagun)
+    public function show(Doklagun $doklagun): Response
     {
         $deleteForm = $this->createDeleteForm($doklagun);
 
-        return $this->render('doklagun/show.html.twig', array(
-            'doklagun' => $doklagun,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('doklagun/show.html.twig', ['doklagun' => $doklagun, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -122,7 +115,7 @@ class DoklagunController extends AbstractController
      * @Route("/{id}/edit", name="doklagun_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Doklagun $doklagun)
+    public function edit(Request $request, Doklagun $doklagun)
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($doklagun->getUdala()==$this->getUser()->getUdala()))
@@ -136,14 +129,10 @@ class DoklagunController extends AbstractController
                 $this->em->persist($doklagun);
                 $this->em->flush();
 
-                return $this->redirectToRoute('doklagun_edit', array('id' => $doklagun->getId()));
+                return $this->redirectToRoute('doklagun_edit', ['id' => $doklagun->getId()]);
             }
 
-            return $this->render('doklagun/edit.html.twig', array(
-                'doklagun' => $doklagun,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('doklagun/edit.html.twig', ['doklagun' => $doklagun, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -156,7 +145,7 @@ class DoklagunController extends AbstractController
      * @Route("/{id}", name="doklagun_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Doklagun $doklagun)
+    public function delete(Request $request, Doklagun $doklagun): RedirectResponse
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($doklagun->getUdala()==$this->getUser()->getUdala()))
@@ -188,8 +177,8 @@ class DoklagunController extends AbstractController
     private function createDeleteForm(Doklagun $doklagun)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('doklagun_delete', array('id' => $doklagun->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('doklagun_delete', ['id' => $doklagun->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

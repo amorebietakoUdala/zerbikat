@@ -41,58 +41,42 @@ use Symfony\Component\Form\AbstractType;
                 ->add(
                     'helburuaeu',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'helburuaes',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'norkeu',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'norkes',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'dokumentazioaeu',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'dokumentazioaes',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'kostuaeu',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'kostuaes',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add( 'ebazpensinpli' )
                 ->add( 'arduraaitorpena' )
@@ -100,162 +84,118 @@ use Symfony\Component\Form\AbstractType;
                 ->add(
                     'araudiaeu',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'araudiaes',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'prozeduraeu',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'prozeduraes',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'doklaguneu',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'doklagunes',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'oharrakeu',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'oharrakes',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'jarraibideakeu',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'jarraibideakes',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add( 'publikoa' )
                 ->add( 'hitzarmena' )
                 ->add( 'kontsultak' )
                 ->add( 'parametroa' )
-                ->add( 'createdAt', DatetimeType::class, array ('widget' => 'single_text') )
-                ->add( 'updatedAt', DatetimeType::class, array ('widget' => 'single_text') )
+                ->add( 'createdAt', DatetimeType::class, ['widget' => 'single_text'] )
+                ->add( 'updatedAt', DatetimeType::class, ['widget' => 'single_text'] )
                 ->add(
                     'besteak1eu',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'besteak1es',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'besteak2eu',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'besteak2es',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'besteak3eu',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'besteak3es',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'datuenbabesaeu',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'datuenbabesaes',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'norkonartueu',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'norkonartues',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'kanalaeu',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add(
                     'kanalaes',
                     CKEditorType::class,
-                    array (
-                        'config' => array (),
-                    )
+                    ['config' => []]
                 )
                 ->add( 'udala' )
                 ->add( 'norkebatzi' )
@@ -267,130 +207,62 @@ use Symfony\Component\Form\AbstractType;
                 ->add(
                     'dokumentazioak',
                     EntityType::class,
-                    array (
-                        'class'       => Dokumentazioa::class,
-                        'required'    => false,
-                        'multiple'    => 'multiple',
-                        'placeholder' => 'Aukeratu dokumentuak',
-                        'group_by'    => 'dokumentumota',
-                    )
+                    ['class'       => Dokumentazioa::class, 'required'    => false, 'multiple'    => 'multiple', 'placeholder' => 'Aukeratu dokumentuak', 'group_by'    => 'dokumentumota']
                 )
                 ->add(
                     'etiketak',
                     EntityType::class,
-                    array (
-                        'class'       => Etiketa::class,
-                        'required'    => false,
-                        'multiple'    => 'multiple',
-                        'placeholder' => 'Aukeratu etiketak',
-                        'empty_data'  => [],
-                    )
+                    ['class'       => Etiketa::class, 'required'    => false, 'multiple'    => 'multiple', 'placeholder' => 'Aukeratu etiketak', 'empty_data'  => []]
                 )
                 ->add(
                     'kanalak',
                     EntityType::class,
-                    array (
-                        'class'       => Kanala::class,
-                        'required'    => false,
-                        'multiple'    => 'multiple',
-                        'placeholder' => 'Aukeratu kanalak',
-                        'group_by'    => 'kanalmota',
-                    )
+                    ['class'       => Kanala::class, 'required'    => false, 'multiple'    => 'multiple', 'placeholder' => 'Aukeratu kanalak', 'group_by'    => 'kanalmota']
                 )
                 ->add(
                     'besteak1ak',
                     EntityType::class,
-                    array (
-                        'class'       => Besteak1::class,
-                        'required'    => false,
-                        'multiple'    => 'multiple',
-                        'placeholder' => 'Aukeratu besteak1',
-                    )
+                    ['class'       => Besteak1::class, 'required'    => false, 'multiple'    => 'multiple', 'placeholder' => 'Aukeratu besteak1']
                 )
                 ->add(
                     'besteak2ak',
                     EntityType::class,
-                    array (
-                        'class'       => Besteak2::class,
-                        'required'    => false,
-                        'multiple'    => 'multiple',
-                        'placeholder' => 'Aukeratu besteak2',
-                    )
+                    ['class'       => Besteak2::class, 'required'    => false, 'multiple'    => 'multiple', 'placeholder' => 'Aukeratu besteak2']
                 )
                 ->add(
                     'besteak3ak',
                     EntityType::class,
-                    array (
-                        'class'       => Besteak3::class,
-                        'required'    => false,
-                        'multiple'    => 'multiple',
-                        'placeholder' => 'Aukeratu besteak3',
-                    )
+                    ['class'       => Besteak3::class, 'required'    => false, 'multiple'    => 'multiple', 'placeholder' => 'Aukeratu besteak3']
                 )
                 ->add(
                     'norkeskatuak',
                     EntityType::class,
-                    array (
-                        'class'       => Norkeskatu::class,
-                        'required'    => false,
-                        'multiple'    => 'multiple',
-                        'placeholder' => 'Aukeratu nork eska dezakeen',
-                    )
+                    ['class'       => Norkeskatu::class, 'required'    => false, 'multiple'    => 'multiple', 'placeholder' => 'Aukeratu nork eska dezakeen']
                 )
                 ->add(
                     'doklagunak',
                     EntityType::class,
-                    array (
-                        'class'       => Doklagun::class,
-                        'required'    => false,
-                        'multiple'    => 'multiple',
-                        'placeholder' => 'Aukeratu dokumentazio lagungarria',
-                    )
+                    ['class'       => Doklagun::class, 'required'    => false, 'multiple'    => 'multiple', 'placeholder' => 'Aukeratu dokumentazio lagungarria']
                 )
                 ->add(
                     'azpiatalak',
                     EntityType::class,
-                    array (
-                        'class'       => Azpiatala::class,
-                        'required'    => false,
-                        'multiple'    => 'multiple',
-                        'placeholder' => 'Aukeratu kostu taulak',
-
-                    )
+                    ['class'       => Azpiatala::class, 'required'    => false, 'multiple'    => 'multiple', 'placeholder' => 'Aukeratu kostu taulak']
                 )
                 ->add(
                     'prozedurak',
                     CollectionType::class,
-                    array (
-                        'entry_type'   => FitxaProzeduraType::class,
-                        'allow_add'    => true,
-                        'allow_delete' => true,
-                        'by_reference' => false,
-                    )
+                    ['entry_type'   => FitxaProzeduraType::class, 'allow_add'    => true, 'allow_delete' => true, 'by_reference' => false]
                 )
                 ->add(
                     'araudiak',
                     CollectionType::class,
-                    array (
-                        'entry_type'   => FitxaAraudiaType::class,
-                        'allow_add'    => true,
-                        'allow_delete' => true,
-                        'by_reference' => false,
-                    )
+                    ['entry_type'   => FitxaAraudiaType::class, 'allow_add'    => true, 'allow_delete' => true, 'by_reference' => false]
                 )
                 ->add(
                     'kostuak',
                     CollectionType::class,
-                    array (
-                        'entry_type'   => FitxaKostuaType::class,
-                        'entry_options'  => array(
-                            'udala' => $user->getUdala() !== null ? $user->getUdala()->getId() : null,
-                            'api_url' => $api_url
-                        ),
-                        'allow_add'    => true,
-                        'allow_delete' => true,
-                        'by_reference' => false
-                    )
+                    ['entry_type'   => FitxaKostuaType::class, 'entry_options'  => ['udala' => $user->getUdala() !== null ? $user->getUdala()->getId() : null, 'api_url' => $api_url], 'allow_add'    => true, 'allow_delete' => true, 'by_reference' => false]
                 )
 
             ;
@@ -401,12 +273,10 @@ use Symfony\Component\Form\AbstractType;
          */
         public function configureOptions ( OptionsResolver $resolver )
         {
-            $resolver->setDefaults(
-                array (
-                    'data_class' => Fitxa::class,
-                    'user' => null,
-                    'api_url' => null
-                )
-            );
+            $resolver->setDefaults(['
+                data_class' => Fitxa::class, 
+                'user' => null, 
+                'api_url' => null
+            ]);
         }
     }

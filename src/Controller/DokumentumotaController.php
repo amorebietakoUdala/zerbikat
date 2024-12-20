@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Dokumentumota controller.
@@ -38,16 +40,16 @@ class DokumentumotaController extends AbstractController
      * @Route("/page{page}", name="dokumentumota_index_paginated") 
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $dokumentumotas = $this->repo->findBy( array(), array('kodea'=>'ASC') );
+            $dokumentumotas = $this->repo->findBy( [], ['kodea'=>'ASC'] );
 
             $adapter = new ArrayAdapter($dokumentumotas);
             $pagerfanta = new Pagerfanta($adapter);            
             
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($dokumentumotas as $dokumentumota) {
                 $deleteForms[$dokumentumota->getId()] = $this->createDeleteForm($dokumentumota)->createView();
             }
@@ -65,11 +67,7 @@ class DokumentumotaController extends AbstractController
                 throw $this->createNotFoundException("Orria ez da existitzen");
             }
 
-            return $this->render('dokumentumota/index.html.twig', array(
-                'dokumentumotas' => $entities,
-                'deleteforms' => $deleteForms,
-                'pager' => $pagerfanta,                
-            ));
+            return $this->render('dokumentumota/index.html.twig', ['dokumentumotas' => $entities, 'deleteforms' => $deleteForms, 'pager' => $pagerfanta]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -82,7 +80,7 @@ class DokumentumotaController extends AbstractController
      * @Route("/new", name="dokumentumota_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
 
         if ($this->isGranted('ROLE_ADMIN'))
@@ -105,10 +103,7 @@ class DokumentumotaController extends AbstractController
                 $form->setData($form->getData());
             }
 
-            return $this->render('dokumentumota/new.html.twig', array(
-                'dokumentumotum' => $dokumentumotum,
-                'form' => $form->createView(),
-            ));
+            return $this->render('dokumentumota/new.html.twig', ['dokumentumotum' => $dokumentumotum, 'form' => $form->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -121,14 +116,11 @@ class DokumentumotaController extends AbstractController
      * @Route("/{id}", name="dokumentumota_show")
      * @Method("GET")
      */
-    public function showAction(Dokumentumota $dokumentumotum)
+    public function show(Dokumentumota $dokumentumotum): Response
     {
         $deleteForm = $this->createDeleteForm($dokumentumotum);
 
-        return $this->render('dokumentumota/show.html.twig', array(
-            'dokumentumotum' => $dokumentumotum,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('dokumentumota/show.html.twig', ['dokumentumotum' => $dokumentumotum, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -137,7 +129,7 @@ class DokumentumotaController extends AbstractController
      * @Route("/{id}/edit", name="dokumentumota_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Dokumentumota $dokumentumotum)
+    public function edit(Request $request, Dokumentumota $dokumentumotum)
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($dokumentumotum->getUdala()==$this->getUser()->getUdala()))
@@ -151,14 +143,10 @@ class DokumentumotaController extends AbstractController
                 $this->em->persist($dokumentumotum);
                 $this->em->flush();
     
-                return $this->redirectToRoute('dokumentumota_edit', array('id' => $dokumentumotum->getId()));
+                return $this->redirectToRoute('dokumentumota_edit', ['id' => $dokumentumotum->getId()]);
             }
     
-            return $this->render('dokumentumota/edit.html.twig', array(
-                'dokumentumotum' => $dokumentumotum,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('dokumentumota/edit.html.twig', ['dokumentumotum' => $dokumentumotum, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -171,7 +159,7 @@ class DokumentumotaController extends AbstractController
      * @Route("/{id}", name="dokumentumota_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Dokumentumota $dokumentumotum)
+    public function delete(Request $request, Dokumentumota $dokumentumotum): RedirectResponse
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($dokumentumotum->getUdala()==$this->getUser()->getUdala()))
@@ -201,8 +189,8 @@ class DokumentumotaController extends AbstractController
     private function createDeleteForm(Dokumentumota $dokumentumotum)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('dokumentumota_delete', array('id' => $dokumentumotum->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('dokumentumota_delete', ['id' => $dokumentumotum->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

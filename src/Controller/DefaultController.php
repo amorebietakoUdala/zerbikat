@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DefaultController extends AbstractController
@@ -13,7 +14,7 @@ class DefaultController extends AbstractController
      *
      * @Route("/")
      */
-    public function indexAction()
+    public function index(): Response
     {
 
 //        $query = $em->createQuery('
@@ -46,7 +47,7 @@ class DefaultController extends AbstractController
      *
      * @Route("/errorea")
      */
-    public function erroreaAction()
+    public function errorea(): Response
     {
         return $this->render('App:Default:errorea.html.twig');
 

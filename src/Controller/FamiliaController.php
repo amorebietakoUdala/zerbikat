@@ -40,25 +40,22 @@ class FamiliaController extends AbstractController
      * @Route("/page{page}", name="familia_index_paginated")
      * @Method("GET")
      */
-    public function indexAction ( $page )
+    public function index ( $page )
     {
 
         if ( $this->isGranted( 'ROLE_KUDEAKETA' ) ) {
             $familias = $this->repo->findBy(
-                array (),
-                array ( 'ordena' => 'ASC' )
+                [],
+                ['ordena' => 'ASC']
             );
-            $deleteForms = array ();
+            $deleteForms = [];
             foreach ( $familias as $familia ) {
                 $deleteForms[ $familia->getId() ] = $this->createDeleteForm( $familia )->createView();
             }
 
             return $this->render(
                 'familia/index.html.twig',
-                array (
-                    'familias'    => $familias,
-                    'deleteforms' => $deleteForms,
-                )
+                ['familias'    => $familias, 'deleteforms' => $deleteForms]
             );
         } else {
             return $this->redirectToRoute( 'backend_errorea' );
@@ -71,7 +68,7 @@ class FamiliaController extends AbstractController
      * @Route("/new", name="familia_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction ( Request $request )
+    public function new ( Request $request )
     {
 
         if ( $this->isGranted( 'ROLE_ADMIN' ) ) {
@@ -91,10 +88,7 @@ class FamiliaController extends AbstractController
 
             return $this->render(
                 'familia/new.html.twig',
-                array (
-                    'familium' => $familium,
-                    'form'     => $form->createView(),
-                )
+                ['familium' => $familium, 'form'     => $form->createView()]
             );
         } else {
             return $this->redirectToRoute( 'backend_errorea' );
@@ -106,13 +100,13 @@ class FamiliaController extends AbstractController
      *
      * @Route("/{id}", name="familia_delete", methods={"DELETE"}, options={"expose"=true})
      */
-    public function deleteAction ( Request $request, Familia $familium )
+    public function delete ( Request $request, Familia $familium )
     {
         if ( $request->isXmlHttpRequest() ) {
             $this->em->remove( $familium );
             $this->em->flush();
 
-            return New JsonResponse( array ( 'result' => 'ok' ) );
+            return New JsonResponse( ['result' => 'ok'] );
         }
 
 
@@ -139,7 +133,7 @@ class FamiliaController extends AbstractController
      * @Route("/{id}/edit", name="familia_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction ( Request $request, Familia $familium )
+    public function edit ( Request $request, Familia $familium )
     {
 
         if ( (($this->isGranted( 'ROLE_ADMIN' )) && ($familium->getUdala() == $this->getUser()->getUdala()))
@@ -153,23 +147,16 @@ class FamiliaController extends AbstractController
                 $this->em->persist( $familium );
                 $this->em->flush();
 
-                return $this->redirectToRoute( 'familia_edit', array ( 'id' => $familium->getId() ) );
+                return $this->redirectToRoute( 'familia_edit', ['id' => $familium->getId()] );
             }
 
             $azpifamiliak = $this->repo->findBy(
-                array (
-                    'parent' => $familium->getId(),
-                )
+                ['parent' => $familium->getId()]
             );
 
             return $this->render(
                 'familia/edit.html.twig',
-                array (
-                    'familium'     => $familium,
-                    'edit_form'    => $editForm->createView(),
-                    'delete_form'  => $deleteForm->createView(),
-                    'azpifamiliak' => $azpifamiliak,
-                )
+                ['familium'     => $familium, 'edit_form'    => $editForm->createView(), 'delete_form'  => $deleteForm->createView(), 'azpifamiliak' => $azpifamiliak]
             );
         } else {
             return $this->redirectToRoute( 'backend_errorea' );
@@ -182,16 +169,13 @@ class FamiliaController extends AbstractController
      * @Route("/{id}", name="familia_show")
      * @Method("GET")
      */
-    public function showAction ( Familia $familium )
+    public function show ( Familia $familium ): Response
     {
         $deleteForm = $this->createDeleteForm( $familium );
 
         return $this->render(
             'familia/show.html.twig',
-            array (
-                'familium'    => $familium,
-                'delete_form' => $deleteForm->createView(),
-            )
+            ['familium'    => $familium, 'delete_form' => $deleteForm->createView()]
         );
     }
 
@@ -205,8 +189,8 @@ class FamiliaController extends AbstractController
     private function createDeleteForm ( Familia $familium )
     {
         return $this->createFormBuilder()
-            ->setAction( $this->generateUrl( 'familia_delete', array ( 'id' => $familium->getId() ) ) )
-            ->setMethod( 'DELETE' )
+            ->setAction( $this->generateUrl( 'familia_delete', ['id' => $familium->getId()] ) )
+            ->setMethod( Request::METHOD_DELETE )
             ->getForm();
     }
 

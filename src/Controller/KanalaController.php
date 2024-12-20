@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Kanala controller.
@@ -37,21 +39,18 @@ class KanalaController extends AbstractController
      * @Route("/page{page}", name="kanala_index_paginated") 
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $kanalas = $this->repo->findBy( array(), array('kanalmota'=>'ASC') );
+            $kanalas = $this->repo->findBy( [], ['kanalmota'=>'ASC'] );
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($kanalas as $kanala) {
                 $deleteForms[$kanala->getId()] = $this->createDeleteForm($kanala)->createView();
             }
 
-            return $this->render('kanala/index.html.twig', array(
-                'kanalas' => $kanalas,
-                'deleteforms' => $deleteForms
-            ));
+            return $this->render('kanala/index.html.twig', ['kanalas' => $kanalas, 'deleteforms' => $deleteForms]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -64,7 +63,7 @@ class KanalaController extends AbstractController
      * @Route("/new", name="kanala_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
 
         if ($this->isGranted('ROLE_ADMIN'))
@@ -88,10 +87,7 @@ class KanalaController extends AbstractController
                 $form->setData($form->getData());
             }
 
-            return $this->render('kanala/new.html.twig', array(
-                'kanala' => $kanala,
-                'form' => $form->createView(),
-            ));
+            return $this->render('kanala/new.html.twig', ['kanala' => $kanala, 'form' => $form->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -104,14 +100,11 @@ class KanalaController extends AbstractController
      * @Route("/{id}", name="kanala_show")
      * @Method("GET")
      */
-    public function showAction(Kanala $kanala)
+    public function show(Kanala $kanala): Response
     {
         $deleteForm = $this->createDeleteForm($kanala);
 
-        return $this->render('kanala/show.html.twig', array(
-            'kanala' => $kanala,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('kanala/show.html.twig', ['kanala' => $kanala, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -120,7 +113,7 @@ class KanalaController extends AbstractController
      * @Route("/{id}/edit", name="kanala_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Kanala $kanala)
+    public function edit(Request $request, Kanala $kanala)
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($kanala->getUdala()==$this->getUser()->getUdala()))
@@ -134,14 +127,10 @@ class KanalaController extends AbstractController
                 $this->em->persist($kanala);
                 $this->em->flush();
 
-                return $this->redirectToRoute('kanala_edit', array('id' => $kanala->getId()));
+                return $this->redirectToRoute('kanala_edit', ['id' => $kanala->getId()]);
             }
 
-            return $this->render('kanala/edit.html.twig', array(
-                'kanala' => $kanala,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('kanala/edit.html.twig', ['kanala' => $kanala, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -154,7 +143,7 @@ class KanalaController extends AbstractController
      * @Route("/{id}", name="kanala_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Kanala $kanala)
+    public function delete(Request $request, Kanala $kanala): RedirectResponse
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($kanala->getUdala()==$this->getUser()->getUdala()))
@@ -184,8 +173,8 @@ class KanalaController extends AbstractController
     private function createDeleteForm(Kanala $kanala)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('kanala_delete', array('id' => $kanala->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('kanala_delete', ['id' => $kanala->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Zerbitzua controller.
@@ -38,7 +40,7 @@ class ZerbitzuaController extends AbstractController
      * @Route("/page{page}", name="zerbitzua_index_paginated") 
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
 
         if ($this->isGranted('ROLE_SUPER_ADMIN')) 
@@ -48,7 +50,7 @@ class ZerbitzuaController extends AbstractController
             $adapter = new ArrayAdapter($zerbitzuas);
             $pagerfanta = new Pagerfanta($adapter);
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($zerbitzuas as $zerbitzua) {
                 $deleteForms[$zerbitzua->getId()] = $this->createDeleteForm($zerbitzua)->createView();
             }
@@ -67,11 +69,7 @@ class ZerbitzuaController extends AbstractController
                 throw $this->createNotFoundException("Orria ez da existitzen");
             }
             
-            return $this->render('zerbitzua/index.html.twig', array(
-                'zerbitzuas' => $entities,
-                'deleteforms' => $deleteForms,
-                'pager' => $pagerfanta,
-            ));
+            return $this->render('zerbitzua/index.html.twig', ['zerbitzuas' => $entities, 'deleteforms' => $deleteForms, 'pager' => $pagerfanta]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -84,7 +82,7 @@ class ZerbitzuaController extends AbstractController
      * @Route("/new", name="zerbitzua_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
 
         if ($this->isGranted('ROLE_SUPER_ADMIN'))
@@ -100,10 +98,7 @@ class ZerbitzuaController extends AbstractController
 //                return $this->redirectToRoute('zerbitzua_show', array('id' => $zerbitzua->getId()));
                 return $this->redirectToRoute('zerbitzua_index');
             }
-            return $this->render('zerbitzua/new.html.twig', array(
-                'zerbitzua' => $zerbitzua,
-                'form' => $form->createView(),
-            ));
+            return $this->render('zerbitzua/new.html.twig', ['zerbitzua' => $zerbitzua, 'form' => $form->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -116,14 +111,11 @@ class ZerbitzuaController extends AbstractController
      * @Route("/{id}", name="zerbitzua_show")
      * @Method("GET")
      */
-    public function showAction(Zerbitzua $zerbitzua)
+    public function show(Zerbitzua $zerbitzua): Response
     {
         $deleteForm = $this->createDeleteForm($zerbitzua);
 
-        return $this->render('zerbitzua/show.html.twig', array(
-            'zerbitzua' => $zerbitzua,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('zerbitzua/show.html.twig', ['zerbitzua' => $zerbitzua, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -132,7 +124,7 @@ class ZerbitzuaController extends AbstractController
      * @Route("/{id}/edit", name="zerbitzua_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Zerbitzua $zerbitzua)
+    public function edit(Request $request, Zerbitzua $zerbitzua)
     {
 
         if ($this->isGranted('ROLE_SUPER_ADMIN'))
@@ -145,14 +137,10 @@ class ZerbitzuaController extends AbstractController
                 $this->em->persist($zerbitzua);
                 $this->em->flush();
     
-                return $this->redirectToRoute('zerbitzua_edit', array('id' => $zerbitzua->getId()));
+                return $this->redirectToRoute('zerbitzua_edit', ['id' => $zerbitzua->getId()]);
             }
     
-            return $this->render('zerbitzua/edit.html.twig', array(
-                'zerbitzua' => $zerbitzua,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('zerbitzua/edit.html.twig', ['zerbitzua' => $zerbitzua, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -165,7 +153,7 @@ class ZerbitzuaController extends AbstractController
      * @Route("/{id}", name="zerbitzua_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Zerbitzua $zerbitzua)
+    public function delete(Request $request, Zerbitzua $zerbitzua): RedirectResponse
     {
 
         if($this->isGranted('ROLE_SUPER_ADMIN'))
@@ -194,8 +182,8 @@ class ZerbitzuaController extends AbstractController
     private function createDeleteForm(Zerbitzua $zerbitzua)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('zerbitzua_delete', array('id' => $zerbitzua->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('zerbitzua_delete', ['id' => $zerbitzua->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

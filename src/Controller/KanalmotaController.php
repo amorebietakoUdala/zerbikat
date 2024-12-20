@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Kanalmota controller.
@@ -37,7 +39,7 @@ class KanalmotaController extends AbstractController
      * @Route("/page{page}", name="kanalmota_index_paginated")
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
@@ -46,7 +48,7 @@ class KanalmotaController extends AbstractController
             $adapter = new ArrayAdapter($kanalmotas);
             $pagerfanta = new Pagerfanta($adapter);
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($kanalmotas as $kanalmota) {
                 $deleteForms[$kanalmota->getId()] = $this->createDeleteForm($kanalmota)->createView();
             }
@@ -65,11 +67,7 @@ class KanalmotaController extends AbstractController
                 throw $this->createNotFoundException("Orria ez da existitzen");
             }
 
-            return $this->render('kanalmota/index.html.twig', array(
-                'kanalmotas' => $entities,
-                'deleteforms' => $deleteForms,
-                'pager' => $pagerfanta,
-            ));
+            return $this->render('kanalmota/index.html.twig', ['kanalmotas' => $entities, 'deleteforms' => $deleteForms, 'pager' => $pagerfanta]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -82,7 +80,7 @@ class KanalmotaController extends AbstractController
      * @Route("/new", name="kanalmota_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
 
         if ($this->isGranted('ROLE_ADMIN'))
@@ -106,10 +104,7 @@ class KanalmotaController extends AbstractController
                 $form->setData($form->getData());
             }
 
-            return $this->render('kanalmota/new.html.twig', array(
-                'kanalmotum' => $kanalmotum,
-                'form' => $form->createView(),
-            ));
+            return $this->render('kanalmota/new.html.twig', ['kanalmotum' => $kanalmotum, 'form' => $form->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -122,14 +117,11 @@ class KanalmotaController extends AbstractController
      * @Route("/{id}", name="kanalmota_show")
      * @Method("GET")
      */
-    public function showAction(Kanalmota $kanalmotum)
+    public function show(Kanalmota $kanalmotum): Response
     {
         $deleteForm = $this->createDeleteForm($kanalmotum);
 
-        return $this->render('kanalmota/show.html.twig', array(
-            'kanalmotum' => $kanalmotum,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('kanalmota/show.html.twig', ['kanalmotum' => $kanalmotum, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -138,7 +130,7 @@ class KanalmotaController extends AbstractController
      * @Route("/{id}/edit", name="kanalmota_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Kanalmota $kanalmotum)
+    public function edit(Request $request, Kanalmota $kanalmotum)
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($kanalmotum->getUdala()==$this->getUser()->getUdala()))
@@ -152,14 +144,10 @@ class KanalmotaController extends AbstractController
                 $this->em->persist($kanalmotum);
                 $this->em->flush();
 
-                return $this->redirectToRoute('kanalmota_edit', array('id' => $kanalmotum->getId()));
+                return $this->redirectToRoute('kanalmota_edit', ['id' => $kanalmotum->getId()]);
             }
 
-            return $this->render('kanalmota/edit.html.twig', array(
-                'kanalmotum' => $kanalmotum,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('kanalmota/edit.html.twig', ['kanalmotum' => $kanalmotum, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -172,7 +160,7 @@ class KanalmotaController extends AbstractController
      * @Route("/{id}", name="kanalmota_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Kanalmota $kanalmotum)
+    public function delete(Request $request, Kanalmota $kanalmotum): RedirectResponse
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($kanalmotum->getUdala()==$this->getUser()->getUdala()))
@@ -202,8 +190,8 @@ class KanalmotaController extends AbstractController
     private function createDeleteForm(Kanalmota $kanalmotum)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('kanalmota_delete', array('id' => $kanalmotum->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('kanalmota_delete', ['id' => $kanalmotum->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

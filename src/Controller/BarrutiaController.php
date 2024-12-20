@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Barrutia controller.
@@ -38,7 +40,7 @@ class BarrutiaController extends AbstractController
      * @Route("/page{page}", name="barrutia_index_paginated")
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
         if ($this->isGranted('ROLE_KUDEAKETA')) {
             $barrutias = $this->repo->findAll();
@@ -46,7 +48,7 @@ class BarrutiaController extends AbstractController
             $adapter = new ArrayAdapter($barrutias);
             $pagerfanta = new Pagerfanta($adapter);
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($barrutias as $barrutia) {
                 $deleteForms[$barrutia->getId()] = $this->createDeleteForm($barrutia)->createView();
             }
@@ -65,11 +67,7 @@ class BarrutiaController extends AbstractController
                 throw $this->createNotFoundException("Orria ez da existitzen");
             }
 
-            return $this->render('barrutia/index.html.twig', array(
-                'barrutias' => $entities,
-                'deleteforms' => $deleteForms,
-                'pager' => $pagerfanta,
-            ));
+            return $this->render('barrutia/index.html.twig', ['barrutias' => $entities, 'deleteforms' => $deleteForms, 'pager' => $pagerfanta]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -82,7 +80,7 @@ class BarrutiaController extends AbstractController
      * @Route("/new", name="barrutia_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
         if ($this->isGranted('ROLE_ADMIN'))
         {
@@ -106,10 +104,7 @@ class BarrutiaController extends AbstractController
                 $form->setData($form->getData());
             }
 
-            return $this->render('barrutia/new.html.twig', array(
-                'barrutium' => $barrutium,
-                'form' => $form->createView(),
-            ));
+            return $this->render('barrutia/new.html.twig', ['barrutium' => $barrutium, 'form' => $form->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -122,14 +117,11 @@ class BarrutiaController extends AbstractController
      * @Route("/{id}", name="barrutia_show")
      * @Method("GET")
      */
-    public function showAction(Barrutia $barrutium)
+    public function show(Barrutia $barrutium): Response
     {
         $deleteForm = $this->createDeleteForm($barrutium);
 
-        return $this->render('barrutia/show.html.twig', array(
-            'barrutium' => $barrutium,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('barrutia/show.html.twig', ['barrutium' => $barrutium, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -138,7 +130,7 @@ class BarrutiaController extends AbstractController
      * @Route("/{id}/edit", name="barrutia_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Barrutia $barrutium)
+    public function edit(Request $request, Barrutia $barrutium)
     {
         if((($this->isGranted('ROLE_ADMIN')) && ($barrutium->getUdala()==$this->getUser()->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
@@ -151,14 +143,10 @@ class BarrutiaController extends AbstractController
                 $this->em->persist($barrutium);
                 $this->em->flush();
 
-                return $this->redirectToRoute('barrutia_edit', array('id' => $barrutium->getId()));
+                return $this->redirectToRoute('barrutia_edit', ['id' => $barrutium->getId()]);
             }
 
-            return $this->render('barrutia/edit.html.twig', array(
-                'barrutium' => $barrutium,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('barrutia/edit.html.twig', ['barrutium' => $barrutium, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -171,7 +159,7 @@ class BarrutiaController extends AbstractController
      * @Route("/{id}", name="barrutia_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Barrutia $barrutium)
+    public function delete(Request $request, Barrutia $barrutium): RedirectResponse
     {
         if((($this->isGranted('ROLE_ADMIN')) && ($barrutium->getUdala()==$this->getUser()->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
@@ -200,8 +188,8 @@ class BarrutiaController extends AbstractController
     private function createDeleteForm(Barrutia $barrutium)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('barrutia_delete', array('id' => $barrutium->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('barrutia_delete', ['id' => $barrutium->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

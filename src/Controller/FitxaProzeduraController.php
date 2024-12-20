@@ -11,6 +11,8 @@ use App\Form\FitxaProzeduraType;
 use App\Repository\FitxaProzeduraRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * FitxaProzedura controller.
@@ -34,13 +36,11 @@ class FitxaProzeduraController extends AbstractController
      * @Route("/", name="fitxaprozedura_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function index(): Response
     {
         $fitxaProzeduras = $this->repo->findAll();
 
-        return $this->render('fitxaprozedura/index.html.twig', array(
-            'fitxaProzeduras' => $fitxaProzeduras,
-        ));
+        return $this->render('fitxaprozedura/index.html.twig', ['fitxaProzeduras' => $fitxaProzeduras]);
     }
 
     /**
@@ -49,7 +49,7 @@ class FitxaProzeduraController extends AbstractController
      * @Route("/new", name="fitxaprozedura_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
         $fitxaProzedura = new FitxaProzedura();
         $form = $this->createForm(FitxaProzeduraType::class, $fitxaProzedura);
@@ -59,17 +59,14 @@ class FitxaProzeduraController extends AbstractController
             $this->em->persist($fitxaProzedura);
             $this->em->flush();
 
-            return $this->redirectToRoute('fitxaprozedura_show', array('id' => $fitxaProzedura->getId()));
+            return $this->redirectToRoute('fitxaprozedura_show', ['id' => $fitxaProzedura->getId()]);
         } else
         {
             $form->getData()->setUdala($this->getUser()->getUdala());
             $form->setData($form->getData());
         }
 
-        return $this->render('fitxaprozedura/new.html.twig', array(
-            'fitxaProzedura' => $fitxaProzedura,
-            'form' => $form->createView(),
-        ));
+        return $this->render('fitxaprozedura/new.html.twig', ['fitxaProzedura' => $fitxaProzedura, 'form' => $form->createView()]);
     }
 
     /**
@@ -78,14 +75,11 @@ class FitxaProzeduraController extends AbstractController
      * @Route("/{id}", name="fitxaprozedura_show")
      * @Method("GET")
      */
-    public function showAction(FitxaProzedura $fitxaProzedura)
+    public function show(FitxaProzedura $fitxaProzedura): Response
     {
         $deleteForm = $this->createDeleteForm($fitxaProzedura);
 
-        return $this->render('fitxaprozedura/show.html.twig', array(
-            'fitxaProzedura' => $fitxaProzedura,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('fitxaprozedura/show.html.twig', ['fitxaProzedura' => $fitxaProzedura, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -94,7 +88,7 @@ class FitxaProzeduraController extends AbstractController
      * @Route("/{id}/edit", name="fitxaprozedura_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, FitxaProzedura $fitxaProzedura)
+    public function edit(Request $request, FitxaProzedura $fitxaProzedura)
     {
         $deleteForm = $this->createDeleteForm($fitxaProzedura);
         $editForm = $this->createForm(FitxaProzeduraType::class, $fitxaProzedura);
@@ -104,14 +98,10 @@ class FitxaProzeduraController extends AbstractController
             $this->em->persist($fitxaProzedura);
             $this->em->flush();
 
-            return $this->redirectToRoute('fitxaprozedura_edit', array('id' => $fitxaProzedura->getId()));
+            return $this->redirectToRoute('fitxaprozedura_edit', ['id' => $fitxaProzedura->getId()]);
         }
 
-        return $this->render('fitxaprozedura/edit.html.twig', array(
-            'fitxaProzedura' => $fitxaProzedura,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('fitxaprozedura/edit.html.twig', ['fitxaProzedura' => $fitxaProzedura, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
 
     }
 
@@ -121,7 +111,7 @@ class FitxaProzeduraController extends AbstractController
      * @Route("/{id}", name="fitxaprozedura_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, FitxaProzedura $fitxaProzedura)
+    public function delete(Request $request, FitxaProzedura $fitxaProzedura): RedirectResponse
     {
         $form = $this->createDeleteForm($fitxaProzedura);
         $form->handleRequest($request);
@@ -144,8 +134,8 @@ class FitxaProzeduraController extends AbstractController
     private function createDeleteForm(FitxaProzedura $fitxaProzedura)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('fitxaprozedura_delete', array('id' => $fitxaProzedura->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('fitxaprozedura_delete', ['id' => $fitxaProzedura->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

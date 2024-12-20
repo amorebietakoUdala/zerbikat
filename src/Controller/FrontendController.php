@@ -55,10 +55,10 @@ class FrontendController extends AbstractController
      *     }
      * )
      */
-    public function indexAction ( $udala, Request $request )
+    public function index ( int $udala, Request $request ): Response
     {
-        $familia = $request->get('familia') !== null? $request->get('familia'): null;
-        $azpisaila = $request->get('azpisaila') !== null? $request->get('azpisaila'): null ;
+        $familia = $request->get('familia') ?? null;
+        $azpisaila = $request->get('azpisaila') ?? null ;
 
         $fitxak = $this->fitxaRepo->findPublicByUdalaAndAzpisaila($udala, $azpisaila);
         $familiak = $this->familiaRepo->findByUdalaAndParentAndFamiliaId($udala, $request->getLocale(), null, $familia);
@@ -66,12 +66,7 @@ class FrontendController extends AbstractController
 
         return $this->render(
             'frontend\index.html.twig',
-            array(
-                'fitxak'   => $fitxak,
-                'familiak' => $familiak,
-                'sailak'   => $sailak,
-                'udala'    => $udala,
-            )
+            ['fitxak'   => $fitxak, 'familiak' => $familiak, 'sailak'   => $sailak, 'udala'    => $udala]
         );
     }
 
@@ -87,13 +82,13 @@ class FrontendController extends AbstractController
      * )
      * @Method("GET")
      */
-    public function showAction ( Fitxa $fitxa, $udala )
+    public function show ( Fitxa $fitxa, int $udala ): Response
     {
         $kanalmotak = $this->kanalmotaRepo->findAll();
         $eremuak = $this->eremuakRepo->findOneByUdalKodea($udala);
         $labelak = $this->eremuakRepo->findLabelakByUdalKodea($udala);
 
-        $kostuZerrenda = array();
+        $kostuZerrenda = [];
         foreach ( $fitxa->getKostuak() as $kostu ) {
             $client = new GuzzleHttp\Client();
             $proba  = $client->request( 'GET', $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '.json' );
@@ -105,14 +100,7 @@ class FrontendController extends AbstractController
 
         return $this->render(
             'frontend/show.html.twig',
-            array(
-                'fitxa'         => $fitxa,
-                'kanalmotak'    => $kanalmotak,
-                'eremuak'       => $eremuak,
-                'labelak'       => $labelak,
-                'udala'         => $udala,
-                'kostuZerrenda' => $kostuZerrenda,
-            )
+            ['fitxa'         => $fitxa, 'kanalmotak'    => $kanalmotak, 'eremuak'       => $eremuak, 'labelak'       => $labelak, 'udala'         => $udala, 'kostuZerrenda' => $kostuZerrenda]
         );
     }
 
@@ -122,18 +110,13 @@ class FrontendController extends AbstractController
      * @Route("/{udala}/{_locale}/pdf/{id}/doklagun", name="frontend_pdf_doklagun")
      * @Method("GET")
      */
-    public function pdfDocLagunAction ( Fitxa $fitxa, $udala )
+    public function pdfDocLagun ( Fitxa $fitxa, $udala )
     {
         $eremuak = $this->eremuakRepo->findOneByUdalKodea($udala);
         $labelak = $this->eremuakRepo->findLabelakByUdalKodea($udala);
         $html = $this->render(
             'frontend/pdf_dokumentazioa.html.twig',
-            array(
-                'fitxa'         => $fitxa,
-                'eremuak'       => $eremuak,
-                'labelak'       => $labelak,
-                'udala'         => $udala,
-            )
+            ['fitxa'         => $fitxa, 'eremuak'       => $eremuak, 'labelak'       => $labelak, 'udala'         => $udala]
         );
 
         $pdf = $this->tcpdfController->create(
@@ -175,13 +158,13 @@ class FrontendController extends AbstractController
      * @Route("/{udala}/{_locale}/pdf/{id}", name="frontend_fitxa_pdf")
      * @Method("GET")
      */
-    public function pdfAction ( Fitxa $fitxa, $udala )
+    public function pdf ( Fitxa $fitxa, $udala )
     {
         $kanalmotak = $this->kanalmotaRepo->findAll();
         $eremuak = $this->eremuakRepo->findOneByUdalKodea($udala);
         $labelak = $this->eremuakRepo->findLabelakByUdalKodea($udala);
 
-        $kostuZerrenda = array();
+        $kostuZerrenda = [];
         foreach ( $fitxa->getKostuak() as $kostu ) {
             $client = new GuzzleHttp\Client();
             $proba  = $client->request( 'GET', $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '.json' );
@@ -193,14 +176,7 @@ class FrontendController extends AbstractController
 
         $html = $this->render(
             'frontend/pdf.html.twig',
-            array(
-                'fitxa'         => $fitxa,
-                'kanalmotak'    => $kanalmotak,
-                'eremuak'       => $eremuak,
-                'labelak'       => $labelak,
-                'udala'         => $udala,
-                'kostuZerrenda' => $kostuZerrenda,
-            )
+            ['fitxa'         => $fitxa, 'kanalmotak'    => $kanalmotak, 'eremuak'       => $eremuak, 'labelak'       => $labelak, 'udala'         => $udala, 'kostuZerrenda' => $kostuZerrenda]
         );
         $this->sendResponsePDF($html, $udala, $fitxa);
     }
@@ -212,14 +188,14 @@ class FrontendController extends AbstractController
      * @Route("/{udala}/{_locale}/pdfelebi/{id}", name="frontend_fitxa_pdfelebi")
      * @Method("GET")
      */
-    public function pdfelebiAction ( Fitxa $fitxa, $udala )
+    public function pdfelebi ( Fitxa $fitxa, $udala )
     {
 
         $kanalmotak = $this->kanalmotaRepo->findAll();
         $eremuak = $this->eremuakRepo->findOneByUdalKodea($udala);
         $labelak = $this->eremuakRepo->findLabelakByUdalKodea($udala);
 
-        $kostuZerrenda = array();
+        $kostuZerrenda = [];
         foreach ( $fitxa->getKostuak() as $kostu ) {
             $client = new GuzzleHttp\Client();
 
@@ -232,14 +208,7 @@ class FrontendController extends AbstractController
         }
         $html = $this->render(
             'frontend/pdfelebi.html.twig',
-            array(
-                'fitxa'         => $fitxa,
-                'kanalmotak'    => $kanalmotak,
-                'eremuak'       => $eremuak,
-                'labelak'       => $labelak,
-                'udala'         => $udala,
-                'kostuZerrenda' => $kostuZerrenda,
-            )
+            ['fitxa'         => $fitxa, 'kanalmotak'    => $kanalmotak, 'eremuak'       => $eremuak, 'labelak'       => $labelak, 'udala'         => $udala, 'kostuZerrenda' => $kostuZerrenda]
         );
         $this->sendResponsePDF($html, $udala, $fitxa);
     }

@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Norkebatzi controller.
@@ -38,21 +40,18 @@ class NorkebatziController extends AbstractController
      * @Route("/page{page}", name="norkebatzi_index_paginated")
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
             $norkebatzis = $this->repo->findAll();
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($norkebatzis as $norkebatzi) {
                 $deleteForms[$norkebatzi->getId()] = $this->createDeleteForm($norkebatzi)->createView();
             }
 
-            return $this->render('norkebatzi/index.html.twig', array(
-                'norkebatzis' => $norkebatzis,
-                'deleteforms' => $deleteForms
-            ));
+            return $this->render('norkebatzi/index.html.twig', ['norkebatzis' => $norkebatzis, 'deleteforms' => $deleteForms]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -65,7 +64,7 @@ class NorkebatziController extends AbstractController
      * @Route("/new", name="norkebatzi_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
 
         if ($this->isGranted('ROLE_ADMIN'))
@@ -89,10 +88,7 @@ class NorkebatziController extends AbstractController
                 $form->setData($form->getData());
             }
 
-            return $this->render('norkebatzi/new.html.twig', array(
-                'norkebatzi' => $norkebatzi,
-                'form' => $form->createView(),
-            ));
+            return $this->render('norkebatzi/new.html.twig', ['norkebatzi' => $norkebatzi, 'form' => $form->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -105,14 +101,11 @@ class NorkebatziController extends AbstractController
      * @Route("/{id}", name="norkebatzi_show")
      * @Method("GET")
      */
-    public function showAction(Norkebatzi $norkebatzi)
+    public function show(Norkebatzi $norkebatzi): Response
     {
         $deleteForm = $this->createDeleteForm($norkebatzi);
 
-        return $this->render('norkebatzi/show.html.twig', array(
-            'norkebatzi' => $norkebatzi,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('norkebatzi/show.html.twig', ['norkebatzi' => $norkebatzi, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -121,7 +114,7 @@ class NorkebatziController extends AbstractController
      * @Route("/{id}/edit", name="norkebatzi_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Norkebatzi $norkebatzi)
+    public function edit(Request $request, Norkebatzi $norkebatzi)
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($norkebatzi->getUdala()==$this->getUser()->getUdala()))
@@ -135,14 +128,10 @@ class NorkebatziController extends AbstractController
                 $this->em->persist($norkebatzi);
                 $this->em->flush();
 
-                return $this->redirectToRoute('norkebatzi_edit', array('id' => $norkebatzi->getId()));
+                return $this->redirectToRoute('norkebatzi_edit', ['id' => $norkebatzi->getId()]);
             }
 
-            return $this->render('norkebatzi/edit.html.twig', array(
-                'norkebatzi' => $norkebatzi,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('norkebatzi/edit.html.twig', ['norkebatzi' => $norkebatzi, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -155,7 +144,7 @@ class NorkebatziController extends AbstractController
      * @Route("/{id}", name="norkebatzi_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Norkebatzi $norkebatzi)
+    public function delete(Request $request, Norkebatzi $norkebatzi): RedirectResponse
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($norkebatzi->getUdala()==$this->getUser()->getUdala()))
@@ -185,8 +174,8 @@ class NorkebatziController extends AbstractController
     private function createDeleteForm(Norkebatzi $norkebatzi)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('norkebatzi_delete', array('id' => $norkebatzi->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('norkebatzi_delete', ['id' => $norkebatzi->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Familia;
 use App\Entity\Fitxa;
 use App\Entity\Fitxafamilia;
-use \Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response;
 use App\Entity\FitxaAldaketa;
 use App\Form\FitxafamiliaType;
 use App\Form\FitxanewType;
@@ -22,6 +22,7 @@ use App\Repository\FamiliaRepository;
 use App\Repository\FitxaRepository;
 use App\Repository\KanalmotaRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use WhiteOctober\TCPDFBundle\Controller\TCPDFController;
 
 /**
@@ -57,12 +58,12 @@ class FitxaController extends AbstractController
      * @Route("/", name="fitxa_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function index()
     {
         if ( $this->isGranted( 'ROLE_USER' ) ) {
             $fitxas = $this->repo->findAzpisailakOrderedBySailakAzpisailak();
 
-            $deleteForms = array();
+            $deleteForms = [];
             /** @var Fitxa $fitxa */
             foreach ( $fitxas as $fitxa ) {
                 $deleteForms[ $fitxa->getId() ] = $this->createDeleteForm( $fitxa )->createView();
@@ -70,10 +71,7 @@ class FitxaController extends AbstractController
 
             return $this->render(
                 'fitxa/index.html.twig',
-                array(
-                    'deleteforms' => $deleteForms,
-                    'fitxas'      => $fitxas,
-                )
+                ['deleteforms' => $deleteForms, 'fitxas'      => $fitxas]
             );
         } else {
             return $this->redirectToRoute( 'fos_user_security_login' );
@@ -87,9 +85,9 @@ class FitxaController extends AbstractController
      * @Method({"GET", "POST"})
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
-    public function newAction( Request $request )
+    public function new( Request $request )
     {
         if ( $this->isGranted( 'ROLE_USER' ) ) {
             /** @var \App\Entity\Fitxa $fitxa */
@@ -105,7 +103,7 @@ class FitxaController extends AbstractController
                 $this->em->flush();
                 $this->saveFitxaAldaketa($fitxa, 'Sortua');
 
-                return $this->redirectToRoute( 'fitxa_edit', array( 'id' => $fitxa->getId() ) );
+                return $this->redirectToRoute( 'fitxa_edit', ['id' => $fitxa->getId()] );
             } else {
                 $form->getData()->setUdala( $this->getUser()->getUdala() );
                 $form->setData( $form->getData() );
@@ -114,10 +112,7 @@ class FitxaController extends AbstractController
 
             return $this->render(
                 'fitxa/new.html.twig',
-                array(
-                    'fitxa' => $fitxa,
-                    'form'  => $form->createView(),
-                )
+                ['fitxa' => $fitxa, 'form'  => $form->createView()]
             );
         } else {
             return $this->redirectToRoute( 'fos_user_security_login' );
@@ -131,15 +126,15 @@ class FitxaController extends AbstractController
      * @Method("GET")
      * @param Fitxa $fitxa
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function showAction( Fitxa $fitxa )
+    public function show( Fitxa $fitxa ): Response
     {
         $deleteForm = $this->createDeleteForm( $fitxa );
 
         $kanalmotak = $this->kanalmotaRepo->findAll();
 
-        $kostuZerrenda = array();
+        $kostuZerrenda = [];
         foreach ( $fitxa->getKostuak() as $kostu ) {
             $client = new GuzzleHttp\Client();
             $proba = $client->request( 'GET', $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '.json' );
@@ -173,14 +168,7 @@ class FitxaController extends AbstractController
 
         return $this->render(
             'fitxa/show.html.twig',
-            array(
-                'fitxa'         => $fitxa,
-                'kanalmotak'    => $kanalmotak,
-                'delete_form'   => $deleteForm->createView(),
-                'eremuak'       => $eremuak,
-                'labelak'       => $labelak,
-                'kostuZerrenda' => $kostuZerrenda,
-            )
+            ['fitxa'         => $fitxa, 'kanalmotak'    => $kanalmotak, 'delete_form'   => $deleteForm->createView(), 'eremuak'       => $eremuak, 'labelak'       => $labelak, 'kostuZerrenda' => $kostuZerrenda]
         );
     }
 
@@ -190,7 +178,7 @@ class FitxaController extends AbstractController
      * @Method("GET")
      */
     
-    public function pdfAllDokLagnAction ( $id = null ) {
+    public function pdfAllDokLagn ( $id = null ) {
 	$user = $this->getUser();
 	$roles = $user->getRoles();
 	$isRoleSuperAdmin = in_array("ROLE_SUPER_ADMIN", $roles);
@@ -203,7 +191,7 @@ class FitxaController extends AbstractController
 	);
 //	dump($udala);die;
 	$pdf = $this->__generateAllFitxaHTML($fitxak,'fitxa/pdf_dokumentazioa.html.twig');
-	
+
         $filename = "izapideen-liburua";
 	return $pdf->Output( $filename . ".pdf", 'I' ); // This will output the PDF as a response directly
     }
@@ -214,7 +202,7 @@ class FitxaController extends AbstractController
      * @Method("GET")
      */
     
-    public function pdfAllAction ( $id = null ) {
+    public function pdfAll ( $id = null ) {
 	$user = $this->getUser();
 	$roles = $user->getRoles();
 	$isRoleSuperAdmin = in_array("ROLE_SUPER_ADMIN", $roles);
@@ -227,7 +215,7 @@ class FitxaController extends AbstractController
 	);
 //	dump($udala);die;
 	$pdf = $this->__generateAllFitxaHTML($fitxak);
-	
+
         $filename = "izapideen-liburua";
 	return $pdf->Output( $filename . ".pdf", 'I' ); // This will output the PDF as a response directly
     }
@@ -262,18 +250,18 @@ class FitxaController extends AbstractController
         );
         $query->setParameter( 'udala', $udala );
         $labelak = $query->getSingleResult();
-	
+
         $pdf = $this->tcpdfController->create('vertical',PDF_UNIT, PDF_PAGE_FORMAT,true,'UTF-8', false);
         $pdf->SetAuthor( $this->getUser()->getUdala() );
         $pdf->SetTitle( ( "Izapideen Liburua" ) );
         $pdf->SetSubject( "Libro de procedimientos" );
         $pdf->setFontSubsetting( true );
 	$pdf->SetFont( 'helvetica', '', 11, '', true );
-	
+
 //	$full_html = '';
 	foreach ($fitxak as $fitxa ) {
 	    $this->logger->debug($fitxa->getEspedienteKodea());
-	    $kostuZerrenda = array();
+	    $kostuZerrenda = [];
 	    foreach ( $fitxa->getKostuak() as $kostu ) {
 		$this->logger->info($kostu->getId());
 		$client = new GuzzleHttp\Client();
@@ -289,14 +277,14 @@ class FitxaController extends AbstractController
 //	    return $this->render(
 	    $html = $this->render(
 		$plantilla,
-		array(
-		    'fitxa'         => $fitxa,
-		    'kanalmotak'    => $kanalmotak,
-//		    'delete_form'   => $deleteForm->createView(),
-		    'eremuak'       => $eremuak,
-		    'labelak'       => $labelak,
-		    'kostuZerrenda' => $kostuZerrenda,
-		)
+		[
+      'fitxa'         => $fitxa,
+      'kanalmotak'    => $kanalmotak,
+      //		    'delete_form'   => $deleteForm->createView(),
+      'eremuak'       => $eremuak,
+      'labelak'       => $labelak,
+      'kostuZerrenda' => $kostuZerrenda,
+  ]
 	    );
 	    $pdf->AddPage();
 	    $pdf->writeHTML($html->getContent(), true, false, false, false, '');
@@ -339,7 +327,7 @@ class FitxaController extends AbstractController
      * @Method("GET")
      * @param Fitxa $fitxa
      */
-    public function pdfAction( Fitxa $fitxa )
+    public function pdf( Fitxa $fitxa )
     {
         $deleteForm = $this->createDeleteForm( $fitxa );
 
@@ -368,7 +356,7 @@ class FitxaController extends AbstractController
         $query->setParameter( 'udala', $fitxa->getUdala() );
         $labelak = $query->getSingleResult();
 
-        $kostuZerrenda = array();
+        $kostuZerrenda = [];
         foreach ( $fitxa->getKostuak() as $kostu ) {
             $client = new GuzzleHttp\Client();
 
@@ -384,14 +372,7 @@ class FitxaController extends AbstractController
         //return $this->render(
         $html = $this->render(
             'fitxa/pdf.html.twig',
-            array(
-                'fitxa'         => $fitxa,
-                'kanalmotak'    => $kanalmotak,
-                'delete_form'   => $deleteForm->createView(),
-                'eremuak'       => $eremuak,
-                'labelak'       => $labelak,
-                'kostuZerrenda' => $kostuZerrenda,
-            )
+            ['fitxa'         => $fitxa, 'kanalmotak'    => $kanalmotak, 'delete_form'   => $deleteForm->createView(), 'eremuak'       => $eremuak, 'labelak'       => $labelak, 'kostuZerrenda' => $kostuZerrenda]
         );
 
         $pdf = $this->tcpdfController->create(
@@ -437,9 +418,9 @@ class FitxaController extends AbstractController
      * @param Request $request
      * @param Fitxa   $fitxa
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
-    public function editAction( Request $request, Fitxa $fitxa )
+    public function edit( Request $request, Fitxa $fitxa )
     {
         if ( ( ( $this->isGranted( 'ROLE_USER' ) ) && ( $fitxa->getUdala() == $this->getUser()->getUdala() ) )
             || ( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
@@ -449,7 +430,7 @@ class FitxaController extends AbstractController
             $editForm = $this->createForm(
                 FitxaType::class,
                 $fitxa,
-                array( 'user' => $this->getUser(), 'api_url' => $this->zzoo_aplikazioaren_API_url )
+                ['user' => $this->getUser(), 'api_url' => $this->zzoo_aplikazioaren_API_url]
             );
 
             // Create an ArrayCollection of the current Kostuak objects in the database
@@ -497,7 +478,7 @@ class FitxaController extends AbstractController
                 $this->em->flush();
                 $this->saveFitxaAldaketa($fitxa, 'Aldatua');
 
-                return $this->redirectToRoute( 'fitxa_edit', array( 'id' => $fitxa->getId() ) );
+                return $this->redirectToRoute( 'fitxa_edit', ['id' => $fitxa->getId()] );
             }
 
             /** @var Query $query */
@@ -535,26 +516,13 @@ class FitxaController extends AbstractController
             );
 
             $familiak = $this->familiaRepo->findBy(
-                array(
-                    'udala'  => $fitxa->getUdala(),
-                    'parent' => null,
-                ),
-                array( 'ordena' => 'ASC' )
+                ['udala'  => $fitxa->getUdala(), 'parent' => null],
+                ['ordena' => 'ASC']
             );
 
             return $this->render(
                 'fitxa/edit.html.twig',
-                array(
-                    'fitxa'            => $fitxa,
-                    'udala'            => $this->getUser()->getUdala() != null ? $this->getUser()->getUdala()->getId() : null,
-                    'udal'             => $this->getUser()->getUdala(),
-                    'edit_form'        => $editForm->createView(),
-                    'delete_form'      => $deleteForm->createView(),
-                    'formfitxafamilia' => $form->createView(),
-                    'eremuak'          => $eremuak,
-                    'labelak'          => $labelak,
-                    'familiak'         => $familiak,
-                )
+                ['fitxa'            => $fitxa, 'udala'            => $this->getUser()->getUdala() != null ? $this->getUser()->getUdala()->getId() : null, 'udal'             => $this->getUser()->getUdala(), 'edit_form'        => $editForm->createView(), 'delete_form'      => $deleteForm->createView(), 'formfitxafamilia' => $form->createView(), 'eremuak'          => $eremuak, 'labelak'          => $labelak, 'familiak'         => $familiak]
             );
         } else {
             return $this->redirectToRoute( 'backend_errorea' );
@@ -569,9 +537,9 @@ class FitxaController extends AbstractController
      * @param Request $request
      * @param Fitxa   $fitxa
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
-    public function deleteAction( Request $request, Fitxa $fitxa )
+    public function delete( Request $request, Fitxa $fitxa ): RedirectResponse
     {
 
         //udala egokia den eta admin baimena duen egiaztatu
@@ -603,16 +571,16 @@ class FitxaController extends AbstractController
     private function createDeleteForm( Fitxa $fitxa )
     {
         return $this->createFormBuilder()
-                    ->setAction( $this->generateUrl( 'fitxa_delete', array( 'id' => $fitxa->getId() ) ) )
-                    ->setMethod( 'DELETE' )
+                    ->setAction( $this->generateUrl( 'fitxa_delete', ['id' => $fitxa->getId()] ) )
+                    ->setMethod( Request::METHOD_DELETE )
                     ->getForm();
     }
 
     private function createfamiliaDeleteForm( Familia $familia )
     {
         return $this->createFormBuilder()
-                    ->setAction( $this->generateUrl( 'familia_delete', array( 'id' => $familia->getId() ) ) )
-                    ->setMethod( 'DELETE' )
+                    ->setAction( $this->generateUrl( 'familia_delete', ['id' => $familia->getId()] ) )
+                    ->setMethod( Request::METHOD_DELETE )
                     ->getForm();
     }
 

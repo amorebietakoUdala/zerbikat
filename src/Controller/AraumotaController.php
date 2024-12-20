@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Araumota controller.
@@ -38,15 +40,15 @@ class AraumotaController extends AbstractController
      * @Route("/page{page}", name="araumota_index_paginated")
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
         if ($this->isGranted('ROLE_KUDEAKETA')) 
         {
-            $araumotas = $this->repo->findBy( array(), array('kodea'=>'ASC') );
+            $araumotas = $this->repo->findBy( [], ['kodea'=>'ASC'] );
             $adapter = new ArrayAdapter($araumotas);
             $pagerfanta = new Pagerfanta($adapter);
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($araumotas as $araumota) {
                 $deleteForms[$araumota->getId()] = $this->createDeleteForm($araumota)->createView();
             }
@@ -64,11 +66,7 @@ class AraumotaController extends AbstractController
                 throw $this->createNotFoundException("Cette page n'existe pas.");
             }
 
-            return $this->render('araumota/index.html.twig', array(
-                'araumotas' => $entities,
-                'deleteforms' => $deleteForms,
-                'pager' => $pagerfanta,
-            ));
+            return $this->render('araumota/index.html.twig', ['araumotas' => $entities, 'deleteforms' => $deleteForms, 'pager' => $pagerfanta]);
         } else
         {
 //            return $this->redirectToRoute('fitxa_index');
@@ -81,7 +79,7 @@ class AraumotaController extends AbstractController
      * @Route("/new", name="araumota_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
         if ($this->isGranted('ROLE_ADMIN'))
         {
@@ -104,10 +102,7 @@ class AraumotaController extends AbstractController
                 $form->setData($form->getData());
             }
 
-            return $this->render('araumota/new.html.twig', array(
-                'araumotum' => $araumotum,
-                'form' => $form->createView(),
-            ));
+            return $this->render('araumota/new.html.twig', ['araumotum' => $araumotum, 'form' => $form->createView()]);
         }else
         {
 //            return $this->redirectToRoute('fitxa_index');
@@ -121,14 +116,11 @@ class AraumotaController extends AbstractController
      * @Route("/{id}", name="araumota_show")
      * @Method("GET")
      */
-    public function showAction(Araumota $araumotum)
+    public function show(Araumota $araumotum): Response
     {
         $deleteForm = $this->createDeleteForm($araumotum);
 
-        return $this->render('araumota/show.html.twig', array(
-            'araumotum' => $araumotum,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('araumota/show.html.twig', ['araumotum' => $araumotum, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -137,7 +129,7 @@ class AraumotaController extends AbstractController
      * @Route("/{id}/edit", name="araumota_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Araumota $araumotum)
+    public function edit(Request $request, Araumota $araumotum)
     {
         if((($this->isGranted('ROLE_ADMIN')) && ($araumotum->getUdala()==$this->getUser()->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
@@ -150,14 +142,10 @@ class AraumotaController extends AbstractController
                 $this->em->persist($araumotum);
                 $this->em->flush();
 
-                return $this->redirectToRoute('araumota_edit', array('id' => $araumotum->getId()));
+                return $this->redirectToRoute('araumota_edit', ['id' => $araumotum->getId()]);
             }
 
-            return $this->render('araumota/edit.html.twig', array(
-                'araumotum' => $araumotum,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('araumota/edit.html.twig', ['araumotum' => $araumotum, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
 //            return $this->redirectToRoute('fitxa_index');
@@ -171,7 +159,7 @@ class AraumotaController extends AbstractController
      * @Route("/{id}", name="araumota_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Araumota $araumotum)
+    public function delete(Request $request, Araumota $araumotum): RedirectResponse
     {
         if((($this->isGranted('ROLE_ADMIN')) && ($araumotum->getUdala()==$this->getUser()->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
@@ -201,8 +189,8 @@ class AraumotaController extends AbstractController
     private function createDeleteForm(Araumota $araumotum)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('araumota_delete', array('id' => $araumotum->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('araumota_delete', ['id' => $araumotum->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

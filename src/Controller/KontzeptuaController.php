@@ -10,6 +10,8 @@ use App\Entity\Kontzeptua;
 use App\Form\KontzeptuaType;
 use App\Repository\KontzeptuaRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Kontzeptua controller.
@@ -33,21 +35,18 @@ class KontzeptuaController extends AbstractController
      * @Route("/", name="kontzeptua_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function index()
     {
 
         if ($this->isGranted('ROLE_KUDEAKETA')) {
             $kontzeptuas = $this->repo->findAll();
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($kontzeptuas as $kontzeptua) {
                 $deleteForms[$kontzeptua->getId()] = $this->createDeleteForm($kontzeptua)->createView();
             }
 
-            return $this->render('kontzeptua/index.html.twig', array(
-                'kontzeptuas' => $kontzeptuas,
-                'deleteforms' => $deleteForms
-            ));
+            return $this->render('kontzeptua/index.html.twig', ['kontzeptuas' => $kontzeptuas, 'deleteforms' => $deleteForms]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -60,7 +59,7 @@ class KontzeptuaController extends AbstractController
      * @Route("/new", name="kontzeptua_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
 
         if ($this->isGranted('ROLE_ADMIN'))
@@ -86,10 +85,7 @@ class KontzeptuaController extends AbstractController
                 $form->setData($form->getData());
             }
 
-            return $this->render('kontzeptua/new.html.twig', array(
-                'kontzeptua' => $kontzeptua,
-                'form' => $form->createView(),
-            ));
+            return $this->render('kontzeptua/new.html.twig', ['kontzeptua' => $kontzeptua, 'form' => $form->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -102,14 +98,11 @@ class KontzeptuaController extends AbstractController
      * @Route("/{id}", name="kontzeptua_show")
      * @Method("GET")
      */
-    public function showAction(Kontzeptua $kontzeptua)
+    public function show(Kontzeptua $kontzeptua): Response
     {
         $deleteForm = $this->createDeleteForm($kontzeptua);
 
-        return $this->render('kontzeptua/show.html.twig', array(
-            'kontzeptua' => $kontzeptua,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('kontzeptua/show.html.twig', ['kontzeptua' => $kontzeptua, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -118,7 +111,7 @@ class KontzeptuaController extends AbstractController
      * @Route("/{id}/edit", name="kontzeptua_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Kontzeptua $kontzeptua)
+    public function edit(Request $request, Kontzeptua $kontzeptua)
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($kontzeptua->getUdala()==$this->getUser()->getUdala()))
@@ -132,14 +125,10 @@ class KontzeptuaController extends AbstractController
                 $this->em->persist($kontzeptua);
                 $this->em->flush();
 
-                return $this->redirectToRoute('kontzeptua_edit', array('id' => $kontzeptua->getId()));
+                return $this->redirectToRoute('kontzeptua_edit', ['id' => $kontzeptua->getId()]);
             }
 
-            return $this->render('kontzeptua/edit.html.twig', array(
-                'kontzeptua' => $kontzeptua,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('kontzeptua/edit.html.twig', ['kontzeptua' => $kontzeptua, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');
@@ -152,7 +141,7 @@ class KontzeptuaController extends AbstractController
      * @Route("/{id}", name="kontzeptua_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Kontzeptua $kontzeptua)
+    public function delete(Request $request, Kontzeptua $kontzeptua): RedirectResponse
     {
 
         if((($this->isGranted('ROLE_ADMIN')) && ($kontzeptua->getUdala()==$this->getUser()->getUdala()))
@@ -182,8 +171,8 @@ class KontzeptuaController extends AbstractController
     private function createDeleteForm(Kontzeptua $kontzeptua)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('kontzeptua_delete', array('id' => $kontzeptua->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('kontzeptua_delete', ['id' => $kontzeptua->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

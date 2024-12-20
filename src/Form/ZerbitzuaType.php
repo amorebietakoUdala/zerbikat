@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Zerbitzua;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,26 +18,26 @@ class ZerbitzuaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('kodea',TextType::class, array(
-                'label' => 'messages.kodea',
-                'translation_domain' => 'messages',
-            ))
-            ->add('zerbitzuaeu',TextType::class, array(
-                'label' => 'messages.zerbitzua',
-                'translation_domain' => 'messages',
-            ))
-            ->add('zerbitzuaes',TextType::class, array(
-                'label' => 'messages.zerbitzua',
-                'translation_domain' => 'messages',
-            ))
-            ->add('erroaeu',TextType::class, array(
-                'label' => 'messages.erroa',
-                'translation_domain' => 'messages',
-            ))
-            ->add('erroaes',TextType::class, array(
-                'label' => 'messages.erroa',
-                'translation_domain' => 'messages',
-            ))
+            ->add('kodea',TextType::class, [
+                'label' => 'messages.kodea', 
+                'translation_domain' => 'messages'
+            ])
+            ->add('zerbitzuaeu',TextType::class, [
+                'label' => 'messages.zerbitzua', 
+                'translation_domain' => 'messages'
+            ])
+            ->add('zerbitzuaes',TextType::class, [
+                'label' => 'messages.zerbitzua', 
+                'translation_domain' => 'messages'
+            ])
+            ->add('erroaeu',TextType::class, [
+                'label' => 'messages.erroa', 
+                'translation_domain' => 'messages'
+            ])
+            ->add('erroaes',TextType::class, [
+                'label' => 'messages.erroa', 
+                'translation_domain' => 'messages'
+            ])
 //            ->add('espedientekudeaketa')
         ;
     }
@@ -46,8 +47,8 @@ class ZerbitzuaType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\Zerbitzua'
-        ));
+        $resolver->setDefaults([
+            'data_class' => Zerbitzua::class
+        ]);
     }
 }

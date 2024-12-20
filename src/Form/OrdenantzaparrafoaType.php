@@ -2,10 +2,11 @@
 
 namespace App\Form;
 
+use App\Entity\Ordenantzaparrafoa;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 
 class OrdenantzaparrafoaType extends AbstractType
 {
@@ -18,10 +19,8 @@ class OrdenantzaparrafoaType extends AbstractType
         $builder
             ->add('ordena')
 //            ->add('testuaeu')
-            ->add('testuaeu',CKEditorType::class, array(
-                'config' => array()))
-            ->add('testuaes',CKEditorType::class, array(
-                'config' => array()))
+            ->add('testuaeu',CKEditorType::class, ['config' => []])
+            ->add('testuaes',CKEditorType::class, ['config' => []])
 //            ->add('testuaes')
 //            ->add('createdAt', 'datetime')
 //            ->add('updatedAt', 'datetime')
@@ -35,8 +34,8 @@ class OrdenantzaparrafoaType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\Ordenantzaparrafoa'
-        ));
+        $resolver->setDefaults([
+            'data_class' => Ordenantzaparrafoa::class
+        ]);
     }
 }

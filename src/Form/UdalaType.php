@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Udala;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -28,8 +29,7 @@ class UdalaType extends AbstractType
 //            ->add('eremuak')
             ->add('espedientekudeaketa')
             ->add('orrikatzea')
-            ->add('zergaor', CheckboxType::class, array(
-                'label'    => 'messages.zergaorapp'))
+            ->add('zergaor', CheckboxType::class, ['label'    => 'messages.zergaorapp'])
         ;
     }
     
@@ -38,8 +38,8 @@ class UdalaType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\Udala'
-        ));
+        $resolver->setDefaults([
+            'data_class' => Udala::class
+        ]);
     }
 }

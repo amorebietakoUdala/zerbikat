@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Azpiatala;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -25,20 +26,8 @@ class AzpiatalaType extends AbstractType
             ->add('udala')
 //            ->add('atala')
 //            ->add('fitxak')
-            ->add('kontzeptuak', CollectionType::class, array(
-                'entry_type' => KontzeptuaType::class,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'prototype' => true,
-                'by_reference' => false,
-            ))
-            ->add('parrafoak', CollectionType::class, array(
-                'entry_type' => AzpiatalaparrafoaType::class,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'prototype' => true,
-                'by_reference' => false,
-            ))
+            ->add('kontzeptuak', CollectionType::class, ['entry_type' => KontzeptuaType::class, 'allow_add' => true, 'allow_delete' => true, 'prototype' => true, 'by_reference' => false])
+            ->add('parrafoak', CollectionType::class, ['entry_type' => AzpiatalaparrafoaType::class, 'allow_add' => true, 'allow_delete' => true, 'prototype' => true, 'by_reference' => false])
         ;
     }
     
@@ -47,8 +36,8 @@ class AzpiatalaType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\Azpiatala'
-        ));
+        $resolver->setDefaults([
+            'data_class' => Azpiatala::class
+        ]);
     }
 }

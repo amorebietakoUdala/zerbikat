@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Arrunta controller.
@@ -38,7 +40,7 @@ class ArruntaController extends AbstractController
      * @Route("/page{page}", name="arrunta_index_paginated")
      * @Method("GET")
      */
-    public function indexAction($page)
+    public function index($page)
     {
         if ($this->isGranted('ROLE_KUDEAKETA')) {
             $arruntas = $this->repo->findAll();
@@ -46,7 +48,7 @@ class ArruntaController extends AbstractController
             $adapter = new ArrayAdapter($arruntas);
             $pagerfanta = new Pagerfanta($adapter);
 
-            $deleteForms = array();
+            $deleteForms = [];
             foreach ($arruntas as $arrunta) {
                 $deleteForms[$arrunta->getId()] = $this->createDeleteForm($arrunta)->createView();
             }
@@ -63,11 +65,7 @@ class ArruntaController extends AbstractController
             } catch (\Pagerfanta\Exception\NotValidCurrentPageException $e) {
                 throw $this->createNotFoundException("Orria ez da existitzen");
             }
-            return $this->render('arrunta/index.html.twig', array(
-                'arruntas' => $entities,
-                'deleteforms' => $deleteForms,
-                'pager' => $pagerfanta,
-            ));
+            return $this->render('arrunta/index.html.twig', ['arruntas' => $entities, 'deleteforms' => $deleteForms, 'pager' => $pagerfanta]);
         }else
         {
             return $this->redirectToRoute('backend_errorea');            
@@ -80,7 +78,7 @@ class ArruntaController extends AbstractController
      * @Route("/new", name="arrunta_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function new(Request $request)
     {
         if ($this->isGranted('ROLE_ADMIN'))
         {
@@ -103,10 +101,7 @@ class ArruntaController extends AbstractController
                 $form->setData($form->getData());
             }
 
-            return $this->render('arrunta/new.html.twig', array(
-                'arruntum' => $arruntum,
-                'form' => $form->createView(),
-            ));
+            return $this->render('arrunta/new.html.twig', ['arruntum' => $arruntum, 'form' => $form->createView()]);
         }else
         {
 //            return $this->redirectToRoute('fitxa_index');
@@ -120,14 +115,11 @@ class ArruntaController extends AbstractController
      * @Route("/{id}", name="arrunta_show")
      * @Method("GET")
      */
-    public function showAction(Arrunta $arruntum)
+    public function show(Arrunta $arruntum): Response
     {
         $deleteForm = $this->createDeleteForm($arruntum);
 
-        return $this->render('arrunta/show.html.twig', array(
-            'arruntum' => $arruntum,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('arrunta/show.html.twig', ['arruntum' => $arruntum, 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
@@ -136,7 +128,7 @@ class ArruntaController extends AbstractController
      * @Route("/{id}/edit", name="arrunta_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Arrunta $arruntum)
+    public function edit(Request $request, Arrunta $arruntum)
     {
         if((($this->isGranted('ROLE_ADMIN')) && ($arruntum->getUdala()==$this->getUser()->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
@@ -149,14 +141,10 @@ class ArruntaController extends AbstractController
                 $this->em->persist($arruntum);
                 $this->em->flush();
     
-                return $this->redirectToRoute('arrunta_edit', array('id' => $arruntum->getId()));
+                return $this->redirectToRoute('arrunta_edit', ['id' => $arruntum->getId()]);
             }
     
-            return $this->render('arrunta/edit.html.twig', array(
-                'arruntum' => $arruntum,
-                'edit_form' => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            ));
+            return $this->render('arrunta/edit.html.twig', ['arruntum' => $arruntum, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
 //            return $this->redirectToRoute('fitxa_index');
@@ -170,7 +158,7 @@ class ArruntaController extends AbstractController
      * @Route("/{id}", name="arrunta_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Arrunta $arruntum)
+    public function delete(Request $request, Arrunta $arruntum): RedirectResponse
     {
         if((($this->isGranted('ROLE_ADMIN')) && ($arruntum->getUdala()==$this->getUser()->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
@@ -201,8 +189,8 @@ class ArruntaController extends AbstractController
     private function createDeleteForm(Arrunta $arruntum)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('arrunta_delete', array('id' => $arruntum->getId())))
-            ->setMethod('DELETE')
+            ->setAction($this->generateUrl('arrunta_delete', ['id' => $arruntum->getId()]))
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm()
         ;
     }

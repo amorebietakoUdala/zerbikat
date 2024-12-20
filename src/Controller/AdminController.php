@@ -23,12 +23,12 @@ class AdminController extends BaseAdminController
 
     public function prePersistUserEntity($user)
     {
-        $this->userManager->updateUser($user, false);
+        $this->userManager->updateUser($user);
     }
 
     public function preUpdateUserEntity($user)
     {
-        $this->userManager->updateUser($user, false);
+        $this->userManager->updateUser($user);
     }
 
 }
