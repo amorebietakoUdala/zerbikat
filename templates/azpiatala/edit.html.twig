@@ -64,8 +64,8 @@
         </tr>
     </table>
 
-    <table class="table table-bordered" id="parrafoa-fields-list" data-prototype="{% filter escape %}
-    {% include 'azpiatalaparrafoa/prototype_new.html.twig' with {'form': edit_form.parrafoak.vars.prototype,'azpiatala':azpiatala} %}{% endfilter %}">
+    <table class="table table-bordered" id="parrafoa-fields-list" data-prototype="{% apply escape %}
+    {% include 'azpiatalaparrafoa/prototype_new.html.twig' with {'form': edit_form.parrafoak.vars.prototype,'azpiatala':azpiatala} %}{% endapply %}">
             <tr class="burua"><th colspan="1">{{ 'messages.ordena'|trans }}:</th><th colspan="5">{{ 'messages.testua'|trans }} ({{ 'messages.eu'|trans }})</th><th colspan="5">{{ 'messages.testua'|trans }} ({{ 'messages.es'|trans }})</th><th colspan="1"></th></tr>
         {% for parrafoa in edit_form.parrafoak %}
             <tr>
@@ -99,8 +99,8 @@
 
     {#<table class="table table-bordered" id="kontzeptua-fields-list"#}
     {#data-prototype="{{ form_widget(edit_form.kontzeptuak.vars.prototype)|e }}">#}
-    <table class="table table-bordered" id="kontzeptua-fields-list" data-prototype="{% filter escape %}
-    {% include 'kontzeptua/prototype_new.html.twig' with {'form': edit_form.kontzeptuak.vars.prototype,'azpiatala':azpiatala} %}{% endfilter %}">
+    <table class="table table-bordered" id="kontzeptua-fields-list" data-prototype="{% apply escape %}
+    {% include 'kontzeptua/prototype_new.html.twig' with {'form': edit_form.kontzeptuak.vars.prototype,'azpiatala':azpiatala} %}{% endapply %}">
         <tr class="burua"><th colspan="1">{{ 'messages.kodea'|trans }}:</th><th colspan="4">{{ 'messages.testua'|trans }} ({{ 'messages.eu'|trans }})</th><th colspan="1">{{ 'messages.kopurua'|trans }}<br/>{{ 'messages.unitatea'|trans }}</th><th colspan="4">{{ 'messages.testua'|trans }} ({{ 'messages.es'|trans }})</th><th colspan="1">{{ 'messages.mota'|trans }}<br>{{ 'messages.baldintza'|trans }}</th></tr>
             {% for kontzeptua in edit_form.kontzeptuak %}
                 <tr>

@@ -151,15 +151,17 @@
                     {% for k in kanalmotak %}
                         {% set aurkitua=0 %}
                         <item>
-                            {% for kanal in fitxa.kanalak if kanal.kanalmota == k %}
-                                {% if aurkitua==0%}
-                                    <list>{{ k.motaeu }}:</list>
-                                    {% set aurkitua=1 %}
+                            {% for kanal in fitxa.kanalak %}
+                                {% if kanal.kanalmota == k %}
+                                    {% if aurkitua==0%}
+                                        <list>{{ k.motaeu }}:</list>
+                                        {% set aurkitua=1 %}
+                                    {% endif %}
+                                    <item>
+                                        <izena>{{ kanal.izenaeu }}</izena>
+                                        {% if k.esteka %}<esteka>{{ kanal.estekaeu }}</esteka>{% endif %}
+                                    </item>
                                 {% endif %}
-                                <item>
-                                    <izena>{{ kanal.izenaeu }}</izena>
-                                    {% if k.esteka %}<esteka>{{ kanal.estekaeu }}</esteka>{% endif %}
-                                </item>
                             {% endfor %}
                         </item>
                     {% endfor %}
@@ -177,15 +179,17 @@
                     {% for k in kanalmotak %}
                         {% set aurkitua=0 %}
                         <item>
-                            {% for kanal in fitxa.kanalak if kanal.kanalmota == k %}
-                                {% if aurkitua==0%}
-                                    <list>{{ k.motaes }}:</list>
-                                    {% set aurkitua=1 %}
+                            {% for kanal in fitxa.kanalak %}
+                                {% if kanal.kanalmota == k %}
+                                    {% if aurkitua==0%}
+                                        <list>{{ k.motaes }}:</list>
+                                        {% set aurkitua=1 %}
+                                    {% endif %}
+                                    <item>
+                                        <izena>{{ kanal.izenaes }}</izena>
+                                        {% if k.esteka %}<esteka>{{ kanal.estekaes }}</esteka>{% endif %}
+                                    </item>
                                 {% endif %}
-                                <item>
-                                    <izena>{{ kanal.izenaes }}</izena>
-                                    {% if k.esteka %}<esteka>{{ kanal.estekaes }}</esteka>{% endif %}
-                                </item>
                             {% endfor %}
                         </item>
                     {% endfor %}
