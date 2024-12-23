@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Prozedura;
 use App\Form\ProzeduraType;
@@ -35,9 +34,8 @@ class ProzeduraController extends AbstractController
     /**
      * Lists all Prozedura entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="prozedura_index")
-     * @Route("/page{page}", name="prozedura_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="prozedura_index", methods={"GET"})
+     * @Route("/page{page}", name="prozedura_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -60,8 +58,7 @@ class ProzeduraController extends AbstractController
     /**
      * Creates a new Prozedura entity.
      *
-     * @Route("/new", name="prozedura_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="prozedura_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -97,8 +94,7 @@ class ProzeduraController extends AbstractController
     /**
      * Finds and displays a Prozedura entity.
      *
-     * @Route("/{id}", name="prozedura_show")
-     * @Method("GET")
+     * @Route("/{id}", name="prozedura_show", methods={"GET"})
      */
     public function show(Prozedura $prozedura): Response
     {
@@ -110,8 +106,7 @@ class ProzeduraController extends AbstractController
     /**
      * Displays a form to edit an existing Prozedura entity.
      *
-     * @Route("/{id}/edit", name="prozedura_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="prozedura_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Prozedura $prozedura)
     {
@@ -140,8 +135,7 @@ class ProzeduraController extends AbstractController
     /**
      * Deletes a Prozedura entity.
      *
-     * @Route("/{id}", name="prozedura_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="prozedura_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Prozedura $prozedura): RedirectResponse
     {
@@ -168,7 +162,7 @@ class ProzeduraController extends AbstractController
      *
      * @param Prozedura $prozedura The Prozedura entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Prozedura $prozedura)
     {

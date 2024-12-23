@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Annotation\UdalaEgiaztatu;
 use App\Repository\AraudiaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Araudia
@@ -72,16 +73,16 @@ class Araudia
     private $udala;
 
     /**
-     * @var fitxak[]
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="FitxaAraudia", mappedBy="araudia")
      */
     private $fitxak;
 
     /**
-     * @var \App\Entity\Araumota
+     * @var Araumota
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Araumota",inversedBy="araudiak")
+     * @ORM\ManyToOne(targetEntity="Araumota",inversedBy="araudiak")
      * @ORM\JoinColumn(name="araumota_id", referencedColumnName="id",onDelete="SET NULL")
      *
      */
@@ -233,11 +234,11 @@ class Araudia
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return Araudia
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -247,7 +248,7 @@ class Araudia
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {
@@ -257,11 +258,11 @@ class Araudia
     /**
      * Set araumota
      *
-     * @param \App\Entity\Araumota $araumota
+     * @param Araumota $araumota
      *
      * @return Araudia
      */
-    public function setAraumota(\App\Entity\Araumota $araumota = null)
+    public function setAraumota(Araumota $araumota = null)
     {
         $this->araumota = $araumota;
 
@@ -271,7 +272,7 @@ class Araudia
     /**
      * Get araumota
      *
-     * @return \App\Entity\Araumota
+     * @return Araumota
      */
     public function getAraumota()
     {
@@ -282,17 +283,17 @@ class Araudia
      */
     public function __construct()
     {
-        $this->fitxak = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fitxak = new ArrayCollection();
     }
 
     /**
      * Add fitxak
      *
-     * @param \App\Entity\FitxaAraudia $fitxak
+     * @param FitxaAraudia $fitxak
      *
      * @return Araudia
      */
-    public function addFitxak(\App\Entity\FitxaAraudia $fitxak)
+    public function addFitxak(FitxaAraudia $fitxak)
     {
         $this->fitxak[] = $fitxak;
 
@@ -302,9 +303,9 @@ class Araudia
     /**
      * Remove fitxak
      *
-     * @param \App\Entity\FitxaAraudia $fitxak
+     * @param FitxaAraudia $fitxak
      */
-    public function removeFitxak(\App\Entity\FitxaAraudia $fitxak)
+    public function removeFitxak(FitxaAraudia $fitxak)
     {
         $this->fitxak->removeElement($fitxak);
     }
@@ -312,7 +313,7 @@ class Araudia
     /**
      * Get fitxak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getFitxak()
     {

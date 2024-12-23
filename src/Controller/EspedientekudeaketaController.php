@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Espedientekudeaketa;
 use App\Form\EspedientekudeaketaType;
@@ -35,9 +34,8 @@ class EspedientekudeaketaController extends AbstractController
     /**
      * Lists all Espedientekudeaketa entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="espedientekudeaketa_index")
-     * @Route("/page{page}", name="espedientekudeaketa_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="espedientekudeaketa_index", methods={"GET"})
+     * @Route("/page{page}", name="espedientekudeaketa_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -77,8 +75,7 @@ class EspedientekudeaketaController extends AbstractController
     /**
      * Creates a new Espedientekudeaketa entity.
      *
-     * @Route("/new", name="espedientekudeaketa_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="espedientekudeaketa_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -107,8 +104,7 @@ class EspedientekudeaketaController extends AbstractController
     /**
      * Finds and displays a Espedientekudeaketa entity.
      *
-     * @Route("/{id}", name="espedientekudeaketa_show")
-     * @Method("GET")
+     * @Route("/{id}", name="espedientekudeaketa_show", methods={"GET"})
      */
     public function show(Espedientekudeaketa $espedientekudeaketum): Response
     {
@@ -120,8 +116,7 @@ class EspedientekudeaketaController extends AbstractController
     /**
      * Displays a form to edit an existing Espedientekudeaketa entity.
      *
-     * @Route("/{id}/edit", name="espedientekudeaketa_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="espedientekudeaketa_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Espedientekudeaketa $espedientekudeaketum)
     {
@@ -149,8 +144,7 @@ class EspedientekudeaketaController extends AbstractController
     /**
      * Deletes a Espedientekudeaketa entity.
      *
-     * @Route("/{id}", name="espedientekudeaketa_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="espedientekudeaketa_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Espedientekudeaketa $espedientekudeaketum): RedirectResponse
     {
@@ -176,7 +170,7 @@ class EspedientekudeaketaController extends AbstractController
      *
      * @param Espedientekudeaketa $espedientekudeaketum The Espedientekudeaketa entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Espedientekudeaketa $espedientekudeaketum)
     {

@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Atalaparrafoa;
 use App\Form\AtalaparrafoaType;
@@ -33,8 +32,7 @@ class AtalaparrafoaController extends AbstractController
     /**
      * Lists all Atalaparrafoa entities.
      *
-     * @Route("/", name="atalaparrafoa_index")
-     * @Method("GET")
+     * @Route("/", name="atalaparrafoa_index", methods={"GET"})
      */
     public function index()
     {
@@ -57,8 +55,7 @@ class AtalaparrafoaController extends AbstractController
     /**
      * Creates a new Atalaparrafoa entity.
      *
-     * @Route("/new", name="atalaparrafoa_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="atalaparrafoa_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -92,8 +89,7 @@ class AtalaparrafoaController extends AbstractController
     /**
      * Finds and displays a Atalaparrafoa entity.
      *
-     * @Route("/{id}", name="atalaparrafoa_show")
-     * @Method("GET")
+     * @Route("/{id}", name="atalaparrafoa_show", methods={"GET"})
      */
     public function show(Atalaparrafoa $atalaparrafoa): Response
     {
@@ -105,8 +101,7 @@ class AtalaparrafoaController extends AbstractController
     /**
      * Displays a form to edit an existing Atalaparrafoa entity.
      *
-     * @Route("/{id}/edit", name="atalaparrafoa_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="atalaparrafoa_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Atalaparrafoa $atalaparrafoa)
     {
@@ -135,8 +130,7 @@ class AtalaparrafoaController extends AbstractController
     /**
      * Deletes a Atalaparrafoa entity.
      *
-     * @Route("/{id}", name="atalaparrafoa_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="atalaparrafoa_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Atalaparrafoa $atalaparrafoa): RedirectResponse
     {
@@ -163,7 +157,7 @@ class AtalaparrafoaController extends AbstractController
      *
      * @param Atalaparrafoa $atalaparrafoa The Atalaparrafoa entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Atalaparrafoa $atalaparrafoa)
     {

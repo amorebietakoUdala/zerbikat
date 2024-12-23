@@ -34,9 +34,8 @@ class Besteak3Controller extends AbstractController
     /**
      * Lists all Besteak3 entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="besteak3_index")
-     * @Route("/page{page}", name="besteak3_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="besteak3_index", methods={"GET"})
+     * @Route("/page{page}", name="besteak3_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -58,8 +57,7 @@ class Besteak3Controller extends AbstractController
     /**
      * Creates a new Besteak3 entity.
      *
-     * @Route("/new", name="besteak3_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="besteak3_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -92,8 +90,7 @@ class Besteak3Controller extends AbstractController
     /**
      * Finds and displays a Besteak3 entity.
      *
-     * @Route("/{id}", name="besteak3_show")
-     * @Method("GET")
+     * @Route("/{id}", name="besteak3_show", methods={"GET"})
      */
     public function show(Besteak3 $besteak3): \Symfony\Component\HttpFoundation\Response
     {
@@ -105,8 +102,7 @@ class Besteak3Controller extends AbstractController
     /**
      * Displays a form to edit an existing Besteak3 entity.
      *
-     * @Route("/{id}/edit", name="besteak3_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="besteak3_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Besteak3 $besteak3)
     {
@@ -135,8 +131,7 @@ class Besteak3Controller extends AbstractController
     /**
      * Deletes a Besteak3 entity.
      *
-     * @Route("/{id}", name="besteak3_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="besteak3_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Besteak3 $besteak3): \Symfony\Component\HttpFoundation\RedirectResponse
     {

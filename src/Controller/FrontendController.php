@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use GuzzleHttp;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Fitxa;
@@ -74,13 +73,7 @@ class FrontendController extends AbstractController
     /**
      * Finds and displays a Fitxa entity.
      *
-     * @Route("/{udala}/{_locale}/{id}", name="frontend_fitxa_show",
-     *         requirements={
-     *           "_locale": "eu|es",
-     *           "udala": "\d+"
-     *           }
-     * )
-     * @Method("GET")
+     * @Route("/{udala}/{_locale}/{id}", name="frontend_fitxa_show", requirements={"_locale"="eu|es", "udala"="\d+"}, methods={"GET"})
      */
     public function show ( Fitxa $fitxa, int $udala ): Response
     {
@@ -107,8 +100,7 @@ class FrontendController extends AbstractController
     /**
      * Finds and displays a Fitxa entity.
      *
-     * @Route("/{udala}/{_locale}/pdf/{id}/doklagun", name="frontend_pdf_doklagun")
-     * @Method("GET")
+     * @Route("/{udala}/{_locale}/pdf/{id}/doklagun", name="frontend_pdf_doklagun", methods={"GET"})
      */
     public function pdfDocLagun ( Fitxa $fitxa, $udala )
     {
@@ -155,8 +147,7 @@ class FrontendController extends AbstractController
     /**
      * Finds and displays a Fitxa entity.
      *
-     * @Route("/{udala}/{_locale}/pdf/{id}", name="frontend_fitxa_pdf")
-     * @Method("GET")
+     * @Route("/{udala}/{_locale}/pdf/{id}", name="frontend_fitxa_pdf", methods={"GET"})
      */
     public function pdf ( Fitxa $fitxa, $udala )
     {
@@ -185,8 +176,7 @@ class FrontendController extends AbstractController
     /**
      * Finds and displays a Fitxa entity.
      *
-     * @Route("/{udala}/{_locale}/pdfelebi/{id}", name="frontend_fitxa_pdfelebi")
-     * @Method("GET")
+     * @Route("/{udala}/{_locale}/pdfelebi/{id}", name="frontend_fitxa_pdfelebi", methods={"GET"})
      */
     public function pdfelebi ( Fitxa $fitxa, $udala )
     {

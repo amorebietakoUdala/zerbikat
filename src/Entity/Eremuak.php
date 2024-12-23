@@ -599,7 +599,7 @@ class Eremuak
      */
 
     /**
-     * @var udala
+     * @var Udala $udala
      * @ORM\OneToOne(targetEntity="Udala", inversedBy="eremuak",fetch="EAGER")
      * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
      *
@@ -1721,11 +1721,11 @@ class Eremuak
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return Eremuak
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -1735,7 +1735,7 @@ class Eremuak
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {

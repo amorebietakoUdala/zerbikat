@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\FitxaProzedura;
 use App\Form\FitxaProzeduraType;
@@ -33,8 +32,7 @@ class FitxaProzeduraController extends AbstractController
     /**
      * Lists all FitxaProzedura entities.
      *
-     * @Route("/", name="fitxaprozedura_index")
-     * @Method("GET")
+     * @Route("/", name="fitxaprozedura_index", methods={"GET"})
      */
     public function index(): Response
     {
@@ -46,8 +44,7 @@ class FitxaProzeduraController extends AbstractController
     /**
      * Creates a new FitxaProzedura entity.
      *
-     * @Route("/new", name="fitxaprozedura_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="fitxaprozedura_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -72,8 +69,7 @@ class FitxaProzeduraController extends AbstractController
     /**
      * Finds and displays a FitxaProzedura entity.
      *
-     * @Route("/{id}", name="fitxaprozedura_show")
-     * @Method("GET")
+     * @Route("/{id}", name="fitxaprozedura_show", methods={"GET"})
      */
     public function show(FitxaProzedura $fitxaProzedura): Response
     {
@@ -85,8 +81,7 @@ class FitxaProzeduraController extends AbstractController
     /**
      * Displays a form to edit an existing FitxaProzedura entity.
      *
-     * @Route("/{id}/edit", name="fitxaprozedura_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="fitxaprozedura_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, FitxaProzedura $fitxaProzedura)
     {
@@ -108,8 +103,7 @@ class FitxaProzeduraController extends AbstractController
     /**
      * Deletes a FitxaProzedura entity.
      *
-     * @Route("/{id}", name="fitxaprozedura_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="fitxaprozedura_delete", methods={"DELETE"})
      */
     public function delete(Request $request, FitxaProzedura $fitxaProzedura): RedirectResponse
     {
@@ -129,7 +123,7 @@ class FitxaProzeduraController extends AbstractController
      *
      * @param FitxaProzedura $fitxaProzedura The FitxaProzedura entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(FitxaProzedura $fitxaProzedura)
     {

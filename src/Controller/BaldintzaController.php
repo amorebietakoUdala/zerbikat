@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Baldintza;
 use App\Form\BaldintzaType;
@@ -36,9 +35,8 @@ class BaldintzaController extends AbstractController
     /**
      * Lists all Baldintza entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="baldintza_index")
-     * @Route("/page{page}", name="baldintza_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="baldintza_index", methods={"GET"})
+     * @Route("/page{page}", name="baldintza_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -60,8 +58,7 @@ class BaldintzaController extends AbstractController
     /**
      * Creates a new Baldintza entity.
      *
-     * @Route("/new", name="baldintza_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="baldintza_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -97,8 +94,7 @@ class BaldintzaController extends AbstractController
     /**
      * Finds and displays a Baldintza entity.
      *
-     * @Route("/{id}", name="baldintza_show")
-     * @Method("GET")
+     * @Route("/{id}", name="baldintza_show", methods={"GET"})
      */
     public function show(Baldintza $baldintza): Response
     {
@@ -110,8 +106,7 @@ class BaldintzaController extends AbstractController
     /**
      * Displays a form to edit an existing Baldintza entity.
      *
-     * @Route("/{id}/edit", name="baldintza_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="baldintza_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Baldintza $baldintza)
     {
@@ -139,8 +134,7 @@ class BaldintzaController extends AbstractController
     /**
      * Deletes a Baldintza entity.
      *
-     * @Route("/{id}", name="baldintza_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="baldintza_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Baldintza $baldintza): RedirectResponse
     {
@@ -166,7 +160,7 @@ class BaldintzaController extends AbstractController
      *
      * @param Baldintza $baldintza The Baldintza entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Baldintza $baldintza)
     {

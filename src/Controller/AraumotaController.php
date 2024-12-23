@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Araumota;
 use App\Form\AraumotaType;
@@ -36,9 +35,8 @@ class AraumotaController extends AbstractController
     /**
      * Lists all Araumota entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="araumota_index")
-     * @Route("/page{page}", name="araumota_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="araumota_index", methods={"GET"})
+     * @Route("/page{page}", name="araumota_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -76,8 +74,7 @@ class AraumotaController extends AbstractController
     /**
      * Creates a new Araumota entity.
      *
-     * @Route("/new", name="araumota_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="araumota_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -113,8 +110,7 @@ class AraumotaController extends AbstractController
     /**
      * Finds and displays a Araumota entity.
      *
-     * @Route("/{id}", name="araumota_show")
-     * @Method("GET")
+     * @Route("/{id}", name="araumota_show", methods={"GET"})
      */
     public function show(Araumota $araumotum): Response
     {
@@ -126,8 +122,7 @@ class AraumotaController extends AbstractController
     /**
      * Displays a form to edit an existing Araumota entity.
      *
-     * @Route("/{id}/edit", name="araumota_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="araumota_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Araumota $araumotum)
     {
@@ -156,8 +151,7 @@ class AraumotaController extends AbstractController
     /**
      * Deletes a Araumota entity.
      *
-     * @Route("/{id}", name="araumota_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="araumota_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Araumota $araumotum): RedirectResponse
     {
@@ -184,7 +178,7 @@ class AraumotaController extends AbstractController
      *
      * @param Araumota $araumotum The Araumota entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Araumota $araumotum)
     {

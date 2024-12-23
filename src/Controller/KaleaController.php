@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Kalea;
 use App\Form\KaleaType;
@@ -35,8 +34,7 @@ class KaleaController extends AbstractController
     /**
      * Lists all Kalea entities.
      *
-     * @Route("/", name="kalea_index")
-     * @Method("GET")
+     * @Route("/", name="kalea_index", methods={"GET"})
      */
     public function index()
     {
@@ -60,8 +58,7 @@ class KaleaController extends AbstractController
     /**
      * Creates a new Kalea entity.
      *
-     * @Route("/new", name="kalea_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="kalea_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -97,8 +94,7 @@ class KaleaController extends AbstractController
     /**
      * Finds and displays a Kalea entity.
      *
-     * @Route("/{id}", name="kalea_show")
-     * @Method("GET")
+     * @Route("/{id}", name="kalea_show", methods={"GET"})
      */
     public function show(Kalea $kalea): Response
     {
@@ -110,8 +106,7 @@ class KaleaController extends AbstractController
     /**
      * Displays a form to edit an existing Kalea entity.
      *
-     * @Route("/{id}/edit", name="kalea_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="kalea_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Kalea $kalea)
     {
@@ -140,8 +135,7 @@ class KaleaController extends AbstractController
     /**
      * Deletes a Kalea entity.
      *
-     * @Route("/{id}", name="kalea_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="kalea_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Kalea $kalea): RedirectResponse
     {
@@ -168,7 +162,7 @@ class KaleaController extends AbstractController
      *
      * @param Kalea $kalea The Kalea entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Kalea $kalea)
     {

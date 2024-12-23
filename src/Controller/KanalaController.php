@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Kanala;
 use App\Form\KanalaType;
@@ -35,9 +34,8 @@ class KanalaController extends AbstractController
     /**
      * Lists all Kanala entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="kanala_index")
-     * @Route("/page{page}", name="kanala_index_paginated") 
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="kanala_index", methods={"GET"})
+     * @Route("/page{page}", name="kanala_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -60,8 +58,7 @@ class KanalaController extends AbstractController
     /**
      * Creates a new Kanala entity.
      *
-     * @Route("/new", name="kanala_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="kanala_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -97,8 +94,7 @@ class KanalaController extends AbstractController
     /**
      * Finds and displays a Kanala entity.
      *
-     * @Route("/{id}", name="kanala_show")
-     * @Method("GET")
+     * @Route("/{id}", name="kanala_show", methods={"GET"})
      */
     public function show(Kanala $kanala): Response
     {
@@ -110,8 +106,7 @@ class KanalaController extends AbstractController
     /**
      * Displays a form to edit an existing Kanala entity.
      *
-     * @Route("/{id}/edit", name="kanala_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="kanala_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Kanala $kanala)
     {
@@ -140,8 +135,7 @@ class KanalaController extends AbstractController
     /**
      * Deletes a Kanala entity.
      *
-     * @Route("/{id}", name="kanala_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="kanala_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Kanala $kanala): RedirectResponse
     {
@@ -168,7 +162,7 @@ class KanalaController extends AbstractController
      *
      * @param Kanala $kanala The Kanala entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Kanala $kanala)
     {

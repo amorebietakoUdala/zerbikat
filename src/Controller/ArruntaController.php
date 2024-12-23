@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Arrunta;
 use App\Form\ArruntaType;
@@ -36,9 +35,8 @@ class ArruntaController extends AbstractController
     /**
      * Lists all Arrunta entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="arrunta_index")
-     * @Route("/page{page}", name="arrunta_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="arrunta_index", methods={"GET"})
+     * @Route("/page{page}", name="arrunta_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -75,8 +73,7 @@ class ArruntaController extends AbstractController
     /**
      * Creates a new Arrunta entity.
      *
-     * @Route("/new", name="arrunta_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="arrunta_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -112,8 +109,7 @@ class ArruntaController extends AbstractController
     /**
      * Finds and displays a Arrunta entity.
      *
-     * @Route("/{id}", name="arrunta_show")
-     * @Method("GET")
+     * @Route("/{id}", name="arrunta_show", methods={"GET"})
      */
     public function show(Arrunta $arruntum): Response
     {
@@ -125,8 +121,7 @@ class ArruntaController extends AbstractController
     /**
      * Displays a form to edit an existing Arrunta entity.
      *
-     * @Route("/{id}/edit", name="arrunta_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="arrunta_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Arrunta $arruntum)
     {
@@ -155,8 +150,7 @@ class ArruntaController extends AbstractController
     /**
      * Deletes a Arrunta entity.
      *
-     * @Route("/{id}", name="arrunta_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="arrunta_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Arrunta $arruntum): RedirectResponse
     {
@@ -184,7 +178,7 @@ class ArruntaController extends AbstractController
      *
      * @param Arrunta $arruntum The Arrunta entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Arrunta $arruntum)
     {

@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Dokumentazioa;
 use App\Form\DokumentazioaType;
@@ -36,9 +35,8 @@ class DokumentazioaController extends AbstractController
     /**
      * Lists all Dokumentazioa entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="dokumentazioa_index")
-     * @Route("/page{page}", name="dokumentazioa_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="dokumentazioa_index", methods={"GET"})
+     * @Route("/page{page}", name="dokumentazioa_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -61,8 +59,7 @@ class DokumentazioaController extends AbstractController
     /**
      * Creates a new Dokumentazioa entity.
      *
-     * @Route("/new", name="dokumentazioa_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="dokumentazioa_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -98,8 +95,7 @@ class DokumentazioaController extends AbstractController
     /**
      * Finds and displays a Dokumentazioa entity.
      *
-     * @Route("/{id}", name="dokumentazioa_show")
-     * @Method("GET")
+     * @Route("/{id}", name="dokumentazioa_show", methods={"GET"})
      */
     public function show(Dokumentazioa $dokumentazioa): Response
     {
@@ -111,8 +107,7 @@ class DokumentazioaController extends AbstractController
     /**
      * Displays a form to edit an existing Dokumentazioa entity.
      *
-     * @Route("/{id}/edit", name="dokumentazioa_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="dokumentazioa_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Dokumentazioa $dokumentazioa)
     {
@@ -141,8 +136,7 @@ class DokumentazioaController extends AbstractController
     /**
      * Deletes a Dokumentazioa entity.
      *
-     * @Route("/{id}", name="dokumentazioa_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="dokumentazioa_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Dokumentazioa $dokumentazioa): RedirectResponse
     {
@@ -169,7 +163,7 @@ class DokumentazioaController extends AbstractController
      *
      * @param Dokumentazioa $dokumentazioa The Dokumentazioa entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Dokumentazioa $dokumentazioa)
     {

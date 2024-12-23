@@ -5,7 +5,6 @@ namespace App\Controller;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Udala;
 use App\Form\UdalaType;
@@ -36,9 +35,8 @@ class UdalaController extends AbstractController
     /**
      * Lists all Udala entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="udala_index")
-     * @Route("/page{page}", name="udala_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="udala_index", methods={"GET"})
+     * @Route("/page{page}", name="udala_index_paginated", methods={"GET"})
      */
     public function index ( $page )
     {
@@ -94,8 +92,7 @@ class UdalaController extends AbstractController
     /**
      * Udalik ez errorea.
      *
-     * @Route("/udala/errorea", defaults={"page" = 1}, name="udala_ez")
-     * @Method("GET")
+     * @Route("/udala/errorea", defaults={"page"=1}, name="udala_ez", methods={"GET"})
      */
     public function udalaez ( $page ): Response
     {
@@ -107,8 +104,7 @@ class UdalaController extends AbstractController
     /**
      * Creates a new Udala entity.
      *
-     * @Route("/new", name="udala_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="udala_new", methods={"GET", "POST"})
      */
     public function new ( Request $request )
     {
@@ -137,8 +133,7 @@ class UdalaController extends AbstractController
     /**
      * Finds and displays a Udala entity.
      *
-     * @Route("/{id}", name="udala_show")
-     * @Method("GET")
+     * @Route("/{id}", name="udala_show", methods={"GET"})
      */
     public function show ( Udala $udala ): Response
     {
@@ -153,8 +148,7 @@ class UdalaController extends AbstractController
     /**
      * Displays a form to edit an existing Udala entity.
      *
-     * @Route("/{id}/edit", name="udala_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="udala_edit", methods={"GET", "POST"})
      */
     public function edit ( Request $request, Udala $udala )
     {
@@ -185,8 +179,7 @@ class UdalaController extends AbstractController
     /**
      * Deletes a Udala entity.
      *
-     * @Route("/{id}", name="udala_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="udala_delete", methods={"DELETE"})
      */
     public function delete ( Request $request, Udala $udala ): RedirectResponse
     {
@@ -211,7 +204,7 @@ class UdalaController extends AbstractController
      *
      * @param Udala $udala The Udala entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm ( Udala $udala )
     {

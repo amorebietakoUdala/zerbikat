@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Eraikina;
 use App\Form\EraikinaType;
@@ -13,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -35,10 +35,9 @@ class EraikinaController extends AbstractController
     /**
      * Lists all Eraikina entities.
      *
-     * @Route("/", name="eraikina_index")
-     * @Route("/", defaults={"page" = 1}, name="eraikina_index")
-     * @Route("/page{page}", name="eraikina_index_paginated")
-     * @Method("GET")
+     * @Route("/", name="eraikina_index", methods={"GET"})
+     * @Route("/", defaults={"page"=1}, name="eraikina_index", methods={"GET"})
+     * @Route("/page{page}", name="eraikina_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -61,8 +60,7 @@ class EraikinaController extends AbstractController
     /**
      * Creates a new Eraikina entity.
      *
-     * @Route("/new", name="eraikina_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="eraikina_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -98,8 +96,7 @@ class EraikinaController extends AbstractController
     /**
      * Finds and displays a Eraikina entity.
      *
-     * @Route("/{id}", name="eraikina_show")
-     * @Method("GET")
+     * @Route("/{id}", name="eraikina_show", methods={"GET"})
      */
     public function show(Eraikina $eraikina): Response
     {
@@ -111,11 +108,9 @@ class EraikinaController extends AbstractController
     /**
      * Displays a form to edit an existing Eraikina entity.
      *
-     * @Route("/{id}/edit", name="eraikina_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="eraikina_edit", methods={"GET", "POST"})
      * @param Request  $request
      * @param Eraikina $eraikina
-     *
      * @return Response
      */
     public function edit(Request $request, Eraikina $eraikina)
@@ -145,8 +140,7 @@ class EraikinaController extends AbstractController
     /**
      * Deletes a Eraikina entity.
      *
-     * @Route("/{id}", name="eraikina_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="eraikina_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Eraikina $eraikina): RedirectResponse
     {
@@ -173,7 +167,7 @@ class EraikinaController extends AbstractController
      *
      * @param Eraikina $eraikina The Eraikina entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Eraikina $eraikina)
     {

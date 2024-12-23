@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Datuenbabesa;
 use App\Form\DatuenbabesaType;
@@ -36,9 +35,8 @@ class DatuenbabesaController extends AbstractController
     /**
      * Lists all Datuenbabesa entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="datuenbabesa_index")
-     * @Route("/page{page}", name="datuenbabesa_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="datuenbabesa_index", methods={"GET"})
+     * @Route("/page{page}", name="datuenbabesa_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -61,8 +59,7 @@ class DatuenbabesaController extends AbstractController
     /**
      * Creates a new Datuenbabesa entity.
      *
-     * @Route("/new", name="datuenbabesa_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="datuenbabesa_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -98,8 +95,7 @@ class DatuenbabesaController extends AbstractController
     /**
      * Finds and displays a Datuenbabesa entity.
      *
-     * @Route("/{id}", name="datuenbabesa_show")
-     * @Method("GET")
+     * @Route("/{id}", name="datuenbabesa_show", methods={"GET"})
      */
     public function show(Datuenbabesa $datuenbabesa): Response
     {
@@ -111,8 +107,7 @@ class DatuenbabesaController extends AbstractController
     /**
      * Displays a form to edit an existing Datuenbabesa entity.
      *
-     * @Route("/{id}/edit", name="datuenbabesa_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="datuenbabesa_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Datuenbabesa $datuenbabesa)
     {
@@ -141,8 +136,7 @@ class DatuenbabesaController extends AbstractController
     /**
      * Deletes a Datuenbabesa entity.
      *
-     * @Route("/{id}", name="datuenbabesa_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="datuenbabesa_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Datuenbabesa $datuenbabesa): RedirectResponse
     {
@@ -169,7 +163,7 @@ class DatuenbabesaController extends AbstractController
      *
      * @param Datuenbabesa $datuenbabesa The Datuenbabesa entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Datuenbabesa $datuenbabesa)
     {

@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Saila;
 use App\Form\SailaType;
@@ -35,9 +34,8 @@ class SailaController extends AbstractController
     /**
      * Lists all Saila entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="saila_index")
-     * @Route("/page{page}", name="saila_index_paginated") 
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="saila_index", methods={"GET"})
+     * @Route("/page{page}", name="saila_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -60,8 +58,7 @@ class SailaController extends AbstractController
     /**
      * Creates a new Saila entity.
      *
-     * @Route("/new", name="saila_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="saila_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -97,8 +94,7 @@ class SailaController extends AbstractController
     /**
      * Finds and displays a Saila entity.
      *
-     * @Route("/{id}", name="saila_show")
-     * @Method("GET")
+     * @Route("/{id}", name="saila_show", methods={"GET"})
      */
     public function show(Saila $saila): Response
     {
@@ -110,8 +106,7 @@ class SailaController extends AbstractController
     /**
      * Displays a form to edit an existing Saila entity.
      *
-     * @Route("/{id}/edit", name="saila_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="saila_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Saila $saila)
     {
@@ -140,8 +135,7 @@ class SailaController extends AbstractController
     /**
      * Deletes a Saila entity.
      *
-     * @Route("/{id}", name="saila_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="saila_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Saila $saila): RedirectResponse
     {
@@ -168,7 +162,7 @@ class SailaController extends AbstractController
      *
      * @param Saila $saila The Saila entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Saila $saila)
     {

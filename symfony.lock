@@ -2,9 +2,6 @@
     "amorebietakoudala/user-bundle": {
         "version": "1.4.6"
     },
-    "bmatzner/fontawesome-bundle": {
-        "version": "4.7.0"
-    },
     "doctrine/annotations": {
         "version": "1.14",
         "recipe": {
@@ -84,19 +81,6 @@
     "friendsofsymfony/user-bundle": {
         "version": "2.x-dev"
     },
-    "javiereguiluz/easyadmin-bundle": {
-        "version": "1.17",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "1.17",
-            "ref": "e58cc3a3956761ff41c27bc9847b145655494d42"
-        },
-        "files": [
-            "config/packages/easy_admin.yaml",
-            "config/routes/easy_admin.yaml"
-        ]
-    },
     "jms/serializer-bundle": {
         "version": "2.4",
         "recipe": {
@@ -140,7 +124,16 @@
         ]
     },
     "sensio/framework-extra-bundle": {
-        "version": "v3.0.27"
+        "version": "5.6",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.2",
+            "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
+        },
+        "files": [
+            "config/packages/sensio_framework_extra.yaml"
+        ]
     },
     "symfony/apache-pack": {
         "version": "1.0",
@@ -362,18 +355,6 @@
             "config/packages/webpack_encore.yaml",
             "package.json",
             "webpack.config.js"
-        ]
-    },
-    "twig/extensions": {
-        "version": "1.5",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "1.0",
-            "ref": "a86723ee8d8b2f9437c8ce60a5546a1c267da5ed"
-        },
-        "files": [
-            "config/packages/twig_extensions.yaml"
         ]
     },
     "white-october/pagerfanta-bundle": {

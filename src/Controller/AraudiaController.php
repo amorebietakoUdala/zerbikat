@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Araudia;
 use App\Form\AraudiaType;
@@ -14,6 +13,7 @@ use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Araudia controller.
@@ -34,9 +34,8 @@ class AraudiaController extends AbstractController
     /**
      * Lists all Araudia entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="araudia_index")
-     * @Route("/page{page}", name="araudia_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="araudia_index", methods={"GET"})
+     * @Route("/page{page}", name="araudia_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -61,8 +60,7 @@ class AraudiaController extends AbstractController
     /**
      * Creates a new Araudia entity.
      *
-     * @Route("/new", name="araudia_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="araudia_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -95,8 +93,7 @@ class AraudiaController extends AbstractController
     /**
      * Finds and displays a Araudia entity.
      *
-     * @Route("/{id}", name="araudia_show")
-     * @Method("GET")
+     * @Route("/{id}", name="araudia_show", methods={"GET"})
      */
     public function show(Araudia $araudium): Response
     {
@@ -108,8 +105,7 @@ class AraudiaController extends AbstractController
     /**
      * Displays a form to edit an existing Araudia entity.
      *
-     * @Route("/{id}/edit", name="araudia_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="araudia_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Araudia $araudium)
     {
@@ -138,8 +134,7 @@ class AraudiaController extends AbstractController
     /**
      * Deletes a Araudia entity.
      *
-     * @Route("/{id}", name="araudia_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="araudia_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Araudia $araudium): RedirectResponse
     {
@@ -166,7 +161,7 @@ class AraudiaController extends AbstractController
      *
      * @param Araudia $araudium The Araudia entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Araudia $araudium)
     {

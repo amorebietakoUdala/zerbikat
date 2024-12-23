@@ -31,7 +31,7 @@ class AraudiaType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => \App\Entity\Araudia::class
+            'data_class' => UdalaAraudia::class
         ]);
     }
 }

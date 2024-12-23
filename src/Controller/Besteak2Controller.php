@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Besteak2;
 use App\Form\Besteak2Type;
@@ -36,9 +35,8 @@ class Besteak2Controller extends AbstractController
     /**
      * Lists all Besteak2 entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="besteak2_index")
-     * @Route("/page{page}", name="besteak2_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="besteak2_index", methods={"GET"})
+     * @Route("/page{page}", name="besteak2_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -60,8 +58,7 @@ class Besteak2Controller extends AbstractController
     /**
      * Creates a new Besteak2 entity.
      *
-     * @Route("/new", name="besteak2_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="besteak2_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -96,8 +93,7 @@ class Besteak2Controller extends AbstractController
     /**
      * Finds and displays a Besteak2 entity.
      *
-     * @Route("/{id}", name="besteak2_show")
-     * @Method("GET")
+     * @Route("/{id}", name="besteak2_show", methods={"GET"})
      */
     public function show(Besteak2 $besteak2): Response
     {
@@ -109,8 +105,7 @@ class Besteak2Controller extends AbstractController
     /**
      * Displays a form to edit an existing Besteak2 entity.
      *
-     * @Route("/{id}/edit", name="besteak2_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="besteak2_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Besteak2 $besteak2)
     {
@@ -138,8 +133,7 @@ class Besteak2Controller extends AbstractController
     /**
      * Deletes a Besteak2 entity.
      *
-     * @Route("/{id}", name="besteak2_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="besteak2_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Besteak2 $besteak2): RedirectResponse
     {
@@ -165,7 +159,7 @@ class Besteak2Controller extends AbstractController
      *
      * @param Besteak2 $besteak2 The Besteak2 entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Besteak2 $besteak2)
     {

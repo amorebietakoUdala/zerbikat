@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Aurreikusi;
 use App\Form\AurreikusiType;
@@ -36,9 +35,8 @@ class AurreikusiController extends AbstractController
     /**
      * Lists all Aurreikusi entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="aurreikusi_index")
-     * @Route("/page{page}", name="aurreikusi_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="aurreikusi_index", methods={"GET"})
+     * @Route("/page{page}", name="aurreikusi_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -79,8 +77,7 @@ class AurreikusiController extends AbstractController
     /**
      * Creates a new Aurreikusi entity.
      *
-     * @Route("/new", name="aurreikusi_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="aurreikusi_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -116,8 +113,7 @@ class AurreikusiController extends AbstractController
     /**
      * Finds and displays a Aurreikusi entity.
      *
-     * @Route("/{id}", name="aurreikusi_show")
-     * @Method("GET")
+     * @Route("/{id}", name="aurreikusi_show", methods={"GET"})
      */
     public function show(Aurreikusi $aurreikusi): Response
     {
@@ -129,8 +125,7 @@ class AurreikusiController extends AbstractController
     /**
      * Displays a form to edit an existing Aurreikusi entity.
      *
-     * @Route("/{id}/edit", name="aurreikusi_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="aurreikusi_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Aurreikusi $aurreikusi)
     {
@@ -159,8 +154,7 @@ class AurreikusiController extends AbstractController
     /**
      * Deletes a Aurreikusi entity.
      *
-     * @Route("/{id}", name="aurreikusi_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="aurreikusi_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Aurreikusi $aurreikusi): RedirectResponse
     {
@@ -187,7 +181,7 @@ class AurreikusiController extends AbstractController
      *
      * @param Aurreikusi $aurreikusi The Aurreikusi entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Aurreikusi $aurreikusi)
     {

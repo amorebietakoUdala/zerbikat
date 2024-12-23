@@ -164,53 +164,6 @@ class Zerbitzua
     }
 
     /**
-     * Set udala
-     *
-     * @param \App\Entity\Udala $udala
-     * @return Zerbitzua
-     */
-    public function setUdala(\App\Entity\Udala $udala = null)
-    {
-        $this->udala = $udala;
-
-        return $this;
-    }
-
-    /**
-     * Get udala
-     *
-     * @return \App\Entity\Udala 
-     */
-    public function getUdala()
-    {
-        return $this->udala;
-    }
-
-    /**
-     * Set espedientekudeaketa
-     *
-     * @param \App\Entity\Espedientekudeaketa $espedientekudeaketa
-     *
-     * @return Zerbitzua
-     */
-    public function setEspedientekudeaketa(\App\Entity\Espedientekudeaketa $espedientekudeaketa = null)
-    {
-        $this->espedientekudeaketa = $espedientekudeaketa;
-
-        return $this;
-    }
-
-    /**
-     * Get espedientekudeaketa
-     *
-     * @return \App\Entity\Espedientekudeaketa
-     */
-    public function getEspedientekudeaketa()
-    {
-        return $this->espedientekudeaketa;
-    }
-
-    /**
      * Set erroaeu
      *
      * @param string $erroaeu

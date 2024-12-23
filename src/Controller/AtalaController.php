@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Atala;
 use App\Form\AtalaType;
@@ -36,10 +35,9 @@ class AtalaController extends AbstractController
     /**
      * Lists all Atala entities.
      *
-     * @Route("/", name="atala_index")
-     * @Route("/", defaults={"page" = 1}, name="atala_index")
-     * @Route("/page{page}", name="atala_index_paginated")
-     * @Method("GET")
+     * @Route("/", name="atala_index", methods={"GET"})
+     * @Route("/", defaults={"page"=1}, name="atala_index", methods={"GET"})
+     * @Route("/page{page}", name="atala_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -77,8 +75,7 @@ class AtalaController extends AbstractController
     /**
      * Creates a new Atala entity.
      *
-     * @Route("/new", name="atala_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="atala_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -117,8 +114,7 @@ class AtalaController extends AbstractController
     /**
      * Finds and displays a Atala entity.
      *
-     * @Route("/{id}", name="atala_show")
-     * @Method("GET")
+     * @Route("/{id}", name="atala_show", methods={"GET"})
      */
     public function show(Atala $atala): Response
     {
@@ -130,8 +126,7 @@ class AtalaController extends AbstractController
     /**
      * Displays a form to edit an existing Atala entity.
      *
-     * @Route("/{id}/edit", name="atala_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="atala_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Atala $atala)
     {
@@ -160,8 +155,7 @@ class AtalaController extends AbstractController
     /**
      * Deletes a Atala entity.
      *
-     * @Route("/{id}", name="atala_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="atala_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Atala $atala): RedirectResponse
     {
@@ -189,7 +183,7 @@ class AtalaController extends AbstractController
      *
      * @param Atala $atala The Atala entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Atala $atala)
     {

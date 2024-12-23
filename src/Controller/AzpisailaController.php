@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Azpisaila;
 use App\Form\AzpisailaType;
@@ -35,9 +34,8 @@ class AzpisailaController extends AbstractController
     /**
      * Lists all Azpisaila entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="azpisaila_index")
-     * @Route("/page{page}", name="azpisaila_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="azpisaila_index", methods={"GET"})
+     * @Route("/page{page}", name="azpisaila_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -60,8 +58,7 @@ class AzpisailaController extends AbstractController
     /**
      * Creates a new Azpisaila entity.
      *
-     * @Route("/new", name="azpisaila_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="azpisaila_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -96,8 +93,7 @@ class AzpisailaController extends AbstractController
     /**
      * Finds and displays a Azpisaila entity.
      *
-     * @Route("/{id}", name="azpisaila_show")
-     * @Method("GET")
+     * @Route("/{id}", name="azpisaila_show", methods={"GET"})
      */
     public function show(Azpisaila $azpisaila): Response
     {
@@ -109,8 +105,7 @@ class AzpisailaController extends AbstractController
     /**
      * Displays a form to edit an existing Azpisaila entity.
      *
-     * @Route("/{id}/edit", name="azpisaila_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="azpisaila_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Azpisaila $azpisaila)
     {
@@ -138,8 +133,7 @@ class AzpisailaController extends AbstractController
     /**
      * Deletes a Azpisaila entity.
      *
-     * @Route("/{id}", name="azpisaila_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="azpisaila_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Azpisaila $azpisaila): RedirectResponse
     {
@@ -165,7 +159,7 @@ class AzpisailaController extends AbstractController
      *
      * @param Azpisaila $azpisaila The Azpisaila entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Azpisaila $azpisaila)
     {

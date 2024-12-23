@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Etiketa;
 use App\Form\EtiketaType;
@@ -35,9 +34,8 @@ class EtiketaController extends AbstractController
     /**
      * Lists all Etiketa entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="etiketa_index")
-     * @Route("/page{page}", name="etiketa_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="etiketa_index", methods={"GET"})
+     * @Route("/page{page}", name="etiketa_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -60,8 +58,7 @@ class EtiketaController extends AbstractController
     /**
      * Creates a new Etiketa entity.
      *
-     * @Route("/new", name="etiketa_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="etiketa_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -97,8 +94,7 @@ class EtiketaController extends AbstractController
     /**
      * Finds and displays a Etiketa entity.
      *
-     * @Route("/{id}", name="etiketa_show")
-     * @Method("GET")
+     * @Route("/{id}", name="etiketa_show", methods={"GET"})
      */
     public function show(Etiketa $etiketum): Response
     {
@@ -110,8 +106,7 @@ class EtiketaController extends AbstractController
     /**
      * Displays a form to edit an existing Etiketa entity.
      *
-     * @Route("/{id}/edit", name="etiketa_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="etiketa_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Etiketa $etiketum)
     {
@@ -140,8 +135,7 @@ class EtiketaController extends AbstractController
     /**
      * Deletes a Etiketa entity.
      *
-     * @Route("/{id}", name="etiketa_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="etiketa_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Etiketa $etiketum): RedirectResponse
     {
@@ -168,7 +162,7 @@ class EtiketaController extends AbstractController
      *
      * @param Etiketa $etiketum The Etiketa entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Etiketa $etiketum)
     {

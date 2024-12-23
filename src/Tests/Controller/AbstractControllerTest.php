@@ -28,7 +28,7 @@ abstract class AbstractControllerTest extends WebTestCase
         $client = static::createClient();
         $container = $client->getContainer();
 
-        $session = $container->get('session');
+        $session = $container->get(\Symfony\Component\HttpFoundation\Session\Session::class);
         /** @var $userManager \FOS\UserBundle\Doctrine\UserManager */
         $userManager = $container->get('fos_user.user_manager');
         /** @var $loginManager \FOS\UserBundle\Security\LoginManager */
@@ -39,8 +39,8 @@ abstract class AbstractControllerTest extends WebTestCase
         $loginManager->loginUser($firewallName, $user);
 
         // save the login token into the session and put it in a cookie
-        $container->get('session')->set('_security_' . $firewallName, serialize($container->get('security.token_storage')->getToken()));
-        $container->get('session')->save();
+        $container->get(\Symfony\Component\HttpFoundation\Session\Session::class)->set('_security_' . $firewallName, serialize($container->get(\Symfony\Component\Security\Core\Authentication\Token\Storage\UsageTrackingTokenStorage::class)->getToken()));
+        $container->get(\Symfony\Component\HttpFoundation\Session\Session::class)->save();
         $client->getCookieJar()->set(new Cookie($session->getName(), $session->getId()));
 
         return $client;

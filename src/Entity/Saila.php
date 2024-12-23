@@ -70,7 +70,7 @@ class Saila
      */
 
     /**
-     * @var udala
+     * @var Udala udala
      * @ORM\ManyToOne(targetEntity="Udala")
      * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
      *
@@ -78,7 +78,7 @@ class Saila
     private $udala;
     
     /**
-     * @var azpisailak[]
+     * @var ArrayCollection
      * @Expose
      *
      * @ORM\OneToMany(targetEntity="Azpisaila", mappedBy="saila")
@@ -261,7 +261,7 @@ class Saila
     /**
      * Get azpisailak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getAzpisailak()
     {

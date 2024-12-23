@@ -394,11 +394,11 @@ class Udala
     /**
      * Set espedientekudeaketa
      *
-     * @param \App\Entity\Espedientekudeaketa $espedientekudeaketa
+     * @param UdalaEspedientekudeaketa $espedientekudeaketa
      *
      * @return Udala
      */
-    public function setEspedientekudeaketa(\App\Entity\Espedientekudeaketa $espedientekudeaketa = null)
+    public function setEspedientekudeaketa(Espedientekudeaketa $espedientekudeaketa = null)
     {
         $this->espedientekudeaketa = $espedientekudeaketa;
 
@@ -408,7 +408,7 @@ class Udala
     /**
      * Get espedientekudeaketa
      *
-     * @return \App\Entity\Espedientekudeaketa
+     * @return UdalaEspedientekudeaketa
      */
     public function getEspedientekudeaketa()
     {
@@ -418,11 +418,11 @@ class Udala
     /**
      * Set eremuak
      *
-     * @param \App\Entity\Eremuak $eremuak
+     * @param Eremuak $eremuak
      *
      * @return Udala
      */
-    public function setEremuak(\App\Entity\Eremuak $eremuak = null)
+    public function setEremuak(Eremuak $eremuak = null)
     {
         $this->eremuak = $eremuak;
 
@@ -432,7 +432,7 @@ class Udala
     /**
      * Get eremuak
      *
-     * @return \App\Entity\Eremuak
+     * @return Eremuak
      */
     public function getEremuak()
     {
@@ -442,11 +442,11 @@ class Udala
     /**
      * Add fitxak
      *
-     * @param \App\Entity\Fitxa $fitxak
+     * @param Fitxa $fitxak
      *
      * @return Udala
      */
-    public function addFitxak(\App\Entity\Fitxa $fitxak)
+    public function addFitxak(Fitxa $fitxak)
     {
         $this->fitxak[] = $fitxak;
 
@@ -456,9 +456,9 @@ class Udala
     /**
      * Remove fitxak
      *
-     * @param \App\Entity\Fitxa $fitxak
+     * @param Fitxa $fitxak
      */
-    public function removeFitxak(\App\Entity\Fitxa $fitxak)
+    public function removeFitxak(Fitxa $fitxak)
     {
         $this->fitxak->removeElement($fitxak);
     }
@@ -466,7 +466,7 @@ class Udala
     /**
      * Get fitxak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getFitxak()
     {

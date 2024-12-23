@@ -93,7 +93,7 @@ class User extends BaseUser
      *
      * @return User
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 

@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Azpiatalaparrafoa;
 use App\Form\AzpiatalaparrafoaType;
@@ -33,8 +32,7 @@ class AzpiatalaparrafoaController extends AbstractController
     /**
      * Lists all Azpiatalaparrafoa entities.
      *
-     * @Route("/", name="azpiatalaparrafoa_index")
-     * @Method("GET")
+     * @Route("/", name="azpiatalaparrafoa_index", methods={"GET"})
      */
     public function index(): Response
     {
@@ -51,8 +49,7 @@ class AzpiatalaparrafoaController extends AbstractController
     /**
      * Creates a new Azpiatalaparrafoa entity.
      *
-     * @Route("/new", name="azpiatalaparrafoa_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="azpiatalaparrafoa_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -88,8 +85,7 @@ class AzpiatalaparrafoaController extends AbstractController
     /**
      * Finds and displays a Azpiatalaparrafoa entity.
      *
-     * @Route("/{id}", name="azpiatalaparrafoa_show")
-     * @Method("GET")
+     * @Route("/{id}", name="azpiatalaparrafoa_show", methods={"GET"})
      */
     public function show(Azpiatalaparrafoa $azpiatalaparrafoa): Response
     {
@@ -101,8 +97,7 @@ class AzpiatalaparrafoaController extends AbstractController
     /**
      * Displays a form to edit an existing Azpiatalaparrafoa entity.
      *
-     * @Route("/{id}/edit", name="azpiatalaparrafoa_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="azpiatalaparrafoa_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Azpiatalaparrafoa $azpiatalaparrafoa)
     {
@@ -130,8 +125,7 @@ class AzpiatalaparrafoaController extends AbstractController
     /**
      * Deletes a Azpiatalaparrafoa entity.
      *
-     * @Route("/{id}", name="azpiatalaparrafoa_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="azpiatalaparrafoa_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Azpiatalaparrafoa $azpiatalaparrafoa): RedirectResponse
     {
@@ -157,7 +151,7 @@ class AzpiatalaparrafoaController extends AbstractController
      *
      * @param Azpiatalaparrafoa $azpiatalaparrafoa The Azpiatalaparrafoa entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Azpiatalaparrafoa $azpiatalaparrafoa)
     {

@@ -8,7 +8,6 @@ use Symfony\Component\Form\AbstractType;
     use Symfony\Component\OptionsResolver\OptionsResolver;
     use Symfony\Bridge\Doctrine\Form\Type\EntityType;
     use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-    use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 //use App\Entity\FitxaProzedura;
     use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 

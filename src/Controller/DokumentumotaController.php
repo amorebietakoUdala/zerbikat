@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Dokumentumota;
 use App\Form\DokumentumotaType;
@@ -36,9 +35,8 @@ class DokumentumotaController extends AbstractController
     /**
      * Lists all Dokumentumota entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="dokumentumota_index")
-     * @Route("/page{page}", name="dokumentumota_index_paginated") 
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="dokumentumota_index", methods={"GET"})
+     * @Route("/page{page}", name="dokumentumota_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -77,8 +75,7 @@ class DokumentumotaController extends AbstractController
     /**
      * Creates a new Dokumentumota entity.
      *
-     * @Route("/new", name="dokumentumota_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="dokumentumota_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -113,8 +110,7 @@ class DokumentumotaController extends AbstractController
     /**
      * Finds and displays a Dokumentumota entity.
      *
-     * @Route("/{id}", name="dokumentumota_show")
-     * @Method("GET")
+     * @Route("/{id}", name="dokumentumota_show", methods={"GET"})
      */
     public function show(Dokumentumota $dokumentumotum): Response
     {
@@ -126,8 +122,7 @@ class DokumentumotaController extends AbstractController
     /**
      * Displays a form to edit an existing Dokumentumota entity.
      *
-     * @Route("/{id}/edit", name="dokumentumota_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="dokumentumota_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Dokumentumota $dokumentumotum)
     {
@@ -156,8 +151,7 @@ class DokumentumotaController extends AbstractController
     /**
      * Deletes a Dokumentumota entity.
      *
-     * @Route("/{id}", name="dokumentumota_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="dokumentumota_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Dokumentumota $dokumentumotum): RedirectResponse
     {
@@ -184,7 +178,7 @@ class DokumentumotaController extends AbstractController
      *
      * @param Dokumentumota $dokumentumotum The Dokumentumota entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Dokumentumota $dokumentumotum)
     {

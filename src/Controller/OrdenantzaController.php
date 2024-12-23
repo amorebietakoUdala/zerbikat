@@ -4,8 +4,7 @@
 
     use Symfony\Component\HttpFoundation\Request;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-    use Symfony\Component\Routing\Annotation\Route;
+        use Symfony\Component\Routing\Annotation\Route;
     use App\Entity\Ordenantza;
     use App\Form\OrdenantzaType;
 use App\Repository\OrdenantzaRepository;
@@ -32,8 +31,7 @@ use Symfony\Component\HttpFoundation\Response;
         /**
          * Lists all Ordenantza entities.
          *
-         * @Route("/", name="ordenantza_index")
-         * @Method("GET")
+         * @Route("/", name="ordenantza_index", methods={"GET"})
          */
         public function index ()
         {
@@ -58,8 +56,7 @@ use Symfony\Component\HttpFoundation\Response;
         /**
          * Creates a new Ordenantza entity.
          *
-         * @Route("/new", name="ordenantza_new")
-         * @Method({"GET", "POST"})
+         * @Route("/new", name="ordenantza_new", methods={"GET", "POST"})
          */
         public function new ( Request $request )
         {
@@ -93,8 +90,7 @@ use Symfony\Component\HttpFoundation\Response;
         /**
          * Finds and displays a Ordenantza entity.
          *
-         * @Route("/{id}", name="ordenantza_show")
-         * @Method("GET")
+         * @Route("/{id}", name="ordenantza_show", methods={"GET"})
          */
         public function show ( Ordenantza $ordenantza ): Response
         {
@@ -109,8 +105,7 @@ use Symfony\Component\HttpFoundation\Response;
         /**
          * Displays a form to edit an existing Ordenantza entity.
          *
-         * @Route("/{id}/edit", name="ordenantza_edit")
-         * @Method({"GET", "POST"})
+         * @Route("/{id}/edit", name="ordenantza_edit", methods={"GET", "POST"})
          */
         public function edit ( Request $request, Ordenantza $ordenantza )
         {
@@ -142,8 +137,7 @@ use Symfony\Component\HttpFoundation\Response;
         /**
          * Deletes a Ordenantza entity.
          *
-         * @Route("/{id}", name="ordenantza_delete")
-         * @Method("DELETE")
+         * @Route("/{id}", name="ordenantza_delete", methods={"DELETE"})
          */
         public function delete ( Request $request, Ordenantza $ordenantza ): RedirectResponse
         {
@@ -171,7 +165,7 @@ use Symfony\Component\HttpFoundation\Response;
          *
          * @param Ordenantza $ordenantza The Ordenantza entity
          *
-         * @return \Symfony\Component\Form\Form The form
+         * @return Form The form
          */
         private function createDeleteForm ( Ordenantza $ordenantza )
         {

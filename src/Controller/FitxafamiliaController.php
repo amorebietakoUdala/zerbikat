@@ -5,7 +5,6 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Fitxafamilia;
 use App\Form\FitxafamiliaType;
@@ -34,8 +33,7 @@ class FitxafamiliaController extends AbstractController
     /**
      * Fitxa-Familiak ordena duen ikusi.
      *
-     * @Route("/api/fitxafamiliakordenadauka/{id}/{fitxa_id}/{familia_id}", name="api_fitxafamiliahasorden", options={"expose"=true})
-     * @Method("GET")
+     * @Route("/api/fitxafamiliakordenadauka/{id}/{fitxa_id}/{familia_id}", name="api_fitxafamiliahasorden", options={"expose"=true}, methods={"GET"})
      */
     public function fitxafamiliahasorden ( $id, $fitxa_id, $familia_id )
     {
@@ -64,8 +62,7 @@ class FitxafamiliaController extends AbstractController
     /**
      * Fitxa-Familiak datooren ordena eman.
      *
-     * @Route("/api/fitxafamilianextorden/{fitxa_id}/{familia_id}", name="api_fitxafamilianextorden", options={"expose"=true})
-     * @Method("GET")
+     * @Route("/api/fitxafamilianextorden/{fitxa_id}/{familia_id}", name="api_fitxafamilianextorden", options={"expose"=true}, methods={"GET"})
      */
     public function fitxafamilianextorden ( $fitxa_id, $familia_id )
     {
@@ -99,8 +96,7 @@ class FitxafamiliaController extends AbstractController
     /**
      * Lists all Fitxafamilia entities.
      *
-     * @Route("/", name="fitxafamilia_index")
-     * @Method("GET")
+     * @Route("/", name="fitxafamilia_index", methods={"GET"})
      */
     public function index (): Response
     {
@@ -115,8 +111,7 @@ class FitxafamiliaController extends AbstractController
     /**
      * Creates a new Fitxafamilia entity.
      *
-     * @Route("/newfromfitxa", name="fitxafamilia_newfromfitxa")
-     * @Method({"GET", "POST"})
+     * @Route("/newfromfitxa", name="fitxafamilia_newfromfitxa", methods={"GET", "POST"})
      */
     public function newfromfitxa ( Request $request )
     {
@@ -146,8 +141,7 @@ class FitxafamiliaController extends AbstractController
     /**
      * Creates a new Fitxafamilia entity.
      *
-     * @Route("/new", name="fitxafamilia_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="fitxafamilia_new", methods={"GET", "POST"})
      */
     public function new ( Request $request )
     {
@@ -172,8 +166,7 @@ class FitxafamiliaController extends AbstractController
     /**
      * Finds and displays a Fitxafamilia entity.
      *
-     * @Route("/{id}", name="fitxafamilia_show")
-     * @Method("GET")
+     * @Route("/{id}", name="fitxafamilia_show", methods={"GET"})
      */
     public function show ( Fitxafamilia $fitxafamilium ): Response
     {
@@ -188,8 +181,7 @@ class FitxafamiliaController extends AbstractController
     /**
      * Displays a form to edit an existing Fitxafamilia entity.
      *
-     * @Route("/{id}/edit", name="fitxafamilia_edit", options={"expose"=true})
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="fitxafamilia_edit", options={"expose"=true}, methods={"GET", "POST"})
      */
     public function edit ( Request $request, Fitxafamilia $fitxafamilium )
     {
@@ -229,8 +221,7 @@ class FitxafamiliaController extends AbstractController
     /**
      * Deletes a Fitxafamilia entity.
      *
-     * @Route("/{id}", name="fitxafamilia_delete", options={"expose"=true})
-     * @Method("DELETE")
+     * @Route("/{id}", name="fitxafamilia_delete", options={"expose"=true}, methods={"DELETE"})
      */
     public function delete ( Request $request, Fitxafamilia $fitxafamilium )
     {
@@ -255,7 +246,7 @@ class FitxafamiliaController extends AbstractController
      *
      * @param Fitxafamilia $fitxafamilium The Fitxafamilia entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm ( Fitxafamilia $fitxafamilium )
     {

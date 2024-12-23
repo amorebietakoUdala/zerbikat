@@ -2,28 +2,13 @@
 
 declare(strict_types=1);
 
-use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\Config\RectorConfig;
-use Rector\Set\ValueObject\LevelSetList;
 use Rector\Symfony\Set\SymfonySetList;
-use Rector\Doctrine\Set\DoctrineSetList;
-use Rector\Symfony\Set\SymfonyLevelSetList;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->paths([
-        __DIR__ . '/config',
-        __DIR__ . '/public',
-        __DIR__ . '/src',
+return RectorConfig::configure()
+    ->withSymfonyContainerXml(__DIR__ . '/var/cache/dev/srcApp_KernelDevDebugContainer.xml')
+    ->withSets([
+        SymfonySetList::SYMFONY_34,
+        // SymfonySetList::SYMFONY_CODE_QUALITY,
+        // SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
     ]);
-
-    // register a single rule
-    $rectorConfig->rule(InlineConstructorDefaultToPropertyRector::class);
-
-    // define sets of rules
-       $rectorConfig->sets([
-        LevelSetList::UP_TO_PHP_72,
-        SymfonyLevelSetList::UP_TO_SYMFONY_50,
-        SymfonySetList::SYMFONY_CODE_QUALITY,
-        SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
-    ]);
-};

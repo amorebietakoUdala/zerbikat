@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Eremuak;
 use App\Form\EremuakType;
@@ -35,9 +34,8 @@ class EremuakController extends AbstractController
     /**
      * Lists all Eremuak entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="eremuak_index")
-     * @Route("/page{page}", name="eremuak_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="eremuak_index", methods={"GET"})
+     * @Route("/page{page}", name="eremuak_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -93,8 +91,7 @@ class EremuakController extends AbstractController
     /**
      * Creates a new Eremuak entity.
      *
-     * @Route("/new", name="eremuak_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="eremuak_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -123,8 +120,7 @@ class EremuakController extends AbstractController
     /**
      * Finds and displays a Eremuak entity.
      *
-     * @Route("/{id}", name="eremuak_show")
-     * @Method("GET")
+     * @Route("/{id}", name="eremuak_show", methods={"GET"})
      */
     public function show(Eremuak $eremuak): Response
     {
@@ -136,8 +132,7 @@ class EremuakController extends AbstractController
     /**
      * Displays a form to edit an existing Eremuak entity.
      *
-     * @Route("/{id}/edit", name="eremuak_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="eremuak_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Eremuak $eremuak)
     {
@@ -166,8 +161,7 @@ class EremuakController extends AbstractController
     /**
      * Deletes a Eremuak entity.
      *
-     * @Route("/{id}", name="eremuak_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="eremuak_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Eremuak $eremuak): RedirectResponse
     {
@@ -193,7 +187,7 @@ class EremuakController extends AbstractController
      *
      * @param Eremuak $eremuak The Eremuak entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Eremuak $eremuak)
     {

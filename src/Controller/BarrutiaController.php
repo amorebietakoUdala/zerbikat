@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Barrutia;
 use App\Form\BarrutiaType;
@@ -36,9 +35,8 @@ class BarrutiaController extends AbstractController
     /**
      * Lists all Barrutia entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="barrutia_index")
-     * @Route("/page{page}", name="barrutia_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="barrutia_index", methods={"GET"})
+     * @Route("/page{page}", name="barrutia_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -77,8 +75,7 @@ class BarrutiaController extends AbstractController
     /**
      * Creates a new Barrutia entity.
      *
-     * @Route("/new", name="barrutia_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="barrutia_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -114,8 +111,7 @@ class BarrutiaController extends AbstractController
     /**
      * Finds and displays a Barrutia entity.
      *
-     * @Route("/{id}", name="barrutia_show")
-     * @Method("GET")
+     * @Route("/{id}", name="barrutia_show", methods={"GET"})
      */
     public function show(Barrutia $barrutium): Response
     {
@@ -127,8 +123,7 @@ class BarrutiaController extends AbstractController
     /**
      * Displays a form to edit an existing Barrutia entity.
      *
-     * @Route("/{id}/edit", name="barrutia_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="barrutia_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Barrutia $barrutium)
     {
@@ -156,8 +151,7 @@ class BarrutiaController extends AbstractController
     /**
      * Deletes a Barrutia entity.
      *
-     * @Route("/{id}", name="barrutia_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="barrutia_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Barrutia $barrutium): RedirectResponse
     {
@@ -183,7 +177,7 @@ class BarrutiaController extends AbstractController
      *
      * @param Barrutia $barrutium The Barrutia entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Barrutia $barrutium)
     {

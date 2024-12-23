@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Kanalmota;
 use App\Form\KanalmotaType;
@@ -35,9 +34,8 @@ class KanalmotaController extends AbstractController
     /**
      * Lists all Kanalmota entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="kanalmota_index")
-     * @Route("/page{page}", name="kanalmota_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="kanalmota_index", methods={"GET"})
+     * @Route("/page{page}", name="kanalmota_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -77,8 +75,7 @@ class KanalmotaController extends AbstractController
     /**
      * Creates a new Kanalmota entity.
      *
-     * @Route("/new", name="kanalmota_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="kanalmota_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -114,8 +111,7 @@ class KanalmotaController extends AbstractController
     /**
      * Finds and displays a Kanalmota entity.
      *
-     * @Route("/{id}", name="kanalmota_show")
-     * @Method("GET")
+     * @Route("/{id}", name="kanalmota_show", methods={"GET"})
      */
     public function show(Kanalmota $kanalmotum): Response
     {
@@ -127,8 +123,7 @@ class KanalmotaController extends AbstractController
     /**
      * Displays a form to edit an existing Kanalmota entity.
      *
-     * @Route("/{id}/edit", name="kanalmota_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="kanalmota_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Kanalmota $kanalmotum)
     {
@@ -157,8 +152,7 @@ class KanalmotaController extends AbstractController
     /**
      * Deletes a Kanalmota entity.
      *
-     * @Route("/{id}", name="kanalmota_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="kanalmota_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Kanalmota $kanalmotum): RedirectResponse
     {
@@ -185,7 +179,7 @@ class KanalmotaController extends AbstractController
      *
      * @param Kanalmota $kanalmotum The Kanalmota entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Kanalmota $kanalmotum)
     {

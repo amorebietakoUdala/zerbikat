@@ -71,7 +71,7 @@ class Espedientekudeaketa
 
 
     /**
-     * @var zerbitzuak[]
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Zerbitzua",cascade={"remove"},mappedBy="espedientekudeaketa")
      */
@@ -194,11 +194,11 @@ class Espedientekudeaketa
     // /**
     //  * Add zerbitzuak
     //  *
-    //  * @param \App\Entity\Zerbitzua $zerbitzuak
+    //  * @param UdalaZerbitzua $zerbitzuak
     //  *
     //  * @return Espedientekudeaketa
     //  */
-    // public function addZerbitzuak(\App\Entity\Zerbitzua $zerbitzuak)
+    // public function addZerbitzuak(UdalaZerbitzua $zerbitzuak)
     // {
     //     $this->zerbitzuak[] = $zerbitzuak;
 
@@ -208,9 +208,9 @@ class Espedientekudeaketa
     // /**
     //  * Remove zerbitzuak
     //  *
-    //  * @param \App\Entity\Zerbitzua $zerbitzuak
+    //  * @param UdalaZerbitzua $zerbitzuak
     //  */
-    // public function removeZerbitzuak(\App\Entity\Zerbitzua $zerbitzuak)
+    // public function removeZerbitzuak(UdalaZerbitzua $zerbitzuak)
     // {
     //     $this->zerbitzuak->removeElement($zerbitzuak);
     // }
@@ -218,7 +218,7 @@ class Espedientekudeaketa
     // /**
     //  * Get zerbitzuak
     //  *
-    //  * @return \Doctrine\Common\Collections\Collection
+    //  * @return ArrayCollection
     //  */
     // public function getZerbitzuak()
     // {

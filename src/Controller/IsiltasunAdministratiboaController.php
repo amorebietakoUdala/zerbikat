@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\IsiltasunAdministratiboa;
 use App\Form\IsiltasunAdministratiboaType;
@@ -35,10 +34,9 @@ class IsiltasunAdministratiboaController extends AbstractController
     /**
      * Lists all IsiltasunAdministratiboa entities.
      *
-     * @Route("/", name="isiltasunadministratiboa_index")
-     * @Route("/", defaults={"page" = 1}, name="isiltasunadministratiboa_index")
-     * @Route("/page{page}", name="isiltasunadministratiboa_index_paginated")
-     * @Method("GET")
+     * @Route("/", name="isiltasunadministratiboa_index", methods={"GET"})
+     * @Route("/", defaults={"page"=1}, name="isiltasunadministratiboa_index", methods={"GET"})
+     * @Route("/page{page}", name="isiltasunadministratiboa_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -79,8 +77,7 @@ class IsiltasunAdministratiboaController extends AbstractController
     /**
      * Creates a new IsiltasunAdministratiboa entity.
      *
-     * @Route("/new", name="isiltasunadministratiboa_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="isiltasunadministratiboa_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -115,8 +112,7 @@ class IsiltasunAdministratiboaController extends AbstractController
     /**
      * Finds and displays a IsiltasunAdministratiboa entity.
      *
-     * @Route("/{id}", name="isiltasunadministratiboa_show")
-     * @Method("GET")
+     * @Route("/{id}", name="isiltasunadministratiboa_show", methods={"GET"})
      */
     public function show(IsiltasunAdministratiboa $isiltasunAdministratiboa): Response
     {
@@ -128,8 +124,7 @@ class IsiltasunAdministratiboaController extends AbstractController
     /**
      * Displays a form to edit an existing IsiltasunAdministratiboa entity.
      *
-     * @Route("/{id}/edit", name="isiltasunadministratiboa_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="isiltasunadministratiboa_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, IsiltasunAdministratiboa $isiltasunAdministratiboa)
     {
@@ -158,8 +153,7 @@ class IsiltasunAdministratiboaController extends AbstractController
     /**
      * Deletes a IsiltasunAdministratiboa entity.
      *
-     * @Route("/{id}", name="isiltasunadministratiboa_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="isiltasunadministratiboa_delete", methods={"DELETE"})
      */
     public function delete(Request $request, IsiltasunAdministratiboa $isiltasunAdministratiboa): RedirectResponse
     {
@@ -186,7 +180,7 @@ class IsiltasunAdministratiboaController extends AbstractController
      *
      * @param IsiltasunAdministratiboa $isiltasunAdministratiboa The IsiltasunAdministratiboa entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(IsiltasunAdministratiboa $isiltasunAdministratiboa)
     {

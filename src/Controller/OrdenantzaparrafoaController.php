@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Ordenantzaparrafoa;
 use App\Form\OrdenantzaparrafoaType;
@@ -32,8 +31,7 @@ class OrdenantzaparrafoaController extends AbstractController
     /**
      * Lists all Ordenantzaparrafoa entities.
      *
-     * @Route("/", name="ordenantzaparrafoa_index")
-     * @Method("GET")
+     * @Route("/", name="ordenantzaparrafoa_index", methods={"GET"})
      */
     public function index()
     {
@@ -56,8 +54,7 @@ class OrdenantzaparrafoaController extends AbstractController
     /**
      * Creates a new Ordenantzaparrafoa entity.
      *
-     * @Route("/new", name="ordenantzaparrafoa_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="ordenantzaparrafoa_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -95,8 +92,7 @@ class OrdenantzaparrafoaController extends AbstractController
     /**
      * Finds and displays a Ordenantzaparrafoa entity.
      *
-     * @Route("/{id}", name="ordenantzaparrafoa_show")
-     * @Method("GET")
+     * @Route("/{id}", name="ordenantzaparrafoa_show", methods={"GET"})
      */
     public function show(Ordenantzaparrafoa $ordenantzaparrafoa): Response
     {
@@ -108,8 +104,7 @@ class OrdenantzaparrafoaController extends AbstractController
     /**
      * Displays a form to edit an existing Ordenantzaparrafoa entity.
      *
-     * @Route("/{id}/edit", name="ordenantzaparrafoa_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="ordenantzaparrafoa_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Ordenantzaparrafoa $ordenantzaparrafoa)
     {
@@ -138,8 +133,7 @@ class OrdenantzaparrafoaController extends AbstractController
     /**
      * Deletes a Ordenantzaparrafoa entity.
      *
-     * @Route("/{id}", name="ordenantzaparrafoa_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="ordenantzaparrafoa_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Ordenantzaparrafoa $ordenantzaparrafoa): RedirectResponse
     {
@@ -166,7 +160,7 @@ class OrdenantzaparrafoaController extends AbstractController
      *
      * @param Ordenantzaparrafoa $ordenantzaparrafoa The Ordenantzaparrafoa entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Ordenantzaparrafoa $ordenantzaparrafoa)
     {

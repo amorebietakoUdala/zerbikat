@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Kontzeptumota;
 use App\Form\KontzeptumotaType;
@@ -33,9 +32,8 @@ class KontzeptumotaController extends AbstractController
     /**
      * Lists all Kontzeptumota entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="kontzeptumota_index")
-     * @Route("/page{page}", name="kontzeptumota_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="kontzeptumota_index", methods={"GET"})
+     * @Route("/page{page}", name="kontzeptumota_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -83,8 +81,7 @@ class KontzeptumotaController extends AbstractController
     /**
      * Creates a new Kontzeptumota entity.
      *
-     * @Route("/new", name="kontzeptumota_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="kontzeptumota_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -120,8 +117,7 @@ class KontzeptumotaController extends AbstractController
     /**
      * Finds and displays a Kontzeptumota entity.
      *
-     * @Route("/{id}", name="kontzeptumota_show")
-     * @Method("GET")
+     * @Route("/{id}", name="kontzeptumota_show", methods={"GET"})
      */
     public function show(Kontzeptumota $kontzeptumotum): \Symfony\Component\HttpFoundation\Response
     {
@@ -133,8 +129,7 @@ class KontzeptumotaController extends AbstractController
     /**
      * Displays a form to edit an existing Kontzeptumota entity.
      *
-     * @Route("/{id}/edit", name="kontzeptumota_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="kontzeptumota_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Kontzeptumota $kontzeptumotum)
     {
@@ -163,8 +158,7 @@ class KontzeptumotaController extends AbstractController
     /**
      * Deletes a Kontzeptumota entity.
      *
-     * @Route("/{id}", name="kontzeptumota_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="kontzeptumota_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Kontzeptumota $kontzeptumotum): \Symfony\Component\HttpFoundation\RedirectResponse
     {

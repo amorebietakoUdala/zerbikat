@@ -339,43 +339,44 @@
          *************************************************************************************************************/
 
         /**
-         * @ORM\ManyToOne(targetEntity="App\Entity\Udala", inversedBy="fitxak")
+         * @var Udala $udala
+         * @ORM\ManyToOne(targetEntity="Udala", inversedBy="fitxak")
          * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
          */
         private $udala;
 
         /**
-         * @var \App\Entity\Norkebatzi
+         * @var Norkebatzi $norkebatzi
          *
          * @Expose
-         * @ORM\ManyToOne(targetEntity="App\Entity\Norkebatzi")
+         * @ORM\ManyToOne(targetEntity="Norkebatzi")
          * @ORM\JoinColumn(name="norkebatzi_id", referencedColumnName="id", onDelete="SET NULL")
          *
          */
         private $norkebatzi;
 
         /**
-         * @var \App\Entity\Zerbitzua
+         * @var Zerbitzua $zerbitzua
          *
-         * @ORM\ManyToOne(targetEntity="App\Entity\Zerbitzua")
+         * @ORM\ManyToOne(targetEntity="Zerbitzua")
          * @ORM\JoinColumn(name="zerbitzua_id", referencedColumnName="id", onDelete="SET NULL")
          *
          */
         private $zerbitzua;
 
         /**
-         * @var \App\Entity\Datuenbabesa
+         * @var Datuenbabesa $datuenbabesa
          *
-         * @ORM\ManyToOne(targetEntity="App\Entity\Datuenbabesa")
+         * @ORM\ManyToOne(targetEntity="Datuenbabesa")
          * @ORM\JoinColumn(name="datuenbabesa_id", referencedColumnName="id", onDelete="SET NULL")
          *
          */
         private $datuenbabesa;
 
         /**
-         * @var \App\Entity\Azpisaila
+         * @var Azpisaila $azpisaila
          *
-         * @ORM\ManyToOne(targetEntity="App\Entity\Azpisaila", inversedBy="fitxak")
+         * @ORM\ManyToOne(targetEntity="Azpisaila", inversedBy="fitxak")
          * @ORM\JoinColumn(name="azpisaila_id", referencedColumnName="id", onDelete="SET NULL")
          *
          * @Expose
@@ -383,9 +384,9 @@
         private $azpisaila;
 
         /**
-         * @var \App\Entity\Aurreikusi
+         * @var Aurreikusi $aurreikusi
          *
-         * @ORM\ManyToOne(targetEntity="App\Entity\Aurreikusi")
+         * @ORM\ManyToOne(targetEntity="Aurreikusi")
          * @ORM\JoinColumn(name="aurreikusi_id", referencedColumnName="id", onDelete="SET NULL")
          *
          * @Expose
@@ -393,9 +394,9 @@
         private $aurreikusi;
 
         /**
-         * @var \App\Entity\Arrunta
+         * @var Arrunta $arrunta
          *
-         * @ORM\ManyToOne(targetEntity="App\Entity\Arrunta")
+         * @ORM\ManyToOne(targetEntity="Arrunta")
          * @ORM\JoinColumn(name="arrunta_id", referencedColumnName="id", onDelete="SET NULL")
          *
          * @Expose
@@ -403,18 +404,18 @@
         private $arrunta;
 
         /**
-         * @var \App\Entity\IsiltasunAdministratiboa
+         * @var IsiltasunAdministratiboa $isiltasunadmin
          * @Expose
-         * @ORM\ManyToOne(targetEntity="App\Entity\IsiltasunAdministratiboa")
+         * @ORM\ManyToOne(targetEntity="IsiltasunAdministratiboa")
          * @ORM\JoinColumn(name="isiltasunadmin_id", referencedColumnName="id", onDelete="SET NULL")
          *
          */
         private $isiltasunadmin;
 
         /**
-         * @var \App\Entity\User
+         * @var User $norkSortua
          * @Expose
-         * @ORM\ManyToOne(targetEntity="App\Entity\User")
+         * @ORM\ManyToOne(targetEntity="User")
          * @ORM\JoinColumn(name="nork_sortua_id", referencedColumnName="id")
          *
          */
@@ -425,7 +426,7 @@
          */
 
         /**
-         * @var dokumentazioak[]
+         * @var ArrayCollection
          * @Expose
          * @ORM\ManyToMany(targetEntity="Dokumentazioa", inversedBy="fitxak")
          */
@@ -433,56 +434,56 @@
 
 
         /**
-         * @var kanalak[]
+         * @var ArrayCollection
          * @Expose
          * @ORM\ManyToMany(targetEntity="Kanala",inversedBy="fitxak")
          */
         private $kanalak;
 
         /**
-         * @var besteak1ak[]
+         * @var ArrayCollection
          * @Expose
          * @ORM\ManyToMany(targetEntity="Besteak1",inversedBy="fitxak")
          */
         private $besteak1ak;
 
         /**
-         * @var besteak2ak[]
+         * @var ArrayCollection
          * @Expose
          * @ORM\ManyToMany(targetEntity="Besteak2",inversedBy="fitxak")
          */
         private $besteak2ak;
 
         /**
-         * @var besteak3ak[]
+         * @var ArrayCollection
          * @Expose
          * @ORM\ManyToMany(targetEntity="Besteak3",inversedBy="fitxak")
          */
         private $besteak3ak;
 
         /**
-         * @var etiketak[]
+         * @var ArrayCollection
          * @Expose
          * @ORM\ManyToMany(targetEntity="Etiketa",inversedBy="fitxak")
          */
         private $etiketak;
 
         /**
-         * @var norkeskatuak[]
+         * @var ArrayCollection
          * @Expose
          * @ORM\ManyToMany(targetEntity="Norkeskatu",inversedBy="fitxak")
          */
         private $norkeskatuak;
 
         /**
-         * @var doklagunak[]
+         * @var ArrayCollection
          * @Expose
          * @ORM\ManyToMany(targetEntity="Doklagun",inversedBy="fitxak")
          */
         private $doklagunak;
 
         /**
-         * @var azpiatalak[]
+         * @var ArrayCollection
          * @Expose
          * @ORM\ManyToMany(targetEntity="Azpiatala",inversedBy="fitxak")
          * @ORM\JoinTable(name="fitxa_azpiatala")
@@ -496,27 +497,27 @@
 
         /**
          * @Expose
-         * @ORM\OneToMany(targetEntity="App\Entity\Fitxafamilia", mappedBy="fitxa", cascade={"remove"}, orphanRemoval=true)
+         * @ORM\OneToMany(targetEntity="Fitxafamilia", mappedBy="fitxa", cascade={"remove"}, orphanRemoval=true)
          * @OrderBy({"ordena" = "ASC"})
          */
         private $fitxafamilia;
 
         /**
-         * @var prozedurak[]
+         * @var ArrayCollection
          *
          * @ORM\OneToMany(targetEntity="FitxaProzedura" , mappedBy="fitxa",cascade={"persist"} )
          */
         private $prozedurak;
 
         /**
-         * @var araudiak[]
+         * @var ArrayCollection
          * @Expose
          * @ORM\OneToMany(targetEntity="FitxaAraudia", mappedBy="fitxa",cascade={"persist"})
          */
         private $araudiak;
 
         /**
-         * @var kostuak[]
+         * @var ArrayCollection
          * @Expose
          * @ORM\OneToMany(targetEntity="FitxaKostua", mappedBy="fitxa",cascade={"persist"})
          */
@@ -1600,11 +1601,11 @@
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return Fitxa
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -1614,7 +1615,7 @@
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return UdalaUdala
      */
     public function getUdala()
     {
@@ -1624,11 +1625,11 @@
     /**
      * Set norkebatzi
      *
-     * @param \App\Entity\Norkebatzi $norkebatzi
+     * @param Norkebatzi $norkebatzi
      *
      * @return Fitxa
      */
-    public function setNorkebatzi(\App\Entity\Norkebatzi $norkebatzi = null)
+    public function setNorkebatzi(Norkebatzi $norkebatzi = null)
     {
         $this->norkebatzi = $norkebatzi;
 
@@ -1638,7 +1639,7 @@
     /**
      * Get norkebatzi
      *
-     * @return \App\Entity\Norkebatzi
+     * @return UdalaNorkebatzi
      */
     public function getNorkebatzi()
     {
@@ -1648,11 +1649,11 @@
     /**
      * Set zerbitzua
      *
-     * @param \App\Entity\Zerbitzua $zerbitzua
+     * @param Zerbitzua $zerbitzua
      *
      * @return Fitxa
      */
-    public function setZerbitzua(\App\Entity\Zerbitzua $zerbitzua = null)
+    public function setZerbitzua(Zerbitzua $zerbitzua = null)
     {
         $this->zerbitzua = $zerbitzua;
 
@@ -1662,7 +1663,7 @@
     /**
      * Get zerbitzua
      *
-     * @return \App\Entity\Zerbitzua
+     * @return Zerbitzua
      */
     public function getZerbitzua()
     {
@@ -1672,11 +1673,11 @@
     /**
      * Set datuenbabesa
      *
-     * @param \App\Entity\Datuenbabesa $datuenbabesa
+     * @param Datuenbabesa $datuenbabesa
      *
      * @return Fitxa
      */
-    public function setDatuenbabesa(\App\Entity\Datuenbabesa $datuenbabesa = null)
+    public function setDatuenbabesa(Datuenbabesa $datuenbabesa = null)
     {
         $this->datuenbabesa = $datuenbabesa;
 
@@ -1686,7 +1687,7 @@
     /**
      * Get datuenbabesa
      *
-     * @return \App\Entity\Datuenbabesa
+     * @return Datuenbabesa
      */
     public function getDatuenbabesa()
     {
@@ -1696,11 +1697,11 @@
     /**
      * Set azpisaila
      *
-     * @param \App\Entity\Azpisaila $azpisaila
+     * @param Azpisaila $azpisaila
      *
      * @return Fitxa
      */
-    public function setAzpisaila(\App\Entity\Azpisaila $azpisaila = null)
+    public function setAzpisaila(Azpisaila $azpisaila = null)
     {
         $this->azpisaila = $azpisaila;
 
@@ -1710,7 +1711,7 @@
     /**
      * Get azpisaila
      *
-     * @return \App\Entity\Azpisaila
+     * @return Azpisaila
      */
     public function getAzpisaila()
     {
@@ -1720,11 +1721,11 @@
     /**
      * Set aurreikusi
      *
-     * @param \App\Entity\Aurreikusi $aurreikusi
+     * @param Aurreikusi $aurreikusi
      *
      * @return Fitxa
      */
-    public function setAurreikusi(\App\Entity\Aurreikusi $aurreikusi = null)
+    public function setAurreikusi(Aurreikusi $aurreikusi = null)
     {
         $this->aurreikusi = $aurreikusi;
 
@@ -1734,7 +1735,7 @@
     /**
      * Get aurreikusi
      *
-     * @return \App\Entity\Aurreikusi
+     * @return Aurreikusi
      */
     public function getAurreikusi()
     {
@@ -1744,11 +1745,11 @@
     /**
      * Set arrunta
      *
-     * @param \App\Entity\Arrunta $arrunta
+     * @param Arrunta $arrunta
      *
      * @return Fitxa
      */
-    public function setArrunta(\App\Entity\Arrunta $arrunta = null)
+    public function setArrunta(Arrunta $arrunta = null)
     {
         $this->arrunta = $arrunta;
 
@@ -1758,7 +1759,7 @@
     /**
      * Get arrunta
      *
-     * @return \App\Entity\Arrunta
+     * @return Arrunta
      */
     public function getArrunta()
     {
@@ -1768,11 +1769,11 @@
     /**
      * Set isiltasunadmin
      *
-     * @param \App\Entity\IsiltasunAdministratiboa $isiltasunadmin
+     * @param IsiltasunAdministratiboa $isiltasunadmin
      *
      * @return Fitxa
      */
-    public function setIsiltasunadmin(\App\Entity\IsiltasunAdministratiboa $isiltasunadmin = null)
+    public function setIsiltasunadmin(IsiltasunAdministratiboa $isiltasunadmin = null)
     {
         $this->isiltasunadmin = $isiltasunadmin;
 
@@ -1782,7 +1783,7 @@
     /**
      * Get isiltasunadmin
      *
-     * @return \App\Entity\IsiltasunAdministratiboa
+     * @return IsiltasunAdministratiboa
      */
     public function getIsiltasunadmin()
     {
@@ -1792,7 +1793,7 @@
     /**
      * Set norkSortua
      *
-     * @param \App\Entity\User $norkSortua
+     * @param User $norkSortua
      *
      * @return Fitxa
      */
@@ -1816,11 +1817,11 @@
     /**
      * Add dokumentazioak
      *
-     * @param \App\Entity\Dokumentazioa $dokumentazioak
+     * @param Dokumentazioa $dokumentazioak
      *
      * @return Fitxa
      */
-    public function addDokumentazioak(\App\Entity\Dokumentazioa $dokumentazioak)
+    public function addDokumentazioak(Dokumentazioa $dokumentazioak)
     {
         $this->dokumentazioak[] = $dokumentazioak;
 
@@ -1830,9 +1831,9 @@
     /**
      * Remove dokumentazioak
      *
-     * @param \App\Entity\Dokumentazioa $dokumentazioak
+     * @param Dokumentazioa $dokumentazioak
      */
-    public function removeDokumentazioak(\App\Entity\Dokumentazioa $dokumentazioak)
+    public function removeDokumentazioak(Dokumentazioa $dokumentazioak)
     {
         $this->dokumentazioak->removeElement($dokumentazioak);
     }
@@ -1840,7 +1841,7 @@
     /**
      * Get dokumentazioak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getDokumentazioak()
     {
@@ -1850,11 +1851,11 @@
     /**
      * Add kanalak
      *
-     * @param \App\Entity\Kanala $kanalak
+     * @param Kanala $kanalak
      *
      * @return Fitxa
      */
-    public function addKanalak(\App\Entity\Kanala $kanalak)
+    public function addKanalak(Kanala $kanalak)
     {
         $this->kanalak[] = $kanalak;
 
@@ -1864,9 +1865,9 @@
     /**
      * Remove kanalak
      *
-     * @param \App\Entity\Kanala $kanalak
+     * @param Kanala $kanalak
      */
-    public function removeKanalak(\App\Entity\Kanala $kanalak)
+    public function removeKanalak(Kanala $kanalak)
     {
         $this->kanalak->removeElement($kanalak);
     }
@@ -1874,7 +1875,7 @@
     /**
      * Get kanalak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getKanalak()
     {
@@ -1884,11 +1885,11 @@
     /**
      * Add besteak1ak
      *
-     * @param \App\Entity\Besteak1 $besteak1ak
+     * @param UdalaBesteak1 $besteak1ak
      *
      * @return Fitxa
      */
-    public function addBesteak1ak(\App\Entity\Besteak1 $besteak1ak)
+    public function addBesteak1ak(Besteak1 $besteak1ak)
     {
         $this->besteak1ak[] = $besteak1ak;
 
@@ -1898,9 +1899,9 @@
     /**
      * Remove besteak1ak
      *
-     * @param \App\Entity\Besteak1 $besteak1ak
+     * @param Besteak1 $besteak1ak
      */
-    public function removeBesteak1ak(\App\Entity\Besteak1 $besteak1ak)
+    public function removeBesteak1ak(Besteak1 $besteak1ak)
     {
         $this->besteak1ak->removeElement($besteak1ak);
     }
@@ -1908,7 +1909,7 @@
     /**
      * Get besteak1ak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getBesteak1ak()
     {
@@ -1918,11 +1919,11 @@
     /**
      * Add besteak2ak
      *
-     * @param \App\Entity\Besteak2 $besteak2ak
+     * @param Besteak2 $besteak2ak
      *
      * @return Fitxa
      */
-    public function addBesteak2ak(\App\Entity\Besteak2 $besteak2ak)
+    public function addBesteak2ak(Besteak2 $besteak2ak)
     {
         $this->besteak2ak[] = $besteak2ak;
 
@@ -1932,9 +1933,9 @@
     /**
      * Remove besteak2ak
      *
-     * @param \App\Entity\Besteak2 $besteak2ak
+     * @param Besteak2 $besteak2ak
      */
-    public function removeBesteak2ak(\App\Entity\Besteak2 $besteak2ak)
+    public function removeBesteak2ak(Besteak2 $besteak2ak)
     {
         $this->besteak2ak->removeElement($besteak2ak);
     }
@@ -1942,7 +1943,7 @@
     /**
      * Get besteak2ak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getBesteak2ak()
     {
@@ -1952,11 +1953,11 @@
     /**
      * Add besteak3ak
      *
-     * @param \App\Entity\Besteak3 $besteak3ak
+     * @param Besteak3 $besteak3ak
      *
      * @return Fitxa
      */
-    public function addBesteak3ak(\App\Entity\Besteak3 $besteak3ak)
+    public function addBesteak3ak(Besteak3 $besteak3ak)
     {
         $this->besteak3ak[] = $besteak3ak;
 
@@ -1966,9 +1967,9 @@
     /**
      * Remove besteak3ak
      *
-     * @param \App\Entity\Besteak3 $besteak3ak
+     * @param Besteak3 $besteak3ak
      */
-    public function removeBesteak3ak(\App\Entity\Besteak3 $besteak3ak)
+    public function removeBesteak3ak(Besteak3 $besteak3ak)
     {
         $this->besteak3ak->removeElement($besteak3ak);
     }
@@ -1976,7 +1977,7 @@
     /**
      * Get besteak3ak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getBesteak3ak()
     {
@@ -1986,11 +1987,11 @@
     /**
      * Add etiketak
      *
-     * @param \App\Entity\Etiketa $etiketak
+     * @param Etiketa $etiketak
      *
      * @return Fitxa
      */
-    public function addEtiketak(\App\Entity\Etiketa $etiketak)
+    public function addEtiketak(Etiketa $etiketak)
     {
         $this->etiketak[] = $etiketak;
 
@@ -2000,9 +2001,9 @@
     /**
      * Remove etiketak
      *
-     * @param \App\Entity\Etiketa $etiketak
+     * @param Etiketa $etiketak
      */
-    public function removeEtiketak(\App\Entity\Etiketa $etiketak)
+    public function removeEtiketak(Etiketa $etiketak)
     {
         $this->etiketak->removeElement($etiketak);
     }
@@ -2010,7 +2011,7 @@
     /**
      * Get etiketak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getEtiketak()
     {
@@ -2020,11 +2021,11 @@
     /**
      * Add norkeskatuak
      *
-     * @param \App\Entity\Norkeskatu $norkeskatuak
+     * @param Norkeskatu $norkeskatuak
      *
      * @return Fitxa
      */
-    public function addNorkeskatuak(\App\Entity\Norkeskatu $norkeskatuak)
+    public function addNorkeskatuak(Norkeskatu $norkeskatuak)
     {
         $this->norkeskatuak[] = $norkeskatuak;
 
@@ -2034,9 +2035,9 @@
     /**
      * Remove norkeskatuak
      *
-     * @param \App\Entity\Norkeskatu $norkeskatuak
+     * @param Norkeskatu $norkeskatuak
      */
-    public function removeNorkeskatuak(\App\Entity\Norkeskatu $norkeskatuak)
+    public function removeNorkeskatuak(Norkeskatu $norkeskatuak)
     {
         $this->norkeskatuak->removeElement($norkeskatuak);
     }
@@ -2044,7 +2045,7 @@
     /**
      * Get norkeskatuak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getNorkeskatuak()
     {
@@ -2054,11 +2055,11 @@
     /**
      * Add doklagunak
      *
-     * @param \App\Entity\Doklagun $doklagunak
+     * @param Doklagun $doklagunak
      *
      * @return Fitxa
      */
-    public function addDoklagunak(\App\Entity\Doklagun $doklagunak)
+    public function addDoklagunak(Doklagun $doklagunak)
     {
         $this->doklagunak[] = $doklagunak;
 
@@ -2068,9 +2069,9 @@
     /**
      * Remove doklagunak
      *
-     * @param \App\Entity\Doklagun $doklagunak
+     * @param Doklagun $doklagunak
      */
-    public function removeDoklagunak(\App\Entity\Doklagun $doklagunak)
+    public function removeDoklagunak(Doklagun $doklagunak)
     {
         $this->doklagunak->removeElement($doklagunak);
     }
@@ -2078,7 +2079,7 @@
     /**
      * Get doklagunak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getDoklagunak()
     {
@@ -2088,11 +2089,11 @@
     /**
      * Add azpiatalak
      *
-     * @param \App\Entity\Azpiatala $azpiatalak
+     * @param Azpiatala $azpiatalak
      *
      * @return Fitxa
      */
-    public function addAzpiatalak(\App\Entity\Azpiatala $azpiatalak)
+    public function addAzpiatalak(Azpiatala $azpiatalak)
     {
         $this->azpiatalak[] = $azpiatalak;
 
@@ -2102,9 +2103,9 @@
     /**
      * Remove azpiatalak
      *
-     * @param \App\Entity\Azpiatala $azpiatalak
+     * @param Azpiatala $azpiatalak
      */
-    public function removeAzpiatalak(\App\Entity\Azpiatala $azpiatalak)
+    public function removeAzpiatalak(Azpiatala $azpiatalak)
     {
         $this->azpiatalak->removeElement($azpiatalak);
     }
@@ -2112,7 +2113,7 @@
     /**
      * Get azpiatalak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getAzpiatalak()
     {
@@ -2122,11 +2123,11 @@
     /**
      * Add fitxafamilium
      *
-     * @param \App\Entity\Fitxafamilia $fitxafamilium
+     * @param Fitxafamilia $fitxafamilium
      *
      * @return Fitxa
      */
-    public function addFitxafamilium(\App\Entity\Fitxafamilia $fitxafamilium)
+    public function addFitxafamilium(Fitxafamilia $fitxafamilium)
     {
         $this->fitxafamilia[] = $fitxafamilium;
 
@@ -2136,9 +2137,9 @@
     /**
      * Remove fitxafamilium
      *
-     * @param \App\Entity\Fitxafamilia $fitxafamilium
+     * @param Fitxafamilia $fitxafamilium
      */
-    public function removeFitxafamilium(\App\Entity\Fitxafamilia $fitxafamilium)
+    public function removeFitxafamilium(Fitxafamilia $fitxafamilium)
     {
         $this->fitxafamilia->removeElement($fitxafamilium);
     }
@@ -2146,7 +2147,7 @@
     /**
      * Get fitxafamilia
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getFitxafamilia()
     {
@@ -2156,11 +2157,11 @@
     /**
      * Add prozedurak
      *
-     * @param \App\Entity\FitxaProzedura $prozedurak
+     * @param FitxaProzedura $prozedurak
      *
      * @return Fitxa
      */
-    public function addProzedurak(\App\Entity\FitxaProzedura $prozedurak)
+    public function addProzedurak(FitxaProzedura $prozedurak)
     {
         $this->prozedurak[] = $prozedurak;
 
@@ -2170,9 +2171,9 @@
     /**
      * Remove prozedurak
      *
-     * @param \App\Entity\FitxaProzedura $prozedurak
+     * @param FitxaProzedura $prozedurak
      */
-    public function removeProzedurak(\App\Entity\FitxaProzedura $prozedurak)
+    public function removeProzedurak(FitxaProzedura $prozedurak)
     {
         $this->prozedurak->removeElement($prozedurak);
     }
@@ -2180,7 +2181,7 @@
     /**
      * Get prozedurak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getProzedurak()
     {
@@ -2190,11 +2191,11 @@
     /**
      * Add araudiak
      *
-     * @param \App\Entity\FitxaAraudia $araudiak
+     * @param FitxaAraudia $araudiak
      *
      * @return Fitxa
      */
-    public function addAraudiak(\App\Entity\FitxaAraudia $araudiak)
+    public function addAraudiak(FitxaAraudia $araudiak)
     {
         $this->araudiak[] = $araudiak;
 
@@ -2204,9 +2205,9 @@
     /**
      * Remove araudiak
      *
-     * @param \App\Entity\FitxaAraudia $araudiak
+     * @param FitxaAraudia $araudiak
      */
-    public function removeAraudiak(\App\Entity\FitxaAraudia $araudiak)
+    public function removeAraudiak(FitxaAraudia $araudiak)
     {
         $this->araudiak->removeElement($araudiak);
     }
@@ -2214,7 +2215,7 @@
     /**
      * Get araudiak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
     public function getAraudiak()
     {
@@ -2224,11 +2225,11 @@
     /**
      * Add kostuak
      *
-     * @param \App\Entity\FitxaKostua $kostuak
+     * @param FitxaKostua $kostuak
      *
      * @return Fitxa
      */
-    public function addKostuak(\App\Entity\FitxaKostua $kostuak)
+    public function addKostuak(FitxaKostua $kostuak)
     {
         $this->kostuak[] = $kostuak;
 
@@ -2238,9 +2239,9 @@
     /**
      * Remove kostuak
      *
-     * @param \App\Entity\FitxaKostua $kostuak
+     * @param FitxaKostua $kostuak
      */
-    public function removeKostuak(\App\Entity\FitxaKostua $kostuak)
+    public function removeKostuak(FitxaKostua $kostuak)
     {
         $this->kostuak->removeElement($kostuak);
     }
@@ -2248,7 +2249,7 @@
     /**
      * Get kostuak
      *
-     * @return \Doctrine\Common\Collections\Collection|FitxaKostua[]
+     * @return ArrayCollection|FitxaKostua[]
      */
     public function getKostuak()
     {

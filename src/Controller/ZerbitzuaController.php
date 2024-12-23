@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Zerbitzua;
 use App\Form\ZerbitzuaType;
@@ -36,9 +35,8 @@ class ZerbitzuaController extends AbstractController
     /**
      * Lists all Zerbitzua entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="zerbitzua_index")
-     * @Route("/page{page}", name="zerbitzua_index_paginated") 
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="zerbitzua_index", methods={"GET"})
+     * @Route("/page{page}", name="zerbitzua_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -79,8 +77,7 @@ class ZerbitzuaController extends AbstractController
     /**
      * Creates a new Zerbitzua entity.
      *
-     * @Route("/new", name="zerbitzua_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="zerbitzua_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -108,8 +105,7 @@ class ZerbitzuaController extends AbstractController
     /**
      * Finds and displays a Zerbitzua entity.
      *
-     * @Route("/{id}", name="zerbitzua_show")
-     * @Method("GET")
+     * @Route("/{id}", name="zerbitzua_show", methods={"GET"})
      */
     public function show(Zerbitzua $zerbitzua): Response
     {
@@ -121,8 +117,7 @@ class ZerbitzuaController extends AbstractController
     /**
      * Displays a form to edit an existing Zerbitzua entity.
      *
-     * @Route("/{id}/edit", name="zerbitzua_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="zerbitzua_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Zerbitzua $zerbitzua)
     {
@@ -150,8 +145,7 @@ class ZerbitzuaController extends AbstractController
     /**
      * Deletes a Zerbitzua entity.
      *
-     * @Route("/{id}", name="zerbitzua_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="zerbitzua_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Zerbitzua $zerbitzua): RedirectResponse
     {
@@ -177,7 +171,7 @@ class ZerbitzuaController extends AbstractController
      *
      * @param Zerbitzua $zerbitzua The Zerbitzua entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Zerbitzua $zerbitzua)
     {

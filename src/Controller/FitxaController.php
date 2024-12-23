@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query;
 use GuzzleHttp;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,8 +54,7 @@ class FitxaController extends AbstractController
     /**
      * Lists all Fitxa entities.
      *
-     * @Route("/", name="fitxa_index")
-     * @Method("GET")
+     * @Route("/", name="fitxa_index", methods={"GET"})
      */
     public function index()
     {
@@ -81,16 +79,14 @@ class FitxaController extends AbstractController
     /**
      * Creates a new Fitxa entity.
      *
-     * @Route("/new", name="fitxa_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="fitxa_new", methods={"GET", "POST"})
      * @param Request $request
-     *
      * @return RedirectResponse|Response
      */
     public function new( Request $request )
     {
         if ( $this->isGranted( 'ROLE_USER' ) ) {
-            /** @var \App\Entity\Fitxa $fitxa */
+            /** @var Fitxa $fitxa */
             $fitxa = new Fitxa();
             $fitxa->setUdala( $this->getUser()->getUdala() );
             $form = $this->createForm( FitxanewType::class, $fitxa );
@@ -122,10 +118,8 @@ class FitxaController extends AbstractController
     /**
      * Finds and displays a Fitxa entity.
      *
-     * @Route("/{id}", name="fitxa_show")
-     * @Method("GET")
+     * @Route("/{id}", name="fitxa_show", methods={"GET"})
      * @param Fitxa $fitxa
-     *
      * @return Response
      */
     public function show( Fitxa $fitxa ): Response
@@ -174,10 +168,8 @@ class FitxaController extends AbstractController
 
     /**
      * Fitxa bakoitzaren dokumentazio laguntzailearen pdf bat sortu
-     * @Route("/pdf/all/doklagun/{id}", name="doklagun_guztiak_pdf")
-     * @Method("GET")
+     * @Route("/pdf/all/doklagun/{id}", name="doklagun_guztiak_pdf", methods={"GET"})
      */
-    
     public function pdfAllDokLagn ( $id = null ) {
 	$user = $this->getUser();
 	$roles = $user->getRoles();
@@ -198,10 +190,8 @@ class FitxaController extends AbstractController
 
     /**
      * Fitxa guztiekin pdf bat sortu
-     * @Route("/pdf/all/{id}", name="fitxa_guztiak_pdf")
-     * @Method("GET")
+     * @Route("/pdf/all/{id}", name="fitxa_guztiak_pdf", methods={"GET"})
      */
-    
     public function pdfAll ( $id = null ) {
 	$user = $this->getUser();
 	$roles = $user->getRoles();
@@ -323,8 +313,7 @@ class FitxaController extends AbstractController
         /**
      * Finds and displays a Fitxa entity.
      *
-     * @Route("/pdf/{id}", name="fitxa_pdf")
-     * @Method("GET")
+     * @Route("/pdf/{id}", name="fitxa_pdf", methods={"GET"})
      * @param Fitxa $fitxa
      */
     public function pdf( Fitxa $fitxa )
@@ -413,11 +402,9 @@ class FitxaController extends AbstractController
     /**
      * Displays a form to edit an existing Fitxa entity.
      *
-     * @Route("/{id}/edit", name="fitxa_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="fitxa_edit", methods={"GET", "POST"})
      * @param Request $request
      * @param Fitxa   $fitxa
-     *
      * @return RedirectResponse|Response
      */
     public function edit( Request $request, Fitxa $fitxa )
@@ -532,11 +519,9 @@ class FitxaController extends AbstractController
     /**
      * Deletes a Fitxa entity.
      *
-     * @Route("/{id}/del", name="fitxa_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/del", name="fitxa_delete", methods={"DELETE"})
      * @param Request $request
      * @param Fitxa   $fitxa
-     *
      * @return RedirectResponse
      */
     public function delete( Request $request, Fitxa $fitxa ): RedirectResponse
@@ -566,7 +551,7 @@ class FitxaController extends AbstractController
      *
      * @param Fitxa $fitxa The Fitxa entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm( Fitxa $fitxa )
     {

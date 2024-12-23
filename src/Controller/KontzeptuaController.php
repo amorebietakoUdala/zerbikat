@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Kontzeptua;
 use App\Form\KontzeptuaType;
@@ -32,8 +31,7 @@ class KontzeptuaController extends AbstractController
     /**
      * Lists all Kontzeptua entities.
      *
-     * @Route("/", name="kontzeptua_index")
-     * @Method("GET")
+     * @Route("/", name="kontzeptua_index", methods={"GET"})
      */
     public function index()
     {
@@ -56,8 +54,7 @@ class KontzeptuaController extends AbstractController
     /**
      * Creates a new Kontzeptua entity.
      *
-     * @Route("/new", name="kontzeptua_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="kontzeptua_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -95,8 +92,7 @@ class KontzeptuaController extends AbstractController
     /**
      * Finds and displays a Kontzeptua entity.
      *
-     * @Route("/{id}", name="kontzeptua_show")
-     * @Method("GET")
+     * @Route("/{id}", name="kontzeptua_show", methods={"GET"})
      */
     public function show(Kontzeptua $kontzeptua): Response
     {
@@ -108,8 +104,7 @@ class KontzeptuaController extends AbstractController
     /**
      * Displays a form to edit an existing Kontzeptua entity.
      *
-     * @Route("/{id}/edit", name="kontzeptua_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="kontzeptua_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Kontzeptua $kontzeptua)
     {
@@ -138,8 +133,7 @@ class KontzeptuaController extends AbstractController
     /**
      * Deletes a Kontzeptua entity.
      *
-     * @Route("/{id}", name="kontzeptua_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="kontzeptua_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Kontzeptua $kontzeptua): RedirectResponse
     {
@@ -166,7 +160,7 @@ class KontzeptuaController extends AbstractController
      *
      * @param Kontzeptua $kontzeptua The Kontzeptua entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Kontzeptua $kontzeptua)
     {

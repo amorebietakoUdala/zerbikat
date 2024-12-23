@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Doklagun;
 use App\Form\DoklagunType;
@@ -36,9 +35,8 @@ class DoklagunController extends AbstractController
     /**
      * Lists all Doklagun entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="doklagun_index")
-     * @Route("/page{page}", name="doklagun_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="doklagun_index", methods={"GET"})
+     * @Route("/page{page}", name="doklagun_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -62,8 +60,7 @@ class DoklagunController extends AbstractController
     /**
      * Creates a new Doklagun entity.
      *
-     * @Route("/new", name="doklagun_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="doklagun_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -99,8 +96,7 @@ class DoklagunController extends AbstractController
     /**
      * Finds and displays a Doklagun entity.
      *
-     * @Route("/{id}", name="doklagun_show")
-     * @Method("GET")
+     * @Route("/{id}", name="doklagun_show", methods={"GET"})
      */
     public function show(Doklagun $doklagun): Response
     {
@@ -112,8 +108,7 @@ class DoklagunController extends AbstractController
     /**
      * Displays a form to edit an existing Doklagun entity.
      *
-     * @Route("/{id}/edit", name="doklagun_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="doklagun_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Doklagun $doklagun)
     {
@@ -142,8 +137,7 @@ class DoklagunController extends AbstractController
     /**
      * Deletes a Doklagun entity.
      *
-     * @Route("/{id}", name="doklagun_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="doklagun_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Doklagun $doklagun): RedirectResponse
     {
@@ -172,7 +166,7 @@ class DoklagunController extends AbstractController
      *
      * @param Doklagun $doklagun The Doklagun entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Doklagun $doklagun)
     {

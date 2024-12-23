@@ -36,9 +36,8 @@ class FamiliaController extends AbstractController
     /**
      * Lists all Familia entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="familia_index")
-     * @Route("/page{page}", name="familia_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="familia_index", methods={"GET"})
+     * @Route("/page{page}", name="familia_index_paginated", methods={"GET"})
      */
     public function index ( $page )
     {
@@ -65,8 +64,7 @@ class FamiliaController extends AbstractController
     /**
      * Creates a new Familia entity.
      *
-     * @Route("/new", name="familia_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="familia_new", methods={"GET", "POST"})
      */
     public function new ( Request $request )
     {
@@ -130,8 +128,7 @@ class FamiliaController extends AbstractController
     /**
      * Displays a form to edit an existing Familia entity.
      *
-     * @Route("/{id}/edit", name="familia_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="familia_edit", methods={"GET", "POST"})
      */
     public function edit ( Request $request, Familia $familium )
     {
@@ -166,8 +163,7 @@ class FamiliaController extends AbstractController
     /**
      * Finds and displays a Familia entity.
      *
-     * @Route("/{id}", name="familia_show")
-     * @Method("GET")
+     * @Route("/{id}", name="familia_show", methods={"GET"})
      */
     public function show ( Familia $familium ): Response
     {

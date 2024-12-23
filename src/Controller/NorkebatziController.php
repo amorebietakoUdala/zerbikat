@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Norkebatzi;
 use App\Form\NorkebatziType;
@@ -36,9 +35,8 @@ class NorkebatziController extends AbstractController
     /**
      * Lists all Norkebatzi entities.
      *
-     * @Route("/", defaults={"page" = 1}, name="norkebatzi_index")
-     * @Route("/page{page}", name="norkebatzi_index_paginated")
-     * @Method("GET")
+     * @Route("/", defaults={"page"=1}, name="norkebatzi_index", methods={"GET"})
+     * @Route("/page{page}", name="norkebatzi_index_paginated", methods={"GET"})
      */
     public function index($page)
     {
@@ -61,8 +59,7 @@ class NorkebatziController extends AbstractController
     /**
      * Creates a new Norkebatzi entity.
      *
-     * @Route("/new", name="norkebatzi_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="norkebatzi_new", methods={"GET", "POST"})
      */
     public function new(Request $request)
     {
@@ -98,8 +95,7 @@ class NorkebatziController extends AbstractController
     /**
      * Finds and displays a Norkebatzi entity.
      *
-     * @Route("/{id}", name="norkebatzi_show")
-     * @Method("GET")
+     * @Route("/{id}", name="norkebatzi_show", methods={"GET"})
      */
     public function show(Norkebatzi $norkebatzi): Response
     {
@@ -111,8 +107,7 @@ class NorkebatziController extends AbstractController
     /**
      * Displays a form to edit an existing Norkebatzi entity.
      *
-     * @Route("/{id}/edit", name="norkebatzi_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="norkebatzi_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Norkebatzi $norkebatzi)
     {
@@ -141,8 +136,7 @@ class NorkebatziController extends AbstractController
     /**
      * Deletes a Norkebatzi entity.
      *
-     * @Route("/{id}", name="norkebatzi_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="norkebatzi_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Norkebatzi $norkebatzi): RedirectResponse
     {
@@ -169,7 +163,7 @@ class NorkebatziController extends AbstractController
      *
      * @param Norkebatzi $norkebatzi The Norkebatzi entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Norkebatzi $norkebatzi)
     {
