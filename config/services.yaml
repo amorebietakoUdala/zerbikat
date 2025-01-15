@@ -6,7 +6,7 @@
 parameters:
     secret: '%env(APP_SECRET)%'
     izfe_login_path: null
-    zzoo_aplikazioaren_API_url: 'http://garapenak2:8888/zergaordenantzak/api'
+    zzoo_aplikazioaren_API_url: '%env(ZZOO_APLIKAZIOAREN_API_URL)%'
 
 services:
     # default configuration for services in *this* file
