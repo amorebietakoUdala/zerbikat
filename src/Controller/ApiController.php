@@ -9,14 +9,12 @@ namespace App\Controller;
 
 use App\Entity\Familia;
 use App\Form\AtalaType;
+use App\Entity\Saila;
 
 use FOS\RestBundle\Controller\Annotations;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\View\View;
 use Symfony\Component\Routing\Annotation\Route;
-
-use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Fitxa;
@@ -25,10 +23,15 @@ use App\Repository\FamiliaRepository;
 use App\Repository\FitxaRepository;
 use App\Repository\KanalmotaRepository;
 use App\Repository\SailaRepository;
+use App\Repository\UdalaRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use OpenApi\Annotations as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
 /**
+ * API.
+ *
  * @Route("/api")
  */
 class ApiController extends AbstractFOSRestController
@@ -40,21 +43,23 @@ class ApiController extends AbstractFOSRestController
     private $familiaRepo;
     private $eremuakRepo;
     private $kanalmotaRepo;
+    private $udalaRepo;
 
     public function __construct(
         SailaRepository $sailaRepo,
         FitxaRepository $fitxaRepo,
         FamiliaRepository $familiaRepo,
         EremuakRepository $eremuakRepo,
-        KanalmotaRepository $kanalmotaRepo
+        KanalmotaRepository $kanalmotaRepo,
+        UdalaRepository $udalaRepo
     )
     {
-//        $this->em = $em;
         $this->sailaRepo = $sailaRepo;
         $this->fitxaRepo = $fitxaRepo;
         $this->familiaRepo = $familiaRepo;
         $this->eremuakRepo = $eremuakRepo;
         $this->kanalmotaRepo = $kanalmotaRepo;
+        $this->udalaRepo = $udalaRepo;
     }
 
     /****************************************************************************************************************
@@ -66,14 +71,14 @@ class ApiController extends AbstractFOSRestController
     /**
      * Udal baten Sail zerrenda
      *
-     * @ApiDoc(
-     *   resource = true,
-     *   description = "Udal baten sail zerrenda",
-     *   statusCodes = {
-     *     200 = "Zuzena denean"
-     *   }
+     * @OA\Response(
+     *     response=200,
+     *     description="Udal baten Sail zerrenda",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type=Saila::class))
+     *     )
      * )
-     *
      *
      * @param $udala
      *
@@ -87,7 +92,7 @@ class ApiController extends AbstractFOSRestController
         $_format = $request->get('_format','json');
         $sailak = $this->sailaRepo->findByUdala($udala);
         if ( $sailak === null ) {
-            return new View( 'there are no users exist', Response::HTTP_NOT_FOUND );
+            return new View( 'udala ez da existitzen', Response::HTTP_NOT_FOUND );
         }
         return $this->returnResponseDataAsFormat($sailak,$_format);
     }
@@ -96,14 +101,14 @@ class ApiController extends AbstractFOSRestController
     /**
      * Udal baten Azpisail baten fitxa zerrenda
      *
-     * @ApiDoc(
-     *   resource = true,
-     *   description = "Udal baten Azpisail baten fitxa zerrenda",
-     *   statusCodes = {
-     *     200 = "Zuzena denean"
-     *   }
+     * @OA\Response(
+     *     response=200,
+     *     description="Udal baten Azpisail baten fitxa zerrenda",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type=Fitxa::class))
+     *     )
      * )
-     *
      * @param $azpisailaid
      *
      * @return array|View
@@ -116,7 +121,7 @@ class ApiController extends AbstractFOSRestController
         $_format = $request->get('_format','json');
         $fitxak = $this->fitxaRepo->findByAzpisaila($azpisailaid);
         if ( $fitxak === null ) {
-            return new View( 'there are no users exist', Response::HTTP_NOT_FOUND );
+            return new View( 'azpisaila ez da existitzen', Response::HTTP_NOT_FOUND );
         }
         return $this->returnResponseDataAsFormat($fitxak,$_format);
     }
@@ -125,15 +130,15 @@ class ApiController extends AbstractFOSRestController
     /**
      * Udal baten Familia/Azpifamilia zerrenda
      *
-     * @ApiDoc(
-     *   resource = true,
-     *   description = "Udal baten Familia/Azpifamilia zerrenda",
-     *   statusCodes = {
-     *     200 = "Zuzena denean"
-     *   }
+     * @OA\Response(
+     *     response=200,
+     *     description="Udal baten Familia/Azpifamilia zerrenda",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type=Fitxa::class))
+     *     )
      * )
-     *
-     *
+     * 
      * @param $udala
      *
      * @return array|View
@@ -146,8 +151,6 @@ class ApiController extends AbstractFOSRestController
         return $this->getSailak($request, $udala);
     }
 
-
-
     /****************************************************************************************************************
      ****************************************************************************************************************
      **** FIN API SAC ***********************************************************************************************
@@ -156,72 +159,70 @@ class ApiController extends AbstractFOSRestController
 
 
     /**
-     * Familia guztien zerrenda.
+     * Familia guztien zerrenda
      *
-     * @ApiDoc(
-     *   resource = true,
-     *   description = "Bloke guztiak eskuratu",
-     *   statusCodes = {
-     *     200 = "Zuzena denean"
-     *   }
+     * @OA\Response(
+     *     response=200,
+     *     description="Familia guztien zerrenda",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type=Familia::class))
+     *     )
+     * )
+     * @OA\Response(
+     *     response=404,
+     *     description="Udala ez da aurkitu",
      * )
      *
-     *
-     * @return array data
-     *
+     * @param $udalKodea
+     * 
+     * @return array|View
      * @Annotations\View()
-     * @Get("/familiak/{udala}")
-     * @Route(name="get_familiak", options={"expose"=true})
+     * @Get("/familiak/{udalKodea}")
      */
-    public function getFamiliak( Request $request, $udala )
+    public function getFamiliak( Request $request, $udalKodea )
     {
         $_format = $request->get('_format','json');
-        $familiak = $this->familiaRepo->findByUdala($udala);
+        $udala = $this->udalaRepo->findBy(['kodea' => $udalKodea]);
+        if ( null === $udala ) {
+            return new View( 'udala ez da existitzen', Response::HTTP_NOT_FOUND );
+        }
+        $familiak = $this->familiaRepo->findByUdala($udalKodea);
         if ( $familiak === null ) {
-            return new View( 'there are no familiak', Response::HTTP_NOT_FOUND );
+            return new View( 'Ez dago familiarik', Response::HTTP_NOT_FOUND );
         }
         return $this->returnResponseDataAsFormat($familiak,$_format);
-    }// "get_familiak"            [GET] /familiak/{udala}
+    }
 
     /**
-     * Familia baten azpifamiliak zerrenda.
-     *
-     * @ApiDoc(
-     *   resource = true,
-     *   description = "Familia baten azpifamiliak zerrenda.",
-     *   statusCodes = {
-     *     200 = "Zuzena denean"
-     *   }
-     * )
-     *
+     * Familia baten azpifamiliak zerrenda familia gurasoaren identifikatzailea adierazita
      *
      * @return array data
      *
      * @Annotations\View()
-     * @Get("/azpifamiliak/{id}")
-     * @Route(name="get_azpifamiliak", options={"expose"=true})
+     * @Get("/azpifamiliak/{id}", options={"expose"=true})
      */
     public function getAzpifamiliak( Request $request, $id )
     {
         $_format = $request->get('_format','json');
         $azpifamiliak = $this->familiaRepo->findBy([ 'parent' => $id ]);
         if ( $azpifamiliak === null ) {
-            return new View( 'there are no azpifamiliak', Response::HTTP_NOT_FOUND );
+            return new View( 'Ez dago azpifamiliarik', Response::HTTP_NOT_FOUND );
         }
         return $this->returnResponseDataAsFormat($azpifamiliak,$_format);
-    }// "get_azpifamiliak"            [GET] /azpifamiliak/{id}
+    }
 
     /**
      * Familia baten fitxa guztien zerrenda.
      *
-     * @ApiDoc(
-     *   resource = true,
-     *   description = "Familia baten fitxak eskuratu",
-     *   statusCodes = {
-     *     200 = "Zuzena denean"
-     *   }
+     * @OA\Response(
+     *     response=200,
+     *     description="Familia baten fitxa guztien zerrenda",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type=Fitxa::class))
+     *     )
      * )
-     *
      *
      * @param $id
      *
@@ -235,28 +236,23 @@ class ApiController extends AbstractFOSRestController
         $_format = $request->get('_format','json');
         $fitxak = $this->fitxaRepo->findByFamilia($id);
         if ( $fitxak === null ) {
-            return new View( 'there are no fitxak', Response::HTTP_NOT_FOUND );
+            return new View( 'Ez dago fitxarik', Response::HTTP_NOT_FOUND );
         }
         return $this->returnResponseDataAsFormat($fitxak,$_format);
-    }// "get_fitxak_by_familia"            [GET] /fitxakbyfamilia/{id}
+    }
 
     /**
-     * Fitxa irakurri.
+     * Fitxa irakurri XML formatuan fitxa identifikatzailea adierazita
      *
-     * @ApiDoc(
-     *   resource = true,
-     *   description = "Fitxa irakurri",
-     *   statusCodes = {
-     *     200 = "Zuzena denean"
-     *   }
+     * @OA\Response(
+     *     response=200,
+     *     description="Familia baten ordena sugeritu"
      * )
-     *
-     *
-     * @return array data
+     * 
+     * @return Fitxa|null
      *
      * @Annotations\View()
      * @Get("/fitxa/{id}")
-     * @Route(name="get_fitxa", options={"expose"=true})
      */
     public function getFitxa( Fitxa $fitxa ): Response
     {
@@ -275,19 +271,15 @@ class ApiController extends AbstractFOSRestController
             ],
             $response
         );
-    }// "get_fitxa"            [GET] /fitxa/{id}
+    }
 
     /**
      * Familia baten ordena sugeritu.
      *
-     * @ApiDoc(
-     *   resource = true,
-     *   description = "Familia baten ordena sugeritu.",
-     *   statusCodes = {
-     *     200 = "Zuzena denean"
-     *   }
+     * @OA\Response(
+     *     response=200,
+     *     description="Familia baten ordena sugeritu"
      * )
-     *
      *
      * @return array data
      *

@@ -1,10 +1,15 @@
 {
 	"folders": [
 		{
+			"name": "zerbikat",
 			"path": "."
 		},
 		{
+			"name": "zergaordenantzak",
 			"path": "../zergaordenantzak"
+		},
+		{
+			"path": "../../bundles/user-bundle"
 		}
 	],
 	"settings": {}

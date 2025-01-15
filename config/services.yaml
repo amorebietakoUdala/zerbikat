@@ -59,9 +59,10 @@ services:
     # please note that last definitions always *replace* previous ones
 
 #    easycorp.easylog.handler:
-    EasyCorp\EasyLog\EasyLogHandler:
-        arguments:
-            - '%kernel.logs_dir%/%kernel.environment%.log'
+    # EasyCorp\EasyLog\EasyLogHandler:
+    #     arguments:
+    #         - '%kernel.logs_dir%/%kernel.environment%.log'
 
-    easycorp.easylog.handler: '@EasyCorp\EasyLog\EasyLogHandler'
-    WhiteOctober\TCPDFBundle\Controller\TCPDFController: '@white_october.tcpdf'
+    # easycorp.easylog.handler: '@EasyCorp\EasyLog\EasyLogHandler'
+
+    Qipsius\TCPDFBundle\Controller\TCPDFController: '@qipsius.tcpdf'

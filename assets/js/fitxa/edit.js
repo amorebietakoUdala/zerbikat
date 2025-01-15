@@ -121,7 +121,7 @@ $(function () {
    var udalaid = $('#udala_id').val();
    var udalakodea = $('#udala_kodea').val();
 
-   var url = param + "/ordenantzakbykodea/" + udalakodea + ".json";
+   var url = param + "/ordenantzakbykodea/" + udalakodea + "?format=json";
    var locale = global.locale;
 
    var jqxhr = $.getJSON(url, function (result) {
@@ -152,7 +152,7 @@ $(function () {
       console.log("ordenantza change")
       $('#nireloader3').addClass('loading');
       var ordenantzaid = $(this).val();
-      var url = param + "/tributuak/" + ordenantzaid + ".json";
+      var url = param + "/tributuak/" + ordenantzaid + "?format=json";
 
       var jqxhr = $.getJSON(url, function (result) {
          $("#cmbAtala").empty();
@@ -234,7 +234,7 @@ $(function () {
       console.log("atala change")
       $('#nireloader3').addClass('loading');
       var atalaid = $(this).val();
-      var url = param + "/zergak/" + atalaid + ".json";
+      var url = param + "/zergak/" + atalaid + "?format=json";
 
       var jqxhr = $.getJSON(url, function (result2) {
          $("#cmbKontzeptua").empty();
@@ -413,7 +413,7 @@ $(function () {
 
 
       $("#fitxafamilia_familia").val(aukera).trigger("change");
-      var url = global.base + Routing.generate('get_azpifamiliak', { id: aukera });
+      var url = global.base + Routing.generate('app_api_getfamiliak', { id: aukera });
 
       var jqxhr = $.getJSON(url, function (result) {
          $.each(result, function (i, field) {

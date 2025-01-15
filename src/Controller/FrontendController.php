@@ -13,7 +13,7 @@ use App\Repository\KanalmotaRepository;
 use App\Repository\SailaRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use WhiteOctober\TCPDFBundle\Controller\TCPDFController;
+use Qipsius\TCPDFBundle\Controller\TCPDFController;
 
 class FrontendController extends AbstractController
 {
@@ -84,7 +84,7 @@ class FrontendController extends AbstractController
         $kostuZerrenda = [];
         foreach ( $fitxa->getKostuak() as $kostu ) {
             $client = new GuzzleHttp\Client();
-            $proba  = $client->request( 'GET', $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '.json' );
+            $proba  = $client->request( 'GET', $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '?format=json' );
 
             $fitxaKostua     = (string)$proba->getBody();
             $array           = json_decode( $fitxaKostua, true );
@@ -158,7 +158,7 @@ class FrontendController extends AbstractController
         $kostuZerrenda = [];
         foreach ( $fitxa->getKostuak() as $kostu ) {
             $client = new GuzzleHttp\Client();
-            $proba  = $client->request( 'GET', $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '.json' );
+            $proba  = $client->request( 'GET', $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '?format=json' );
 
             $fitxaKostua     = (string)$proba->getBody();
             $array           = json_decode( $fitxaKostua, true );
@@ -189,8 +189,8 @@ class FrontendController extends AbstractController
         foreach ( $fitxa->getKostuak() as $kostu ) {
             $client = new GuzzleHttp\Client();
 
-//            $proba = $client->request( 'GET', 'http://zergaordenantzak.dev/app_dev.php/api/azpiatalas/'.$kostu->getKostua().'.json' );
-            $proba = $client->request( 'GET', $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '.json' );
+//            $proba = $client->request( 'GET', 'http://zergaordenantzak.dev/app_dev.php/api/azpiatalas/'.$kostu->getKostua().'?format=json' );
+            $proba = $client->request( 'GET', $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '?format=json' );
 
             $fitxaKostua     = (string)$proba->getBody();
             $array           = json_decode( $fitxaKostua, true );

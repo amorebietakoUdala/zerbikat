@@ -88,7 +88,7 @@ class Azpiatala
     /**
      * @var fitxak[]
      *
-     * @ORM\ManyToMany(targetEntity="Fitxa",mappedBy="azpiatalak", cascade="persist"))
+     * @ORM\ManyToMany(targetEntity="Fitxa",mappedBy="azpiatalak", cascade={"persist"}))
      */
     private $fitxak;
 

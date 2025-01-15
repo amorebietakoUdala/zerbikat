@@ -171,7 +171,7 @@ class Kanala
     /**
      * @var fitxak[]
      *
-     * @ORM\ManyToMany(targetEntity="Fitxa", mappedBy="kanalak", cascade="persist")
+     * @ORM\ManyToMany(targetEntity="Fitxa", mappedBy="kanalak", cascade={"persist"})
      */
     private $fitxak;
     

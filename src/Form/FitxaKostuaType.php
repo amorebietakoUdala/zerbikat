@@ -30,7 +30,7 @@ class FitxaKostuaType extends AbstractType
 //        $api = "http://zzoo.dev/app_dev.php/api";
 
         $client = new GuzzleHttp\Client();
-        $url = $api.'/udalzergak/'.$udala.'.json';
+        $url = $api.'/udalzergak/'.$udala.'?format=json';
         $proba = $client->request( 'GET', $url );
         $valftp = (string)$proba->getBody();
         $array = json_decode($valftp, true);

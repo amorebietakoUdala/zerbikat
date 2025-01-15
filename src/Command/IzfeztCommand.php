@@ -521,7 +521,7 @@ class IzfeztCommand extends Command
                                 $client = new GuzzleHttp\Client();
                                 $proba = $client->request(
                                     'GET',
-                                    $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '.json'
+                                    $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '?format=json'
                                 );
                                 $fitxaKostua = (string)$proba->getBody();
                                 $array = json_decode( $fitxaKostua, true );
@@ -2171,7 +2171,7 @@ class IzfeztCommand extends Command
                                     $client = new GuzzleHttp\Client();
                                     $proba = $client->request(
                                         'GET',
-                                        $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '.json'
+                                        $this->zzoo_aplikazioaren_API_url . '/zerga/' . $kostu->getKostua() . '?format=json'
                                     );
                                     $fitxaKostua = (string)$proba->getBody();
                                     $array = json_decode( $fitxaKostua, true );

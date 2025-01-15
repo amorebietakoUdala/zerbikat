@@ -335,7 +335,7 @@
             {% if eremuak.kostuatable %}
                 <div class="row">
                     {% if fitxa.udala.zergaor %}
-                        <ul class="list-unstyled" id="kostua-fields-list" data-prototype="{% filter escape %}{% include 'fitxakostua/prototype_new.html.twig' with {'form': edit_form.kostuak.vars.prototype,'udal':fitxa.udala,'fitxa':fitxa} %}{% endfilter %}">
+                        <ul class="list-unstyled" id="kostua-fields-list" data-prototype="{% apply escape %}{% include 'fitxakostua/prototype_new.html.twig' with {'form': edit_form.kostuak.vars.prototype,'udal':fitxa.udala,'fitxa':fitxa} %}{% endapply %}">
                             <li class="burua"></li>
                             {% for kostua in edit_form.kostuak %}
                                 <li>
@@ -458,8 +458,8 @@
                     <div class="col-sm-1"></div>
                     <div class="col-sm-10">
                         <div class="form-group">
-                            <ul class="list-unstyled" id="araudia-fields-list" data-prototype="{% filter escape %}
-                {% include 'fitxaaraudia/prototype_new.html.twig' with {'form': edit_form.araudiak.vars.prototype,'fitxa':fitxa} %}{% endfilter %}">
+                            <ul class="list-unstyled" id="araudia-fields-list" data-prototype="{% apply escape %}
+                {% include 'fitxaaraudia/prototype_new.html.twig' with {'form': edit_form.araudiak.vars.prototype,'fitxa':fitxa} %}{% endapply %}">
                                 <li class="burua">
                                     <div class="col-sm-7"><b>{{ 'messages.araudia'|trans }}</b></div>
                                     <div class="col-sm-2"><b>{{ 'messages.atala'|trans }} ({{ 'messages.eu'|trans }}
@@ -516,8 +516,8 @@
                 <div class="col-sm-2"></div>
                 <div class="col-sm-8">
                     <div class="form-group">
-                        <ul class="list-unstyled" id="prozedura-fields-list" data-prototype="{% filter escape %}
-                {% include 'fitxaprozedura/prototype_new.html.twig' with {'form': edit_form.prozedurak.vars.prototype,'udal':fitxa.udala,'fitxa':fitxa} %}{% endfilter %}">
+                        <ul class="list-unstyled" id="prozedura-fields-list" data-prototype="{% apply escape %}
+                {% include 'fitxaprozedura/prototype_new.html.twig' with {'form': edit_form.prozedurak.vars.prototype,'udal':fitxa.udala,'fitxa':fitxa} %}{% endapply %}">
                             <li class="burua">
                                 <div class="col-sm-9"><b>{{ 'messages.prozedura'|trans }}</b></div>
                                 <div class="col-sm-2"><b>{{ 'messages.ordena'|trans }}</b></div>
