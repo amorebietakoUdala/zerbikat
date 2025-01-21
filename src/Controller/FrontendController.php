@@ -14,6 +14,8 @@ use App\Repository\SailaRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Qipsius\TCPDFBundle\Controller\TCPDFController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 
 class FrontendController extends AbstractController
 {
@@ -25,6 +27,7 @@ class FrontendController extends AbstractController
     private $kanalmotaRepo;
     private $eremuakRepo;
     private $zzoo_aplikazioaren_API_url;
+    private $pdfPath;
     
     public function __construct(
         TCPDFController $tcpdfController,
@@ -33,8 +36,8 @@ class FrontendController extends AbstractController
         SailaRepository $sailaRepo,
         KanalmotaRepository $kanalmotaRepo,
         EremuakRepository $eremuakRepo,
-        $zzoo_aplikazioaren_API_url
-
+        string $zzoo_aplikazioaren_API_url,
+        string $pdfPath
     )
     {
         $this->tcpdfController = $tcpdfController;
@@ -44,6 +47,7 @@ class FrontendController extends AbstractController
         $this->kanalmotaRepo = $kanalmotaRepo;
         $this->eremuakRepo = $eremuakRepo;
         $this->zzoo_aplikazioaren_API_url = $zzoo_aplikazioaren_API_url;
+        $this->pdfPath = $pdfPath;
     }
 
     /**
@@ -141,7 +145,10 @@ class FrontendController extends AbstractController
             $align = '',
             $autopadding = true
         );
-        $pdf->Output( $filename . ".pdf", 'I' ); // This will output the PDF as a response directly
+        $this->createPDF($html, $udala, $fitxa);
+        $filename = $fitxa->getEspedientekodea() . "." . $fitxa->getDeskribapenaeu();
+        return new BinaryFileResponse($this->pdfPath.'/'.$filename.'.pdf');
+
     }
 
     /**
@@ -169,7 +176,9 @@ class FrontendController extends AbstractController
             'frontend/pdf.html.twig',
             ['fitxa'         => $fitxa, 'kanalmotak'    => $kanalmotak, 'eremuak'       => $eremuak, 'labelak'       => $labelak, 'udala'         => $udala, 'kostuZerrenda' => $kostuZerrenda]
         );
-        $this->sendResponsePDF($html, $udala, $fitxa);
+        $this->createPDF($html, $udala, $fitxa);
+        $filename = $fitxa->getEspedientekodea() . "." . $fitxa->getDeskribapenaeu();
+        return new BinaryFileResponse($this->pdfPath.'/'.$filename.'.pdf');
     }
 
 
@@ -198,12 +207,22 @@ class FrontendController extends AbstractController
         }
         $html = $this->render(
             'frontend/pdfelebi.html.twig',
-            ['fitxa'         => $fitxa, 'kanalmotak'    => $kanalmotak, 'eremuak'       => $eremuak, 'labelak'       => $labelak, 'udala'         => $udala, 'kostuZerrenda' => $kostuZerrenda]
+            [
+                'fitxa'         => $fitxa, 
+                'kanalmotak'    => $kanalmotak, 
+                'eremuak'       => $eremuak, 
+                'labelak'       => $labelak, 
+                'udala'         => $udala, 
+                'kostuZerrenda' => $kostuZerrenda
+            ]
         );
-        $this->sendResponsePDF($html, $udala, $fitxa);
+        
+        $this->createPDF($html, $udala, $fitxa);
+        $filename = $fitxa->getEspedientekodea() . "." . $fitxa->getDeskribapenaeu();
+        return new BinaryFileResponse($this->pdfPath.'/'.$filename.'.pdf');
     }
 
-    private function sendResponsePDF ($html, $udala, Fitxa$fitxa) {
+    private function createPDF($html, $udala, Fitxa $fitxa): void {
         $pdf = $this->tcpdfController->create(
             'vertical',
             PDF_UNIT,
@@ -234,6 +253,6 @@ class FrontendController extends AbstractController
             $align = '',
             $autopadding = true
         );
-        $pdf->Output( $filename . ".pdf", 'I' ); // This will output the PDF as a response directly
+        $pdf->Output( $this->pdfPath.'/'.$filename . ".pdf", 'F' ); // This will output the PDF as a response directly
     }
 }

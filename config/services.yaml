@@ -7,6 +7,7 @@ parameters:
     secret: '%env(APP_SECRET)%'
     izfe_login_path: null
     zzoo_aplikazioaren_API_url: '%env(ZZOO_APLIKAZIOAREN_API_URL)%'
+    pdfPath: '%env(PDF_PATH)%'
 
 services:
     # default configuration for services in *this* file
@@ -18,6 +19,7 @@ services:
             $allowedRoles: ["ROLE_USER","ROLE_KUDEAKETA", "ROLE_ADMIN"]
             $class: App\Entity\User
             $zzoo_aplikazioaren_API_url: '%zzoo_aplikazioaren_API_url%'
+            $pdfPath: '%pdfPath%'
 
     Symfony\Component\Ldap\Ldap:
         arguments: ['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter']
