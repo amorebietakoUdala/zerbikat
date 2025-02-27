@@ -7,11 +7,13 @@
             <div class="navbar-header">
                 <a class="navbar-brand">{{ 'messages.zerbitzua'|trans }}</a>
             </div>
-            <div id="navbar" class="navbar-collapse collapse navbar-right">
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ path('zerbitzua_new') }}" class="fa fa-plus"> {{ 'messages.zerbitzuberria'|trans }}</a></li>
-                </ul>
-            </div>
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <div id="navbar" class="navbar-collapse collapse navbar-right">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{{ path('zerbitzua_new') }}" class="fa fa-plus"> {{ 'messages.zerbitzuberria'|trans }}</a></li>
+                    </ul>
+                </div>
+            {% endif %}
         </div>
     </nav>
 {% endblock %}
@@ -38,8 +40,8 @@
                 </td>
                 <td NOWRAP class="text-right">
                     <ul class="list-inline">
-                            <li><a href="{{ path('zerbitzua_edit', { 'id': zerbitzua.id }) }}" ><i class="fa fa-pencil"></i></a></li>
                         {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('zerbitzua_edit', { 'id': zerbitzua.id }) }}" ><i class="fa fa-pencil"></i></a></li>
                             <li>{{ form_start(deleteforms[zerbitzua.id],{'attr': {'id': zerbitzua.id}}) }}
                                 <a href="#" {{ stimulus_controller('confirmation', {
                                         id: zerbitzua.id,
@@ -57,7 +59,7 @@
     <div class="text-center">
         {% if zerbitzuas is not empty %}
             {% if pager.haveToPaginate %}
-                {{ pagerfanta(pager, 'twitter_bootstrap3_translated', {'routeName': 'zerbitzua_index_paginated'}) }}
+                {{ pagerfanta(pager, 'twitter_bootstrap3', {'routeName': 'zerbitzua_index_paginated', 'prev_message': 'Anterior' | trans, 'next_message': 'Siguiente' | trans }) }}
             {% endif %}
         {% else %}
             <p>{{ 'messages.emaitzarikez'|trans }}</p>

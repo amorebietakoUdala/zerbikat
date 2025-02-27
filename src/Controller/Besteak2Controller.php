@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Besteak2;
 use App\Form\Besteak2Type;
 use App\Repository\Besteak2Repository;
@@ -14,87 +14,72 @@ use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\ExpressionLanguage\Expression;
 
 /**
  * Besteak2 controller.
- *
- * @Route("/{_locale}/besteak2")
  */
+#[Route(path: '/{_locale}/besteak2')]
 class Besteak2Controller extends AbstractController
 {
 
-    private $repo;
-    private $em;
-
-    public function __construct(EntityManagerInterface $em, Besteak2Repository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private Besteak2Repository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
     /**
      * Lists all Besteak2 entities.
-     *
-     * @Route("/", defaults={"page"=1}, name="besteak2_index", methods={"GET"})
-     * @Route("/page{page}", name="besteak2_index_paginated", methods={"GET"})
      */
+    #[IsGranted("ROLE_KUDEAKETA")]
+    #[Route(path: '/', defaults: ['page' => 1], name: 'besteak2_index', methods: ['GET'])]
+    #[Route(path: '/page{page}', name: 'besteak2_index_paginated', methods: ['GET'])]
     public function index($page)
     {
-        if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $besteak2s = $this->repo->findBy( [], ['kodea'=>'ASC'] );
+        $besteak2s = $this->repo->findBy( [], ['kodea'=>'ASC'] );
 
-            $deleteForms = [];
-            foreach ($besteak2s as $besteak2) {
-                $deleteForms[$besteak2->getId()] = $this->createDeleteForm($besteak2)->createView();
-            }
-
-            return $this->render('besteak2/index.html.twig', ['besteak2s' => $besteak2s, 'deleteforms' => $deleteForms]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+        $deleteForms = [];
+        foreach ($besteak2s as $besteak2) {
+            $deleteForms[$besteak2->getId()] = $this->createDeleteForm($besteak2)->createView();
         }
+
+        return $this->render('besteak2/index.html.twig', ['besteak2s' => $besteak2s, 'deleteforms' => $deleteForms]);
     }
 
     /**
      * Creates a new Besteak2 entity.
-     *
-     * @Route("/new", name="besteak2_new", methods={"GET", "POST"})
      */
+    #[IsGranted("ROLE_ADMIN")]
+    #[Route(path: '/new', name: 'besteak2_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
-        if ($this->isGranted('ROLE_ADMIN'))
-        {
-            $besteak2 = new Besteak2();
-            $form = $this->createForm(Besteak2Type::class, $besteak2);
-            $form->handleRequest($request);
+        $besteak2 = new Besteak2();
+        $form = $this->createForm(Besteak2Type::class, $besteak2);
+        $form->handleRequest($request);
 
-//            $form->getData()->setUdala($this->getUser()->getUdala());
-//            $form->setData($form->getData());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $besteak2 = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $udala = $user->getUdala();
+            $besteak2->setUdala($udala);
+            $this->em->persist($besteak2);
+            $this->em->flush();
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->em->persist($besteak2);
-                $this->em->flush();
-
-//                return $this->redirectToRoute('besteak2_show', array('id' => $besteak2->getId()));
-                return $this->redirectToRoute('besteak2_index');                
-            } else
-            {
-                $form->getData()->setUdala($this->getUser()->getUdala());
-                $form->setData($form->getData());
-            }
-
-            return $this->render('besteak2/new.html.twig', ['besteak2' => $besteak2, 'form' => $form->createView()]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+            return $this->redirectToRoute('besteak2_index');                
         }
+
+        return $this->render('besteak2/new.html.twig', ['besteak2' => $besteak2, 'form' => $form->createView()]);
     }
 
     /**
      * Finds and displays a Besteak2 entity.
-     *
-     * @Route("/{id}", name="besteak2_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'besteak2_show', methods: ['GET'])]
     public function show(Besteak2 $besteak2): Response
     {
         $deleteForm = $this->createDeleteForm($besteak2);
@@ -104,12 +89,14 @@ class Besteak2Controller extends AbstractController
 
     /**
      * Displays a form to edit an existing Besteak2 entity.
-     *
-     * @Route("/{id}/edit", name="besteak2_edit", methods={"GET", "POST"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}/edit', name: 'besteak2_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Besteak2 $besteak2)
     {
-        if((($this->isGranted('ROLE_ADMIN')) && ($besteak2->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($besteak2->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($besteak2);
@@ -126,18 +113,20 @@ class Besteak2Controller extends AbstractController
             return $this->render('besteak2/edit.html.twig', ['besteak2' => $besteak2, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 
     /**
      * Deletes a Besteak2 entity.
-     *
-     * @Route("/{id}", name="besteak2_delete", methods={"DELETE"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}', name: 'besteak2_delete', methods: ['DELETE'])]
     public function delete(Request $request, Besteak2 $besteak2): RedirectResponse
     {
-        if((($this->isGranted('ROLE_ADMIN')) && ($besteak2->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($besteak2->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $form = $this->createDeleteForm($besteak2);
@@ -150,7 +139,7 @@ class Besteak2Controller extends AbstractController
         }else
         {
             //baimenik ez
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }            
     }
 

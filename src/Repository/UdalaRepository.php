@@ -54,7 +54,7 @@ class UdalaRepository extends ServiceEntityRepository
     public function findByUdala($udala)
     {
         return $this->createQueryBuilder('s')
-            ->innerJoin('App:Udala','u')
+            ->innerJoin(Udala::class,'u')
             ->andWhere('u.kodea = :udala')
             ->setParameter('udala', $udala)
             ->orderBy('s.kodea', 'DESC')

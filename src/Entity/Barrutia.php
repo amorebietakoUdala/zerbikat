@@ -3,58 +3,51 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
+use Doctrine\Common\Collections\ArrayCollection;
 
-/**
- * Barrutia
- *
- * @ORM\Table(name="barrutia")
- * @ORM\Entity
- * @UdalaEgiaztatu(userFieldName="udala_id")
- */
-class Barrutia
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'barrutia')]
+#[ORM\Entity]
+class Barrutia implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
     
     /**
      * @var string
-     *
-     * @ORM\Column(name="izena", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'izena', type: 'string', length: 255, nullable: true)]
     private $izena;
 
 
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
     
     /**
-     * @var azpisailak[]
-     *
-     * @ORM\OneToMany(targetEntity="Azpisaila", mappedBy="saila")
+     * @var ArrayCollection
      */
+    #[ORM\OneToMany(targetEntity: Azpisaila::class, mappedBy: 'saila')]
     private $azpisailak;
 
 
     /**
      *          TOSTRING
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getIzena();
     }
@@ -66,7 +59,7 @@ class Barrutia
      */
     public function __construct()
     {
-        $this->azpisailak = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->azpisailak = new ArrayCollection();
     }
 
     /**
@@ -106,11 +99,11 @@ class Barrutia
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return Barrutia
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -120,7 +113,7 @@ class Barrutia
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {
@@ -130,11 +123,11 @@ class Barrutia
     /**
      * Add azpisailak
      *
-     * @param \App\Entity\Azpisaila $azpisailak
+     * @param Azpisaila $azpisailak
      *
      * @return Barrutia
      */
-    public function addAzpisailak(\App\Entity\Azpisaila $azpisailak)
+    public function addAzpisailak(Azpisaila $azpisailak)
     {
         $this->azpisailak[] = $azpisailak;
 
@@ -144,9 +137,9 @@ class Barrutia
     /**
      * Remove azpisailak
      *
-     * @param \App\Entity\Azpisaila $azpisailak
+     * @param Azpisaila $azpisailak
      */
-    public function removeAzpisailak(\App\Entity\Azpisaila $azpisailak)
+    public function removeAzpisailak(Azpisaila $azpisailak)
     {
         $this->azpisailak->removeElement($azpisailak);
     }
@@ -154,7 +147,7 @@ class Barrutia
     /**
      * Get azpisailak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getAzpisailak()
     {

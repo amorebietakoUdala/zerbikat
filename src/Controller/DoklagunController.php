@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Doklagun;
 use App\Form\DoklagunType;
 use App\Repository\DoklagunRepository;
@@ -14,90 +14,74 @@ use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\ExpressionLanguage\Expression;
 
 /**
  * Doklagun controller.
- *
- * @Route("/{_locale}/doklagun")
  */
+#[Route(path: '/{_locale}/doklagun')]
 class DoklagunController extends AbstractController
 {
 
-    private $repo;
-    private $em;
-
-    public function __construct(EntityManagerInterface $em, DoklagunRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private DoklagunRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
     /**
      * Lists all Doklagun entities.
-     *
-     * @Route("/", defaults={"page"=1}, name="doklagun_index", methods={"GET"})
-     * @Route("/page{page}", name="doklagun_index_paginated", methods={"GET"})
      */
+    #[IsGranted("ROLE_KUDEAKETA")]
+    #[Route(path: '/', defaults: ['page' => 1], name: 'doklagun_index', methods: ['GET'])]
+    #[Route(path: '/page{page}', name: 'doklagun_index_paginated', methods: ['GET'])]
     public function index($page)
     {
 
-        if ($this->isGranted('ROLE_KUDEAKETA'))
-        {
-            $doklaguns = $this->repo->findBy( [], ['kodea'=>'ASC'] );
+        $doklaguns = $this->repo->findBy( [], ['kodea'=>'ASC'] );
 
-            $deleteForms = [];
-            foreach ($doklaguns as $doklagun) {
-                $deleteForms[$doklagun->getId()] = $this->createDeleteForm($doklagun)->createView();
-            }
-
-            return $this->render('doklagun/index.html.twig', ['doklaguns' => $doklaguns, 'deleteforms' => $deleteForms]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+        $deleteForms = [];
+        foreach ($doklaguns as $doklagun) {
+            $deleteForms[$doklagun->getId()] = $this->createDeleteForm($doklagun)->createView();
         }
+
+        return $this->render('doklagun/index.html.twig', ['doklaguns' => $doklaguns, 'deleteforms' => $deleteForms]);
     }
 
     /**
      * Creates a new Doklagun entity.
-     *
-     * @Route("/new", name="doklagun_new", methods={"GET", "POST"})
      */
+    #[IsGranted("ROLE_ADMIN")]
+    #[Route(path: '/new', name: 'doklagun_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
 
-        if ($this->isGranted('ROLE_ADMIN'))
-        {
-            $doklagun = new Doklagun();
-            $form = $this->createForm(DoklagunType::class, $doklagun);
-            $form->handleRequest($request);
+        $doklagun = new Doklagun();
+        $form = $this->createForm(DoklagunType::class, $doklagun);
+        $form->handleRequest($request);
 
-//            $form->getData()->setUdala($this->getUser()->getUdala());
-//            $form->setData($form->getData());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $doklagun = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $udala = $user->getUdala();
+            $doklagun->setUdala($udala);
+            $this->em->persist($doklagun);
+            $this->em->flush();
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->em->persist($doklagun);
-                $this->em->flush();
-
-//                return $this->redirectToRoute('doklagun_show', array('id' => $doklagun->getId()));
-                return $this->redirectToRoute('doklagun_index');
-            } else
-            {
-                $form->getData()->setUdala($this->getUser()->getUdala());
-                $form->setData($form->getData());
-            }
-
-            return $this->render('doklagun/new.html.twig', ['doklagun' => $doklagun, 'form' => $form->createView()]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+            return $this->redirectToRoute('doklagun_index');
         }
+
+        return $this->render('doklagun/new.html.twig', ['doklagun' => $doklagun, 'form' => $form->createView()]);
     }
 
     /**
      * Finds and displays a Doklagun entity.
-     *
-     * @Route("/{id}", name="doklagun_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'doklagun_show', methods: ['GET'])]
     public function show(Doklagun $doklagun): Response
     {
         $deleteForm = $this->createDeleteForm($doklagun);
@@ -107,13 +91,15 @@ class DoklagunController extends AbstractController
 
     /**
      * Displays a form to edit an existing Doklagun entity.
-     *
-     * @Route("/{id}/edit", name="doklagun_edit", methods={"GET", "POST"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}/edit', name: 'doklagun_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Doklagun $doklagun)
     {
 
-        if((($this->isGranted('ROLE_ADMIN')) && ($doklagun->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($doklagun->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($doklagun);
@@ -130,19 +116,20 @@ class DoklagunController extends AbstractController
             return $this->render('doklagun/edit.html.twig', ['doklagun' => $doklagun, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 
     /**
      * Deletes a Doklagun entity.
-     *
-     * @Route("/{id}", name="doklagun_delete", methods={"DELETE"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}', name: 'doklagun_delete', methods: ['DELETE'])]
     public function delete(Request $request, Doklagun $doklagun): RedirectResponse
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($doklagun->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($doklagun->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $form = $this->createDeleteForm($doklagun);
@@ -157,7 +144,7 @@ class DoklagunController extends AbstractController
         }else
         {
             //baimenik ez
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 

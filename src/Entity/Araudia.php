@@ -3,89 +3,78 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\AraudiaRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 
-/**
- * Araudia
- *
- * @ORM\Table(name="araudia", indexes={@ORM\Index(name="araumota_id_idx", columns={"araumota_id"})})
- * @ORM\Entity(repositoryClass=AraudiaRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
- */
-class Araudia
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'araudia')]
+#[ORM\Index(name: 'araumota_id_idx', columns: ['araumota_id'])]
+#[ORM\Entity(repositoryClass: AraudiaRepository::class)]
+class Araudia implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="kodea", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'kodea', type: 'string', length: 255, nullable: true)]
     private $kodea;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="arauaeu", type="string", length=1024, nullable=true)
      */
+    #[ORM\Column(name: 'arauaeu', type: 'string', length: 1024, nullable: true)]
     private $arauaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="arauaes", type="string", length=1024, nullable=true)
      */
+    #[ORM\Column(name: 'arauaes', type: 'string', length: 1024, nullable: true)]
     private $arauaes;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="estekaeu", type="string", length=1000, nullable=true)
      */
+    #[ORM\Column(name: 'estekaeu', type: 'string', length: 1000, nullable: true)]
     private $estekaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="estekaes", type="string", length=1000, nullable=true)
      */
+    #[ORM\Column(name: 'estekaes', type: 'string', length: 1000, nullable: true)]
     private $estekaes;
 
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
     /**
      * @var ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="FitxaAraudia", mappedBy="araudia")
      */
+    #[ORM\OneToMany(targetEntity: FitxaAraudia::class, mappedBy: 'araudia')]
     private $fitxak;
 
     /**
      * @var Araumota
      *
-     * @ORM\ManyToOne(targetEntity="Araumota",inversedBy="araudiak")
-     * @ORM\JoinColumn(name="araumota_id", referencedColumnName="id",onDelete="SET NULL")
      *
      */
+    #[ORM\JoinColumn(name: 'araumota_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: Araumota::class, inversedBy: 'araudiak')]
     private $araumota;
 
 
@@ -94,7 +83,7 @@ class Araudia
      *      FUNTZIOAK
      */
 
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getKodea() . "-" . $this->getArauaeu();
     }

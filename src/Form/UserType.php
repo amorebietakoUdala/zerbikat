@@ -22,8 +22,8 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 class UserType extends BaseUserType
 //class UserType extends BaseType
 {
-    private $class;
-    private $allowedRoles;
+    protected $class;
+    protected $allowedRoles;
 
     public function __construct($class, $allowedRoles)
     {
@@ -40,7 +40,7 @@ class UserType extends BaseUserType
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options) :void
     {
         parent::buildForm($builder, $options);
         $readonly = $options['readonly'];
@@ -73,9 +73,8 @@ class UserType extends BaseUserType
             'label' => 'user.udala',
             'translation_domain' => 'user_bundle',
             'disabled' => $readonly,
-            'query_builder' => function (UdalaRepository $repo) {
-                return $repo->findOrderedByIdDesc();
-            },
+            'query_builder' => fn(UdalaRepository $repo) => $repo->findOrderedByIdDesc(),
+            'required' => false,
         ]);
     }
     

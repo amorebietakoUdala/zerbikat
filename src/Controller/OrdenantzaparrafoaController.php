@@ -4,96 +4,78 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Ordenantzaparrafoa;
 use App\Form\OrdenantzaparrafoaType;
 use App\Repository\OrdenantzaparrafoaRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Ordenantzaparrafoa controller.
- *
- * @Route("/{_locale}/ordenantzaparrafoa")
  */
+#[Route(path: '/{_locale}/ordenantzaparrafoa')]
 class OrdenantzaparrafoaController extends AbstractController
 {
-    private $repo;
-    private $em;
 
-    public function __construct(EntityManagerInterface $em, OrdenantzaparrafoaRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private OrdenantzaparrafoaRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
     /**
      * Lists all Ordenantzaparrafoa entities.
-     *
-     * @Route("/", name="ordenantzaparrafoa_index", methods={"GET"})
      */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route(path: '/', name: 'ordenantzaparrafoa_index', methods: ['GET'])]
     public function index()
     {
+        $ordenantzaparrafoas = $this->repo->findAll();
 
-        if ($this->isGranted('ROLE_ADMIN')) {
-            $ordenantzaparrafoas = $this->repo->findAll();
-
-            $deleteForms = [];
-            foreach ($ordenantzaparrafoas as $ordenantzaparrafoa) {
-                $deleteForms[$ordenantzaparrafoa->getId()] = $this->createDeleteForm($ordenantzaparrafoa)->createView();
-            }
-
-            return $this->render('ordenantzaparrafoa/index.html.twig', ['ordenantzaparrafoas' => $ordenantzaparrafoas, 'deleteforms' => $deleteForms]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+        $deleteForms = [];
+        foreach ($ordenantzaparrafoas as $ordenantzaparrafoa) {
+            $deleteForms[$ordenantzaparrafoa->getId()] = $this->createDeleteForm($ordenantzaparrafoa)->createView();
         }
+
+        return $this->render('ordenantzaparrafoa/index.html.twig', ['ordenantzaparrafoas' => $ordenantzaparrafoas, 'deleteforms' => $deleteForms]);
     }
 
     /**
      * Creates a new Ordenantzaparrafoa entity.
-     *
-     * @Route("/new", name="ordenantzaparrafoa_new", methods={"GET", "POST"})
      */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route(path: '/new', name: 'ordenantzaparrafoa_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
+        $ordenantzaparrafoa = new Ordenantzaparrafoa();
+        $form = $this->createForm(OrdenantzaparrafoaType::class, $ordenantzaparrafoa);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $ordenantzaparrafoa = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $ordenantzaparrafoa->setCreatedAt(new \DateTime());
+            $ordenantzaparrafoa->setUpdatedAt(new \DateTime());
+            $ordenantzaparrafoa->setUdala($user->getUdala());
+            $this->em->persist($ordenantzaparrafoa);
+            $this->em->flush();
 
-        if ($this->isGranted('ROLE_ADMIN'))
-        {
-            $ordenantzaparrafoa = new Ordenantzaparrafoa();
-            $form = $this->createForm(OrdenantzaparrafoaType::class, $ordenantzaparrafoa);
-            $form->handleRequest($request);
-
-//            $form->getData()->setUdala($this->getUser()->getUdala());
-//            $form->setData($form->getData());
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $ordenantzaparrafoa->setCreatedAt(new \DateTime());
-                $ordenantzaparrafoa->setUpdatedAt(new \DateTime());
-                $this->em->persist($ordenantzaparrafoa);
-                $this->em->flush();
-
-//                return $this->redirectToRoute('ordenantzaparrafoa_show', array('id' => $ordenantzaparrafoa->getId()));
-                return $this->redirectToRoute('ordenantzaparrafoa_index');
-            } else
-            {
-                $form->getData()->setUdala($this->getUser()->getUdala());
-                $form->setData($form->getData());
-            }
-
-            return $this->render('ordenantzaparrafoa/new.html.twig', ['ordenantzaparrafoa' => $ordenantzaparrafoa, 'form' => $form->createView()]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+            return $this->redirectToRoute('ordenantzaparrafoa_index');
         }
+
+        return $this->render('ordenantzaparrafoa/new.html.twig', ['ordenantzaparrafoa' => $ordenantzaparrafoa, 'form' => $form->createView()]);
     }
 
     /**
      * Finds and displays a Ordenantzaparrafoa entity.
-     *
-     * @Route("/{id}", name="ordenantzaparrafoa_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'ordenantzaparrafoa_show', methods: ['GET'])]
     public function show(Ordenantzaparrafoa $ordenantzaparrafoa): Response
     {
         $deleteForm = $this->createDeleteForm($ordenantzaparrafoa);
@@ -103,13 +85,14 @@ class OrdenantzaparrafoaController extends AbstractController
 
     /**
      * Displays a form to edit an existing Ordenantzaparrafoa entity.
-     *
-     * @Route("/{id}/edit", name="ordenantzaparrafoa_edit", methods={"GET", "POST"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}/edit', name: 'ordenantzaparrafoa_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Ordenantzaparrafoa $ordenantzaparrafoa)
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($ordenantzaparrafoa->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($ordenantzaparrafoa->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($ordenantzaparrafoa);
@@ -126,19 +109,20 @@ class OrdenantzaparrafoaController extends AbstractController
             return $this->render('ordenantzaparrafoa/edit.html.twig', ['ordenantzaparrafoa' => $ordenantzaparrafoa, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 
     /**
      * Deletes a Ordenantzaparrafoa entity.
-     *
-     * @Route("/{id}", name="ordenantzaparrafoa_delete", methods={"DELETE"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]    
+    #[Route(path: '/{id}', name: 'ordenantzaparrafoa_delete', methods: ['DELETE'])]
     public function delete(Request $request, Ordenantzaparrafoa $ordenantzaparrafoa): RedirectResponse
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($ordenantzaparrafoa->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($ordenantzaparrafoa->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $form = $this->createDeleteForm($ordenantzaparrafoa);
@@ -151,7 +135,7 @@ class OrdenantzaparrafoaController extends AbstractController
         }else
         {
             //baimenik ez
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }            
     }
 

@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Zerbitzua;
 use App\Form\ZerbitzuaType;
 use App\Repository\ZerbitzuaRepository;
@@ -12,101 +12,84 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Exception\NotValidCurrentPageException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Zerbitzua controller.
- *
- * @Route("/{_locale}/zerbitzua")
  */
+#[Route(path: '/{_locale}/zerbitzua')]
 class ZerbitzuaController extends AbstractController
 {
 
-    private $repo;
-    private $em;
-
-    public function __construct(EntityManagerInterface $em, ZerbitzuaRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private ZerbitzuaRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
     /**
      * Lists all Zerbitzua entities.
-     *
-     * @Route("/", defaults={"page"=1}, name="zerbitzua_index", methods={"GET"})
-     * @Route("/page{page}", name="zerbitzua_index_paginated", methods={"GET"})
      */
+    #[IsGranted("ROLE_SUPER_ADMIN")]
+    #[Route(path: '/', defaults: ['page' => 1], name: 'zerbitzua_index', methods: ['GET'])]
+    #[Route(path: '/page{page}', name: 'zerbitzua_index_paginated', methods: ['GET'])]
     public function index($page)
     {
+        $zerbitzuas = $this->repo->findAll();
 
-        if ($this->isGranted('ROLE_SUPER_ADMIN')) 
-        {
-            $zerbitzuas = $this->repo->findAll();
+        $adapter = new ArrayAdapter($zerbitzuas);
+        $pagerfanta = new Pagerfanta($adapter);
 
-            $adapter = new ArrayAdapter($zerbitzuas);
-            $pagerfanta = new Pagerfanta($adapter);
+        $deleteForms = [];
+        foreach ($zerbitzuas as $zerbitzua) {
+            $deleteForms[$zerbitzua->getId()] = $this->createDeleteForm($zerbitzua)->createView();
+        }
 
-            $deleteForms = [];
-            foreach ($zerbitzuas as $zerbitzua) {
-                $deleteForms[$zerbitzua->getId()] = $this->createDeleteForm($zerbitzua)->createView();
-            }
-
-            try {
-                $entities = $pagerfanta
-                    // Le nombre maximum d'éléments par page
+        try {
+            $entities = $pagerfanta
+                // Le nombre maximum d'éléments par page
 //                    ->setMaxPerPage($this->getUser()->getUdala()->getOrrikatzea())
-                    // Notre position actuelle (numéro de page)
-                    ->setCurrentPage($page)
-                    // On récupère nos entités via Pagerfanta,
-                    // celui-ci s'occupe de limiter la requête en fonction de nos réglages.
-                    ->getCurrentPageResults()
-                ;
-            } catch (\Pagerfanta\Exception\NotValidCurrentPageException $e) {
-                throw $this->createNotFoundException("Orria ez da existitzen");
-            }
-            
-            return $this->render('zerbitzua/index.html.twig', ['zerbitzuas' => $entities, 'deleteforms' => $deleteForms, 'pager' => $pagerfanta]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
-        }            
+                // Notre position actuelle (numéro de page)
+                ->setCurrentPage($page)
+                // On récupère nos entités via Pagerfanta,
+                // celui-ci s'occupe de limiter la requête en fonction de nos réglages.
+                ->getCurrentPageResults()
+            ;
+        } catch (NotValidCurrentPageException) {
+            throw $this->createNotFoundException("Orria ez da existitzen");
+        }
+        
+        return $this->render('zerbitzua/index.html.twig', ['zerbitzuas' => $entities, 'deleteforms' => $deleteForms, 'pager' => $pagerfanta]);
     }
 
     /**
      * Creates a new Zerbitzua entity.
-     *
-     * @Route("/new", name="zerbitzua_new", methods={"GET", "POST"})
      */
+    #[IsGranted("ROLE_SUPER_ADMIN")]
+    #[Route(path: '/new', name: 'zerbitzua_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
+        $zerbitzua = new Zerbitzua();
+        $form = $this->createForm(ZerbitzuaType::class, $zerbitzua);
+        $form->handleRequest($request);
 
-        if ($this->isGranted('ROLE_SUPER_ADMIN'))
-        {
-            $zerbitzua = new Zerbitzua();
-            $form = $this->createForm(ZerbitzuaType::class, $zerbitzua);
-            $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->persist($zerbitzua);
+            $this->em->flush();
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->em->persist($zerbitzua);
-                $this->em->flush();
-
-//                return $this->redirectToRoute('zerbitzua_show', array('id' => $zerbitzua->getId()));
-                return $this->redirectToRoute('zerbitzua_index');
-            }
-            return $this->render('zerbitzua/new.html.twig', ['zerbitzua' => $zerbitzua, 'form' => $form->createView()]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+            return $this->redirectToRoute('zerbitzua_index');
         }
+        return $this->render('zerbitzua/new.html.twig', ['zerbitzua' => $zerbitzua, 'form' => $form->createView()]);
     }
 
     /**
      * Finds and displays a Zerbitzua entity.
-     *
-     * @Route("/{id}", name="zerbitzua_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'zerbitzua_show', methods: ['GET'])]
     public function show(Zerbitzua $zerbitzua): Response
     {
         $deleteForm = $this->createDeleteForm($zerbitzua);
@@ -116,54 +99,39 @@ class ZerbitzuaController extends AbstractController
 
     /**
      * Displays a form to edit an existing Zerbitzua entity.
-     *
-     * @Route("/{id}/edit", name="zerbitzua_edit", methods={"GET", "POST"})
      */
+    #[IsGranted("ROLE_SUPER_ADMIN")]
+    #[Route(path: '/{id}/edit', name: 'zerbitzua_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Zerbitzua $zerbitzua)
     {
+        $deleteForm = $this->createDeleteForm($zerbitzua);
+        $editForm = $this->createForm(ZerbitzuaType::class, $zerbitzua);
+        $editForm->handleRequest($request);
 
-        if ($this->isGranted('ROLE_SUPER_ADMIN'))
-        {
-            $deleteForm = $this->createDeleteForm($zerbitzua);
-            $editForm = $this->createForm(ZerbitzuaType::class, $zerbitzua);
-            $editForm->handleRequest($request);
-    
-            if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $this->em->persist($zerbitzua);
-                $this->em->flush();
-    
-                return $this->redirectToRoute('zerbitzua_edit', ['id' => $zerbitzua->getId()]);
-            }
-    
-            return $this->render('zerbitzua/edit.html.twig', ['zerbitzua' => $zerbitzua, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
-        }            
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $this->em->persist($zerbitzua);
+            $this->em->flush();
+
+            return $this->redirectToRoute('zerbitzua_edit', ['id' => $zerbitzua->getId()]);
+        }
+
+        return $this->render('zerbitzua/edit.html.twig', ['zerbitzua' => $zerbitzua, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
     }
 
     /**
      * Deletes a Zerbitzua entity.
-     *
-     * @Route("/{id}", name="zerbitzua_delete", methods={"DELETE"})
      */
+    #[IsGranted("ROLE_SUPER_ADMIN")]
+    #[Route(path: '/{id}', name: 'zerbitzua_delete', methods: ['DELETE'])]
     public function delete(Request $request, Zerbitzua $zerbitzua): RedirectResponse
     {
-
-        if($this->isGranted('ROLE_SUPER_ADMIN'))
-        {
-            $form = $this->createDeleteForm($zerbitzua);
-            $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->em->remove($zerbitzua);
-                $this->em->flush();
-            }
-            return $this->redirectToRoute('zerbitzua_index');
-        }else
-        {
-            //baimenik ez
-            return $this->redirectToRoute('backend_errorea');
+        $form = $this->createDeleteForm($zerbitzua);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->remove($zerbitzua);
+            $this->em->flush();
         }
+        return $this->redirectToRoute('zerbitzua_index');
     }
 
     /**

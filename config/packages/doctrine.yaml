@@ -16,20 +16,19 @@ doctrine:
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        controller_resolver:
+            auto-mapping: false
         auto_mapping: true
+        enable_lazy_ghost_objects: true
+        report_fields_where_declared: true
         mappings:
             App:
                 is_bundle: false
-                type: annotation
+                type: attribute
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
-            # Zerbikat\App:
-            #     is_bundle: false
-            #     type: annotation
-            #     dir: '%kernel.project_dir%/src/Zerbikat/BackendBundle/Entity'
-            #     prefix: 'App\Entity'
-            #     alias: Zerbikat\BackendBundle
+
         filters:
             udala_filter:
                 class: App\Filter\UdalaFilter

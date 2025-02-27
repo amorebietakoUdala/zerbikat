@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Entity\Azpisaila;
 use App\Entity\Udala;
 use JMS\Serializer\Annotation\ExclusionPolicy;
@@ -14,87 +14,76 @@ use App\Repository\SailaRepository;
 /**
  * Saila
  *
- * @ORM\Table(name="saila")
- * @ORM\Entity(repositoryClass=SailaRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
- * @ExclusionPolicy("all")
  */
-class Saila
+#[ExclusionPolicy("all")]
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'saila')]
+#[ORM\Entity(repositoryClass: SailaRepository::class)]
+class Saila implements \Stringable
 {
     /**
      * @var integer
-     * @Expose
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[Expose()]
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var string
-     * @Expose
-     *
-     * @ORM\Column(name="kodea", type="string", length=10, nullable=true)
      */
+    #[Expose()]
+    #[ORM\Column(name: 'kodea', type: 'string', length: 10, nullable: true)]
     private $kodea;
 
     /**
      * @var string
-     * @Expose
-     *
-     * @ORM\Column(name="sailaeu", type="string", length=255, nullable=true)
      */
+    #[Expose()]
+    #[ORM\Column(name: 'sailaeu', type: 'string', length: 255, nullable: true)]
     private $sailaeu;
 
     /**
      * @var string
-     * @Expose
-     *
-     * @ORM\Column(name="sailaes", type="string", length=255, nullable=true)
      */
+    #[Expose()]
+    #[ORM\Column(name: 'sailaes', type: 'string', length: 255, nullable: true)]
     private $sailaes;
 
     /**
      * @var string
-     * @Expose
-     *
-     * @ORM\Column(name="arduraduna", type="string", length=255, nullable=true)
      */
+    #[Expose()]
+    #[ORM\Column(name: 'arduraduna', type: 'string', length: 255, nullable: true)]
     private $arduraduna;
-
-
 
     /**
      *          ERLAZIOAK
      */
-
     /**
      * @var Udala udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
     
     /**
      * @var ArrayCollection
      * @Expose
-     *
-     * @ORM\OneToMany(targetEntity="Azpisaila", mappedBy="saila")
      */
+    #[ORM\OneToMany(targetEntity: Azpisaila::class, mappedBy: 'saila')]
     private $azpisailak;
 
 
     /**
      *          TOSTRING
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getSailaeu();
     }
-
-
     
     /**
      * Constructor

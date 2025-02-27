@@ -7,49 +7,46 @@ use App\Repository\FitxaKostuaRepository;
 
 /**
  * FitxaKostua
- *
- * @ORM\Table(name="fitxa_kostua", indexes={@ORM\Index(name="fitxa_id_idx", columns={"fitxa_id"})})
- * @ORM\Entity(repositoryClass=FitxaKostuaRepository::class)
  */
-class FitxaKostua
+#[ORM\Table(name: 'fitxa_kostua')]
+#[ORM\Index(name: 'fitxa_id_idx', columns: ['fitxa_id'])]
+#[ORM\Entity(repositoryClass: FitxaKostuaRepository::class)]
+class FitxaKostua implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="kostua", type="bigint")
      */
+    #[ORM\Column(name: 'kostua', type: 'bigint')]
     private $kostua;
 
 
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
     
     
     /**
-     * @var \App\Entity\Fitxa
+     * @var Fitxa
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Fitxa",inversedBy="kostuak")
-     * @ORM\JoinColumn(name="fitxa_id", referencedColumnName="id",onDelete="CASCADE")
-     * 
+     *
      */
+    #[ORM\JoinColumn(name: 'fitxa_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Fitxa::class, inversedBy: 'kostuak')]
     private $fitxa;
 
 
@@ -57,7 +54,7 @@ class FitxaKostua
      *          TOSTRING
      */
 
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->kostua." ";
     }
@@ -100,11 +97,11 @@ class FitxaKostua
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return FitxaKostua
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -114,7 +111,7 @@ class FitxaKostua
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {
@@ -124,11 +121,11 @@ class FitxaKostua
     /**
      * Set fitxa
      *
-     * @param \App\Entity\Fitxa $fitxa
+     * @param Fitxa $fitxa
      *
      * @return FitxaKostua
      */
-    public function setFitxa(\App\Entity\Fitxa $fitxa = null)
+    public function setFitxa(Fitxa $fitxa = null)
     {
         $this->fitxa = $fitxa;
 
@@ -138,7 +135,7 @@ class FitxaKostua
     /**
      * Get fitxa
      *
-     * @return \App\Entity\Fitxa
+     * @return Fitxa
      */
     public function getFitxa()
     {

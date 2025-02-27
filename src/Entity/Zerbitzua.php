@@ -7,56 +7,49 @@ use App\Repository\ZerbitzuaRepository;
 
 /**
  * Zerbitzua
- *
- * @ORM\Table(name="zerbitzua")
- * @ORM\Entity(repositoryClass=ZerbitzuaRepository::class)
  */
-class Zerbitzua
+#[ORM\Table(name: 'zerbitzua')]
+#[ORM\Entity(repositoryClass: ZerbitzuaRepository::class)]
+class Zerbitzua implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="kodea", type="string", length=10, nullable=false)
      */
+    #[ORM\Column(name: 'kodea', type: 'string', length: 10, nullable: false)]
     private $kodea;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="zerbitzuaeu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'zerbitzuaeu', type: 'string', length: 255, nullable: true)]
     private $zerbitzuaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="zerbitzuaes", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'zerbitzuaes', type: 'string', length: 255, nullable: true)]
     private $zerbitzuaes;
 
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="erroaeu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'erroaeu', type: 'string', length: 255, nullable: true)]
     private $erroaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="erroaes", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'erroaes', type: 'string', length: 255, nullable: true)]
     private $erroaes;
 
 
@@ -65,17 +58,10 @@ class Zerbitzua
      *      ERLAZIOAK
      */
 
-//    /**
-//     * @ORM\ManyToOne(targetEntity="Espedientekudeaketa")
-//     * @ORM\JoinColumn(name="espedientekudeaketa_id", referencedColumnName="id",onDelete="CASCADE")
-//     */
-//    private $espedientekudeaketa;
-
-
     /**
      *          TOSTRING
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getKodea()."-".$this->getZerbitzuaeu();
     }

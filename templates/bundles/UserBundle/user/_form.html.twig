@@ -30,6 +30,14 @@
 			{{ form_widget(form.activated, {'attr': {'class': ''}}) }}
 		</div>
 	</div>
+	{% if is_granted('ROLE_SUPER_ADMIN') %}
+		<div class="row">
+			<div class="form-group col-lg-3">
+				{{ form_label(form.azpisaila) }}
+				{{ form_widget(form.azpisaila, {'attr': {'class': ''}}) }}
+			</div>
+		</div>
+	{% endif %}
 	<div class="row m-1">
 		{% if not readonly and password_change %}
 			<div class="form-group col-lg-3">
@@ -55,7 +63,7 @@
 	</div>
 {% endif %}
 	<div class="col-lg-auto">
-		<a href="{{ returnUrl is defined and not returnUrl is empty ? returnUrl : path('admin_user_list') }}" class="btn btn-secondary">{{ "btn.user.cancel" | trans }}</a>
+		<a href="{{ returnUrl is defined and not returnUrl is empty ? returnUrl : path('admin_user_index') }}" class="btn btn-secondary">{{ "btn.user.cancel" | trans }}</a>
 	</div>
 </div> #}
 

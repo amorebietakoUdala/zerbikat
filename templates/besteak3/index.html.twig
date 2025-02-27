@@ -6,18 +6,19 @@
         <div class="container">
             <div class="navbar-header">
                 {#<a class="navbar-brand">{% if app.user.udala.eremuak %}{{ app.user.udala.eremuak.besteak3labeleu }}{% endif %}</a>#}
-                {% if app.user.udala.eremuak %}
+                {% if app.user.udala is defined and app.user.udala != null and app.user.udala.eremuak %}
                     {% if app.request.locale == 'es'%}{{ app.user.udala.eremuak.besteak3labeles }}
                     {% else %}{{ app.user.udala.eremuak.besteak3labeleu }}
                     {% endif %}
                 {% endif %}
             </div>
-            <div id="navbar" class="navbar-collapse collapse navbar-right">
-                <ul class="nav navbar-nav">
-                    {#<li><a href="{{ path('besteak3_new') }}" class="fa fa-plus">{% if app.user.udala.eremuak %} {{ app.user.udala.eremuak.besteak3labeleu }}{% else %}Sarrera{% endif %} berria</a></li>#}
-                    <li><a href="{{ path('besteak3_new') }}" class="fa fa-plus"> {{ 'messages.berria'|trans }}</a></li>
-                </ul>
-            </div>
+            {% if is_granted('ROLE_ADMIN') %}
+                <div id="navbar" class="navbar-collapse collapse navbar-right">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{{ path('besteak3_new') }}" class="fa fa-plus"> {{ 'messages.berria'|trans }}</a></li>
+                    </ul>
+                </div>
+            {% endif %}
         </div>
     </nav>
 {% endblock %}
@@ -41,8 +42,8 @@
                 <td>{{ besteak3.izenburuaeu }}</td>
                 <td NOWRAP class="text-right">
                     <ul class="list-inline">
-                        <li><a href="{{ path('besteak3_edit', { 'id': besteak3.id }) }}" class="fa fa-pencil"></a></li>
                     {% if is_granted('ROLE_ADMIN') %}
+                        <li><a href="{{ path('besteak3_edit', { 'id': besteak3.id }) }}" class="fa fa-pencil"></a></li>
                         <li>{{ form_start(deleteforms[besteak3.id],{'attr': {'id': besteak3.id}}) }}
                             <a href="#" {{ stimulus_controller('confirmation', {
                                         id: besteak3.id,
@@ -58,13 +59,10 @@
         </tbody>
     </table>
 
-    <div class="text-center">
-        {% if besteak3s is not empty %}
-            {% if pager.haveToPaginate %}
-                {{ pagerfanta(pager, 'twitter_bootstrap3_translated', {'routeName': 'besteak3_index_paginated'}) }}
-            {% endif %}
-        {% else %}
+    {% if besteak3s is empty %}
+        <div class="text-center">
             <p>{{ 'messages.emaitzarikez'|trans }}</p>
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
+
 {% endblock %}

@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Kalea;
 use App\Form\KaleaType;
 use App\Repository\KaleaRepository;
@@ -12,90 +12,74 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Kalea controller.
- *
- * @Route("/{_locale}/kalea")
  */
+#[Route(path: '/{_locale}/kalea')]
 class KaleaController extends AbstractController
 {
-    private $repo;
-    private $em;
 
-    public function __construct(EntityManagerInterface $em, KaleaRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private KaleaRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
     /**
      * Lists all Kalea entities.
-     *
-     * @Route("/", name="kalea_index", methods={"GET"})
      */
+    #[IsGranted('ROLE_KUDEAKETA')]
+    #[Route(path: '/', name: 'kalea_index', methods: ['GET'])]
     public function index()
     {
+        $kaleas = $this->repo->findAll();
 
-        if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $kaleas = $this->repo->findAll();
-
-            $deleteForms = [];
-            foreach ($kaleas as $kalea) {
-                $deleteForms[$kalea->getId()] = $this->createDeleteForm($kalea)->createView();
-            }
-
-
-            return $this->render('kalea/index.html.twig', ['kaleas' => $kaleas, 'deleteforms' => $deleteForms]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+        $deleteForms = [];
+        foreach ($kaleas as $kalea) {
+            $deleteForms[$kalea->getId()] = $this->createDeleteForm($kalea)->createView();
         }
+
+        return $this->render('kalea/index.html.twig', ['kaleas' => $kaleas, 'deleteforms' => $deleteForms]);
     }
 
     /**
      * Creates a new Kalea entity.
-     *
-     * @Route("/new", name="kalea_new", methods={"GET", "POST"})
      */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route(path: '/new', name: 'kalea_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
 
-        if ($this->isGranted('ROLE_ADMIN')) 
-        {
-            $kalea = new Kalea();
-            $form = $this->createForm(KaleaType::class, $kalea);
-            $form->handleRequest($request);
+        $kalea = new Kalea();
+        $form = $this->createForm(KaleaType::class, $kalea);
+        $form->handleRequest($request);
 
-//            $form->getData()->setUdala($this->getUser()->getUdala());
-//            $form->setData($form->getData());
-            
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->em->persist($kalea);
-                $this->em->flush();
-    
+        if ($form->isSubmitted() && $form->isValid()) {
+            $kalea = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $kalea->setUdala($user->getUdala());
+            $this->em->persist($kalea);
+            $this->em->flush();
+
 //                return $this->redirectToRoute('kalea_show', array('id' => $kalea->getId()));
-                return $this->redirectToRoute('kalea_index');
-            } else
-            {
-                $form->getData()->setUdala($this->getUser()->getUdala());
-                $form->setData($form->getData());
-            }
-    
-            return $this->render('kalea/new.html.twig', ['kalea' => $kalea, 'form' => $form->createView()]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
-        }            
+            return $this->redirectToRoute('kalea_index');
+        }
+
+        return $this->render('kalea/new.html.twig', ['kalea' => $kalea, 'form' => $form->createView()]);
     }
 
     /**
      * Finds and displays a Kalea entity.
-     *
-     * @Route("/{id}", name="kalea_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'kalea_show', methods: ['GET'])]
     public function show(Kalea $kalea): Response
     {
         $deleteForm = $this->createDeleteForm($kalea);
@@ -105,13 +89,13 @@ class KaleaController extends AbstractController
 
     /**
      * Displays a form to edit an existing Kalea entity.
-     *
-     * @Route("/{id}/edit", name="kalea_edit", methods={"GET", "POST"})
      */
+    #[Route(path: '/{id}/edit', name: 'kalea_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Kalea $kalea)
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($kalea->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($kalea->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($kalea);
@@ -128,19 +112,20 @@ class KaleaController extends AbstractController
             return $this->render('kalea/edit.html.twig', ['kalea' => $kalea, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }            
     }
 
     /**
      * Deletes a Kalea entity.
-     *
-     * @Route("/{id}", name="kalea_delete", methods={"DELETE"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}', name: 'kalea_delete', methods: ['DELETE'])]
     public function delete(Request $request, Kalea $kalea): RedirectResponse
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($kalea->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($kalea->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $form = $this->createDeleteForm($kalea);
@@ -153,7 +138,7 @@ class KaleaController extends AbstractController
         }else
         {
             //baimenik ez
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }            
     }
 

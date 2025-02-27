@@ -8,6 +8,8 @@ layout.login: "Sartu"
 user.udala: "Udala"
 user.activated: "Aktibatua"
 user.firstName: "Izena"
+user.new: "Erabiltzaile berria"
+user.azpisaila: "Azpisaila"
 
 ROLE_SUPER_ADMIN: "Super Administratzailea"
 ROLE_KUDEAKETA: "Kudeatzailea"

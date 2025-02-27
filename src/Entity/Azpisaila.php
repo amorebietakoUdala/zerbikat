@@ -4,163 +4,148 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 use App\Repository\AzpisailaRepository;
 
-/**
- * Azpisaila
- *
- * @ORM\Table(name="azpisaila", indexes={@ORM\Index(name="saila_id_idx", columns={"saila_id"}), @ORM\Index(name="barrutia_id_idx", columns={"barrutia_id"}), @ORM\Index(name="eraikina_id_idx", columns={"eraikina_id"}), @ORM\Index(name="kalea_id_idx", columns={"kalea_id"})})
- * @ORM\Entity(repositoryClass=AzpisailaRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
- * @ExclusionPolicy("all")
- */
-class Azpisaila
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'azpisaila')]
+#[ORM\Index(name: 'saila_id_idx', columns: ['saila_id'])]
+#[ORM\Index(name: 'barrutia_id_idx', columns: ['barrutia_id'])]
+#[ORM\Index(name: 'eraikina_id_idx', columns: ['eraikina_id'])]
+#[ORM\Index(name: 'kalea_id_idx', columns: ['kalea_id'])]
+#[ORM\Entity(repositoryClass: AzpisailaRepository::class)]
+class Azpisaila implements \Stringable
 {
     /**
      * @var integer
      * @Expose
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var string
      * @Expose
-     *
-     * @ORM\Column(name="kodea", type="string", length=10, nullable=true)
      */
+    #[ORM\Column(name: 'kodea', type: 'string', length: 10, nullable: true)]
     private $kodea;
 
     /**
      * @var string
      * @Expose
-     *
-     * @ORM\Column(name="azpisailaeu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'azpisailaeu', type: 'string', length: 255, nullable: true)]
     private $azpisailaeu;
 
     /**
      * @var string
      * @Expose
-     *
-     * @ORM\Column(name="azpisailaes", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'azpisailaes', type: 'string', length: 255, nullable: true)]
     private $azpisailaes;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="arduraduna", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'arduraduna', type: 'string', length: 255, nullable: true)]
     private $arduraduna;
 
     /**
      * @var arduradunahaz
-     *
-     * @ORM\Column(name="arduradunahaz", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'arduradunahaz', type: 'string', length: 255, nullable: true)]
     private $arduradunahaz;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'email', type: 'string', length: 255, nullable: true)]
     private $email;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="telefonoa", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'telefonoa', type: 'string', length: 255, nullable: true)]
     private $telefonoa;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="fax", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'fax', type: 'string', length: 255, nullable: true)]
     private $fax;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="kale_zbkia", type="string", length=50, nullable=true)
      */
+    #[ORM\Column(name: 'kale_zbkia', type: 'string', length: 50, nullable: true)]
     private $kaleZbkia;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="hizkia", type="string", length=2, nullable=true)
      */
+    #[ORM\Column(name: 'hizkia', type: 'string', length: 2, nullable: true)]
     private $hizkia;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="ordutegia", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'ordutegia', type: 'string', length: 255, nullable: true)]
     private $ordutegia;
 
     /**
      *  ERLAZIOAK 
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
     /**
      * @var Saila
-     * @ORM\ManyToOne(targetEntity="Saila", inversedBy="azpisailak")
-     * @ORM\JoinColumn(name="saila_id", referencedColumnName="id",onDelete="CASCADE")
      */
+    #[ORM\JoinColumn(name: 'saila_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Saila::class, inversedBy: 'azpisailak')]
     protected $saila;
 
 
     /**
-     * @var \App\Entity\Kalea
+     * @var Kalea
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Kalea",inversedBy="azpisailak")
-     * @ORM\JoinColumn(name="kalea_id", referencedColumnName="id",onDelete="SET NULL")
      *
      */
+    #[ORM\JoinColumn(name: 'kalea_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: Kalea::class, inversedBy: 'azpisailak')]
     private $kalea;
 
     /**
-     * @var \App\Entity\Eraikina
+     * @var Eraikina
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Eraikina")
-     * @ORM\JoinColumn(name="eraikina_id", referencedColumnName="id",onDelete="SET NULL")
      *
      */
+    #[ORM\JoinColumn(name: 'eraikina_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: Eraikina::class)]
     private $eraikina;
 
     /**
-     * @var \App\Entity\Barrutia
+     * @var Barrutia
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Barrutia")
-     * @ORM\JoinColumn(name="barrutia_id", referencedColumnName="id",onDelete="SET NULL")
      *
      */
+    #[ORM\JoinColumn(name: 'barrutia_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: Barrutia::class)]
     private $barrutia;
 
     /**
-     * @var fitxak[]
-     *
-     * @ORM\OneToMany(targetEntity="App\Entity\Fitxa", mappedBy="azpisaila")
+     * @var ArrayCollection
      */
+    #[ORM\OneToMany(targetEntity: Fitxa::class, mappedBy: 'azpisaila')]
     private $fitxak;
 
 
@@ -169,7 +154,7 @@ class Azpisaila
      *          TOSTRING
      */
     
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getAzpisailaeu();
     }
@@ -435,11 +420,11 @@ class Azpisaila
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return Azpisaila
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -449,7 +434,7 @@ class Azpisaila
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {
@@ -483,11 +468,11 @@ class Azpisaila
     /**
      * Set kalea
      *
-     * @param \App\Entity\Kalea $kalea
+     * @param Kalea $kalea
      *
      * @return Azpisaila
      */
-    public function setKalea(\App\Entity\Kalea $kalea = null)
+    public function setKalea(Kalea $kalea = null)
     {
         $this->kalea = $kalea;
 
@@ -497,7 +482,7 @@ class Azpisaila
     /**
      * Get kalea
      *
-     * @return \App\Entity\Kalea
+     * @return Kalea
      */
     public function getKalea()
     {
@@ -507,11 +492,11 @@ class Azpisaila
     /**
      * Set eraikina
      *
-     * @param \App\Entity\Eraikina $eraikina
+     * @param Eraikina $eraikina
      *
      * @return Azpisaila
      */
-    public function setEraikina(\App\Entity\Eraikina $eraikina = null)
+    public function setEraikina(Eraikina $eraikina = null)
     {
         $this->eraikina = $eraikina;
 
@@ -521,7 +506,7 @@ class Azpisaila
     /**
      * Get eraikina
      *
-     * @return \App\Entity\Eraikina
+     * @return Eraikina
      */
     public function getEraikina()
     {
@@ -531,11 +516,11 @@ class Azpisaila
     /**
      * Set barrutia
      *
-     * @param \App\Entity\Barrutia $barrutia
+     * @param Barrutia $barrutia
      *
      * @return Azpisaila
      */
-    public function setBarrutia(\App\Entity\Barrutia $barrutia = null)
+    public function setBarrutia(Barrutia $barrutia = null)
     {
         $this->barrutia = $barrutia;
 
@@ -545,7 +530,7 @@ class Azpisaila
     /**
      * Get barrutia
      *
-     * @return \App\Entity\Barrutia
+     * @return Barrutia
      */
     public function getBarrutia()
     {
@@ -579,11 +564,11 @@ class Azpisaila
     /**
      * Add fitxak
      *
-     * @param \App\Entity\Fitxa $fitxak
+     * @param Fitxa $fitxak
      *
      * @return Azpisaila
      */
-    public function addFitxak(\App\Entity\Fitxa $fitxak)
+    public function addFitxak(Fitxa $fitxak)
     {
         $this->fitxak[] = $fitxak;
 
@@ -593,9 +578,9 @@ class Azpisaila
     /**
      * Remove fitxak
      *
-     * @param \App\Entity\Fitxa $fitxak
+     * @param Fitxa $fitxak
      */
-    public function removeFitxak(\App\Entity\Fitxa $fitxak)
+    public function removeFitxak(Fitxa $fitxak)
     {
         $this->fitxak->removeElement($fitxak);
     }
@@ -603,7 +588,7 @@ class Azpisaila
     /**
      * Get fitxak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getFitxak()
     {

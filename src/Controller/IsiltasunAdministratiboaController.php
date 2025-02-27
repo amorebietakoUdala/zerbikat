@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\IsiltasunAdministratiboa;
 use App\Form\IsiltasunAdministratiboaType;
 use App\Repository\IsiltasunAdministratiboaRepository;
@@ -12,108 +12,92 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Exception\NotValidCurrentPageException;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * IsiltasunAdministratiboa controller.
- *
- * @Route("/{_locale}/isiltasunadministratiboa")
  */
+#[Route(path: '/{_locale}/isiltasunadministratiboa')]
 class IsiltasunAdministratiboaController extends AbstractController
 {
-    private $repo;
-    private $em;
 
-    public function __construct(EntityManagerInterface $em, IsiltasunAdministratiboaRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private IsiltasunAdministratiboaRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
     /**
      * Lists all IsiltasunAdministratiboa entities.
-     *
-     * @Route("/", name="isiltasunadministratiboa_index", methods={"GET"})
-     * @Route("/", defaults={"page"=1}, name="isiltasunadministratiboa_index", methods={"GET"})
-     * @Route("/page{page}", name="isiltasunadministratiboa_index_paginated", methods={"GET"})
      */
+    #[IsGranted('ROLE_KUDEAKETA')]    
+    #[Route(path: '/', name: 'isiltasunadministratiboa_index', methods: ['GET'])]
+    #[Route(path: '/', defaults: ['page' => 1], name: 'isiltasunadministratiboa_index', methods: ['GET'])]
+    #[Route(path: '/page{page}', name: 'isiltasunadministratiboa_index_paginated', methods: ['GET'])]
     public function index($page)
     {
+        $isiltasunAdministratiboas = $this->repo->findAll();
 
-        if ($this->isGranted('ROLE_KUDEAKETA'))
-        {
-            $isiltasunAdministratiboas = $this->repo->findAll();
-
-            $adapter = new ArrayAdapter($isiltasunAdministratiboas);
-            $pagerfanta = new Pagerfanta($adapter);
-            
-            $deleteForms = [];
-            foreach ($isiltasunAdministratiboas as $isiltasunAdministratiboa) {
-                $deleteForms[$isiltasunAdministratiboa->getId()] = $this->createDeleteForm($isiltasunAdministratiboa)->createView();
-            }
-
-            try {
-                $entities = $pagerfanta
-                    // Le nombre maximum d'éléments par page
-//                    ->setMaxPerPage($this->getUser()->getUdala()->getOrrikatzea())
-                    // Notre position actuelle (numéro de page)
-                    ->setCurrentPage($page)
-                    // On récupère nos entités via Pagerfanta,
-                    // celui-ci s'occupe de limiter la requête en fonction de nos réglages.
-                    ->getCurrentPageResults()
-                ;
-            } catch (\Pagerfanta\Exception\NotValidCurrentPageException $e) {
-                throw $this->createNotFoundException("Orria ez da existitzen");
-            }
-            
-            return $this->render('isiltasunadministratiboa/index.html.twig', ['isiltasunAdministratiboas' => $entities, 'deleteforms' => $deleteForms, 'pager' => $pagerfanta]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+        $adapter = new ArrayAdapter($isiltasunAdministratiboas);
+        $pagerfanta = new Pagerfanta($adapter);
+        
+        $deleteForms = [];
+        foreach ($isiltasunAdministratiboas as $isiltasunAdministratiboa) {
+            $deleteForms[$isiltasunAdministratiboa->getId()] = $this->createDeleteForm($isiltasunAdministratiboa)->createView();
         }
+
+        try {
+            $entities = $pagerfanta
+                // Le nombre maximum d'éléments par page
+//                    ->setMaxPerPage($this->getUser()->getUdala()->getOrrikatzea())
+                // Notre position actuelle (numéro de page)
+                ->setCurrentPage($page)
+                // On récupère nos entités via Pagerfanta,
+                // celui-ci s'occupe de limiter la requête en fonction de nos réglages.
+                ->getCurrentPageResults()
+            ;
+        } catch (NotValidCurrentPageException) {
+            throw $this->createNotFoundException("Orria ez da existitzen");
+        }
+        
+        return $this->render('isiltasunadministratiboa/index.html.twig', ['isiltasunAdministratiboas' => $entities, 'deleteforms' => $deleteForms, 'pager' => $pagerfanta]);
     }
 
     /**
      * Creates a new IsiltasunAdministratiboa entity.
-     *
-     * @Route("/new", name="isiltasunadministratiboa_new", methods={"GET", "POST"})
      */
+    #[IsGranted('ROLE_ADMIN')]    
+    #[Route(path: '/new', name: 'isiltasunadministratiboa_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
+        $isiltasunAdministratiboa = new IsiltasunAdministratiboa();
+        $form = $this->createForm(IsiltasunAdministratiboaType::class, $isiltasunAdministratiboa);
+        $form->handleRequest($request);
 
-        if ($this->isGranted('ROLE_ADMIN')) {
-            $isiltasunAdministratiboa = new IsiltasunAdministratiboa();
-            $form = $this->createForm(IsiltasunAdministratiboaType::class, $isiltasunAdministratiboa);
-            $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $isiltasunAdministratiboa = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $isiltasunAdministratiboa->setUdala($user->getUdala());
+            $this->em->persist($isiltasunAdministratiboa);
+            $this->em->flush();
 
-//            $form->getData()->setUdala($this->getUser()->getUdala());
-//            $form->setData($form->getData());
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->em->persist($isiltasunAdministratiboa);
-                $this->em->flush();
-
-//                return $this->redirectToRoute('isiltasunadministratiboa_show', array('id' => $isiltasunAdministratiboa->getId()));
-                return $this->redirectToRoute('isiltasunadministratiboa_index');
-            } else
-            {
-                $form->getData()->setUdala($this->getUser()->getUdala());
-                $form->setData($form->getData());
-            }
-
-            return $this->render('isiltasunadministratiboa/new.html.twig', ['isiltasunAdministratiboa' => $isiltasunAdministratiboa, 'form' => $form->createView()]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+            return $this->redirectToRoute('isiltasunadministratiboa_index');
         }
+
+        return $this->render('isiltasunadministratiboa/new.html.twig', ['isiltasunAdministratiboa' => $isiltasunAdministratiboa, 'form' => $form->createView()]);
     }
 
     /**
      * Finds and displays a IsiltasunAdministratiboa entity.
-     *
-     * @Route("/{id}", name="isiltasunadministratiboa_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'isiltasunadministratiboa_show', methods: ['GET'])]
     public function show(IsiltasunAdministratiboa $isiltasunAdministratiboa): Response
     {
         $deleteForm = $this->createDeleteForm($isiltasunAdministratiboa);
@@ -123,13 +107,14 @@ class IsiltasunAdministratiboaController extends AbstractController
 
     /**
      * Displays a form to edit an existing IsiltasunAdministratiboa entity.
-     *
-     * @Route("/{id}/edit", name="isiltasunadministratiboa_edit", methods={"GET", "POST"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]    
+    #[Route(path: '/{id}/edit', name: 'isiltasunadministratiboa_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, IsiltasunAdministratiboa $isiltasunAdministratiboa)
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($isiltasunAdministratiboa->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($isiltasunAdministratiboa->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($isiltasunAdministratiboa);
@@ -146,19 +131,19 @@ class IsiltasunAdministratiboaController extends AbstractController
             return $this->render('isiltasunadministratiboa/edit.html.twig', ['isiltasunAdministratiboa' => $isiltasunAdministratiboa, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }            
     }
 
     /**
      * Deletes a IsiltasunAdministratiboa entity.
-     *
-     * @Route("/{id}", name="isiltasunadministratiboa_delete", methods={"DELETE"})
      */
+    #[Route(path: '/{id}', name: 'isiltasunadministratiboa_delete', methods: ['DELETE'])]
     public function delete(Request $request, IsiltasunAdministratiboa $isiltasunAdministratiboa): RedirectResponse
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($isiltasunAdministratiboa->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($isiltasunAdministratiboa->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $form = $this->createDeleteForm($isiltasunAdministratiboa);
@@ -171,7 +156,7 @@ class IsiltasunAdministratiboaController extends AbstractController
         }else
         {
             //baimenik ez
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 

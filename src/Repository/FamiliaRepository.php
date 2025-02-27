@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Familia;
+use App\Entity\Udala;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -55,14 +56,23 @@ class FamiliaRepository extends ServiceEntityRepository
     public function findByUdala($udala)
     {
         return $this->createQueryBuilder('f')
-            ->innerJoin('App:Udala','u')
+            ->innerJoin(Udala::class,'u')
             ->andWhere('u.kodea = :kodea')
             ->setParameter('kodea', $udala)
             ->getQuery()
             ->getResult()
         ;
     }
-    
+
+    public function findFamiliaByUdala($udala)
+    {
+        $qb =  $this->createQueryBuilder('f');
+        $qb = $this->andWhereUdalaQB($qb , $udala);
+        $qb = $this->andWhereParentQB($qb);
+        $qb->orderBy('f.ordena', 'ASC');
+        return $qb->getQuery()->getResult();
+    }
+
     public function findByUdalaAndParentAndFamiliaId($udala, $locale, $parent = null, $familiaId = null) {
         $qb = $this->createQueryBuilder('f')
             ->select('f, COALESCE (f.ordena, 0) as HIDDEN ezkutuan');
@@ -76,7 +86,7 @@ class FamiliaRepository extends ServiceEntityRepository
     }
 
     private function lefJoinUdalaQB($qb): QueryBuilder {
-        $qb->leftJoin('App:Udala','u', Join::WITH, 'f.udala = u.id');
+        $qb->leftJoin(Udala::class,'u', Join::WITH, 'f.udala = u.id');
         return $qb;
     }
 

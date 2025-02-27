@@ -4,39 +4,36 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\NorkeskatuRepository;
 
 /**
  * Norkeskatu
  *
- * @ORM\Table(name="norkeskatu")
- * @ORM\Entity(repositoryClass=NorkeskatuRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
  */
-class Norkeskatu
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'norkeskatu')]
+#[ORM\Entity(repositoryClass: NorkeskatuRepository::class)]
+class Norkeskatu implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="norkeu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'norkeu', type: 'string', length: 255, nullable: true)]
     private $norkeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="norkes", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'norkes', type: 'string', length: 255, nullable: true)]
     private $norkes;
 
 
@@ -45,20 +42,18 @@ class Norkeskatu
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
     
     /**
-     * @var fitxak[]
-     *
-     * @ORM\ManyToMany(targetEntity="Fitxa",mappedBy="norkeskatuak", cascade={"persist"}))
+     * @var ArrayCollection
      */
+    #[ORM\ManyToMany(targetEntity: Fitxa::class, mappedBy: 'norkeskatuak', cascade: ['persist'])]
     private $fitxak;
 
 
@@ -66,7 +61,7 @@ class Norkeskatu
     /**
      *          TOSTRING
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getNorkeu();
     }
@@ -76,7 +71,7 @@ class Norkeskatu
      */
     public function __construct()
     {
-        $this->fitxak = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fitxak = new ArrayCollection();
     }
 
     /**
@@ -140,11 +135,11 @@ class Norkeskatu
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return Norkeskatu
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -154,7 +149,7 @@ class Norkeskatu
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {
@@ -164,11 +159,11 @@ class Norkeskatu
     /**
      * Add fitxak
      *
-     * @param \App\Entity\Fitxa $fitxak
+     * @param Fitxa $fitxak
      *
      * @return Norkeskatu
      */
-    public function addFitxak(\App\Entity\Fitxa $fitxak)
+    public function addFitxak(Fitxa $fitxak)
     {
         $this->fitxak[] = $fitxak;
 
@@ -178,9 +173,9 @@ class Norkeskatu
     /**
      * Remove fitxak
      *
-     * @param \App\Entity\Fitxa $fitxak
+     * @param Fitxa $fitxak
      */
-    public function removeFitxak(\App\Entity\Fitxa $fitxak)
+    public function removeFitxak(Fitxa $fitxak)
     {
         $this->fitxak->removeElement($fitxak);
     }
@@ -188,7 +183,7 @@ class Norkeskatu
     /**
      * Get fitxak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getFitxak()
     {

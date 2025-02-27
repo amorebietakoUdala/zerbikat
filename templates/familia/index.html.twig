@@ -7,11 +7,13 @@
             <div class="navbar-header">
                 <a class="navbar-brand">{{ 'messages.familiak'|trans }}</a>
             </div>
-            <div id="navbar" class="navbar-collapse collapse navbar-right">
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ path('familia_new') }}" class="fa fa-plus"> {{ 'messages.familiaberria'|trans }}</a></li>
-                </ul>
-            </div>
+            {% if is_granted('ROLE_ADMIN') %}
+                <div id="navbar" class="navbar-collapse collapse navbar-right">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{{ path('familia_new') }}" class="fa fa-plus"> {{ 'messages.familiaberria'|trans }}</a></li>
+                    </ul>
+                </div>
+            {% endif %}
         </div>
     </nav>
 {% endblock %}
@@ -84,8 +86,8 @@
                             <td><span class="label label-primary">{{ c.children | length }}</span></td>
                             <td NOWRAP class="text-right">
                                 <ul class="list-inline">
-                                    <li><a href="{{ path('familia_edit', { 'id': c.id }) }}" class="fa fa-pencil"></a></li>
                                     {% if is_granted('ROLE_ADMIN') and c.children | length == 0%}
+                                        <li><a href="{{ path('familia_edit', { 'id': c.id }) }}" class="fa fa-pencil"></a></li>
                                         <li>{{ form_start(deleteforms[c.id],{'attr': {'id': c.id}}) }}
                                             <a href="#"  {{ stimulus_controller('confirmation', {
                                                     id: c.id,

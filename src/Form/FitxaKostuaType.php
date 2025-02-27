@@ -20,33 +20,33 @@ class FitxaKostuaType extends AbstractType
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options) :void
     {
-
-
         $udala = $options['udala'];
-        $api = $options[ 'api_url' ];
-        // DEBUG
-//        $api = "http://zzoo.dev/app_dev.php/api";
-
-        $client = new GuzzleHttp\Client();
-        $url = $api.'/udalzergak/'.$udala.'?format=json';
-        $proba = $client->request( 'GET', $url );
-        $valftp = (string)$proba->getBody();
-        $array = json_decode($valftp, true);
-
-        $resp=["Aukeratu bat" => "-1"];
-        foreach ($array as $a)
-        {
-            $txt ="";
-            if ( (array_key_exists("kodea_prod", $a))  ) {
-                $txt = $a[ 'kodea_prod' ]." - ";
-            }
-
-
-            if ( array_key_exists("izenburuaeu_prod", $a) ) {
-                $txt = $txt . $a[ 'izenburuaeu_prod' ];
-                $resp[$txt] = $a['id'];
+        if ( null !== $udala ) {
+            $api = $options[ 'api_url' ];
+            // DEBUG
+    //        $api = "http://zzoo.dev/app_dev.php/api";
+    
+            $client = new GuzzleHttp\Client();
+            $url = $api.'/udalzergak/'.$udala.'?format=json';
+            $proba = $client->request( 'GET', $url );
+            $valftp = (string)$proba->getBody();
+            $array = json_decode($valftp, true);
+    
+            $resp=["Aukeratu bat" => "-1"];
+            foreach ($array as $a)
+            {
+                $txt ="";
+                if ( (array_key_exists("kodea_prod", $a))  ) {
+                    $txt = $a[ 'kodea_prod' ]." - ";
+                }
+    
+    
+                if ( array_key_exists("izenburuaeu_prod", $a) ) {
+                    $txt = $txt . $a[ 'izenburuaeu_prod' ];
+                    $resp[$txt] = $a['id'];
+                }
             }
         }
 
@@ -54,7 +54,6 @@ class FitxaKostuaType extends AbstractType
             ->add('udala')
             ->add('fitxa')
             ->add('kostua', ChoiceType::class, ['choices' => $resp]
-
             )
         ;
     }
@@ -62,7 +61,7 @@ class FitxaKostuaType extends AbstractType
     /**
      * @param OptionsResolver $resolver
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => FitxaKostua::class, 

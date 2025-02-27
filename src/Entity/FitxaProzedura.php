@@ -7,60 +7,54 @@ use App\Repository\FitxaProzeduraRepository;
 
 /**
  * FitxaProzedura
- *
- * @ORM\Table(name="fitxa_prozedura", indexes={@ORM\Index(name="fitxa_id_idx", columns={"fitxa_id"}), @ORM\Index(name="prozedura_id_idx", columns={"prozedura_id"})})
- * @ORM\Entity(repositoryClass=FitxaProzeduraRepository::class)
  */
-class FitxaProzedura
+#[ORM\Table(name: 'fitxa_prozedura')]
+#[ORM\Index(name: 'fitxa_id_idx', columns: ['fitxa_id'])]
+#[ORM\Index(name: 'prozedura_id_idx', columns: ['prozedura_id'])]
+#[ORM\Entity(repositoryClass: FitxaProzeduraRepository::class)]
+class FitxaProzedura implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="ordena", type="bigint", nullable=true)
      */
+    #[ORM\Column(name: 'ordena', type: 'bigint', nullable: true)]
     private $ordena;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
 
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Prozedura", inversedBy="fitxak")
-     * @ORM\JoinColumn(name="prozedura_id", referencedColumnName="id")
-     *
-     * */
+    
+    #[ORM\JoinColumn(name: 'prozedura_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: Prozedura::class, inversedBy: 'fitxak')]
     protected $prozedura;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Fitxa", inversedBy="prozedurak")
-     * @ORM\JoinColumn(name="fitxa_id", referencedColumnName="id")
-     *
-     * */
+    
+    #[ORM\JoinColumn(name: 'fitxa_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: Fitxa::class, inversedBy: 'prozedurak')]
     protected $fitxa;
 
 
     /**
      *          TOSTRING
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getProzedura()->getProzeduraeu();
     }
@@ -104,11 +98,11 @@ class FitxaProzedura
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return FitxaProzedura
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -118,7 +112,7 @@ class FitxaProzedura
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {
@@ -128,11 +122,11 @@ class FitxaProzedura
     /**
      * Set prozedura
      *
-     * @param \App\Entity\Prozedura $prozedura
+     * @param Prozedura $prozedura
      *
      * @return FitxaProzedura
      */
-    public function setProzedura(\App\Entity\Prozedura $prozedura = null)
+    public function setProzedura(Prozedura $prozedura = null)
     {
         $this->prozedura = $prozedura;
 
@@ -142,7 +136,7 @@ class FitxaProzedura
     /**
      * Get prozedura
      *
-     * @return \App\Entity\Prozedura
+     * @return Prozedura
      */
     public function getProzedura()
     {
@@ -152,11 +146,11 @@ class FitxaProzedura
     /**
      * Set fitxa
      *
-     * @param \App\Entity\Fitxa $fitxa
+     * @param Fitxa $fitxa
      *
      * @return FitxaProzedura
      */
-    public function setFitxa(\App\Entity\Fitxa $fitxa = null)
+    public function setFitxa(Fitxa $fitxa = null)
     {
         $this->fitxa = $fitxa;
 
@@ -166,7 +160,7 @@ class FitxaProzedura
     /**
      * Get fitxa
      *
-     * @return \App\Entity\Fitxa
+     * @return Fitxa
      */
     public function getFitxa()
     {

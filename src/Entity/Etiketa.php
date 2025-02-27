@@ -3,39 +3,33 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\EtiketaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 
-/**
- * Etiketa
- *
- * @ORM\Table(name="etiketa")
- * @ORM\Entity(repositoryClass=EtiketaRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
- */
-class Etiketa
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'etiketa')]
+#[ORM\Entity(repositoryClass: EtiketaRepository::class)]
+class Etiketa implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="etiketaeu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'etiketaeu', type: 'string', length: 255, nullable: true)]
     private $etiketaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="etiketaes", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'etiketaes', type: 'string', length: 255, nullable: true)]
     private $etiketaes;
 
 
@@ -44,26 +38,24 @@ class Etiketa
      *      ERLAZIOAK
      *
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
 
     /**
-     * @var fitxak[]
-     *
-     * @ORM\ManyToMany(targetEntity="Fitxa", mappedBy="etiketak", cascade={"persist"}))
+     * @var ArrayCollection
      */
+    #[ORM\ManyToMany(targetEntity: Fitxa::class, mappedBy: 'etiketak', cascade: ['persist'])]
     private $fitxak;
     
     
 
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getEtiketaeu();
     }
@@ -76,7 +68,7 @@ class Etiketa
      */
     public function __construct()
     {
-        $this->fitxak = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fitxak = new ArrayCollection();
     }
 
     /**
@@ -140,11 +132,11 @@ class Etiketa
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return Etiketa
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -154,7 +146,7 @@ class Etiketa
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {
@@ -164,11 +156,11 @@ class Etiketa
     /**
      * Add fitxak
      *
-     * @param \App\Entity\Fitxa $fitxak
+     * @param Fitxa $fitxak
      *
      * @return Etiketa
      */
-    public function addFitxak(\App\Entity\Fitxa $fitxak)
+    public function addFitxak(Fitxa $fitxak)
     {
         $this->fitxak[] = $fitxak;
 
@@ -178,9 +170,9 @@ class Etiketa
     /**
      * Remove fitxak
      *
-     * @param \App\Entity\Fitxa $fitxak
+     * @param Fitxa $fitxak
      */
-    public function removeFitxak(\App\Entity\Fitxa $fitxak)
+    public function removeFitxak(Fitxa $fitxak)
     {
         $this->fitxak->removeElement($fitxak);
     }
@@ -188,7 +180,7 @@ class Etiketa
     /**
      * Get fitxak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getFitxak()
     {

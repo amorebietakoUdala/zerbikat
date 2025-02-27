@@ -5,7 +5,11 @@
     <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand">{% if app.user.udala.eremuak %}{{ app.user.udala.eremuak.besteak1labeleu }}{% endif %}</a>
+                <a class="navbar-brand">
+                    {% if ( app.user.udala is defined and app.user.udala != null and app.user.udala.eremuak ) %}
+                       {{ app.user.udala.eremuak.besteak1labeleu }}
+                    {% endif %}
+                </a>
             </div>
             <div id="navbar" class="navbar-collapse collapse navbar-right">
                 <ul class="nav navbar-nav">

@@ -7,11 +7,13 @@
             <div class="navbar-header">
                 <a class="navbar-brand">{{ 'messages.agiriak'|trans }}</a>
             </div>
-            <div id="navbar" class="navbar-collapse collapse navbar-right">
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ path('dokumentazioa_new') }}" class="fa fa-plus"> {{ 'messages.agiriberria'|trans }}</a></li>
-                </ul>
-            </div>
+            {% if is_granted('ROLE_ADMIN') %}
+                <div id="navbar" class="navbar-collapse collapse navbar-right">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{{ path('dokumentazioa_new') }}" class="fa fa-plus"> {{ 'messages.agiriberria'|trans }}</a></li>
+                    </ul>
+                </div>
+            {% endif %}
         </div>
     </nav>
 {% endblock %}
@@ -38,8 +40,8 @@
                 </td>
                 <td NOWRAP class="text-right">
                     <ul class="list-inline">
-                        <li><a href="{{ path('dokumentazioa_edit', { 'id': dokumentazioa.id }) }}" class="fa fa-pencil"></a></li>
                         {% if is_granted('ROLE_ADMIN') %}
+                        <li><a href="{{ path('dokumentazioa_edit', { 'id': dokumentazioa.id }) }}" class="fa fa-pencil"></a></li>
                             {#<li>{{ form_start(deleteforms[dokumentazioa.id],{'attr': {'id': dokumentazioa.id}}) }}#}
                                 {#<a href="#" onclick="document.getElementById({{ dokumentazioa.id }}).submit();" ><i class="fa fa-trash text-danger"></i></a>#}
                                 {#{{ form_end(deleteforms[dokumentazioa.id]) }}</li>#}

@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Kanala;
 use App\Form\KanalaType;
 use App\Repository\KanalaRepository;
@@ -12,90 +12,73 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Kanala controller.
- *
- * @Route("/{_locale}/kanala")
  */
+#[Route(path: '/{_locale}/kanala')]
 class KanalaController extends AbstractController
 {
-    private $repo;
-    private $em;
-
-    public function __construct(EntityManagerInterface $em, KanalaRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private KanalaRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
     /**
      * Lists all Kanala entities.
-     *
-     * @Route("/", defaults={"page"=1}, name="kanala_index", methods={"GET"})
-     * @Route("/page{page}", name="kanala_index_paginated", methods={"GET"})
      */
+    #[IsGranted('ROLE_KUDEAKETA')]    
+    #[Route(path: '/', defaults: ['page' => 1], name: 'kanala_index', methods: ['GET'])]
+    #[Route(path: '/page{page}', name: 'kanala_index_paginated', methods: ['GET'])]
     public function index($page)
     {
+        $kanalas = $this->repo->findBy( [], ['kanalmota'=>'ASC'] );
 
-        if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $kanalas = $this->repo->findBy( [], ['kanalmota'=>'ASC'] );
-
-            $deleteForms = [];
-            foreach ($kanalas as $kanala) {
-                $deleteForms[$kanala->getId()] = $this->createDeleteForm($kanala)->createView();
-            }
-
-            return $this->render('kanala/index.html.twig', ['kanalas' => $kanalas, 'deleteforms' => $deleteForms]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+        $deleteForms = [];
+        foreach ($kanalas as $kanala) {
+            $deleteForms[$kanala->getId()] = $this->createDeleteForm($kanala)->createView();
         }
+
+        return $this->render('kanala/index.html.twig', ['kanalas' => $kanalas, 'deleteforms' => $deleteForms]);
     }
 
     /**
      * Creates a new Kanala entity.
-     *
-     * @Route("/new", name="kanala_new", methods={"GET", "POST"})
      */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route(path: '/new', name: 'kanala_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
+        $kanala = new Kanala();
+        $form = $this->createForm(KanalaType::class, $kanala);
+        $form->handleRequest($request);
 
-        if ($this->isGranted('ROLE_ADMIN'))
-        {
-            $kanala = new Kanala();
-            $form = $this->createForm(KanalaType::class, $kanala);
-            $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $kanala = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $udala = $user->getUdala();
+            $kanala->setUdala($udala);
+            $this->em->persist($kanala);
+            $this->em->flush();
 
-//            $form->getData()->setUdala($this->getUser()->getUdala());
-//            $form->setData($form->getData());
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->em->persist($kanala);
-                $this->em->flush();
-
-//                return $this->redirectToRoute('kanala_show', array('id' => $kanala->getId()));
-                return $this->redirectToRoute('kanala_index');
-            } else
-            {
-                $form->getData()->setUdala($this->getUser()->getUdala());
-                $form->setData($form->getData());
-            }
-
-            return $this->render('kanala/new.html.twig', ['kanala' => $kanala, 'form' => $form->createView()]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+            return $this->redirectToRoute('kanala_index');
         }
+
+        return $this->render('kanala/new.html.twig', ['kanala' => $kanala, 'form' => $form->createView()]);
     }
 
     /**
      * Finds and displays a Kanala entity.
-     *
-     * @Route("/{id}", name="kanala_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'kanala_show', methods: ['GET'])]
     public function show(Kanala $kanala): Response
     {
         $deleteForm = $this->createDeleteForm($kanala);
@@ -105,13 +88,14 @@ class KanalaController extends AbstractController
 
     /**
      * Displays a form to edit an existing Kanala entity.
-     *
-     * @Route("/{id}/edit", name="kanala_edit", methods={"GET", "POST"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]    
+    #[Route(path: '/{id}/edit', name: 'kanala_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Kanala $kanala)
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($kanala->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($kanala->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($kanala);
@@ -128,19 +112,20 @@ class KanalaController extends AbstractController
             return $this->render('kanala/edit.html.twig', ['kanala' => $kanala, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 
     /**
      * Deletes a Kanala entity.
-     *
-     * @Route("/{id}", name="kanala_delete", methods={"DELETE"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}', name: 'kanala_delete', methods: ['DELETE'])]
     public function delete(Request $request, Kanala $kanala): RedirectResponse
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($kanala->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($kanala->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {        
             $form = $this->createDeleteForm($kanala);
@@ -153,7 +138,7 @@ class KanalaController extends AbstractController
         }else
         {
             //baimenik ez
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }            
     }
 

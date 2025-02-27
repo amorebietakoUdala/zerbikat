@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Dokumentazioa;
 use App\Form\DokumentazioaType;
 use App\Repository\DokumentazioaRepository;
@@ -14,89 +14,70 @@ use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\ExpressionLanguage\Expression;
 
 /**
  * Dokumentazioa controller.
- *
- * @Route("/{_locale}/dokumentazioa")
  */
+#[Route(path: '/{_locale}/dokumentazioa')]
 class DokumentazioaController extends AbstractController
 {
 
-    private $repo;
-    private $em;
-
-    public function __construct(EntityManagerInterface $em, DokumentazioaRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private DokumentazioaRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
     /**
      * Lists all Dokumentazioa entities.
-     *
-     * @Route("/", defaults={"page"=1}, name="dokumentazioa_index", methods={"GET"})
-     * @Route("/page{page}", name="dokumentazioa_index_paginated", methods={"GET"})
      */
+    #[IsGranted("ROLE_KUDEAKETA")]
+    #[Route(path: '/', defaults: ['page' => 1], name: 'dokumentazioa_index', methods: ['GET'])]
+    #[Route(path: '/page{page}', name: 'dokumentazioa_index_paginated', methods: ['GET'])]
     public function index($page)
     {
+        $dokumentazioas = $this->repo->findBy( [], ['kodea'=>'ASC'] );
 
-        if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $dokumentazioas = $this->repo->findBy( [], ['kodea'=>'ASC'] );
-
-            $deleteForms = [];
-            foreach ($dokumentazioas as $dokumentazioa) {
-                $deleteForms[$dokumentazioa->getId()] = $this->createDeleteForm($dokumentazioa)->createView();
-            }
-
-            return $this->render('dokumentazioa/index.html.twig', ['dokumentazioas' => $dokumentazioas, 'deleteforms' => $deleteForms]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+        $deleteForms = [];
+        foreach ($dokumentazioas as $dokumentazioa) {
+            $deleteForms[$dokumentazioa->getId()] = $this->createDeleteForm($dokumentazioa)->createView();
         }
+
+        return $this->render('dokumentazioa/index.html.twig', ['dokumentazioas' => $dokumentazioas, 'deleteforms' => $deleteForms]);
     }
 
     /**
      * Creates a new Dokumentazioa entity.
-     *
-     * @Route("/new", name="dokumentazioa_new", methods={"GET", "POST"})
      */
+    #[IsGranted("ROLE_ADMIN")]
+    #[Route(path: '/new', name: 'dokumentazioa_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
-
-        if ($this->isGranted('ROLE_ADMIN')) 
-        {
-            $dokumentazioa = new Dokumentazioa();
-            $form = $this->createForm(DokumentazioaType::class, $dokumentazioa);
-            $form->handleRequest($request);
-
-//            $form->getData()->setUdala($this->getUser()->getUdala());
-//            $form->setData($form->getData());
-    
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->em->persist($dokumentazioa);
-                $this->em->flush();
-    
-//                return $this->redirectToRoute('dokumentazioa_show', array('id' => $dokumentazioa->getId()));
-                return $this->redirectToRoute('dokumentazioa_index');
-            } else
-            {
-                $form->getData()->setUdala($this->getUser()->getUdala());
-                $form->setData($form->getData());
-            }
-    
-            return $this->render('dokumentazioa/new.html.twig', ['dokumentazioa' => $dokumentazioa, 'form' => $form->createView()]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+        $dokumentazioa = new Dokumentazioa();
+        $form = $this->createForm(DokumentazioaType::class, $dokumentazioa);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $dokumentazioa = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $udala = $user->getUdala();
+            $dokumentazioa->setUdala($udala);
+            $this->em->persist($dokumentazioa);
+            $this->em->flush();
+            return $this->redirectToRoute('dokumentazioa_index');
         }
+
+        return $this->render('dokumentazioa/new.html.twig', ['dokumentazioa' => $dokumentazioa, 'form' => $form->createView()]);
     }
 
     /**
      * Finds and displays a Dokumentazioa entity.
-     *
-     * @Route("/{id}", name="dokumentazioa_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'dokumentazioa_show', methods: ['GET'])]
     public function show(Dokumentazioa $dokumentazioa): Response
     {
         $deleteForm = $this->createDeleteForm($dokumentazioa);
@@ -106,13 +87,14 @@ class DokumentazioaController extends AbstractController
 
     /**
      * Displays a form to edit an existing Dokumentazioa entity.
-     *
-     * @Route("/{id}/edit", name="dokumentazioa_edit", methods={"GET", "POST"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}/edit', name: 'dokumentazioa_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Dokumentazioa $dokumentazioa)
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($dokumentazioa->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($dokumentazioa->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($dokumentazioa);
@@ -129,19 +111,20 @@ class DokumentazioaController extends AbstractController
             return $this->render('dokumentazioa/edit.html.twig', ['dokumentazioa' => $dokumentazioa, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 
     /**
      * Deletes a Dokumentazioa entity.
-     *
-     * @Route("/{id}", name="dokumentazioa_delete", methods={"DELETE"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}', name: 'dokumentazioa_delete', methods: ['DELETE'])]
     public function delete(Request $request, Dokumentazioa $dokumentazioa): RedirectResponse
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($dokumentazioa->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($dokumentazioa->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $form = $this->createDeleteForm($dokumentazioa);
@@ -154,7 +137,7 @@ class DokumentazioaController extends AbstractController
         }else
         {
             //baimenik ez
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 

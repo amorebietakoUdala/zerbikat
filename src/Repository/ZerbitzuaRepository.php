@@ -54,7 +54,7 @@ class ZerbitzuaRepository extends ServiceEntityRepository
     public function findByZerbitzua($Zerbitzua)
     {
         return $this->createQueryBuilder('s')
-            ->innerJoin('App:Zerbitzua','u')
+            ->innerJoin(Zerbitzua::class,'u')
             ->andWhere('u.kodea = :Zerbitzua')
             ->setParameter('Zerbitzua', $Zerbitzua)
             ->orderBy('s.kodea', 'DESC')

@@ -965,52 +965,40 @@
 
     {% if is_granted('ROLE_ADMIN') %}
         <div class="row">
-            {% if is_granted('ROLE_SUPER_ADMIN') %}
-                <div class="col-sm-2">
-                    <div class="form-group">
-                        <b>{{ 'messages.udala'|trans }}</b>
-                        {#{{ form_label(edit_form.udala, 'Udala', { 'label_attr': {'class': 'control-label'} }) }}#}
-                        {{ form_errors(edit_form.udala) }}
-                        {{ form_widget(edit_form.udala, {'attr': {'class': 'form-control'}}) }}
-                    </div>
+            <div class="col-sm-9 hidden">
+                <div class="form-group col-sm-4">
+                    <b>{{ 'messages.kontsultak'|trans }}</b>
+                    {#{{ form_label(edit_form.kontsultak, 'Kontsulta kopurua:', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    {{ form_errors(edit_form.kontsultak) }}
+                    {{ form_widget(edit_form.kontsultak, {'attr': {'class': 'form-control'}}) }}
                 </div>
-            {% endif %}
-
-            {% if is_granted('ROLE_ADMIN') %}
-                <div class="col-sm-9 hidden">
-                    <div class="form-group col-sm-4">
-                        <b>{{ 'messages.kontsultak'|trans }}</b>
-                        {#{{ form_label(edit_form.kontsultak, 'Kontsulta kopurua:', { 'label_attr': {'class': 'control-label'} }) }}#}
-                        {{ form_errors(edit_form.kontsultak) }}
-                        {{ form_widget(edit_form.kontsultak, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    <div class="form-group col-sm-4">
-                        {{ form_errors(edit_form.hitzarmena) }}
-                        {{ form_widget(edit_form.hitzarmena, {'attr': {'class': 'c-checkbox'}}) }}
-                        {#{{ form_label(edit_form.hitzarmena, 'Hitzarmenean?', { 'label_attr': {'class': 'control-label'} }) }}#}
-                        <b>{{ 'messages.hitzarmenean'|trans }}</b>
-                    </div>
+                <div class="form-group col-sm-4">
+                    {{ form_errors(edit_form.hitzarmena) }}
+                    {{ form_widget(edit_form.hitzarmena, {'attr': {'class': 'c-checkbox'}}) }}
+                    {#{{ form_label(edit_form.hitzarmena, 'Hitzarmenean?', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    <b>{{ 'messages.hitzarmenean'|trans }}</b>
                 </div>
-            {% endif %}
+            </div>
         </div>
     {% endif %}
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
         <div class="row">
             <div class="form-group col-sm-4">
+                <b>{{ 'messages.udala'|trans }}</b>
+                {{ form_errors(edit_form.udala) }}
+                {{ form_widget(edit_form.udala, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group col-sm-4">
                 <b>{{ 'messages.created'|trans }}</b>
-                {#{{ form_label(edit_form.createdAt, 'Noiz sortua', { 'label_attr': {'class': 'control-label'} }) }}#}
                 {{ form_errors(edit_form.createdAt) }}
                 {{ form_widget(edit_form.createdAt, {'attr': {'class': 'form-control'}}) }}
             </div>
             <div class="form-group col-sm-4">
                 <b>{{ 'messages.updated'|trans }}</b>
-                {#{{ form_label(edit_form.updatedAt, 'Azken aldaketa', { 'label_attr': {'class': 'control-label'} }) }}#}
                 {{ form_errors(edit_form.updatedAt) }}
                 {{ form_widget(edit_form.updatedAt, {'attr': {'class': 'form-control'}}) }}
             </div>
-        </div>
-        </div>
         </div>
     {% endif %}
 
@@ -1146,7 +1134,7 @@
 
 
     <input id="fitxa_id" type="hidden" value="{{ fitxa.id }}">
-    <input id="udala_id" type="hidden" value="{{ udala}}">
+    <input id="udala_id" type="hidden" value="{{ udala }}">
     <input id="udala_kodea" type="hidden" value="{{ udal != null ? udal.kodea : null }}">
     <input id="url_api_zzoo" type="hidden" value="{{ zzoo_aplikazioaren_API_url }}">
 

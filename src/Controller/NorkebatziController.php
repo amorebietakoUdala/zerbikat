@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Norkebatzi;
 use App\Form\NorkebatziType;
 use App\Repository\NorkebatziRepository;
@@ -12,91 +12,74 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Norkebatzi controller.
- *
- * @Route("/{_locale}/norkebatzi")
  */
+#[Route(path: '/{_locale}/norkebatzi')]
 class NorkebatziController extends AbstractController
 {
 
-    private $repo;
-    private $em;
-
-    public function __construct(EntityManagerInterface $em, NorkebatziRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private NorkebatziRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
     /**
      * Lists all Norkebatzi entities.
-     *
-     * @Route("/", defaults={"page"=1}, name="norkebatzi_index", methods={"GET"})
-     * @Route("/page{page}", name="norkebatzi_index_paginated", methods={"GET"})
      */
+    #[IsGranted('ROLE_KUDEAKETA')]
+    #[Route(path: '/', defaults: ['page' => 1], name: 'norkebatzi_index', methods: ['GET'])]
+    #[Route(path: '/page{page}', name: 'norkebatzi_index_paginated', methods: ['GET'])]
     public function index($page)
     {
+        $norkebatzis = $this->repo->findAll();
 
-        if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $norkebatzis = $this->repo->findAll();
-
-            $deleteForms = [];
-            foreach ($norkebatzis as $norkebatzi) {
-                $deleteForms[$norkebatzi->getId()] = $this->createDeleteForm($norkebatzi)->createView();
-            }
-
-            return $this->render('norkebatzi/index.html.twig', ['norkebatzis' => $norkebatzis, 'deleteforms' => $deleteForms]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+        $deleteForms = [];
+        foreach ($norkebatzis as $norkebatzi) {
+            $deleteForms[$norkebatzi->getId()] = $this->createDeleteForm($norkebatzi)->createView();
         }
+
+        return $this->render('norkebatzi/index.html.twig', ['norkebatzis' => $norkebatzis, 'deleteforms' => $deleteForms]);
     }
 
     /**
      * Creates a new Norkebatzi entity.
-     *
-     * @Route("/new", name="norkebatzi_new", methods={"GET", "POST"})
      */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route(path: '/new', name: 'norkebatzi_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
+        $norkebatzi = new Norkebatzi();
+        $form = $this->createForm(NorkebatziType::class, $norkebatzi);
+        $form->handleRequest($request);
 
-        if ($this->isGranted('ROLE_ADMIN'))
-        {
-            $norkebatzi = new Norkebatzi();
-            $form = $this->createForm(NorkebatziType::class, $norkebatzi);
-            $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $norkebatzi = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $udala = $user->getUdala();
+            $norkebatzi->setUdala($udala);                
+            $this->em->persist($norkebatzi);
+            $this->em->flush();
 
-//            $form->getData()->setUdala($this->getUser()->getUdala());
-//            $form->setData($form->getData());
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->em->persist($norkebatzi);
-                $this->em->flush();
-
-//                return $this->redirectToRoute('norkebatzi_show', array('id' => $norkebatzi->getId()));
-                return $this->redirectToRoute('norkebatzi_index');
-            } else
-            {
-                $form->getData()->setUdala($this->getUser()->getUdala());
-                $form->setData($form->getData());
-            }
-
-            return $this->render('norkebatzi/new.html.twig', ['norkebatzi' => $norkebatzi, 'form' => $form->createView()]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+            return $this->redirectToRoute('norkebatzi_index');
         }
+
+        return $this->render('norkebatzi/new.html.twig', ['norkebatzi' => $norkebatzi, 'form' => $form->createView()]);
     }
 
     /**
      * Finds and displays a Norkebatzi entity.
-     *
-     * @Route("/{id}", name="norkebatzi_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'norkebatzi_show', methods: ['GET'])]
     public function show(Norkebatzi $norkebatzi): Response
     {
         $deleteForm = $this->createDeleteForm($norkebatzi);
@@ -106,13 +89,14 @@ class NorkebatziController extends AbstractController
 
     /**
      * Displays a form to edit an existing Norkebatzi entity.
-     *
-     * @Route("/{id}/edit", name="norkebatzi_edit", methods={"GET", "POST"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}/edit', name: 'norkebatzi_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Norkebatzi $norkebatzi)
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($norkebatzi->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($norkebatzi->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($norkebatzi);
@@ -129,19 +113,20 @@ class NorkebatziController extends AbstractController
             return $this->render('norkebatzi/edit.html.twig', ['norkebatzi' => $norkebatzi, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 
     /**
      * Deletes a Norkebatzi entity.
-     *
-     * @Route("/{id}", name="norkebatzi_delete", methods={"DELETE"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}', name: 'norkebatzi_delete', methods: ['DELETE'])]
     public function delete(Request $request, Norkebatzi $norkebatzi): RedirectResponse
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($norkebatzi->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($norkebatzi->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $form = $this->createDeleteForm($norkebatzi);
@@ -154,7 +139,7 @@ class NorkebatziController extends AbstractController
         }else
         {
             //baimenik ez
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }            
     }
 

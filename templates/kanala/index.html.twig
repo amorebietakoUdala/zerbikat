@@ -7,11 +7,13 @@
             <div class="navbar-header">
                 <a class="navbar-brand">{{ 'messages.kanalak'|trans }}</a>
             </div>
-            <div id="navbar" class="navbar-collapse collapse navbar-right">
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ path('kanala_new') }}" class="fa fa-plus"> {{ 'messages.kanalberria'|trans }}</a></li>
-                </ul>
-            </div>
+            {% if is_granted('ROLE_ADMIN') %}
+                <div id="navbar" class="navbar-collapse collapse navbar-right">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{{ path('kanala_new') }}" class="fa fa-plus"> {{ 'messages.kanalberria'|trans }}</a></li>
+                    </ul>
+                </div>
+            {% endif %}
         </div>
     </nav>
 {% endblock %}
@@ -51,8 +53,8 @@
                         {{ 'messages.bai'|trans }}{% else %}{{ 'messages.ez'|trans }}{% endif %}</td>
                 <td NOWRAP class="text-right">
                     <ul class="list-inline">
-                            <li><a href="{{ path('kanala_edit', { 'id': kanala.id }) }}" class="fa fa-pencil"></a></li>
                         {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('kanala_edit', { 'id': kanala.id }) }}" class="fa fa-pencil"></a></li>
                             {#<li>{{ form_start(deleteforms[kanala.id],{'attr': {'id': kanala.id}}) }}#}
                                 {#<a href="#" onclick="document.getElementById({{ kanala.id }}).submit();" ><i class="fa fa-trash text-danger"></i></a>#}
                                 {#{{ form_end(deleteforms[kanala.id]) }}</li>#}
@@ -73,9 +75,7 @@
     </table>
 
     <div class="text-center">
-        {% if kanalas is not empty %}
-
-        {% else %}
+        {% if kanalas is empty %}
             <p>{{ 'messages.emaitzarikez'|trans }}</p>
         {% endif %}
     </div>

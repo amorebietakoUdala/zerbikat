@@ -4,99 +4,86 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\AzpiatalaRepository;
 
-/**
- * Azpiatala
- *
- * @ORM\Table(name="azpiatala")
- * @ORM\Entity(repositoryClass=AzpiatalaRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
- */
-class Azpiatala
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'azpiatala')]
+#[ORM\Entity(repositoryClass: AzpiatalaRepository::class)]
+class Azpiatala implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="kodea", type="string", length=9, nullable=true)
      */
+    #[ORM\Column(name: 'kodea', type: 'string', length: 9, nullable: true)]
     private $kodea;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="izenburuaeu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'izenburuaeu', type: 'string', length: 255, nullable: true)]
     private $izenburuaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="izenburuaes", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'izenburuaes', type: 'string', length: 255, nullable: true)]
     private $izenburuaes;
 
 
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
 
 //    /**
-//     * @var \App\Entity\Atala
-//     *
-//     * @ORM\ManyToOne(targetEntity="App\Entity\Atala")
-//     * @ORM\JoinColumn(name="atala_id", referencedColumnName="id",onDelete="CASCADE")
-//     *
-//     */
-//    private $atala;
-
+    //     * @var Atala
+    //     *
+    //     * @ORM\ManyToOne(targetEntity="App\Entity\Atala")
+    //     * @ORM\JoinColumn(name="atala_id", referencedColumnName="id",onDelete="CASCADE")
+    //     *
+    //     */
+    //    private $atala;
     /**
-     * @var kontzeptuak[]
-     *
-     * @ORM\OneToMany(targetEntity="Kontzeptua", mappedBy="azpiatala",cascade={"persist"})
+     * @var ArrayCollection
      */
+    #[ORM\OneToMany(targetEntity: Kontzeptua::class, mappedBy: 'azpiatala', cascade: ['persist'])]
     private $kontzeptuak;
 
     /**
-     * @var parrafoak[]
-     *
-     * @ORM\OneToMany(targetEntity="Azpiatalaparrafoa", mappedBy="azpiatala",cascade={"persist"})
-     * @ORM\OrderBy({"ordena" = "ASC"})
+     * @var ArrayCollection
      */
+    #[ORM\OneToMany(targetEntity: Azpiatalaparrafoa::class, mappedBy: 'azpiatala', cascade: ['persist'])]
+    #[ORM\OrderBy(['ordena' => 'ASC'])]
     private $parrafoak;
 
     /**
-     * @var fitxak[]
-     *
-     * @ORM\ManyToMany(targetEntity="Fitxa",mappedBy="azpiatalak", cascade={"persist"}))
+     * @var ArrayCollection
      */
+    #[ORM\ManyToMany(targetEntity: Fitxa::class, mappedBy: 'azpiatalak', cascade: ['persist'])]
     private $fitxak;
 
 
     /**
      *          TOSTRING
      */
-    public function __toString()
+    public function __toString(): string
     {
         return
             (string) $this->getKodea()."-".$this->getIzenburuaeu();
@@ -136,11 +123,6 @@ class Azpiatala
      *          HEMENDIK AURRERA AUTOMATIKOKI SORTUTAKOAK 
      */
     
-    
-    
-    
-
-
     /**
      * Get id
      *
@@ -226,11 +208,11 @@ class Azpiatala
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return Azpiatala
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -240,7 +222,7 @@ class Azpiatala
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {
@@ -250,11 +232,11 @@ class Azpiatala
     /**
      * Add kontzeptuak
      *
-     * @param \App\Entity\Kontzeptua $kontzeptuak
+     * @param Kontzeptua $kontzeptuak
      *
      * @return Azpiatala
      */
-    public function addKontzeptuak(\App\Entity\Kontzeptua $kontzeptuak)
+    public function addKontzeptuak(Kontzeptua $kontzeptuak)
     {
         $this->kontzeptuak[] = $kontzeptuak;
 
@@ -264,9 +246,9 @@ class Azpiatala
     /**
      * Remove kontzeptuak
      *
-     * @param \App\Entity\Kontzeptua $kontzeptuak
+     * @param Kontzeptua $kontzeptuak
      */
-    public function removeKontzeptuak(\App\Entity\Kontzeptua $kontzeptuak)
+    public function removeKontzeptuak(Kontzeptua $kontzeptuak)
     {
         $this->kontzeptuak->removeElement($kontzeptuak);
     }
@@ -274,7 +256,7 @@ class Azpiatala
     /**
      * Get kontzeptuak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getKontzeptuak()
     {
@@ -284,11 +266,11 @@ class Azpiatala
     /**
      * Add parrafoak
      *
-     * @param \App\Entity\Azpiatalaparrafoa $parrafoak
+     * @param Azpiatalaparrafoa $parrafoak
      *
      * @return Azpiatala
      */
-    public function addParrafoak(\App\Entity\Azpiatalaparrafoa $parrafoak)
+    public function addParrafoak(Azpiatalaparrafoa $parrafoak)
     {
         $this->parrafoak[] = $parrafoak;
 
@@ -298,9 +280,9 @@ class Azpiatala
     /**
      * Remove parrafoak
      *
-     * @param \App\Entity\Azpiatalaparrafoa $parrafoak
+     * @param Azpiatalaparrafoa $parrafoak
      */
-    public function removeParrafoak(\App\Entity\Azpiatalaparrafoa $parrafoak)
+    public function removeParrafoak(Azpiatalaparrafoa $parrafoak)
     {
         $this->parrafoak->removeElement($parrafoak);
     }
@@ -308,7 +290,7 @@ class Azpiatala
     /**
      * Get parrafoak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getParrafoak()
     {
@@ -318,11 +300,11 @@ class Azpiatala
     /**
      * Add fitxak
      *
-     * @param \App\Entity\Fitxa $fitxak
+     * @param Fitxa $fitxak
      *
      * @return Azpiatala
      */
-    public function addFitxak(\App\Entity\Fitxa $fitxak)
+    public function addFitxak(Fitxa $fitxak)
     {
         $this->fitxak[] = $fitxak;
 
@@ -332,9 +314,9 @@ class Azpiatala
     /**
      * Remove fitxak
      *
-     * @param \App\Entity\Fitxa $fitxak
+     * @param Fitxa $fitxak
      */
-    public function removeFitxak(\App\Entity\Fitxa $fitxak)
+    public function removeFitxak(Fitxa $fitxak)
     {
         $this->fitxak->removeElement($fitxak);
     }
@@ -342,7 +324,7 @@ class Azpiatala
     /**
      * Get fitxak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getFitxak()
     {

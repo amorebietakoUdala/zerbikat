@@ -4,80 +4,68 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\DoklagunRepository;
 
-/**
- * Doklagun
- *
- * @ORM\Table(name="doklagun")
- * @ORM\Entity(repositoryClass=DoklagunRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
- */
-class Doklagun
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'doklagun')]
+#[ORM\Entity(repositoryClass: DoklagunRepository::class)]
+class Doklagun implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="kodea", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'kodea', type: 'string', length: 255, nullable: true)]
     private $kodea;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="deskribapenaeu", type="text", length=65535, nullable=true)
      */
+    #[ORM\Column(name: 'deskribapenaeu', type: 'text', length: 65535, nullable: true)]
     private $deskribapenaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="deskribapenaes", type="text", length=65535, nullable=true)
      */
+    #[ORM\Column(name: 'deskribapenaes', type: 'text', length: 65535, nullable: true)]
     private $deskribapenaes;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="estekaeu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'estekaeu', type: 'string', length: 255, nullable: true)]
     private $estekaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="estekaes", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'estekaes', type: 'string', length: 255, nullable: true)]
     private $estekaes;
 
 
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
     /**
-     * @var fitxak[]
-     *
-     * @ORM\ManyToMany(targetEntity="Fitxa",mappedBy="doklagunak", cascade={"persist"}))
+     * @var ArrayCollection
      */
+    #[ORM\ManyToMany(targetEntity: Fitxa::class, mappedBy: 'doklagunak', cascade: ['persist'])]
     private $fitxak;
 
 
@@ -85,7 +73,7 @@ class Doklagun
     /**
      *          TOSTRING
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getKodea()."-".$this->getDeskribapenaeu();
     }
@@ -96,7 +84,7 @@ class Doklagun
      */
     public function __construct()
     {
-        $this->fitxak = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fitxak = new ArrayCollection();
     }
 
     /**
@@ -232,11 +220,11 @@ class Doklagun
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return Doklagun
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -246,7 +234,7 @@ class Doklagun
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {
@@ -256,11 +244,11 @@ class Doklagun
     /**
      * Add fitxak
      *
-     * @param \App\Entity\Fitxa $fitxak
+     * @param Fitxa $fitxak
      *
      * @return Doklagun
      */
-    public function addFitxak(\App\Entity\Fitxa $fitxak)
+    public function addFitxak(Fitxa $fitxak)
     {
         $this->fitxak[] = $fitxak;
 
@@ -270,9 +258,9 @@ class Doklagun
     /**
      * Remove fitxak
      *
-     * @param \App\Entity\Fitxa $fitxak
+     * @param Fitxa $fitxak
      */
-    public function removeFitxak(\App\Entity\Fitxa $fitxak)
+    public function removeFitxak(Fitxa $fitxak)
     {
         $this->fitxak->removeElement($fitxak);
     }
@@ -280,7 +268,7 @@ class Doklagun
     /**
      * Get fitxak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getFitxak()
     {

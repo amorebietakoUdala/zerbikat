@@ -54,7 +54,7 @@ class AraudiaRepository extends ServiceEntityRepository
     // public function findByAraudiakByUdala($udala)
     // {
     //     return $this->createQueryBuilder('s')
-    //         ->innerJoin('App:Udala','u')
+    //         ->innerJoin(Udala::class,'u')
     //         ->andWhere('u.kodea = :udala')
     //         ->setParameter('udala', $udala)
     //         ->orderBy('s.kodea', 'DESC')

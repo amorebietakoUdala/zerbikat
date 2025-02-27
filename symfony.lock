@@ -5,15 +5,6 @@
     "babdev/pagerfanta-bundle": {
         "version": "v2.11.0"
     },
-    "doctrine/annotations": {
-        "version": "1.14",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "1.10",
-            "ref": "64d8583af5ea57b7afa4aba4b159907f3a148b05"
-        }
-    },
     "doctrine/doctrine-bundle": {
         "version": "1.12",
         "recipe": {
@@ -92,9 +83,6 @@
             "config/packages/prod/jms_serializer.yaml"
         ]
     },
-    "knplabs/knp-menu-bundle": {
-        "version": "v3.2.0"
-    },
     "nelmio/api-doc-bundle": {
         "version": "2.13",
         "recipe": {
@@ -122,18 +110,6 @@
     },
     "qipsius/tcpdf-bundle": {
         "version": "2.0.3"
-    },
-    "sensio/framework-extra-bundle": {
-        "version": "5.6",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "5.2",
-            "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
-        },
-        "files": [
-            "config/packages/sensio_framework_extra.yaml"
-        ]
     },
     "symfony/apache-pack": {
         "version": "1.0",
@@ -269,6 +245,15 @@
         "files": [
             "config/packages/security.yaml"
         ]
+    },
+    "symfony/stimulus-bundle": {
+        "version": "2.23",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.8",
+            "ref": "9e33a8a3794b603fb4be6c04ee5ecab901ce549e"
+        }
     },
     "symfony/translation": {
         "version": "4.4",

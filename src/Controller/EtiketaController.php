@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Etiketa;
 use App\Form\EtiketaType;
 use App\Repository\EtiketaRepository;
@@ -12,90 +12,73 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Etiketa controller.
- *
- * @Route("/{_locale}/etiketa")
  */
+#[Route(path: '/{_locale}/etiketa')]
 class EtiketaController extends AbstractController
 {
-    private $repo;
-    private $em;
-
-    public function __construct(EntityManagerInterface $em, EtiketaRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private EtiketaRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
     /**
      * Lists all Etiketa entities.
-     *
-     * @Route("/", defaults={"page"=1}, name="etiketa_index", methods={"GET"})
-     * @Route("/page{page}", name="etiketa_index_paginated", methods={"GET"})
      */
+    #[IsGranted('ROLE_KUDEAKETA')]    
+    #[Route(path: '/', defaults: ['page' => 1], name: 'etiketa_index', methods: ['GET'])]
+    #[Route(path: '/page{page}', name: 'etiketa_index_paginated', methods: ['GET'])]
     public function index($page)
     {
+        $etiketas = $this->repo->findBy( [], ['etiketaeu'=>'ASC'] );
 
-        if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $etiketas = $this->repo->findBy( [], ['etiketaeu'=>'ASC'] );
-
-            $deleteForms = [];
-            foreach ($etiketas as $etiketa) {
-                $deleteForms[$etiketa->getId()] = $this->createDeleteForm($etiketa)->createView();
-            }
-
-            return $this->render('etiketa/index.html.twig', ['etiketas' => $etiketas, 'deleteforms' => $deleteForms]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+        $deleteForms = [];
+        foreach ($etiketas as $etiketa) {
+            $deleteForms[$etiketa->getId()] = $this->createDeleteForm($etiketa)->createView();
         }
+
+        return $this->render('etiketa/index.html.twig', ['etiketas' => $etiketas, 'deleteforms' => $deleteForms]);
     }
 
     /**
      * Creates a new Etiketa entity.
-     *
-     * @Route("/new", name="etiketa_new", methods={"GET", "POST"})
      */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route(path: '/new', name: 'etiketa_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
 
-        if ($this->isGranted('ROLE_ADMIN'))
-        {
-            $etiketum = new Etiketa();
-            $form = $this->createForm(EtiketaType::class, $etiketum);
-            $form->handleRequest($request);
+        $etiketum = new Etiketa();
+        $form = $this->createForm(EtiketaType::class, $etiketum);
+        $form->handleRequest($request);
 
-//            $form->getData()->setUdala($this->getUser()->getUdala());
-//            $form->setData($form->getData());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $etiketum = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $etiketum->setUdala($user->getUdala());
+            $this->em->persist($etiketum);
+            $this->em->flush();
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->em->persist($etiketum);
-                $this->em->flush();
-
-//                return $this->redirectToRoute('etiketa_show', array('id' => $etiketum->getId()));
-                return $this->redirectToRoute('etiketa_index');
-            } else
-            {
-                $form->getData()->setUdala($this->getUser()->getUdala());
-                $form->setData($form->getData());
-            }
-
-            return $this->render('etiketa/new.html.twig', ['etiketum' => $etiketum, 'form' => $form->createView()]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+            return $this->redirectToRoute('etiketa_index');
         }
+
+        return $this->render('etiketa/new.html.twig', ['etiketum' => $etiketum, 'form' => $form->createView()]);
     }
 
     /**
      * Finds and displays a Etiketa entity.
-     *
-     * @Route("/{id}", name="etiketa_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'etiketa_show', methods: ['GET'])]
     public function show(Etiketa $etiketum): Response
     {
         $deleteForm = $this->createDeleteForm($etiketum);
@@ -105,13 +88,14 @@ class EtiketaController extends AbstractController
 
     /**
      * Displays a form to edit an existing Etiketa entity.
-     *
-     * @Route("/{id}/edit", name="etiketa_edit", methods={"GET", "POST"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}/edit', name: 'etiketa_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Etiketa $etiketum)
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($etiketum->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($etiketum->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($etiketum);
@@ -128,19 +112,20 @@ class EtiketaController extends AbstractController
             return $this->render('etiketa/edit.html.twig', ['etiketum' => $etiketum, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }            
     }
 
     /**
      * Deletes a Etiketa entity.
-     *
-     * @Route("/{id}", name="etiketa_delete", methods={"DELETE"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}', name: 'etiketa_delete', methods: ['DELETE'])]
     public function delete(Request $request, Etiketa $etiketum): RedirectResponse
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($etiketum->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($etiketum->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $form = $this->createDeleteForm($etiketum);
@@ -153,7 +138,7 @@ class EtiketaController extends AbstractController
         }else
         {
             //baimenik ez
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 

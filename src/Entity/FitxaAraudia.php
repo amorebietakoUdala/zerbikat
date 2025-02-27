@@ -8,33 +8,31 @@ use App\Repository\FitxaAraudiaRepository;
 
 /**
  * FitxaAraudia
- *
- * @ORM\Table(name="fitxa_araudia", indexes={@ORM\Index(name="fitxa_id_idx", columns={"fitxa_id"}), @ORM\Index(name="araudia_id_idx", columns={"araudia_id"})})
- * @ORM\Entity(repositoryClass=FitxaAraudiaRepository::class)
  */
-class FitxaAraudia
+#[ORM\Table(name: 'fitxa_araudia')]
+#[ORM\Index(name: 'fitxa_id_idx', columns: ['fitxa_id'])]
+#[ORM\Index(name: 'araudia_id_idx', columns: ['araudia_id'])]
+#[ORM\Entity(repositoryClass: FitxaAraudiaRepository::class)]
+class FitxaAraudia implements \Stringable
 {
     /**
      * @var string
-     *
-     * @ORM\Column(name="atalaeu", type="string", length=50, nullable=true)
      */
+    #[ORM\Column(name: 'atalaeu', type: 'string', length: 50, nullable: true)]
     private $atalaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="atalaes", type="string", length=50, nullable=true)
      */
+    #[ORM\Column(name: 'atalaes', type: 'string', length: 50, nullable: true)]
     private $atalaes;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
 
@@ -43,40 +41,39 @@ class FitxaAraudia
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
     
     
     /**
-     * @var \App\Entity\Fitxa
+     * @var Fitxa
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Fitxa",inversedBy="araudiak")
-     * @ORM\JoinColumn(name="fitxa_id", referencedColumnName="id",onDelete="CASCADE")
-     * 
+     *
      */
+    #[ORM\JoinColumn(name: 'fitxa_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Fitxa::class, inversedBy: 'araudiak')]
     private $fitxa;
 
     /**
-     * @var \App\Entity\Araudia
+     * @var Araudia
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Araudia",inversedBy="fitxak")
-     * @ORM\JoinColumn(name="araudia_id", referencedColumnName="id",onDelete="CASCADE")
-     * @ORM\OrderBy({"kodea" = "ASC"})
-     * 
+     *
      */
+    #[ORM\JoinColumn(name: 'araudia_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Araudia::class, inversedBy: 'fitxak')]
+    #[ORM\OrderBy(['kodea' => 'ASC'])]
     private $araudia;
 
     /**
      *          TOSTRING
      */
 
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->araudia->getKodea()."-".$this->araudia->getArauaeu();
     }
@@ -144,11 +141,11 @@ class FitxaAraudia
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return FitxaAraudia
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -158,7 +155,7 @@ class FitxaAraudia
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {
@@ -168,11 +165,11 @@ class FitxaAraudia
     /**
      * Set fitxa
      *
-     * @param \App\Entity\Fitxa $fitxa
+     * @param Fitxa $fitxa
      *
      * @return FitxaAraudia
      */
-    public function setFitxa(\App\Entity\Fitxa $fitxa = null)
+    public function setFitxa(Fitxa $fitxa = null)
     {
         $this->fitxa = $fitxa;
 
@@ -182,7 +179,7 @@ class FitxaAraudia
     /**
      * Get fitxa
      *
-     * @return \App\Entity\Fitxa
+     * @return Fitxa
      */
     public function getFitxa()
     {
@@ -192,11 +189,11 @@ class FitxaAraudia
     /**
      * Set araudia
      *
-     * @param \App\Entity\Araudia $araudia
+     * @param Araudia $araudia
      *
      * @return FitxaAraudia
      */
-    public function setAraudia(\App\Entity\Araudia $araudia = null)
+    public function setAraudia(Araudia $araudia = null)
     {
         $this->araudia = $araudia;
 
@@ -206,7 +203,7 @@ class FitxaAraudia
     /**
      * Get araudia
      *
-     * @return \App\Entity\Araudia
+     * @return Araudia
      */
     public function getAraudia()
     {
