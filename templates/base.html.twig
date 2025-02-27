@@ -49,7 +49,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ "messages.menu.admin" | trans }}<span class="caret"></span></a>
                                 <ul class="dropdown-menu" id="menuaAdmin">
                                     <li><a href="{{ path('udala_index') }}">{{ 'messages.udala'|trans }}</a></li>
-                                    <li><a href="{{ path('admin_user_list') }}">{{ 'messages.erabiltzaileak'|trans }}</a>
+                                    <li><a href="{{ path('admin_user_index') }}">{{ 'messages.erabiltzaileak'|trans }}</a>
                                     </li>
                                     <li><a href="{{ path('eremuak_index') }}">{{ 'messages.eremuak'|trans }}</a></li>
                                     {% if is_granted('ROLE_SUPER_ADMIN') %}
@@ -120,15 +120,20 @@
 
                     </ul>
                 {% endif %}
-                <ul class="nav navbar-nav navbar-right">
-                    {% block ekintzak %}
-                        <li class="list-inline"><a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'es'})) }}">ES</a></li>
-                        <li class="list-inline"><a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'eu'})) }}">EU</a></li>
-                    {% endblock %}
-                    {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
-                        <li class="list-inline"><a href="{{ path('admin_user_list', {'_switch_user': '_exit'}) }}">Modu arruntera itzuli</a></li>
-                    {% endif %}
-                </ul>
+                {% block navright %}
+                    <ul class="nav navbar-nav navbar-right" {{ stimulus_controller('locale') }} id="hizkuntza">
+                        {% block ekintzak %}
+                            <li class="list-inline"><a href="#" data-action="click->locale#changeLocale">es</a></li>
+                            <li class="list-inline"><a href="#" data-action="click->locale#changeLocale">eu</a></li>
+
+                            {# <li class="list-inline"><a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'es'})) }}">ES</a></li>
+                            <li class="list-inline"><a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'eu'})) }}">EU</a></li> #}
+                        {% endblock %}
+                        {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                            <li class="list-inline"><a href="{{ path('admin_user_index', {'_switch_user': '_exit'}) }}">Modu arruntera itzuli</a></li>
+                        {% endif %}
+                    </ul>
+                {% endblock navright %}
             </div><!--/.nav-collapse -->
         </div>
     </nav>

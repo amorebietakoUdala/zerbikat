@@ -3,75 +3,71 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\KaleaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Kalea
  *
- * @ORM\Table(name="kalea", indexes={@ORM\Index(name="barrutia_id_idx", columns={"barrutia_id"})})
- * @ORM\Entity(repositoryClass=KaleaRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
  */
-class Kalea
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'kalea')]
+#[ORM\Index(name: 'barrutia_id_idx', columns: ['barrutia_id'])]
+#[ORM\Entity(repositoryClass: KaleaRepository::class)]
+class Kalea implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="izena", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'izena', type: 'string', length: 255, nullable: true)]
     private $izena;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="google", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'google', type: 'string', length: 255, nullable: true)]
     private $google;
 
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
     /**
-     * @var \App\Entity\Barrutia
+     * @var Barrutia
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Barrutia")
-     * @ORM\JoinColumn(name="barrutia_id", referencedColumnName="id",onDelete="CASCADE")
      *
      */
+    #[ORM\JoinColumn(name: 'barrutia_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Barrutia::class)]
     private $barrutia;
 
 
     /**
-     * @var azpisailak[]
-     *
-     * @ORM\OneToMany(targetEntity="Azpisaila", mappedBy="kalea")
+     * @var ArrayCollection
      */
+    #[ORM\OneToMany(targetEntity: Azpisaila::class, mappedBy: 'kalea')]
     private $azpisailak;
 
     /**
-     * @var kanalak[]
-     *
-     * @ORM\OneToMany(targetEntity="Kanala", mappedBy="kalea")
+     * @var ArrayCollection
      */
+    #[ORM\OneToMany(targetEntity: Kanala::class, mappedBy: 'kalea')]
     private $kanalak;
 
     /**
@@ -82,7 +78,7 @@ class Kalea
      * @return string
      */
 
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getIzena();
     }
@@ -94,8 +90,8 @@ class Kalea
      */
     public function __construct()
     {
-        $this->azpisailak = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->kanalak = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->azpisailak = new ArrayCollection();
+        $this->kanalak = new ArrayCollection();
     }
 
     /**
@@ -159,11 +155,11 @@ class Kalea
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return Kalea
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -173,7 +169,7 @@ class Kalea
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {
@@ -183,11 +179,11 @@ class Kalea
     /**
      * Set barrutia
      *
-     * @param \App\Entity\Barrutia $barrutia
+     * @param Barrutia $barrutia
      *
      * @return Kalea
      */
-    public function setBarrutia(\App\Entity\Barrutia $barrutia = null)
+    public function setBarrutia(Barrutia $barrutia = null)
     {
         $this->barrutia = $barrutia;
 
@@ -197,7 +193,7 @@ class Kalea
     /**
      * Get barrutia
      *
-     * @return \App\Entity\Barrutia
+     * @return Barrutia
      */
     public function getBarrutia()
     {
@@ -207,11 +203,11 @@ class Kalea
     /**
      * Add azpisailak
      *
-     * @param \App\Entity\Azpisaila $azpisailak
+     * @param Azpisaila $azpisailak
      *
      * @return Kalea
      */
-    public function addAzpisailak(\App\Entity\Azpisaila $azpisailak)
+    public function addAzpisailak(Azpisaila $azpisailak)
     {
         $this->azpisailak[] = $azpisailak;
 
@@ -221,9 +217,9 @@ class Kalea
     /**
      * Remove azpisailak
      *
-     * @param \App\Entity\Azpisaila $azpisailak
+     * @param Azpisaila $azpisailak
      */
-    public function removeAzpisailak(\App\Entity\Azpisaila $azpisailak)
+    public function removeAzpisailak(Azpisaila $azpisailak)
     {
         $this->azpisailak->removeElement($azpisailak);
     }
@@ -231,7 +227,7 @@ class Kalea
     /**
      * Get azpisailak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getAzpisailak()
     {
@@ -241,11 +237,11 @@ class Kalea
     /**
      * Add kanalak
      *
-     * @param \App\Entity\Kanala $kanalak
+     * @param Kanala $kanalak
      *
      * @return Kalea
      */
-    public function addKanalak(\App\Entity\Kanala $kanalak)
+    public function addKanalak(Kanala $kanalak)
     {
         $this->kanalak[] = $kanalak;
 
@@ -255,9 +251,9 @@ class Kalea
     /**
      * Remove kanalak
      *
-     * @param \App\Entity\Kanala $kanalak
+     * @param Kanala $kanalak
      */
-    public function removeKanalak(\App\Entity\Kanala $kanalak)
+    public function removeKanalak(Kanala $kanalak)
     {
         $this->kanalak->removeElement($kanalak);
     }
@@ -265,7 +261,7 @@ class Kalea
     /**
      * Get kanalak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getKanalak()
     {

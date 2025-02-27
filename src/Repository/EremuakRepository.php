@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Eremuak;
+use App\Entity\Udala;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -55,14 +56,16 @@ class EremuakRepository extends ServiceEntityRepository
 
     public function findOneByUdala($udala)
     {
-        return $this->createQueryBuilder('e')
+        $qb = $this->createQueryBuilder('e')
             ->select('e.oharraktext,e.helburuatext,e.ebazpensinpli,e.arduraaitorpena,e.aurreikusi,e.arrunta,e.isiltasunadmin,e.norkeskatutext,e.norkeskatutable,e.dokumentazioatext,e.dokumentazioatable,e.kostuatext,e.kostuatable,e.araudiatext,e.araudiatable,e.prozeduratext,e.prozeduratable,e.doklaguntext,e.doklaguntable,e.datuenbabesatext,e.datuenbabesatable,e.norkebatzitext,e.norkebatzitable,e.besteak1text,e.besteak1table,e.besteak2text,e.besteak2table,e.besteak3text,e.besteak3table,e.kanalatext,e.kanalatable,e.azpisailatable')
             ->andWhere('e.udala = :udala')
             ->setParameter('udala', $udala)
 //            ->orderBy('s.kodea', 'DESC')
-            ->getQuery()
-            ->getSingleResult()
         ;
+
+        dump($qb->getQuery()->getSQL());
+
+        return $qb->getQuery()->getSingleResult();
     }
 
     /**
@@ -77,7 +80,7 @@ class EremuakRepository extends ServiceEntityRepository
     }
 
     private function andWhereUdalKodeaQB ($qb, $udalKodea): QueryBuilder {
-        $qb->leftJoin('App:Udala','u', Join::WITH, 'e.udala=u.id')
+        $qb->leftJoin(Udala::class,'u', Join::WITH, 'e.udala=u.id')
         ->andWhere('u.kodea = :udalaKodea')
         ->setParameter('udalaKodea', $udalKodea);
         return $qb;

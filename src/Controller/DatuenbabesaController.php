@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Datuenbabesa;
 use App\Form\DatuenbabesaType;
 use App\Repository\DatuenbabesaRepository;
@@ -14,89 +14,77 @@ use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\ExpressionLanguage\Expression;
 
 /**
  * Datuenbabesa controller.
- *
- * @Route("/{_locale}/datuenbabesa")
  */
+#[Route(path: '/{_locale}/datuenbabesa')]
 class DatuenbabesaController extends AbstractController
 {
 
-    private $repo;
-    private $em;
-
-    public function __construct(EntityManagerInterface $em, DatuenbabesaRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private DatuenbabesaRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
     /**
      * Lists all Datuenbabesa entities.
-     *
-     * @Route("/", defaults={"page"=1}, name="datuenbabesa_index", methods={"GET"})
-     * @Route("/page{page}", name="datuenbabesa_index_paginated", methods={"GET"})
      */
+    #[IsGranted("ROLE_KUDEAKETA")]
+    #[Route(path: '/', defaults: ['page' => 1], name: 'datuenbabesa_index', methods: ['GET'])]
+    #[Route(path: '/page{page}', name: 'datuenbabesa_index_paginated', methods: ['GET'])]
     public function index($page)
     {
+        $datuenbabesas = $this->repo->findBy( [], ['kodea'=>'ASC'] );
 
-        if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $datuenbabesas = $this->repo->findBy( [], ['kodea'=>'ASC'] );
-
-            $deleteForms = [];
-            foreach ($datuenbabesas as $datuenbabesa) {
-                $deleteForms[$datuenbabesa->getId()] = $this->createDeleteForm($datuenbabesa)->createView();
-            }
-
-            return $this->render('datuenbabesa/index.html.twig', ['datuenbabesas' => $datuenbabesas, 'deleteforms' => $deleteForms]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+        $deleteForms = [];
+        foreach ($datuenbabesas as $datuenbabesa) {
+            $deleteForms[$datuenbabesa->getId()] = $this->createDeleteForm($datuenbabesa)->createView();
         }
+
+        return $this->render('datuenbabesa/index.html.twig', ['datuenbabesas' => $datuenbabesas, 'deleteforms' => $deleteForms]);
     }
 
     /**
      * Creates a new Datuenbabesa entity.
-     *
-     * @Route("/new", name="datuenbabesa_new", methods={"GET", "POST"})
      */
+    #[IsGranted("ROLE_ADMIN")]
+    #[Route(path: '/new', name: 'datuenbabesa_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
 
-        if ($this->isGranted('ROLE_ADMIN')) 
-        {
-            $datuenbabesa = new Datuenbabesa();
-            $form = $this->createForm(DatuenbabesaType::class, $datuenbabesa);
-            $form->handleRequest($request);
+        $datuenbabesa = new Datuenbabesa();
+        $form = $this->createForm(DatuenbabesaType::class, $datuenbabesa);
+        $form->handleRequest($request);
 
 //            $form->getData()->setUdala($this->getUser()->getUdala());
 //            $form->setData($form->getData());
-            
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->em->persist($datuenbabesa);
-                $this->em->flush();
-    
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            $datuenbabesa = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $udala = $user->getUdala();
+            $datuenbabesa->setUdala($udala);
+            $this->em->persist($datuenbabesa);
+            $this->em->flush();
+
 //                return $this->redirectToRoute('datuenbabesa_show', array('id' => $datuenbabesa->getId()));
-                return $this->redirectToRoute('datuenbabesa_index');
-            } else
-            {
-                $form->getData()->setUdala($this->getUser()->getUdala());
-                $form->setData($form->getData());
-            }
-    
-            return $this->render('datuenbabesa/new.html.twig', ['datuenbabesa' => $datuenbabesa, 'form' => $form->createView()]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+            return $this->redirectToRoute('datuenbabesa_index');
         }
+
+        return $this->render('datuenbabesa/new.html.twig', ['datuenbabesa' => $datuenbabesa, 'form' => $form->createView()]);
     }
 
     /**
      * Finds and displays a Datuenbabesa entity.
-     *
-     * @Route("/{id}", name="datuenbabesa_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'datuenbabesa_show', methods: ['GET'])]
     public function show(Datuenbabesa $datuenbabesa): Response
     {
         $deleteForm = $this->createDeleteForm($datuenbabesa);
@@ -106,13 +94,14 @@ class DatuenbabesaController extends AbstractController
 
     /**
      * Displays a form to edit an existing Datuenbabesa entity.
-     *
-     * @Route("/{id}/edit", name="datuenbabesa_edit", methods={"GET", "POST"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}/edit', name: 'datuenbabesa_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Datuenbabesa $datuenbabesa)
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($datuenbabesa->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($datuenbabesa->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($datuenbabesa);
@@ -129,19 +118,20 @@ class DatuenbabesaController extends AbstractController
             return $this->render('datuenbabesa/edit.html.twig', ['datuenbabesa' => $datuenbabesa, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }            
     }
 
     /**
      * Deletes a Datuenbabesa entity.
-     *
-     * @Route("/{id}", name="datuenbabesa_delete", methods={"DELETE"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}', name: 'datuenbabesa_delete', methods: ['DELETE'])]
     public function delete(Request $request, Datuenbabesa $datuenbabesa): RedirectResponse
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($datuenbabesa->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($datuenbabesa->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $form = $this->createDeleteForm($datuenbabesa);
@@ -154,7 +144,7 @@ class DatuenbabesaController extends AbstractController
         }else
         {
             //baimenik ez
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 

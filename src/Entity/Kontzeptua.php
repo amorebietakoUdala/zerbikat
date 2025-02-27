@@ -3,60 +3,57 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\KontzeptuaRepository;
 
 /**
  * Kontzeptua
  *
- * @ORM\Table(name="kontzeptua", indexes={@ORM\Index(name="azpiatala_id_idx", columns={"azpiatala_id"}), @ORM\Index(name="baldintza_id_idx", columns={"baldintza_id"}), @ORM\Index(name="kontzeptumota_id_idx", columns={"kontzeptumota_id"})})
- * @ORM\Entity(repositoryClass=KontzeptuaRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
  */
-class Kontzeptua
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'kontzeptua')]
+#[ORM\Index(name: 'azpiatala_id_idx', columns: ['azpiatala_id'])]
+#[ORM\Index(name: 'baldintza_id_idx', columns: ['baldintza_id'])]
+#[ORM\Index(name: 'kontzeptumota_id_idx', columns: ['kontzeptumota_id'])]
+#[ORM\Entity(repositoryClass: KontzeptuaRepository::class)]
+class Kontzeptua implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="kodea", type="string", length=9, nullable=true)
      */
+    #[ORM\Column(name: 'kodea', type: 'string', length: 9, nullable: true)]
     private $kodea;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="kontzeptuaeu", type="text", length=65535, nullable=true)
      */
+    #[ORM\Column(name: 'kontzeptuaeu', type: 'text', length: 65535, nullable: true)]
     private $kontzeptuaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="kontzeptuaes", type="text", length=65535, nullable=true)
      */
+    #[ORM\Column(name: 'kontzeptuaes', type: 'text', length: 65535, nullable: true)]
     private $kontzeptuaes;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="kopurua", type="string", length=50, nullable=true)
      */
+    #[ORM\Column(name: 'kopurua', type: 'string', length: 50, nullable: true)]
     private $kopurua;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="unitatea", type="string", length=50, nullable=true)
      */
+    #[ORM\Column(name: 'unitatea', type: 'string', length: 50, nullable: true)]
     private $unitatea;
 
 
@@ -64,55 +61,50 @@ class Kontzeptua
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
 
     /**
-     * @var \App\Entity\Kontzeptumota
+     * @var Kontzeptumota
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Kontzeptumota")
-     * @ORM\JoinColumn(name="kontzeptumota_id", referencedColumnName="id",onDelete="SET NULL")
      *
      */
+    #[ORM\JoinColumn(name: 'kontzeptumota_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: Kontzeptumota::class)]
     private $kontzeptumota;
 
     /**
-     * @var \App\Entity\Baldintza
+     * @var Baldintza
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Baldintza")
-     * @ORM\JoinColumn(name="baldintza_id", referencedColumnName="id",onDelete="SET NULL")
      *
      */
+    #[ORM\JoinColumn(name: 'baldintza_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: Baldintza::class)]
     private $baldintza;
 
     /**
-     * @var \App\Entity\Azpiatala
+     * @var Azpiatala
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Azpiatala", inversedBy="kontzeptuak")
-     * @ORM\JoinColumn(name="azpiatala_id", referencedColumnName="id",onDelete="CASCADE")
      *
      */
+    #[ORM\JoinColumn(name: 'azpiatala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Azpiatala::class, inversedBy: 'kontzeptuak')]
     private $azpiatala;
 
 
     /**
      *          TOSTRING
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getKodea() . " - " . $this->getKontzeptuaeu();
     }
-
-
-
-
 
     /**
      * Set kodea
@@ -229,51 +221,51 @@ class Kontzeptua
         return $this->unitatea;
     }
 
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     * @return Kontzeptua
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
+    // /**
+    //  * Set createdAt
+    //  *
+    //  * @param \DateTime $createdAt
+    //  * @return Kontzeptua
+    //  */
+    // public function setCreatedAt($createdAt)
+    // {
+    //     $this->createdAt = $createdAt;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime 
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
+    // /**
+    //  * Get createdAt
+    //  *
+    //  * @return \DateTime 
+    //  */
+    // public function getCreatedAt()
+    // {
+    //     return $this->createdAt;
+    // }
 
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     * @return Kontzeptua
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
+    // /**
+    //  * Set updatedAt
+    //  *
+    //  * @param \DateTime $updatedAt
+    //  * @return Kontzeptua
+    //  */
+    // public function setUpdatedAt($updatedAt)
+    // {
+    //     $this->updatedAt = $updatedAt;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime 
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
+    // /**
+    //  * Get updatedAt
+    //  *
+    //  * @return \DateTime 
+    //  */
+    // public function getUpdatedAt()
+    // {
+    //     return $this->updatedAt;
+    // }
 
     /**
      * Get id
@@ -288,10 +280,10 @@ class Kontzeptua
     /**
      * Set kontzeptumota
      *
-     * @param \App\Entity\Kontzeptumota $kontzeptumota
+     * @param Kontzeptumota $kontzeptumota
      * @return Kontzeptua
      */
-    public function setKontzeptumota(\App\Entity\Kontzeptumota $kontzeptumota = null)
+    public function setKontzeptumota(Kontzeptumota $kontzeptumota = null)
     {
         $this->kontzeptumota = $kontzeptumota;
 
@@ -301,7 +293,7 @@ class Kontzeptua
     /**
      * Get kontzeptumota
      *
-     * @return \App\Entity\Kontzeptumota 
+     * @return Kontzeptumota 
      */
     public function getKontzeptumota()
     {
@@ -311,10 +303,10 @@ class Kontzeptua
     /**
      * Set baldintza
      *
-     * @param \App\Entity\Baldintza $baldintza
+     * @param Baldintza $baldintza
      * @return Kontzeptua
      */
-    public function setBaldintza(\App\Entity\Baldintza $baldintza = null)
+    public function setBaldintza(Baldintza $baldintza = null)
     {
         $this->baldintza = $baldintza;
 
@@ -324,7 +316,7 @@ class Kontzeptua
     /**
      * Get baldintza
      *
-     * @return \App\Entity\Baldintza 
+     * @return Baldintza 
      */
     public function getBaldintza()
     {
@@ -334,10 +326,10 @@ class Kontzeptua
     /**
      * Set azpiatala
      *
-     * @param \App\Entity\Azpiatala $azpiatala
+     * @param Azpiatala $azpiatala
      * @return Kontzeptua
      */
-    public function setAzpiatala(\App\Entity\Azpiatala $azpiatala = null)
+    public function setAzpiatala(Azpiatala $azpiatala = null)
     {
         $this->azpiatala = $azpiatala;
 
@@ -347,7 +339,7 @@ class Kontzeptua
     /**
      * Get azpiatala
      *
-     * @return \App\Entity\Azpiatala 
+     * @return Azpiatala 
      */
     public function getAzpiatala()
     {
@@ -357,10 +349,10 @@ class Kontzeptua
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      * @return Kontzeptua
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -370,7 +362,7 @@ class Kontzeptua
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala 
+     * @return Udala 
      */
     public function getUdala()
     {

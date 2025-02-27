@@ -3,40 +3,33 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\AurreikusiRepository;
 
-/**
- * Aurreikusi
- *
- * @ORM\Table(name="aurreikusi")
- * @ORM\Entity(repositoryClass=AurreikusiRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
- */
-class Aurreikusi
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'aurreikusi')]
+#[ORM\Entity(repositoryClass: AurreikusiRepository::class)]
+class Aurreikusi implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="epeaeu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'epeaeu', type: 'string', length: 255, nullable: true)]
     private $epeaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="epeaes", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'epeaes', type: 'string', length: 255, nullable: true)]
     private $epeaes;
 
 
@@ -44,17 +37,17 @@ class Aurreikusi
     /**
      *          ERLAZIOAK
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getEpeaeu();
     }
 
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
     /**
@@ -121,10 +114,10 @@ class Aurreikusi
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      * @return Aurreikusi
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -134,7 +127,7 @@ class Aurreikusi
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala 
+     * @return Udala 
      */
     public function getUdala()
     {

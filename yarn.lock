@@ -5,6 +5,33 @@ __metadata:
   version: 6
   cacheKey: 8
 
+"@amorebietakoudala/stimulus-controller-bundle@file:vendor/amorebietakoudala/stimulus-controller-bundle/assets::locator=root-workspace-0b6124%40workspace%3A.":
+  version: 0.1.0
+  resolution: "@amorebietakoudala/stimulus-controller-bundle@file:vendor/amorebietakoudala/stimulus-controller-bundle/assets#vendor/amorebietakoudala/stimulus-controller-bundle/assets::hash=58706c&locator=root-workspace-0b6124%40workspace%3A."
+  dependencies:
+    "@eonasdan/tempus-dominus": ^6.2.10
+    "@hotwired/stimulus": ^3.0.0
+    bootstrap: ^5.2.3
+    bootstrap-table: 1.21.1
+    jquery: 3.6.1
+    select2: ^4.1.0-rc.0
+    select2-bootstrap-5-theme: ^1.3.0
+    sweetalert2: 11.4.8
+    tableexport.jquery.plugin: ^1.26.0
+  peerDependencies:
+    "@eonasdan/tempus-dominus": ^6.2.10
+    "@hotwired/stimulus": ^3.0.0
+    bootstrap: ^5.2.3
+    bootstrap-table: 1.21.1
+    jquery: 3.6.1
+    select2: ^4.1.0-rc.0
+    select2-bootstrap-5-theme: ^1.3.0
+    sweetalert2: 11.4.8
+    tableexport.jquery.plugin: ^1.26.0
+  checksum: 9113715e40f3a9b146a103dff880d7edd0f6c96aa71e6c4cc788b2f9986a2e68241d2c72e65001fd65449d8f8929413f7a81033bd29e39c2d8507dc41541e4a4
+  languageName: node
+  linkType: hard
+
 "@ampproject/remapping@npm:^2.2.0":
   version: 2.3.0
   resolution: "@ampproject/remapping@npm:2.3.0"
@@ -1145,10 +1172,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bpnetguy/webpack-inject-plugin@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "@bpnetguy/webpack-inject-plugin@npm:2.0.4"
+  peerDependencies:
+    webpack: ">=5.0.0"
+  checksum: fddb47a4f01e2a609be98cb7fa386d1983152cf011530b70838d5a9538ed85d751971f923d4ba6059e358ed09078f884176d6bbdd92bbf9608b98a5dd77b71df
+  languageName: node
+  linkType: hard
+
 "@discoveryjs/json-ext@npm:^0.5.0":
   version: 0.5.7
   resolution: "@discoveryjs/json-ext@npm:0.5.7"
   checksum: 2176d301cc258ea5c2324402997cf8134ebb212469c0d397591636cea8d3c02f2b3cf9fd58dcb748c7a0dade77ebdc1b10284fa63e608c033a1db52fddc69918
+  languageName: node
+  linkType: hard
+
+"@eonasdan/tempus-dominus@npm:^6.2.10":
+  version: 6.9.11
+  resolution: "@eonasdan/tempus-dominus@npm:6.9.11"
+  peerDependencies:
+    "@popperjs/core": ^2.11.6
+  peerDependenciesMeta:
+    "@popperjs/core\"":
+      optional: true
+  checksum: 6eda2b95142314891ce24475cc1be7e11b100a31adb9c5466911f022f7d595aa5559d3bc1f31b7e504ed28b77d2b268d99a7455903df00fbae0862a58f07bfe9
   languageName: node
   linkType: hard
 
@@ -2310,12 +2358,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bootstrap-table@npm:^1.21.1":
-  version: 1.23.5
-  resolution: "bootstrap-table@npm:1.23.5"
+"bootstrap-table@npm:1.21.1":
+  version: 1.21.1
+  resolution: "bootstrap-table@npm:1.21.1"
   peerDependencies:
-    jquery: 3
-  checksum: 7d5e4734ddd89a305c22f380bcd028314908a343e634258bb7c7ec7719c046e5ac8c708680f7be2ad4d572593bedf8f40e433d1419b562b7d9ccd97db8f9afff
+    jquery: 1.9.1 - 3
+  checksum: 070a46e9078230e0c1fb9878490c39fc0695f5c2377cc3f9cee307c47b27eafe9502de0343bfadfdc9b89a0bb5cc85b8d23e69b8a2040446e704655b5fb37aaa
   languageName: node
   linkType: hard
 
@@ -2323,6 +2371,15 @@ __metadata:
   version: 3.4.1
   resolution: "bootstrap@npm:3.4.1"
   checksum: 5742035e8c541cd525780542771e7d56f63e5d4b2d902427bf182d3383e74a17c9074b6809f50d7f3de0585377e673339628b97cfdcde597ad69ecb1d2b562a6
+  languageName: node
+  linkType: hard
+
+"bootstrap@npm:^5.1.3, bootstrap@npm:^5.2.3":
+  version: 5.3.3
+  resolution: "bootstrap@npm:5.3.3"
+  peerDependencies:
+    "@popperjs/core": ^2.11.8
+  checksum: 537b68db30150075614310e9ebdf1be9b4affdf89ca226d59f4352e82a368b203af13ed0ce5ccfa4e06f141ecd233f7432ca3817e9c1a39863a05fbe13c73c4b
   languageName: node
   linkType: hard
 
@@ -3811,9 +3868,11 @@ __metadata:
   linkType: hard
 
 "fos-router@file:./vendor/friendsofsymfony/jsrouting-bundle/Resources::locator=root-workspace-0b6124%40workspace%3A.":
-  version: 2.2.0
-  resolution: "fos-router@file:./vendor/friendsofsymfony/jsrouting-bundle/Resources#./vendor/friendsofsymfony/jsrouting-bundle/Resources::hash=67ba67&locator=root-workspace-0b6124%40workspace%3A."
-  checksum: 74b0b9e44663ef5874e007613d2011b661bb53b2db5a0fbfead0074d579f1d1e1fd3998e15f0adc68c5015b5a7d372e0e634af9bcefa13040417792b71b82dac
+  version: 2.5.0
+  resolution: "fos-router@file:./vendor/friendsofsymfony/jsrouting-bundle/Resources#./vendor/friendsofsymfony/jsrouting-bundle/Resources::hash=e4c064&locator=root-workspace-0b6124%40workspace%3A."
+  dependencies:
+    "@bpnetguy/webpack-inject-plugin": ^2.0.4
+  checksum: a1504225652d631d2220c1f35f4b59a45780f24d785ddf6719d2b17a98d0d82e3de6af4c7954325cce0c01f92d8e8f4125dd369a6ae0b141b122f1dfd28b00d2
   languageName: node
   linkType: hard
 
@@ -6537,13 +6596,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
+    "@amorebietakoudala/stimulus-controller-bundle": "file:vendor/amorebietakoudala/stimulus-controller-bundle/assets"
     "@babel/plugin-proposal-class-properties": ^7.18.6
     "@hotwired/stimulus": ^3.0.0
     "@symfony/stimulus-bridge": ^3.0.0
     "@symfony/webpack-encore": ^1.7.0
     bootbox: ^4.4.0
     bootstrap: 3.4.1
-    bootstrap-table: ^1.21.1
+    bootstrap-table: 1.21.1
     core-js: ^3.23
     datatables.net-bs: ^2.1.8
     datatables.net-buttons-bs: ^3.2.0
@@ -6642,6 +6702,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"select2-bootstrap-5-theme@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "select2-bootstrap-5-theme@npm:1.3.0"
+  dependencies:
+    bootstrap: ^5.1.3
+  checksum: 248a8698352109c33c462d4f08d1f6afd31d633a36c854a89b37719b6927d07b14f0909214db780ad779ae461bb6e48587fdb74f71f0ee6731981fb9aa668364
+  languageName: node
+  linkType: hard
+
 "select2-bootstrap-theme@npm:^0.1.0-beta.10":
   version: 0.1.0-beta.10
   resolution: "select2-bootstrap-theme@npm:0.1.0-beta.10"
@@ -6656,6 +6725,13 @@ __metadata:
     almond: ~0.3.1
     jquery-mousewheel: ~3.1.13
   checksum: 7d33c8dffeaefce7874df610d3cf9dfb806cf774313de955997d52fc2e2c9bd9be203f44e2ee4dd16b8059eef55feead2fdd124bba4b2aae15d166bf6d9e99dc
+  languageName: node
+  linkType: hard
+
+"select2@npm:^4.1.0-rc.0":
+  version: 4.1.0-rc.0
+  resolution: "select2@npm:4.1.0-rc.0"
+  checksum: c27cefc3967d2082b2887869e8379f6e8e0ec2e02a268b7abbaec87fbda20abe4d62ac008b87a14f17bfa46dd27aa0b33ee793ed30142e3bc30ba408e208ad20
   languageName: node
   linkType: hard
 
@@ -7220,6 +7296,13 @@ __metadata:
   bin:
     svgo: bin/svgo
   checksum: b92f71a8541468ffd0b81b8cdb36b1e242eea320bf3c1a9b2c8809945853e9d8c80c19744267eb91cabf06ae9d5fff3592d677df85a31be4ed59ff78534fa420
+  languageName: node
+  linkType: hard
+
+"sweetalert2@npm:11.4.8":
+  version: 11.4.8
+  resolution: "sweetalert2@npm:11.4.8"
+  checksum: 6dcb2eac662a9748a8695ef0614cadfaa4b462e120effc66c0e739320d31818bfd64708a71af4ebfff516bd00a54aeaf0945f5e7564abf714ec9c9cf88c8a174
   languageName: node
   linkType: hard
 

@@ -5,42 +5,28 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\FitxaAldaketaRepository;
 
-/**
- * @ORM\Entity(repositoryClass=FitxaAldaketaRepository::class)
- * @ORM\Table(name="fitxa_aldaketa")
- */
+#[ORM\Table(name: 'fitxa_aldaketa')]
+#[ORM\Entity(repositoryClass: FitxaAldaketaRepository::class)]
 class FitxaAldaketa
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private $fitxaId;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: 'string')]
     private $fitxaKodea;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: 'string')]
     private $nork;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: 'datetime')]
     private $noiz;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: 'string')]
     private $aldaketaMota;
 
     public function getId()

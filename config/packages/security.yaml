@@ -1,7 +1,7 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/book/security.html
 security:
-    encoders:
+    password_hashers:
         AMREU\UserBundle\Model\UserInterface: bcrypt
         legacy:
             algorithm: sodium
@@ -31,31 +31,25 @@ security:
             security: false
 
         main:
-            anonymous: lazy
-#            logout_on_user_change: true
             pattern: ^/
-            guard:
-                authenticators:
-                    - amreu.login.form.authenticator
-                entry_point: amreu.login.form.authenticator
-            form_login:
-                provider: amreu_user_provider
-                csrf_token_generator: security.csrf.token_manager
-                check_path: /login_check
-                default_target_path: admin_user_list
-                always_use_default_target_path: true
+            lazy: true
+            provider: amreu_user_provider
+            custom_authenticators:
+                    - amreu.login.form.passportauthenticator
+
+            entry_point: amreu.login.form.passportauthenticator
+
             logout:
-                path:   /logout
-                target: /login
-            switch_user:
-                provider:   amreu_user_provider
-                role: ROLE_SUPER_ADMIN
+                path: user_security_logout
+
+            switch_user: { role: ROLE_SUPER_ADMIN }
+                                
 
     access_control:
-        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login$, role: PUBLIC_ACCESS }
+        - { path: ^/api/, role: PUBLIC_ACCESS }
         - { path: ^/fitxa/, role: ROLE_USER }
 #        - { path: ^/araudia, role: ROLE_USER }
 #        - { path: ^/admin/, role: ROLE_KUDEAKETA }
-        - { path: ^/[0-9][0-9][0-9][0-9]?[0-9]?/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/[0-9][0-9][0-9][0-9]?[0-9]?/, role: PUBLIC_ACCESS }
         - { path: ^/, role: ROLE_USER }

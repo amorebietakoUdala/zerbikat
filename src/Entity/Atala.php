@@ -3,89 +3,79 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\AtalaRepository;
 
-/**
- * Atala
- *
- * @ORM\Table(name="atala", indexes={@ORM\Index(name="ordenantza_id_idx", columns={"ordenantza_id"})})
- * @ORM\Entity(repositoryClass=AtalaRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
- */
-class Atala
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'atala')]
+#[ORM\Index(name: 'ordenantza_id_idx', columns: ['ordenantza_id'])]
+#[ORM\Entity(repositoryClass: AtalaRepository::class)]
+class Atala implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="kodea", type="string", length=9, nullable=true)
      */
+    #[ORM\Column(name: 'kodea', type: 'string', length: 9, nullable: true)]
     private $kodea;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="izenburuaeu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'izenburuaeu', type: 'string', length: 255, nullable: true)]
     private $izenburuaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="izenburuaes", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'izenburuaes', type: 'string', length: 255, nullable: true)]
     private $izenburuaes;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
+    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
     private $createdAt;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
+    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: false)]
     private $updatedAt;
 
 
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
 
     /**
-     * @var \App\Entity\Ordenantza
+     * @var Ordenantza
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Ordenantza")
-     * @ORM\JoinColumn(name="ordenantza_id", referencedColumnName="id",onDelete="CASCADE")
      *
      */
+    #[ORM\JoinColumn(name: 'ordenantza_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Ordenantza::class)]
     private $ordenantza;
 
     /**
      *          TOSTRING
      */
-    public function __toString()
+    public function __toString(): string
     {
 //        return $this->getOrdenantza()->getKodea().".".$this->getKodea().".".$this->getIzenburuaeu();
         return (string) $this->getOrdenantza().".".$this->getKodea().".".$this->getIzenburuaeu();
@@ -220,10 +210,10 @@ class Atala
     /**
      * Set ordenantza
      *
-     * @param \App\Entity\Ordenantza $ordenantza
+     * @param Ordenantza $ordenantza
      * @return Atala
      */
-    public function setOrdenantza(\App\Entity\Ordenantza $ordenantza = null)
+    public function setOrdenantza(Ordenantza $ordenantza = null)
     {
         $this->ordenantza = $ordenantza;
 
@@ -233,7 +223,7 @@ class Atala
     /**
      * Get ordenantza
      *
-     * @return \App\Entity\Ordenantza 
+     * @return Ordenantza 
      */
     public function getOrdenantza()
     {
@@ -243,10 +233,10 @@ class Atala
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      * @return Atala
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -256,7 +246,7 @@ class Atala
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala 
+     * @return Udala 
      */
     public function getUdala()
     {

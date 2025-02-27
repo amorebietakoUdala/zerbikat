@@ -4,96 +4,79 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Kontzeptua;
 use App\Form\KontzeptuaType;
 use App\Repository\KontzeptuaRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Kontzeptua controller.
- *
- * @Route("/{_locale}/kontzeptua")
  */
+#[Route(path: '/{_locale}/kontzeptua')]
 class KontzeptuaController extends AbstractController
 {
-    private $repo;
-    private $em;
 
-    public function __construct(EntityManagerInterface $em, KontzeptuaRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private KontzeptuaRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
     /**
      * Lists all Kontzeptua entities.
-     *
-     * @Route("/", name="kontzeptua_index", methods={"GET"})
      */
+    #[IsGranted('ROLE_KUDEAKETA')]
+    #[Route(path: '/', name: 'kontzeptua_index', methods: ['GET'])]
     public function index()
     {
+        $kontzeptuas = $this->repo->findAll();
 
-        if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $kontzeptuas = $this->repo->findAll();
-
-            $deleteForms = [];
-            foreach ($kontzeptuas as $kontzeptua) {
-                $deleteForms[$kontzeptua->getId()] = $this->createDeleteForm($kontzeptua)->createView();
-            }
-
-            return $this->render('kontzeptua/index.html.twig', ['kontzeptuas' => $kontzeptuas, 'deleteforms' => $deleteForms]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+        $deleteForms = [];
+        foreach ($kontzeptuas as $kontzeptua) {
+            $deleteForms[$kontzeptua->getId()] = $this->createDeleteForm($kontzeptua)->createView();
         }
+
+        return $this->render('kontzeptua/index.html.twig', ['kontzeptuas' => $kontzeptuas, 'deleteforms' => $deleteForms]);
     }
 
     /**
      * Creates a new Kontzeptua entity.
-     *
-     * @Route("/new", name="kontzeptua_new", methods={"GET", "POST"})
      */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route(path: '/new', name: 'kontzeptua_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
+        $kontzeptua = new Kontzeptua();
+        $form = $this->createForm(KontzeptuaType::class, $kontzeptua);
+        $form->handleRequest($request);
 
-        if ($this->isGranted('ROLE_ADMIN'))
-        {
-            $kontzeptua = new Kontzeptua();
-            $form = $this->createForm(KontzeptuaType::class, $kontzeptua);
-            $form->handleRequest($request);
-
-//            $form->getData()->setUdala($this->getUser()->getUdala());
-//            $form->setData($form->getData());
-
-            if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
+            $kontzeptua = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $kontzeptua->setUdala($user->getUdala());
 //                $kontzeptua->setCreatedAt(new \DateTime());
 //                $kontzeptua->setUpdatedAt(new \DateTime());
-                $this->em->persist($kontzeptua);
-                $this->em->flush();
+            $this->em->persist($kontzeptua);
+            $this->em->flush();
 
-//                return $this->redirectToRoute('kontzeptua_show', array('id' => $kontzeptua->getId()));
-                return $this->redirectToRoute('kontzeptua_index');
-            } else
-            {
-                $form->getData()->setUdala($this->getUser()->getUdala());
-                $form->setData($form->getData());
-            }
-
-            return $this->render('kontzeptua/new.html.twig', ['kontzeptua' => $kontzeptua, 'form' => $form->createView()]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+            return $this->redirectToRoute('kontzeptua_index');
         }
+
+        return $this->render('kontzeptua/new.html.twig', ['kontzeptua' => $kontzeptua, 'form' => $form->createView()]);
     }
 
     /**
      * Finds and displays a Kontzeptua entity.
-     *
-     * @Route("/{id}", name="kontzeptua_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'kontzeptua_show', methods: ['GET'])]
     public function show(Kontzeptua $kontzeptua): Response
     {
         $deleteForm = $this->createDeleteForm($kontzeptua);
@@ -103,13 +86,14 @@ class KontzeptuaController extends AbstractController
 
     /**
      * Displays a form to edit an existing Kontzeptua entity.
-     *
-     * @Route("/{id}/edit", name="kontzeptua_edit", methods={"GET", "POST"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}/edit', name: 'kontzeptua_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Kontzeptua $kontzeptua)
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($kontzeptua->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($kontzeptua->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($kontzeptua);
@@ -126,19 +110,20 @@ class KontzeptuaController extends AbstractController
             return $this->render('kontzeptua/edit.html.twig', ['kontzeptua' => $kontzeptua, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 
     /**
      * Deletes a Kontzeptua entity.
-     *
-     * @Route("/{id}", name="kontzeptua_delete", methods={"DELETE"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]    
+    #[Route(path: '/{id}', name: 'kontzeptua_delete', methods: ['DELETE'])]
     public function delete(Request $request, Kontzeptua $kontzeptua): RedirectResponse
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($kontzeptua->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($kontzeptua->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $form = $this->createDeleteForm($kontzeptua);
@@ -151,7 +136,7 @@ class KontzeptuaController extends AbstractController
         }else
         {
             //baimenik ez
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }            
     }
 

@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Azpisaila;
 use App\Entity\Saila;
+use App\Entity\Udala;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -56,7 +58,7 @@ class SailaRepository extends ServiceEntityRepository
     public function findByUdala($udala)
     {
         return $this->createQueryBuilder('s')
-            ->innerJoin('App:Udala','u')
+            ->innerJoin(Udala::class,'u')
             ->andWhere('u.kodea = :udala')
             ->setParameter('udala', $udala)
             ->orderBy('s.kodea', 'DESC')
@@ -75,7 +77,7 @@ class SailaRepository extends ServiceEntityRepository
     }
 
     private function lefJoinUdalaQB($qb): QueryBuilder {
-        $qb->leftJoin('App:Udala','u', Join::WITH, 's.udala = u.id');
+        $qb->leftJoin(Udala::class,'u', Join::WITH, 's.udala = u.id');
         return $qb;
     }
 
@@ -87,7 +89,7 @@ class SailaRepository extends ServiceEntityRepository
     }
 
     private function leftJoinAzpisailaQB($qb): QueryBuilder {
-        $qb->leftJoin('App:Azpisaila','az', Join::WITH, 'az.saila=s.id');
+        $qb->leftJoin(Azpisaila::class,'az', Join::WITH, 'az.saila=s.id');
         return $qb;
     }
 

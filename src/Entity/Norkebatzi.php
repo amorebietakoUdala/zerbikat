@@ -3,42 +3,37 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\NorkebatziRepository;
 use JMS\Serializer\Annotation\Expose;
 
-/**
- * Norkebatzi
- *
- * @ORM\Table(name="norkebatzi")
- * @ORM\Entity(repositoryClass=NorkebatziRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
- */
-class Norkebatzi
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'norkebatzi')]
+#[ORM\Entity(repositoryClass: NorkebatziRepository::class)]
+class Norkebatzi implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var string
      *
      * @Expose
-     * @ORM\Column(name="norkeu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'norkeu', type: 'string', length: 255, nullable: true)]
     private $norkeu;
 
     /**
      * @var string
      *
      * @Expose
-     * @ORM\Column(name="norkes", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'norkes', type: 'string', length: 255, nullable: true)]
     private $norkes;
 
 
@@ -46,19 +41,18 @@ class Norkebatzi
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
     /**
      *          TOSTRING
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getNorkeu();
     }
@@ -119,17 +113,13 @@ class Norkebatzi
         return $this->id;
     }
 
-
-
-
-
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      * @return Norkebatzi
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -139,7 +129,7 @@ class Norkebatzi
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala 
+     * @return Udala 
      */
     public function getUdala()
     {

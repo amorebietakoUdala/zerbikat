@@ -4,36 +4,35 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Azpiatalaparrafoa;
 use App\Form\AzpiatalaparrafoaType;
 use App\Repository\AzpiatalaparrafoaRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Azpiatalaparrafoa controller.
- *
- * @Route("/{_locale}/azpiatalaparrafoa")
  */
+#[Route(path: '/{_locale}/azpiatalaparrafoa')]
 class AzpiatalaparrafoaController extends AbstractController
 {
 
-    private $repo;
-    private $em;
-
-    public function __construct(EntityManagerInterface $em, AzpiatalaparrafoaRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private AzpiatalaparrafoaRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
     /**
      * Lists all Azpiatalaparrafoa entities.
-     *
-     * @Route("/", name="azpiatalaparrafoa_index", methods={"GET"})
      */
+    #[Route(path: '/', name: 'azpiatalaparrafoa_index', methods: ['GET'])]
     public function index(): Response
     {
         $azpiatalaparrafoas = $this->repo->findAll();
@@ -48,45 +47,35 @@ class AzpiatalaparrafoaController extends AbstractController
 
     /**
      * Creates a new Azpiatalaparrafoa entity.
-     *
-     * @Route("/new", name="azpiatalaparrafoa_new", methods={"GET", "POST"})
      */
+    #[IsGranted("ROLE_ADMIN")]
+    #[Route(path: '/new', name: 'azpiatalaparrafoa_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
-        if ($this->isGranted('ROLE_ADMIN')) 
-        {
-            $azpiatalaparrafoa = new Azpiatalaparrafoa();
-            $form = $this->createForm(AzpiatalaparrafoaType::class, $azpiatalaparrafoa);
-            $form->handleRequest($request);
-    
-//            $form->getData()->setUdala($this->getUser()->getUdala());
-//            $form->setData($form->getData());
-            
-            if ($form->isSubmitted() && $form->isValid()) {
+        $azpiatalaparrafoa = new Azpiatalaparrafoa();
+        $form = $this->createForm(AzpiatalaparrafoaType::class, $azpiatalaparrafoa);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $azpiatalaparrafoa = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $udala = $user->getUdala();
+            $azpiatalaparrafoa->setUdala($udala);                
 //                $azpiatalaparrafoa->setCreatedAt(new \DateTime());
 //                $azpiatalaparrafoa->setUpdatedAt(new \DateTime());
-                $this->em->persist($azpiatalaparrafoa);
-                $this->em->flush();
-    
-                return $this->redirectToRoute('azpiatalaparrafoa_show', ['id' => $azpiatalaparrafoa->getId()]);
-            } else
-            {
-                $form->getData()->setUdala($this->getUser()->getUdala());
-                $form->setData($form->getData());
-            }
-    
-            return $this->render('azpiatalaparrafoa/new.html.twig', ['azpiatalaparrafoa' => $azpiatalaparrafoa, 'form' => $form->createView()]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
-        }            
+            $this->em->persist($azpiatalaparrafoa);
+            $this->em->flush();
+
+            return $this->redirectToRoute('azpiatalaparrafoa_show', ['id' => $azpiatalaparrafoa->getId()]);
+        }
+
+        return $this->render('azpiatalaparrafoa/new.html.twig', ['azpiatalaparrafoa' => $azpiatalaparrafoa, 'form' => $form->createView()]);
     }
 
     /**
      * Finds and displays a Azpiatalaparrafoa entity.
-     *
-     * @Route("/{id}", name="azpiatalaparrafoa_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'azpiatalaparrafoa_show', methods: ['GET'])]
     public function show(Azpiatalaparrafoa $azpiatalaparrafoa): Response
     {
         $deleteForm = $this->createDeleteForm($azpiatalaparrafoa);
@@ -96,12 +85,14 @@ class AzpiatalaparrafoaController extends AbstractController
 
     /**
      * Displays a form to edit an existing Azpiatalaparrafoa entity.
-     *
-     * @Route("/{id}/edit", name="azpiatalaparrafoa_edit", methods={"GET", "POST"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}/edit', name: 'azpiatalaparrafoa_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Azpiatalaparrafoa $azpiatalaparrafoa)
     {
-        if((($this->isGranted('ROLE_ADMIN')) && ($azpiatalaparrafoa->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($azpiatalaparrafoa->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($azpiatalaparrafoa);
@@ -118,18 +109,20 @@ class AzpiatalaparrafoaController extends AbstractController
             return $this->render('azpiatalaparrafoa/edit.html.twig', ['azpiatalaparrafoa' => $azpiatalaparrafoa, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 
     /**
      * Deletes a Azpiatalaparrafoa entity.
-     *
-     * @Route("/{id}", name="azpiatalaparrafoa_delete", methods={"DELETE"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}', name: 'azpiatalaparrafoa_delete', methods: ['DELETE'])]
     public function delete(Request $request, Azpiatalaparrafoa $azpiatalaparrafoa): RedirectResponse
     {
-        if((($this->isGranted('ROLE_ADMIN')) && ($azpiatalaparrafoa->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($azpiatalaparrafoa->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $form = $this->createDeleteForm($azpiatalaparrafoa);
@@ -142,7 +135,7 @@ class AzpiatalaparrafoaController extends AbstractController
         }else
         {
             //baimenik ez
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 

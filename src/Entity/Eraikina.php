@@ -3,46 +3,40 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\EraikinaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 
-/**
- * Eraikina
- *
- * @ORM\Table(name="eraikina", indexes={@ORM\Index(name="barrutia_id_idx", columns={"barrutia_id"})})
- * @ORM\Entity(repositoryClass=EraikinaRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
- */
-class Eraikina
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'eraikina')]
+#[ORM\Index(name: 'barrutia_id_idx', columns: ['barrutia_id'])]
+#[ORM\Entity(repositoryClass: EraikinaRepository::class)]
+class Eraikina implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="izena", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'izena', type: 'string', length: 255, nullable: true)]
     private $izena;
 
     /**
      * @var float
-     *
-     * @ORM\Column(name="longitudea", type="float", precision=18, scale=6, nullable=true)
      */
+    #[ORM\Column(name: 'longitudea', type: 'float', precision: 18, scale: 6, nullable: true)]
     private $longitudea;
 
     /**
      * @var float
-     *
-     * @ORM\Column(name="latitudea", type="float", precision=18, scale=6, nullable=true)
      */
+    #[ORM\Column(name: 'latitudea', type: 'float', precision: 18, scale: 6, nullable: true)]
     private $latitudea;
 
 
@@ -50,35 +44,33 @@ class Eraikina
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
     
     /**
-     * @var \App\Entity\Barrutia
+     * @var Barrutia
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Barrutia")
-     * @ORM\JoinColumn(name="barrutia_id", referencedColumnName="id",onDelete="CASCADE")
      *
      */
+    #[ORM\JoinColumn(name: 'barrutia_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Barrutia::class)]
     private $barrutia;
         
     /**
-     * @var azpisailak[]
-     *
-     * @ORM\OneToMany(targetEntity="Azpisaila", mappedBy="saila")
+     * @var ArrayCollection
      */
+    #[ORM\OneToMany(targetEntity: Azpisaila::class, mappedBy: 'saila')]
     private $azpisailak;
 
     /**
      *          TOSTRING
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getIzena();
     }
@@ -89,7 +81,7 @@ class Eraikina
      */
     public function __construct()
     {
-        $this->azpisailak = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->azpisailak = new ArrayCollection();
     }
 
     /**
@@ -177,11 +169,11 @@ class Eraikina
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return Eraikina
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -191,7 +183,7 @@ class Eraikina
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {
@@ -201,11 +193,11 @@ class Eraikina
     /**
      * Set barrutia
      *
-     * @param \App\Entity\Barrutia $barrutia
+     * @param Barrutia $barrutia
      *
      * @return Eraikina
      */
-    public function setBarrutia(\App\Entity\Barrutia $barrutia = null)
+    public function setBarrutia(Barrutia $barrutia = null)
     {
         $this->barrutia = $barrutia;
 
@@ -215,7 +207,7 @@ class Eraikina
     /**
      * Get barrutia
      *
-     * @return \App\Entity\Barrutia
+     * @return Barrutia
      */
     public function getBarrutia()
     {
@@ -225,11 +217,11 @@ class Eraikina
     /**
      * Add azpisailak
      *
-     * @param \App\Entity\Azpisaila $azpisailak
+     * @param Azpisaila $azpisailak
      *
      * @return Eraikina
      */
-    public function addAzpisailak(\App\Entity\Azpisaila $azpisailak)
+    public function addAzpisailak(Azpisaila $azpisailak)
     {
         $this->azpisailak[] = $azpisailak;
 
@@ -239,9 +231,9 @@ class Eraikina
     /**
      * Remove azpisailak
      *
-     * @param \App\Entity\Azpisaila $azpisailak
+     * @param Azpisaila $azpisailak
      */
-    public function removeAzpisailak(\App\Entity\Azpisaila $azpisailak)
+    public function removeAzpisailak(Azpisaila $azpisailak)
     {
         $this->azpisailak->removeElement($azpisailak);
     }
@@ -249,7 +241,7 @@ class Eraikina
     /**
      * Get azpisailak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getAzpisailak()
     {

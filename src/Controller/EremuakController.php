@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Eremuak;
 use App\Form\EremuakType;
 use App\Repository\EremuakRepository;
@@ -12,31 +12,32 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Exception\NotValidCurrentPageException;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Eremuak controller.
- *
- * @Route("/{_locale}/eremuak")
  */
+#[Route(path: '/{_locale}/eremuak')]
 class EremuakController extends AbstractController
 {
-    private $repo;
-    private $em;
-
-    public function __construct(EntityManagerInterface $em, EremuakRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private EremuakRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
     /**
      * Lists all Eremuak entities.
-     *
-     * @Route("/", defaults={"page"=1}, name="eremuak_index", methods={"GET"})
-     * @Route("/page{page}", name="eremuak_index_paginated", methods={"GET"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/', defaults: ['page' => 1], name: 'eremuak_index', methods: ['GET'])]
+    #[Route(path: '/page{page}', name: 'eremuak_index_paginated', methods: ['GET'])]
     public function index($page)
     {
 
@@ -62,15 +63,16 @@ class EremuakController extends AbstractController
                     // celui-ci s'occupe de limiter la requête en fonction de nos réglages.
                     ->getCurrentPageResults()
                 ;
-            } catch (\Pagerfanta\Exception\NotValidCurrentPageException $e) {
+            } catch (NotValidCurrentPageException) {
                 throw $this->createNotFoundException("Orria ez da existitzen");
             }
 
             return $this->render('eremuak/index.html.twig', ['eremuaks' => $entities, 'deleteforms' => $deleteForms, 'pager' => $pagerfanta]);
         }else if ($this->isGranted('ROLE_ADMIN'))
         {
-
-            $udala=$this->getUser()->getUdala()->getId();
+            /** @var User $user */
+            $user = $this->getUser();
+            $udala=$user->getUdala()->getId();
             $query = $this->em->createQuery('
               SELECT f.id
                 FROM App:Eremuak f
@@ -79,49 +81,41 @@ class EremuakController extends AbstractController
             $query->setParameter('udala', $udala);
             $eremuid = $query->getSingleResult();
 
-            $eremuak=$this->getUser()->getUdala()->getEremuak();
+            $eremuak=$user->getUdala()->getEremuak();
 
             return $this->redirectToRoute('eremuak_edit', ['id' => $eremuid['id']]);
         }else
         {
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 
     /**
      * Creates a new Eremuak entity.
-     *
-     * @Route("/new", name="eremuak_new", methods={"GET", "POST"})
      */
+    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[Route(path: '/new', name: 'eremuak_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
 
-        if ($this->isGranted('ROLE_SUPER_ADMIN'))
-        {
-            $eremuak = new Eremuak();
-            $form = $this->createForm(EremuakType::class, $eremuak);
-            $form->handleRequest($request);
+        $eremuak = new Eremuak();
+        $form = $this->createForm(EremuakType::class, $eremuak);
+        $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->em->persist($eremuak);
-                $this->em->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->persist($eremuak);
+            $this->em->flush();
 
-//                return $this->redirectToRoute('eremuak_show', array('id' => $eremuak->getId()));
-                return $this->redirectToRoute('eremuak_index');
-            }
-
-            return $this->render('eremuak/new.html.twig', ['eremuak' => $eremuak, 'form' => $form->createView()]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+            return $this->redirectToRoute('eremuak_index');
         }
+
+        return $this->render('eremuak/new.html.twig', ['eremuak' => $eremuak, 'form' => $form->createView()]);
     }
 
     /**
      * Finds and displays a Eremuak entity.
-     *
-     * @Route("/{id}", name="eremuak_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'eremuak_show', methods: ['GET'])]
     public function show(Eremuak $eremuak): Response
     {
         $deleteForm = $this->createDeleteForm($eremuak);
@@ -131,13 +125,14 @@ class EremuakController extends AbstractController
 
     /**
      * Displays a form to edit an existing Eremuak entity.
-     *
-     * @Route("/{id}/edit", name="eremuak_edit", methods={"GET", "POST"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}/edit', name: 'eremuak_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Eremuak $eremuak)
     {
-
-        if((($this->isGranted('ROLE_ADMIN')) && ($eremuak->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($eremuak->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($eremuak);
@@ -154,32 +149,24 @@ class EremuakController extends AbstractController
             return $this->render('eremuak/edit.html.twig', ['eremuak' => $eremuak, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 
     /**
      * Deletes a Eremuak entity.
-     *
-     * @Route("/{id}", name="eremuak_delete", methods={"DELETE"})
      */
+    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[Route(path: '/{id}', name: 'eremuak_delete', methods: ['DELETE'])]
     public function delete(Request $request, Eremuak $eremuak): RedirectResponse
     {
-
-        if($this->isGranted('ROLE_SUPER_ADMIN'))
-        {
-            $form = $this->createDeleteForm($eremuak);
-            $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->em->remove($eremuak);
-                $this->em->flush();
-            }
-            return $this->redirectToRoute('eremuak_index');
-        }else
-        {
-            //baimenik ez
-            return $this->redirectToRoute('backend_errorea');
+        $form = $this->createDeleteForm($eremuak);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->remove($eremuak);
+            $this->em->flush();
         }
+        return $this->redirectToRoute('eremuak_index');
     }
 
     /**

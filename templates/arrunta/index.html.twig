@@ -7,11 +7,13 @@
             <div class="navbar-header">
                 <a class="navbar-brand">{{ 'messages.arruntak'|trans }}</a>
             </div>
+            {% if is_granted('ROLE_ADMIN') %}
             <div id="navbar" class="navbar-collapse collapse navbar-right">
                 <ul class="nav navbar-nav">
                     <li><a href="{{ path('arrunta_new') }}" class="fa fa-plus"> {{ 'messages.epeberria'|trans }}</a></li>
                 </ul>
             </div>
+            {% endif %}
         </div>
     </nav>
 {% endblock %}
@@ -36,10 +38,10 @@
                 </td>
                 <td NOWRAP class="text-right">
                     <ul class="list-inline">
+                        {% if is_granted('ROLE_ADMIN') %}
                         <li>
                             <a href="{{ path('arrunta_edit', { 'id': arruntum.id }) }}"  class="fa fa-pencil"></a>
                         </li>
-                        {% if is_granted('ROLE_ADMIN') %}
                             <li>{{ form_start(deleteforms[arruntum.id],{'attr': {'id': arruntum.id}}) }}
                                 <a href="#" {{ stimulus_controller('confirmation', {
                                         id: arruntum.id,
@@ -58,10 +60,10 @@
     <div class="text-center">
         {% if arruntas is not empty %}
             {% if pager.haveToPaginate %}
-                {{ pagerfanta(pager, 'twitter_bootstrap3_translated', {'routeName': 'arrunta_index_paginated'}) }}
+                {{ pagerfanta(pager, 'twitter_bootstrap3', {'routeName': 'arrunta_index_paginated', 'prev_message': 'Anterior' | trans, 'next_message': 'Siguiente' | trans }) }}
             {% endif %}
         {% else %}
-            <p>{{ 'messages.emaitzarikez'|trans }}</p>
+            <p>{{ 'messages.emaitzarikez' | trans }}</p>
         {% endif %}
     </div>
 {% endblock %}

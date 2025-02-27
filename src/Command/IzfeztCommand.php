@@ -2,40 +2,44 @@
 
 namespace App\Command;
 
+use App\Entity\Eremuak;
 use App\Entity\Kanalmota;
 use App\Entity\Udala;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use App\Repository\EremuakRepository;
+use App\Repository\FamiliaRepository;
 
+#[AsCommand('api:izfezt','Zerbitzu telematikoen fitxategia sortu. Familia <-> Azpifamilia erabiliz')]
 class IzfeztCommand extends Command
 {
 
     protected $unekoFitxaKodea = "";
-    protected $zzoo_aplikazioaren_API_url;
-    protected static $defaultName = 'api:izfezt';
-    protected static $defaultDescription = 'Zerbitzu telematikoen fitxategia sortu. Familia <-> Azpifamilia erabiliz';
 
-    protected $em;
-
-    public function __construct(EntityManagerInterface $em, $zzoo_aplikazioaren_API_url)
+    public function __construct(
+        protected EntityManagerInterface $em,
+        private string $zzoo_aplikazioaren_API_url,
+        private EremuakRepository $eremuakRepo,
+        private FamiliaRepository $familiaRepo
+        )
     {
-        $this->em = $em;
-        $this->zzoo_aplikazioaren_API_url = $zzoo_aplikazioaren_API_url;
         parent::__construct();
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->addArgument( 'udalKodea', InputArgument::REQUIRED, 'Udal kodea, adibidez pasaiarentzat 064.' )
@@ -141,7 +145,7 @@ class IzfeztCommand extends Command
                 $A204TIPO = "'EXPEDIENTE'";
                 $A204IDTIPO = "'" . $tipo . "'";
             default:
-                $servicios = array(
+                $servicios = [
                     "UML",
                     "UPF",
                     "URM",
@@ -154,7 +158,7 @@ class IzfeztCommand extends Command
                     //"URA",
                     "URB",
                     "UVD",
-                );
+                ];
 
                 if ( $tipo == "URA" ) {
                     $A204TIPO = "'FITXAZERBIKAT'";
@@ -272,7 +276,7 @@ class IzfeztCommand extends Command
                     break;
 
                 default:
-                    $servicios = array(
+                    $servicios = [
                         "UML",
                         "UPF",
                         "UEX",
@@ -284,7 +288,7 @@ class IzfeztCommand extends Command
                         //"URA",
                         "URB",
                         "UVD",
-                    );
+                    ];
 
                     if ( $tipo == "URA" ) {
                         $A202SERVICIO = "'FITXAZERBIKAT'";
@@ -320,16 +324,14 @@ class IzfeztCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute( InputInterface $input, OutputInterface $output )
+    protected function execute( InputInterface $input, OutputInterface $output ): int
     {
         $udalKodea = $input->getArgument( 'udalKodea' );
         $debug = $input->getArgument( 'debug' );
 
-        $filename = "web/doc/$udalKodea/izfesql.sql";
+        $filename = "public/doc/$udalKodea/izfesql.sql";
         $udala = $this->em->getRepository( Udala::class )->findOneBy(
-            array(
-                'kodea' => $udalKodea,
-            )
+            ['kodea' => $udalKodea]
         );
 
         $output->writeln(
@@ -357,7 +359,7 @@ class IzfeztCommand extends Command
         $helper = $this->getHelper( 'question' );
         $question = new ChoiceQuestion(
             'Datuak zuzenak dira? Horrela bada tauletako datuak ezabatuko dira.',
-            array( 'Bai', 'Ez' ),
+            ['Bai', 'Ez'],
             null
         );
 
@@ -375,7 +377,7 @@ class IzfeztCommand extends Command
                 ]
             );
 
-            return;
+            return Command::SUCCESS;
         }
 
 
@@ -387,9 +389,9 @@ class IzfeztCommand extends Command
         $idOrdenElementua = 1;
         $idElementua = 9000;
         $A204AYUNTA = "'" . $udalKodea . "'";
-        $mapa = array();
-        $sortutakoAzpifamiliak = array();
-        $sortutakoFitxak = array();
+        $mapa = [];
+        $sortutakoAzpifamiliak = [];
+        $sortutakoFitxak = [];
 
         $sql = "DELETE FROM UDAA20401 WHERE A204CAPLI='Z' AND A204AYUNTA=$A204AYUNTA;\n"; // Orriak
         $sql = $sql . "DELETE FROM UDAA20201 WHERE A202CAPLI='Z' AND A202AYUNTA=$A204AYUNTA;\n"; // Elementuak
@@ -408,38 +410,38 @@ class IzfeztCommand extends Command
 
         $kanalmotak = $this->em->getRepository( Kanalmota::class )->findAll();
 
-        $query = $this->em->createQuery(
-            '
-                    SELECT f.oharraktext,f.helburuatext,f.ebazpensinpli,f.arduraaitorpena,f.aurreikusi,f.arrunta,f.isiltasunadmin,f.norkeskatutext,f.norkeskatutable,f.dokumentazioatext,f.dokumentazioatable,f.kostuatext,f.kostuatable,f.araudiatext,f.araudiatable,f.prozeduratext,f.prozeduratable,f.doklaguntext,f.doklaguntable,f.datuenbabesatext,f.datuenbabesatable,f.norkebatzitext,f.norkebatzitable,f.besteak1text,f.besteak1table,f.besteak2text,f.besteak2table,f.besteak3text,f.besteak3table,f.kanalatext,f.kanalatable,f.azpisailatable
-                      FROM App:Eremuak f
-                      WHERE f.udala = :udala
-                '
-        );
-        $query->setParameter( 'udala', $udala->getId() );
-        $eremuak = $query->getSingleResult();
-
-        $query = $this->em->createQuery(
-            '
-                  SELECT f.oharraklabeleu,f.oharraklabeles,f.helburualabeleu,f.helburualabeles,f.ebazpensinplilabeleu,f.ebazpensinplilabeles,f.arduraaitorpenalabeleu,f.arduraaitorpenalabeles,f.aurreikusilabeleu,f.aurreikusilabeles,f.arruntalabeleu,f.arruntalabeles,f.isiltasunadminlabeleu,f.isiltasunadminlabeles,f.norkeskatulabeleu,f.norkeskatulabeles,f.dokumentazioalabeleu,f.dokumentazioalabeles,f.kostualabeleu,f.kostualabeles,f.araudialabeleu,f.araudialabeles,f.prozeduralabeleu,f.prozeduralabeles,f.doklagunlabeleu,f.doklagunlabeles,f.datuenbabesalabeleu,f.datuenbabesalabeles,f.norkebatzilabeleu,f.norkebatzilabeles,f.besteak1labeleu,f.besteak1labeles,f.besteak2labeleu,f.besteak2labeles,f.besteak3labeleu,f.besteak3labeles,f.kanalalabeleu,f.kanalalabeles,f.epealabeleu,f.epealabeles,f.doanlabeleu,f.doanlabeles,f.azpisailalabeleu,f.azpisailalabeles
-                    FROM App:Eremuak f
-                    WHERE f.udala = :udala
-                '
-        );
-        $query->setParameter( 'udala', $udala->getId() );
-        $labelak = $query->getSingleResult();
-
-        $query = $this->em->createQuery(
-            '
-                  SELECT f 
-                    FROM App:Familia f 
-                      LEFT JOIN App:Udala u WITH f.udala=u.id                      
-                  WHERE u.kodea = :udala AND f.parent IS NULL 
-                  ORDER BY f.ordena ASC
-                '
-        );
-        $query->setParameter( 'udala', $udalKodea );
-        $familiak = $query->getResult();
-
+        // $query = $this->em->createQuery(
+        //     '
+        //             SELECT f.oharraktext,f.helburuatext,f.ebazpensinpli,f.arduraaitorpena,f.aurreikusi,f.arrunta,f.isiltasunadmin,f.norkeskatutext,f.norkeskatutable,f.dokumentazioatext,f.dokumentazioatable,f.kostuatext,f.kostuatable,f.araudiatext,f.araudiatable,f.prozeduratext,f.prozeduratable,f.doklaguntext,f.doklaguntable,f.datuenbabesatext,f.datuenbabesatable,f.norkebatzitext,f.norkebatzitable,f.besteak1text,f.besteak1table,f.besteak2text,f.besteak2table,f.besteak3text,f.besteak3table,f.kanalatext,f.kanalatable,f.azpisailatable
+        //               FROM App:Eremuak f
+        //               WHERE f.udala = :udala
+        //         '
+        // );
+        // $query->setParameter( 'udala', $udala->getId() );
+        // $eremuak = $query->getSingleResult();
+        $eremuak = $this->eremuakRepo->findOneByUdalKodea($udala->getId());
+        // $query = $this->em->createQuery(
+        //     '
+        //           SELECT f.oharraklabeleu,f.oharraklabeles,f.helburualabeleu,f.helburualabeles,f.ebazpensinplilabeleu,f.ebazpensinplilabeles,f.arduraaitorpenalabeleu,f.arduraaitorpenalabeles,f.aurreikusilabeleu,f.aurreikusilabeles,f.arruntalabeleu,f.arruntalabeles,f.isiltasunadminlabeleu,f.isiltasunadminlabeles,f.norkeskatulabeleu,f.norkeskatulabeles,f.dokumentazioalabeleu,f.dokumentazioalabeles,f.kostualabeleu,f.kostualabeles,f.araudialabeleu,f.araudialabeles,f.prozeduralabeleu,f.prozeduralabeles,f.doklagunlabeleu,f.doklagunlabeles,f.datuenbabesalabeleu,f.datuenbabesalabeles,f.norkebatzilabeleu,f.norkebatzilabeles,f.besteak1labeleu,f.besteak1labeles,f.besteak2labeleu,f.besteak2labeles,f.besteak3labeleu,f.besteak3labeles,f.kanalalabeleu,f.kanalalabeles,f.epealabeleu,f.epealabeles,f.doanlabeleu,f.doanlabeles,f.azpisailalabeleu,f.azpisailalabeles
+        //             FROM App:Eremuak f
+        //             WHERE f.udala = :udala
+        //         '
+        // );
+        // $query->setParameter( 'udala', $udala->getId() );
+        // $labelak = $query->getSingleResult();
+        $labelak = $this->eremuakRepo->findLabelakByUdalKodea($udala->getId());
+        // $query = $this->em->createQuery(
+        //     '
+        //           SELECT f 
+        //             FROM App:Familia f 
+        //               LEFT JOIN App:Udala u WITH f.udala=u.id                      
+        //           WHERE u.kodea = :udala AND f.parent IS NULL 
+        //           ORDER BY f.ordena ASC
+        //         '
+        // );
+        // $query->setParameter( 'udala', $udalKodea );
+        // $familiak = $query->getResult();
+        $familiak = $this->familiaRepo->findFamiliaByUdala($udalKodea);
         /*******************************************************************/
         /**** Home-a sortu  ************************************************/
         /*******************************************************************/
@@ -515,7 +517,7 @@ class IzfeztCommand extends Command
                         $sortutakoFitxak
                     )
                     ) { // Begiratu ea aldez aurretik sortu dugun...
-                        $kostuZerrenda = array();
+                        $kostuZerrenda = [];
                         foreach ( $fitxa->getKostuak() as $kostu ) {
                             if ( ( strlen( $this->zzoo_aplikazioaren_API_url ) > 0 ) && ( $kostu->getKostua() ) ) {
                                 $client = new GuzzleHttp\Client();
@@ -885,7 +887,7 @@ class IzfeztCommand extends Command
                                             }
                                             if ( $kanala->getTelematikoa() ) {
                                                 if ( $fitxa->getZerbitzua() ) {
-                                                    if (( strlen($fitxa->getExpedientes()) > 0 )  && ( substr( $fitxa->getParametroa(),0,2) == "08" )) {
+                                                    if (( strlen($fitxa->getExpedientes()) > 0 )  && ( str_starts_with($fitxa->getParametroa(), "08") )) {
                                                         $textes = $textes . "<li><a href='" . $fitxa->getZerbitzua()->getErroaes() . $fitxa->getUdala()->getKodea() . $fitxa->getParametroa() . $fitxa->getExpedientes() . "' target='_blank'>" . $kanala->getIzenaes() . "</a></li>";
                                                         $texteu = $texteu . "<li><a href='" . $fitxa->getZerbitzua()->getErroaeu() . $fitxa->getUdala()->getKodea() . $fitxa->getParametroa() . $fitxa->getExpedientes() . "' target='_blank'>" . $kanala->getIzenaeu() . "</a></li>";
                                                     } else {
@@ -1354,12 +1356,16 @@ class IzfeztCommand extends Command
                                         $doctextes = $doctextes . "<li>";
                                         $doctexteu = $doctexteu . "<li>";
 
-                                        if ( $araua->getAraudia()->getEstekaeu() ) {
-                                            $doctextes = $doctextes . "<a href='" . $araua->getAraudia()->getEstekaes() . "' target='_blank'>" . $araua->getAraudia()->getArauaes() . "</a> " . $araua->getAtalaes();
-                                            $doctexteu = $doctexteu . "<a href='" . $araua->getAraudia()->getEstekaeu() . "' target='_blank'>" . $araua->getAraudia()->getArauaeu() . "</a> " . $araua->getAtalaeu();
-                                        } else {
-                                            $doctextes = $doctextes . $araua->getAraudia()->getArauaes() . " - " . $araua->getAtalaes();
-                                            $doctexteu = $doctexteu . $araua->getAraudia()->getArauaeu() . " - " . $araua->getAtalaeu();
+                                        if ( null !== $araua->getAraudia() ) {
+                                            if ( $araua->getAraudia()->getEstekaeu() ) {
+                                                $doctextes = $doctextes . "<a href='" . $araua->getAraudia()->getEstekaes() . "' target='_blank'>" . $araua->getAraudia()->getArauaes() . "</a> " . $araua->getAtalaes();
+                                                $doctexteu = $doctexteu . "<a href='" . $araua->getAraudia()->getEstekaeu() . "' target='_blank'>" . $araua->getAraudia()->getArauaeu() . "</a> " . $araua->getAtalaeu();
+                                            } else {
+                                                if ( $araua->getAraudia()->getArauaeu() ) {
+                                                    $doctextes = $doctextes . $araua->getAraudia()->getArauaes() . " - " . $araua->getAtalaes();
+                                                    $doctexteu = $doctexteu . $araua->getAraudia()->getArauaeu() . " - " . $araua->getAtalaeu();
+                                                }
+                                            }
                                         }
                                         $doctextes = $doctextes . "</li>";
                                         $doctexteu = $doctexteu . "</li>";
@@ -2165,7 +2171,7 @@ class IzfeztCommand extends Command
                             $sortutakoFitxak
                         )
                         ) { // Begiratu ea aldez aurretik sortu dugun...
-                            $kostuZerrenda = array();
+                            $kostuZerrenda = [];
                             foreach ( $fitxa->getKostuak() as $kostu ) {
                                 if ( ( strlen( $this->zzoo_aplikazioaren_API_url ) > 0 ) && ( $kostu->getKostua() ) ) {
                                     $client = new GuzzleHttp\Client();
@@ -2536,7 +2542,7 @@ class IzfeztCommand extends Command
                                                 }
                                                 if ( $kanala->getTelematikoa() ) {
                                                     if ( $fitxa->getZerbitzua() ) {
-                                                        if (( strlen($fitxa->getExpedientes()) > 0 )  && ( substr( $fitxa->getParametroa(),0,2) == "08" )) {
+                                                        if (( strlen($fitxa->getExpedientes()) > 0 )  && ( str_starts_with($fitxa->getParametroa(), "08") )) {
                                                             $textes = $textes . "<li><a href='" . $fitxa->getZerbitzua()->getErroaes() . $fitxa->getUdala()->getKodea() . $fitxa->getParametroa() . $fitxa->getExpedientes() . "' target='_blank'>" . $kanala->getIzenaes() . "</a></li>";
                                                             $texteu = $texteu . "<li><a href='" . $fitxa->getZerbitzua()->getErroaeu() . $fitxa->getUdala()->getKodea() . $fitxa->getParametroa() . $fitxa->getExpedientes() . "' target='_blank'>" . $kanala->getIzenaeu() . "</a></li>";
                                                         } else {
@@ -3778,19 +3784,16 @@ class IzfeztCommand extends Command
         try {
             $fs->dumpFile( $filename, $sql );
         } catch ( IOExceptionInterface $e ) {
-            echo "An error occurred while creating your directory at " . $e->getPath();
+            $output->writeln("An error occurred while creating your directory at " . $e->getPath());
         }
 
         if ( !$debug ) {
             $progress->finish();
         }
-
-    }
-
-
-    function addFicha( $fitxa )
-    {
-
-
+        $output->writeln('');
+        $output->writeln('-----------------------------');
+        $output->writeln('Process successfully finished');
+        $output->writeln('-----------------------------');
+        return Command::SUCCESS;
     }
 }

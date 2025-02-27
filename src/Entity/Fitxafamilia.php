@@ -5,34 +5,31 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\OrderBy;
 use JMS\Serializer\Annotation\ExclusionPolicy;
-use JMS\Serializer\Annotation\Expose;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\FitxafamiliaRepository;
 
 /**
  * Fitxafamilia
  *
- * @ORM\Table(name="fitxa_familia_erlazioak")
- * @ORM\Entity(repositoryClass=FitxafamiliaRepository::class)
- * @ExclusionPolicy("all")
- * @UdalaEgiaztatu(userFieldName="udala_id")
  */
-class Fitxafamilia
+#[ExclusionPolicy("all")]
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'fitxa_familia_erlazioak')]
+#[ORM\Entity(repositoryClass: FitxafamiliaRepository::class)]
+class Fitxafamilia implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="ordena", type="integer", nullable=true)
      */
+    #[ORM\Column(name: 'ordena', type: 'integer', nullable: true)]
     private $ordena=0;
 
     /**************************************************************************************************************
@@ -40,26 +37,21 @@ class Fitxafamilia
      ******************      ERLAZIOAK
      **************************************************************************************************************
      *************************************************************************************************************/
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Familia", inversedBy="fitxafamilia")
-     * @ORM\JoinColumn(name="familia_id", referencedColumnName="id", nullable=false, onDelete="cascade")
-     * @OrderBy({"ordena" = "ASC"})
-     */
+    #[ORM\JoinColumn(name: 'familia_id', referencedColumnName: 'id', nullable: false, onDelete: 'cascade')]
+    #[ORM\ManyToOne(targetEntity: Familia::class, inversedBy: 'fitxafamilia')]
+    #[OrderBy(['ordena' => 'ASC'])]
     protected $familia;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Fitxa", inversedBy="fitxafamilia")
-     * @ORM\JoinColumn(name="fitxa_id", referencedColumnName="id", nullable=false, onDelete="cascade")
-     */
+    #[ORM\JoinColumn(name: 'fitxa_id', referencedColumnName: 'id', nullable: false, onDelete: 'cascade')]
+    #[ORM\ManyToOne(targetEntity: Fitxa::class, inversedBy: 'fitxafamilia')]
     protected $fitxa;
 
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
     /**************************************************************************************************************
@@ -69,7 +61,7 @@ class Fitxafamilia
      *************************************************************************************************************/
 
 
-    public function __toString ()
+    public function __toString (): string
     {
         return (string) "";
     }
@@ -123,11 +115,11 @@ class Fitxafamilia
     /**
      * Set familia
      *
-     * @param \App\Entity\Familia $familia
+     * @param Familia $familia
      *
      * @return Fitxafamilia
      */
-    public function setFamilia(\App\Entity\Familia $familia)
+    public function setFamilia(Familia $familia)
     {
         $this->familia = $familia;
 
@@ -137,7 +129,7 @@ class Fitxafamilia
     /**
      * Get familia
      *
-     * @return \App\Entity\Familia
+     * @return Familia
      */
     public function getFamilia()
     {
@@ -147,11 +139,11 @@ class Fitxafamilia
     /**
      * Set fitxa
      *
-     * @param \App\Entity\Fitxa $fitxa
+     * @param Fitxa $fitxa
      *
      * @return Fitxafamilia
      */
-    public function setFitxa(\App\Entity\Fitxa $fitxa)
+    public function setFitxa(Fitxa $fitxa)
     {
         $this->fitxa = $fitxa;
 
@@ -161,7 +153,7 @@ class Fitxafamilia
     /**
      * Get fitxa
      *
-     * @return \App\Entity\Fitxa
+     * @return Fitxa
      */
     public function getFitxa()
     {
@@ -171,11 +163,11 @@ class Fitxafamilia
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return Fitxafamilia
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -185,7 +177,7 @@ class Fitxafamilia
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {

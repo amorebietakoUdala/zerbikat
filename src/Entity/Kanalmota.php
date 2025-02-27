@@ -3,75 +3,69 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\KanalmotaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Kanalmota
  *
- * @ORM\Table(name="kanalmota")
- * @ORM\Entity(repositoryClass=KanalmotaRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
  */
-class Kanalmota
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'kanalmota')]
+#[ORM\Entity(repositoryClass: KanalmotaRepository::class)]
+class Kanalmota implements \Stringable
 {
 
     /**
      * @var id
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var motaeu
-     *
-     * @ORM\Column(name="motaeu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'motaeu', type: 'string', length: 255, nullable: true)]
     private $motaeu;
 
     /**
      * @var motaes
-     *
-     * @ORM\Column(name="motaes", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'motaes', type: 'string', length: 255, nullable: true)]
     private $motaes;
 
     /**
      * @var esteka
-     *
-     * @ORM\Column(name="esteka", type="boolean", nullable=true)
      */
+    #[ORM\Column(name: 'esteka', type: 'boolean', nullable: true)]
     private $esteka;
 
     /**
      * @var ikonoa
-     *
-     * @ORM\Column(name="ikonoa", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'ikonoa', type: 'string', length: 255, nullable: true)]
     private $ikonoa;
 
 
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
 
     /**
-     * @var kanalak[]
-     *
-     * @ORM\OneToMany(targetEntity="Kanala", mappedBy="kanalmota")
+     * @var ArrayCollection
      */
+    #[ORM\OneToMany(targetEntity: Kanala::class, mappedBy: 'kanalmota')]
     private $kanalak;
 
 
@@ -83,7 +77,7 @@ class Kanalmota
      * @return string
      */
 
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getMotaeu();
     }
@@ -93,7 +87,7 @@ class Kanalmota
      */
     public function __construct()
     {
-        $this->kanalak = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->kanalak = new ArrayCollection();
     }
 
     /**
@@ -205,11 +199,11 @@ class Kanalmota
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return Kanalmota
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -219,7 +213,7 @@ class Kanalmota
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {
@@ -229,11 +223,11 @@ class Kanalmota
     /**
      * Add kanalak
      *
-     * @param \App\Entity\Kanala $kanalak
+     * @param Kanala $kanalak
      *
      * @return Kanalmota
      */
-    public function addKanalak(\App\Entity\Kanala $kanalak)
+    public function addKanalak(Kanala $kanalak)
     {
         $this->kanalak[] = $kanalak;
 
@@ -243,9 +237,9 @@ class Kanalmota
     /**
      * Remove kanalak
      *
-     * @param \App\Entity\Kanala $kanalak
+     * @param Kanala $kanalak
      */
-    public function removeKanalak(\App\Entity\Kanala $kanalak)
+    public function removeKanalak(Kanala $kanalak)
     {
         $this->kanalak->removeElement($kanalak);
     }
@@ -253,7 +247,7 @@ class Kanalmota
     /**
      * Get kanalak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getKanalak()
     {

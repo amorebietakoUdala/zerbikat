@@ -6,18 +6,20 @@
         <div class="container">
             <div class="navbar-header">
                 <a class="navbar-brand">
-                    {% if app.user.udala.eremuak %}
+                    {% if ( app.user.udala is defined and app.user.udala != null and app.user.udala.eremuak ) %}
                         {% if app.request.locale == 'es'%}{{ app.user.udala.eremuak.besteak1labeles }}
                         {% else %}{{ app.user.udala.eremuak.besteak1labeleu }}
                         {% endif %}
                     {% endif %}
                 </a>
             </div>
-            <div id="navbar" class="navbar-collapse collapse navbar-right">
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ path('besteak1_new') }}" class="fa fa-plus"> {{ 'messages.berria'|trans }}</a></li>
-                </ul>
-            </div>
+            {% if is_granted('ROLE_ADMIN') %}
+                <div id="navbar" class="navbar-collapse collapse navbar-right">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{{ path('besteak1_new') }}" class="fa fa-plus"> {{ 'messages.berria'|trans }}</a></li>
+                    </ul>
+                </div>
+            {% endif %}
         </div>
     </nav>
 {% endblock %}
@@ -44,11 +46,8 @@
                 </td>
                 <td NOWRAP class="text-right">
                     <ul class="list-inline">
-                        <li><a href="{{ path('besteak1_edit', { 'id': besteak1.id }) }}" class="fa fa-pencil"></a></li>
                         {% if is_granted('ROLE_ADMIN') %}
-                            {#<li>{{ form_start(deleteforms[besteak1.id],{'attr': {'id': besteak1.id}}) }}#}
-                                {#<a href="#" onclick="document.getElementById({{ besteak1.id }}).submit();" ><i class="fa fa-trash text-danger"></i></a>#}
-                                {#{{ form_end(deleteforms[besteak1.id]) }}</li>#}
+                        <li><a href="{{ path('besteak1_edit', { 'id': besteak1.id }) }}" class="fa fa-pencil"></a></li>
                             <li>{{ form_start(deleteforms[besteak1.id],{'attr': {'id': besteak1.id}}) }}
                                 <a href="#" {{ stimulus_controller('confirmation', {
                                         id: besteak1.id,
@@ -65,11 +64,10 @@
         </tbody>
     </table>
 
-    <div class="text-center">
-        {% if besteak1s is not empty %}
-
-        {% else %}
+    {% if besteak1s is empty %}
+        <div class="text-center">
             <p>{{ 'messages.emaitzarikez'|trans }}</p>
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
+
 {% endblock %}

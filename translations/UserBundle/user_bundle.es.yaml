@@ -8,6 +8,8 @@ layout.login: "Entrar"
 user.udala: "Ayuntamiento"
 user.activated: "Activado"
 user.firstName: "Nombre"
+user.new: "Nuevo usuario"
+user.azpisaila: "Subdepartamento"
 
 ROLE_SUPER_ADMIN: "Super Administrador"
 ROLE_KUDEAKETA: "Gestor"

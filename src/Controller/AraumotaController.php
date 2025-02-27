@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Araumota;
 use App\Form\AraumotaType;
 use App\Repository\AraumotaRepository;
@@ -12,106 +12,89 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Exception\NotValidCurrentPageException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\ExpressionLanguage\Expression;
 
 /**
  * Araumota controller.
- *
- * @Route("/{_locale}/araumota")
  */
+#[Route(path: '/{_locale}/araumota')]
 class AraumotaController extends AbstractController
 {
 
-    private $repo;
-    private $em;
-
-    public function __construct(EntityManagerInterface $em, AraumotaRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private AraumotaRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
     /**
      * Lists all Araumota entities.
-     *
-     * @Route("/", defaults={"page"=1}, name="araumota_index", methods={"GET"})
-     * @Route("/page{page}", name="araumota_index_paginated", methods={"GET"})
      */
+    #[IsGranted("ROLE_KUDEAKETA")]
+    #[Route(path: '/', defaults: ['page' => 1], name: 'araumota_index', methods: ['GET'])]
+    #[Route(path: '/page{page}', name: 'araumota_index_paginated', methods: ['GET'])]
     public function index($page)
     {
-        if ($this->isGranted('ROLE_KUDEAKETA')) 
-        {
-            $araumotas = $this->repo->findBy( [], ['kodea'=>'ASC'] );
-            $adapter = new ArrayAdapter($araumotas);
-            $pagerfanta = new Pagerfanta($adapter);
+        $araumotas = $this->repo->findBy( [], ['kodea'=>'ASC'] );
+        $adapter = new ArrayAdapter($araumotas);
+        $pagerfanta = new Pagerfanta($adapter);
 
-            $deleteForms = [];
-            foreach ($araumotas as $araumota) {
-                $deleteForms[$araumota->getId()] = $this->createDeleteForm($araumota)->createView();
-            }
-            try {
-                $entities = $pagerfanta
-                    // Le nombre maximum d'éléments par page
-//                    ->setMaxPerPage($this->getUser()->getUdala()->getOrrikatzea())
-                    // Notre position actuelle (numéro de page)
-                    ->setCurrentPage($page)
-                    // On récupère nos entités via Pagerfanta,
-                    // celui-ci s'occupe de limiter la requête en fonction de nos réglages.
-                    ->getCurrentPageResults()
-                ;
-            } catch (\Pagerfanta\Exception\NotValidCurrentPageException $e) {
-                throw $this->createNotFoundException("Cette page n'existe pas.");
-            }
-
-            return $this->render('araumota/index.html.twig', ['araumotas' => $entities, 'deleteforms' => $deleteForms, 'pager' => $pagerfanta]);
-        } else
-        {
-//            return $this->redirectToRoute('fitxa_index');
-            return $this->redirectToRoute('backend_errorea');
+        $deleteForms = [];
+        foreach ($araumotas as $araumota) {
+            $deleteForms[$araumota->getId()] = $this->createDeleteForm($araumota)->createView();
         }
+        try {
+            $entities = $pagerfanta
+                // Le nombre maximum d'éléments par page
+//                    ->setMaxPerPage($this->getUser()->getUdala()->getOrrikatzea())
+                // Notre position actuelle (numéro de page)
+                ->setCurrentPage($page)
+                // On récupère nos entités via Pagerfanta,
+                // celui-ci s'occupe de limiter la requête en fonction de nos réglages.
+                ->getCurrentPageResults()
+            ;
+        } catch (NotValidCurrentPageException) {
+            throw $this->createNotFoundException("Cette page n'existe pas.");
+        }
+
+        return $this->render('araumota/index.html.twig', ['araumotas' => $entities, 'deleteforms' => $deleteForms, 'pager' => $pagerfanta]);
     }
     /**
      * Creates a new Araumota entity.
-     *
-     * @Route("/new", name="araumota_new", methods={"GET", "POST"})
      */
+    #[IsGranted("ROLE_ADMIN")]
+    #[Route(path: '/new', name: 'araumota_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
-        if ($this->isGranted('ROLE_ADMIN'))
-        {
-            $araumotum = new Araumota();
-            $form = $this->createForm(AraumotaType::class, $araumotum);
-            $form->handleRequest($request);
+        $araumotum = new Araumota();
+        $form = $this->createForm(AraumotaType::class, $araumotum);
+        $form->handleRequest($request);
 
-//            $form->getData()->setUdala($this->getUser()->getUdala());
-//            $form->setData($form->getData());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $araumotum = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $udala = $user->getUdala();
+            $araumotum->setUdala($udala);
+            $this->em->persist($araumotum);
+            $this->em->flush();
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->em->persist($araumotum);
-                $this->em->flush();
-
-//                return $this->redirectToRoute('araumota_show', array('id' => $araumotum->getId()));
-                return $this->redirectToRoute('araumota_index');
-            } else
-            {
-                $form->getData()->setUdala($this->getUser()->getUdala());
-                $form->setData($form->getData());
-            }
-
-            return $this->render('araumota/new.html.twig', ['araumotum' => $araumotum, 'form' => $form->createView()]);
-        }else
-        {
-//            return $this->redirectToRoute('fitxa_index');
-            return $this->redirectToRoute('backend_errorea');
+            return $this->redirectToRoute('araumota_index');
         }
+
+        return $this->render('araumota/new.html.twig', ['araumotum' => $araumotum, 'form' => $form->createView()]);
     }
 
     /**
      * Finds and displays a Araumota entity.
-     *
-     * @Route("/{id}", name="araumota_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'araumota_show', methods: ['GET'])]
     public function show(Araumota $araumotum): Response
     {
         $deleteForm = $this->createDeleteForm($araumotum);
@@ -121,12 +104,14 @@ class AraumotaController extends AbstractController
 
     /**
      * Displays a form to edit an existing Araumota entity.
-     *
-     * @Route("/{id}/edit", name="araumota_edit", methods={"GET", "POST"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}/edit', name: 'araumota_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Araumota $araumotum)
     {
-        if((($this->isGranted('ROLE_ADMIN')) && ($araumotum->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($araumotum->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($araumotum);
@@ -144,18 +129,20 @@ class AraumotaController extends AbstractController
         }else
         {
 //            return $this->redirectToRoute('fitxa_index');
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 
     /**
      * Deletes a Araumota entity.
-     *
-     * @Route("/{id}", name="araumota_delete", methods={"DELETE"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}', name: 'araumota_delete', methods: ['DELETE'])]
     public function delete(Request $request, Araumota $araumotum): RedirectResponse
     {
-        if((($this->isGranted('ROLE_ADMIN')) && ($araumotum->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($araumotum->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $form = $this->createDeleteForm($araumotum);
@@ -169,7 +156,7 @@ class AraumotaController extends AbstractController
         }else
         {
             //baimenik ez
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 

@@ -6,329 +6,330 @@
     use Doctrine\Common\Collections\ArrayCollection;
     use JMS\Serializer\Annotation\ExclusionPolicy;
     use JMS\Serializer\Annotation\Expose;
-    use JMS\Serializer\Annotation as JMS;
-    use App\Annotation\UdalaEgiaztatu;
+    use JMS\Serializer\Annotation\Groups;
+    use App\Attribute\UdalaEgiaztatu;
     use Doctrine\ORM\Mapping\OrderBy;
     use App\Repository\FitxaRepository;
 
     /**
      * Fitxa
      *
-     * @ORM\Table(name="fitxa", indexes={@ORM\Index(name="aurreikusi_id_idx", columns={"aurreikusi_id"}), @ORM\Index(name="arrunta_id_idx", columns={"arrunta_id"}), @ORM\Index(name="norkebatzi_id_idx", columns={"norkebatzi_id"}), @ORM\Index(name="azpisaila_id_idx", columns={"azpisaila_id"}), @ORM\Index(name="datuenbabesa_id_idx", columns={"datuenbabesa_id"}), @ORM\Index(name="zerbitzua_id_idx", columns={"zerbitzua_id"})})
-     * @ORM\Entity(repositoryClass=FitxaRepository::class)
-     * @ExclusionPolicy("all")
-     * @UdalaEgiaztatu(userFieldName="udala_id")
      */
-    class Fitxa
+    #[ExclusionPolicy("all")]
+    #[UdalaEgiaztatu(userFieldName: "udala_id")]
+    #[ORM\Table(name: 'fitxa')]
+    #[ORM\Index(name: 'aurreikusi_id_idx', columns: ['aurreikusi_id'])]
+    #[ORM\Index(name: 'arrunta_id_idx', columns: ['arrunta_id'])]
+    #[ORM\Index(name: 'norkebatzi_id_idx', columns: ['norkebatzi_id'])]
+    #[ORM\Index(name: 'azpisaila_id_idx', columns: ['azpisaila_id'])]
+    #[ORM\Index(name: 'datuenbabesa_id_idx', columns: ['datuenbabesa_id'])]
+    #[ORM\Index(name: 'zerbitzua_id_idx', columns: ['zerbitzua_id'])]
+    #[ORM\Entity(repositoryClass: FitxaRepository::class)]
+    class Fitxa implements \Stringable
     {
 
         /**
          * @var integer
          *
-         * @Expose
-         * @ORM\Column(name="id", type="bigint")
-         * @ORM\Id
-         * @ORM\GeneratedValue(strategy="IDENTITY")
-         * @JMS\Groups({"kontakud"})
          */
+        #[Groups(['kontakud'])]
+        #[Expose()]
+        #[ORM\Column(name: 'id', type: 'bigint')]
+        #[ORM\Id]
+        #[ORM\GeneratedValue(strategy: 'IDENTITY')]
         private $id;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="espedientekodea", type="string", length=9, nullable=true)
-         * @JMS\Groups({"kontakud"})
          */
+        #[Groups(['kontakud'])]
+        #[Expose()]
+        #[ORM\Column(name: 'espedientekodea', type: 'string', length: 9, nullable: true)]
         private $espedientekodea;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="expedientes", type="string", length=9, nullable=true)
-         * @JMS\Groups({"kontakud"})
          */
+        #[Groups(['kontakud'])]
+        #[Expose()]
+        #[ORM\Column(name: 'expedientes', type: 'string', length: 9, nullable: true)]
         private $expedientes;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="deskribapenaeu", type="string", length=255, nullable=true)
-         * @JMS\Groups({"kontakud"})
          */
+        #[Groups(['kontakud'])]
+        #[Expose()]
+        #[ORM\Column(name: 'deskribapenaeu', type: 'string', length: 255, nullable: true)]
         private $deskribapenaeu;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="deskribapenaes", type="string", length=255, nullable=true)
-         * @JMS\Groups({"kontakud"})
          */
+        #[Groups(['kontakud'])]
+        #[Expose()]
+        #[ORM\Column(name: 'deskribapenaes', type: 'string', length: 255, nullable: true)]
         private $deskribapenaes;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="helburuaeu", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'helburuaeu', type: 'text', length: 65535, nullable: true)]
         private $helburuaeu;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="helburuaes", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'helburuaes', type: 'text', length: 65535, nullable: true)]
         private $helburuaes;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="norkeu", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'norkeu', type: 'text', length: 65535, nullable: true)]
         private $norkeu;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="norkes", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'norkes', type: 'text', length: 65535, nullable: true)]
         private $norkes;
 
         /**
          * @var string
-         *
-         * @ORM\Column(name="dokumentazioaeu", type="text", length=65535, nullable=true)
          */
+        #[ORM\Column(name: 'dokumentazioaeu', type: 'text', length: 65535, nullable: true)]
         private $dokumentazioaeu;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="dokumentazioaes", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'dokumentazioaes', type: 'text', length: 65535, nullable: true)]
         private $dokumentazioaes;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="kostuaeu", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'kostuaeu', type: 'text', length: 65535, nullable: true)]
         private $kostuaeu;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="kostuaes", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'kostuaes', type: 'text', length: 65535, nullable: true)]
         private $kostuaes;
 
         /**
          * @var boolean
-         * @Expose
-         * @ORM\Column(name="ebazpensinpli", type="boolean", nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'ebazpensinpli', type: 'boolean', nullable: true)]
         private $ebazpensinpli;
 
         /**
          * @var boolean
-         * @Expose
-         * @ORM\Column(name="arduraaitorpena", type="boolean", nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'arduraaitorpena', type: 'boolean', nullable: true)]
         private $arduraaitorpena;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="araudiaeu", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'araudiaeu', type: 'text', length: 65535, nullable: true)]
         private $araudiaeu;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="araudiaes", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'araudiaes', type: 'text', length: 65535, nullable: true)]
         private $araudiaes;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="prozeduraeu", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'prozeduraeu', type: 'text', length: 65535, nullable: true)]
         private $prozeduraeu;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="prozeduraes", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'prozeduraes', type: 'text', length: 65535, nullable: true)]
         private $prozeduraes;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="doklaguneu", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'doklaguneu', type: 'text', length: 65535, nullable: true)]
         private $doklaguneu;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="doklagunes", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'doklagunes', type: 'text', length: 65535, nullable: true)]
         private $doklagunes;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="oharrakeu", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'oharrakeu', type: 'text', length: 65535, nullable: true)]
         private $oharrakeu;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="oharrakes", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'oharrakes', type: 'text', length: 65535, nullable: true)]
         private $oharrakes;
 
         /**
          * @var datuenbabesaeu
-         * @Expose
-         * @ORM\Column(name="datuenbabesaeu", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'datuenbabesaeu', type: 'text', length: 65535, nullable: true)]
         private $datuenbabesaeu;
 
         /**
          * @var datuenbabesaes
-         * @Expose
-         * @ORM\Column(name="datuenbabesaes", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'datuenbabesaes', type: 'text', length: 65535, nullable: true)]
         private $datuenbabesaes;
 
         /**
          * @var norkonartueu
-         * @Expose
-         * @ORM\Column(name="norkonartueu", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'norkonartueu', type: 'text', length: 65535, nullable: true)]
         private $norkonartueu;
 
         /**
          * @var norkonartues
-         * @Expose
-         * @ORM\Column(name="norkonartues", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'norkonartues', type: 'text', length: 65535, nullable: true)]
         private $norkonartues;
 
 
         /**
          * @var boolean
-         * @Expose
-         * @ORM\Column(name="publikoa", type="boolean", nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'publikoa', type: 'boolean', nullable: true)]
         private $publikoa;
 
         /**
          * @var boolean
-         * @Expose
-         * @ORM\Column(name="hitzarmena", type="boolean", nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'hitzarmena', type: 'boolean', nullable: true)]
         private $hitzarmena;
 
 
         /**
          * @var integer
-         * @Expose
-         * @ORM\Column(name="kontsultak", type="bigint", nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'kontsultak', type: 'bigint', nullable: true)]
         private $kontsultak;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="parametroa", type="string", length=50, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'parametroa', type: 'string', length: 50, nullable: true)]
         private $parametroa;
 
         /**
          * @var \DateTime
-         *
-         * @ORM\Column(name="created_at", type="datetime", nullable=false)
          */
+        #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
         private $createdAt;
 
         /**
          * @var \DateTime
-         * @ORM\Column(name="updated_at", type="datetime", nullable=false)
          */
+        #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: false)]
         private $updatedAt;
 
         /**
          * @var jarraibideakeu
-         *
-         * @ORM\Column(name="jarraibideakeu", type="text", nullable=true)
          */
+        #[ORM\Column(name: 'jarraibideakeu', type: 'text', nullable: true)]
         private $jarraibideakeu;
 
         /**
          * @var jarraibideakes
-         *
-         * @ORM\Column(name="jarraibideakes", type="text", nullable=true)
          */
+        #[ORM\Column(name: 'jarraibideakes', type: 'text', nullable: true)]
         private $jarraibideakes;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="besteak1eu", type="text", length=65535, nullable=true)
-         * @Expose
          */
+        #[Expose()]
+        #[ORM\Column(name: 'besteak1eu', type: 'text', length: 65535, nullable: true)]
         private $besteak1eu;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="besteak1es", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'besteak1es', type: 'text', length: 65535, nullable: true)]
         private $besteak1es;
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="besteak2eu", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'besteak2eu', type: 'text', length: 65535, nullable: true)]
         private $besteak2eu;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="besteak2es", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'besteak2es', type: 'text', length: 65535, nullable: true)]
         private $besteak2es;
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="besteak3eu", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'besteak3eu', type: 'text', length: 65535, nullable: true)]
         private $besteak3eu;
 
         /**
          * @var string
-         * @Expose
-         * @ORM\Column(name="besteak3es", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'besteak3es', type: 'text', length: 65535, nullable: true)]
         private $besteak3es;
 
         /**
          * @var kanalaeu
-         * @Expose
-         * @ORM\Column(name="kanalaeu", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'kanalaeu', type: 'text', length: 65535, nullable: true)]
         private $kanalaeu;
 
         /**
          * @var kanalaes
-         * @Expose
-         * @ORM\Column(name="kanalaes", type="text", length=65535, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'kanalaes', type: 'text', length: 65535, nullable: true)]
         private $kanalaes;
 
 
@@ -337,193 +338,188 @@
          ******* ERLAZIOAK: ManyToOne *********************************************************************************
          **************************************************************************************************************
          *************************************************************************************************************/
-
         /**
          * @var Udala $udala
-         * @ORM\ManyToOne(targetEntity="Udala", inversedBy="fitxak")
-         * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
          */
+        #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+        #[ORM\ManyToOne(targetEntity: Udala::class, inversedBy: 'fitxak')]
         private $udala;
 
         /**
          * @var Norkebatzi $norkebatzi
          *
-         * @Expose
-         * @ORM\ManyToOne(targetEntity="Norkebatzi")
-         * @ORM\JoinColumn(name="norkebatzi_id", referencedColumnName="id", onDelete="SET NULL")
          *
          */
+        #[Expose()]
+        #[ORM\JoinColumn(name: 'norkebatzi_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+        #[ORM\ManyToOne(targetEntity: Norkebatzi::class)]
         private $norkebatzi;
 
         /**
          * @var Zerbitzua $zerbitzua
          *
-         * @ORM\ManyToOne(targetEntity="Zerbitzua")
-         * @ORM\JoinColumn(name="zerbitzua_id", referencedColumnName="id", onDelete="SET NULL")
          *
          */
+        #[ORM\JoinColumn(name: 'zerbitzua_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+        #[ORM\ManyToOne(targetEntity: Zerbitzua::class)]
         private $zerbitzua;
 
         /**
          * @var Datuenbabesa $datuenbabesa
          *
-         * @ORM\ManyToOne(targetEntity="Datuenbabesa")
-         * @ORM\JoinColumn(name="datuenbabesa_id", referencedColumnName="id", onDelete="SET NULL")
          *
          */
+        #[ORM\JoinColumn(name: 'datuenbabesa_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+        #[ORM\ManyToOne(targetEntity: Datuenbabesa::class)]
         private $datuenbabesa;
 
         /**
          * @var Azpisaila $azpisaila
          *
-         * @ORM\ManyToOne(targetEntity="Azpisaila", inversedBy="fitxak")
-         * @ORM\JoinColumn(name="azpisaila_id", referencedColumnName="id", onDelete="SET NULL")
          *
-         * @Expose
          */
+        #[Expose()]
+        #[ORM\JoinColumn(name: 'azpisaila_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+        #[ORM\ManyToOne(targetEntity: Azpisaila::class, inversedBy: 'fitxak')]
         private $azpisaila;
 
         /**
          * @var Aurreikusi $aurreikusi
          *
-         * @ORM\ManyToOne(targetEntity="Aurreikusi")
-         * @ORM\JoinColumn(name="aurreikusi_id", referencedColumnName="id", onDelete="SET NULL")
          *
-         * @Expose
          */
+        #[Expose()]
+        #[ORM\JoinColumn(name: 'aurreikusi_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+        #[ORM\ManyToOne(targetEntity: Aurreikusi::class)]
         private $aurreikusi;
 
         /**
          * @var Arrunta $arrunta
          *
-         * @ORM\ManyToOne(targetEntity="Arrunta")
-         * @ORM\JoinColumn(name="arrunta_id", referencedColumnName="id", onDelete="SET NULL")
          *
-         * @Expose
          */
+        #[Expose()]
+        #[ORM\JoinColumn(name: 'arrunta_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+        #[ORM\ManyToOne(targetEntity: Arrunta::class)]
         private $arrunta;
 
         /**
          * @var IsiltasunAdministratiboa $isiltasunadmin
-         * @Expose
-         * @ORM\ManyToOne(targetEntity="IsiltasunAdministratiboa")
-         * @ORM\JoinColumn(name="isiltasunadmin_id", referencedColumnName="id", onDelete="SET NULL")
          *
          */
+        #[Expose()]
+        #[ORM\JoinColumn(name: 'isiltasunadmin_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+        #[ORM\ManyToOne(targetEntity: IsiltasunAdministratiboa::class)]
         private $isiltasunadmin;
 
         /**
          * @var User $norkSortua
-         * @Expose
-         * @ORM\ManyToOne(targetEntity="User")
-         * @ORM\JoinColumn(name="nork_sortua_id", referencedColumnName="id")
          *
          */
+        #[Expose()]
+        #[ORM\JoinColumn(name: 'nork_sortua_id', referencedColumnName: 'id')]
+        #[ORM\ManyToOne(targetEntity: User::class)]
         private $norkSortua;
 
         /**
          *      ERLAZIOAK: ManyToMany
          */
-
         /**
          * @var ArrayCollection
-         * @Expose
-         * @ORM\ManyToMany(targetEntity="Dokumentazioa", inversedBy="fitxak")
          */
+        #[Expose()]
+        #[ORM\ManyToMany(targetEntity: Dokumentazioa::class, inversedBy: 'fitxak')]
         private $dokumentazioak;
 
 
         /**
          * @var ArrayCollection
-         * @Expose
-         * @ORM\ManyToMany(targetEntity="Kanala",inversedBy="fitxak")
          */
+        #[Expose()]
+        #[ORM\ManyToMany(targetEntity: Kanala::class, inversedBy: 'fitxak')]
         private $kanalak;
 
         /**
          * @var ArrayCollection
-         * @Expose
-         * @ORM\ManyToMany(targetEntity="Besteak1",inversedBy="fitxak")
          */
+        #[Expose()]
+        #[ORM\ManyToMany(targetEntity: Besteak1::class, inversedBy: 'fitxak')]
         private $besteak1ak;
 
         /**
          * @var ArrayCollection
-         * @Expose
-         * @ORM\ManyToMany(targetEntity="Besteak2",inversedBy="fitxak")
          */
+        #[Expose()]
+        #[ORM\ManyToMany(targetEntity: Besteak2::class, inversedBy: 'fitxak')]
         private $besteak2ak;
 
         /**
          * @var ArrayCollection
-         * @Expose
-         * @ORM\ManyToMany(targetEntity="Besteak3",inversedBy="fitxak")
          */
+        #[Expose()]
+        #[ORM\ManyToMany(targetEntity: Besteak3::class, inversedBy: 'fitxak')]
         private $besteak3ak;
 
         /**
          * @var ArrayCollection
-         * @Expose
-         * @ORM\ManyToMany(targetEntity="Etiketa",inversedBy="fitxak")
          */
+        #[Expose()]
+        #[ORM\ManyToMany(targetEntity: Etiketa::class, inversedBy: 'fitxak')]
         private $etiketak;
 
         /**
          * @var ArrayCollection
-         * @Expose
-         * @ORM\ManyToMany(targetEntity="Norkeskatu",inversedBy="fitxak")
          */
+        #[Expose()]
+        #[ORM\ManyToMany(targetEntity: Norkeskatu::class, inversedBy: 'fitxak')]
         private $norkeskatuak;
 
         /**
          * @var ArrayCollection
-         * @Expose
-         * @ORM\ManyToMany(targetEntity="Doklagun",inversedBy="fitxak")
          */
+        #[Expose()]
+        #[ORM\ManyToMany(targetEntity: Doklagun::class, inversedBy: 'fitxak')]
         private $doklagunak;
 
         /**
          * @var ArrayCollection
-         * @Expose
-         * @ORM\ManyToMany(targetEntity="Azpiatala",inversedBy="fitxak")
-         * @ORM\JoinTable(name="fitxa_azpiatala")
          */
+        #[Expose()]
+        #[ORM\JoinTable(name: 'fitxa_azpiatala')]
+        #[ORM\ManyToMany(targetEntity: Azpiatala::class, inversedBy: 'fitxak')]
         private $azpiatalak;
 
         /**
          *      ERLAZIOAK: ManyToMany + Extra fields
          */
-
-
         /**
-         * @Expose
-         * @ORM\OneToMany(targetEntity="Fitxafamilia", mappedBy="fitxa", cascade={"remove"}, orphanRemoval=true)
-         * @OrderBy({"ordena" = "ASC"})
          */
+        #[Expose()]
+        #[ORM\OneToMany(targetEntity: Fitxafamilia::class, mappedBy: 'fitxa', cascade: ['remove'], orphanRemoval: true)]
+        #[OrderBy(['ordena' => 'ASC'])]
         private $fitxafamilia;
 
         /**
          * @var ArrayCollection
-         *
-         * @ORM\OneToMany(targetEntity="FitxaProzedura" , mappedBy="fitxa",cascade={"persist"} )
          */
+        #[ORM\OneToMany(targetEntity: FitxaProzedura::class, mappedBy: 'fitxa', cascade: ['persist'])]
         private $prozedurak;
 
         /**
          * @var ArrayCollection
-         * @Expose
-         * @ORM\OneToMany(targetEntity="FitxaAraudia", mappedBy="fitxa",cascade={"persist"})
          */
+        #[Expose()]
+        #[ORM\OneToMany(targetEntity: FitxaAraudia::class, mappedBy: 'fitxa', cascade: ['persist'])]
         private $araudiak;
 
         /**
          * @var ArrayCollection
-         * @Expose
-         * @ORM\OneToMany(targetEntity="FitxaKostua", mappedBy="fitxa",cascade={"persist"})
          */
+        #[Expose()]
+        #[ORM\OneToMany(targetEntity: FitxaKostua::class, mappedBy: 'fitxa', cascade: ['persist'])]
         private $kostuak;
 
-        public function __toString ()
+        public function __toString (): string
         {
             return (string) $this->getDeskribapenaeu();
         }

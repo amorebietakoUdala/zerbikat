@@ -3,88 +3,77 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\Besteak3Repository;
+use Doctrine\Common\Collections\ArrayCollection;
 
-/**
- * Besteak3
- *
- * @ORM\Table(name="besteak3")
- * @ORM\Entity(repositoryClass=Besteak3Repository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
- */
-class Besteak3
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'besteak3')]
+#[ORM\Entity(repositoryClass: Besteak3Repository::class)]
+class Besteak3 implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="izenburuaeu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'izenburuaeu', type: 'string', length: 255, nullable: true)]
     private $izenburuaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="izenburuaes", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'izenburuaes', type: 'string', length: 255, nullable: true)]
     private $izenburuaes;
 
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="estekaeu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'estekaeu', type: 'string', length: 255, nullable: true)]
     private $estekaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="estekaes", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'estekaes', type: 'string', length: 255, nullable: true)]
     private $estekaes;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="kodea", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'kodea', type: 'string', length: 255, nullable: true)]
     private $kodea;
 
 
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
     
     /**
-     * @var fitxak[]
-     *
-     * @ORM\ManyToMany(targetEntity="Fitxa", mappedBy="besteak3ak", cascade={"persist"}))
+     * @var ArrayCollection
      */
+    #[ORM\ManyToMany(targetEntity: Fitxa::class, mappedBy: 'besteak3ak', cascade: ['persist'])]
     private $fitxak;
 
 
     /**
      *          TOSTRING
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getIzenburuaeu();
     }
@@ -95,7 +84,7 @@ class Besteak3
      */
     public function __construct()
     {
-        $this->fitxak = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fitxak = new ArrayCollection();
     }
 
     /**
@@ -231,11 +220,11 @@ class Besteak3
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return Besteak3
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -245,7 +234,7 @@ class Besteak3
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {
@@ -255,11 +244,11 @@ class Besteak3
     /**
      * Add fitxak
      *
-     * @param \App\Entity\Fitxa $fitxak
+     * @param Fitxa $fitxak
      *
      * @return Besteak3
      */
-    public function addFitxak(\App\Entity\Fitxa $fitxak)
+    public function addFitxak(Fitxa $fitxak)
     {
         $this->fitxak[] = $fitxak;
 
@@ -269,9 +258,9 @@ class Besteak3
     /**
      * Remove fitxak
      *
-     * @param \App\Entity\Fitxa $fitxak
+     * @param Fitxa $fitxak
      */
-    public function removeFitxak(\App\Entity\Fitxa $fitxak)
+    public function removeFitxak(Fitxa $fitxak)
     {
         $this->fitxak->removeElement($fitxak);
     }
@@ -279,7 +268,7 @@ class Besteak3
     /**
      * Get fitxak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getFitxak()
     {

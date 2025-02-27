@@ -3,52 +3,48 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\IsiltasunAdministratiboaRepository;
 
 /**
  * IsiltasunAdministratiboa
  *
- * @ORM\Table(name="isiltasunadministratiboa")
- * @ORM\Entity(repositoryClass=IsiltasunAdministratiboaRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
  */
-class IsiltasunAdministratiboa
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'isiltasunadministratiboa')]
+#[ORM\Entity(repositoryClass: IsiltasunAdministratiboaRepository::class)]
+class IsiltasunAdministratiboa implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
     
     /**
      * @var string
-     *
-     * @ORM\Column(name="isiltasuneu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'isiltasuneu', type: 'string', length: 255, nullable: true)]
     private $isiltasuneu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="isiltasunes", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'isiltasunes', type: 'string', length: 255, nullable: true)]
     private $isiltasunes;
 
 
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
 
@@ -63,16 +59,9 @@ class IsiltasunAdministratiboa
      * 
      */
 
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getIsiltasuneu();
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-//        $this->fitxak = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -134,47 +123,13 @@ class IsiltasunAdministratiboa
     }
 
     /**
-     * Add fitxak
-     *
-     * @param \App\Entity\Fitxa $fitxak
-     *
-     * @return IsiltasunAdministratiboa
-     */
-    public function addFitxak(\App\Entity\Fitxa $fitxak)
-    {
-        $this->fitxak[] = $fitxak;
-
-        return $this;
-    }
-
-    /**
-     * Remove fitxak
-     *
-     * @param \App\Entity\Fitxa $fitxak
-     */
-    public function removeFitxak(\App\Entity\Fitxa $fitxak)
-    {
-        $this->fitxak->removeElement($fitxak);
-    }
-
-    /**
-     * Get fitxak
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFitxak()
-    {
-        return $this->fitxak;
-    }
-
-    /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return IsiltasunAdministratiboa
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -184,7 +139,7 @@ class IsiltasunAdministratiboa
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {

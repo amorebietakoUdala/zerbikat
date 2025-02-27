@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Baldintza;
 use App\Form\BaldintzaType;
 use App\Repository\BaldintzaRepository;
@@ -12,90 +12,75 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Baldintza controller.
- *
- * @Route("/{_locale}/baldintza")
  */
+#[Route(path: '/{_locale}/baldintza')]
 class BaldintzaController extends AbstractController
 {
 
-    private $repo;
-    private $em;
-
-    public function __construct(EntityManagerInterface $em, BaldintzaRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private BaldintzaRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
     /**
      * Lists all Baldintza entities.
-     *
-     * @Route("/", defaults={"page"=1}, name="baldintza_index", methods={"GET"})
-     * @Route("/page{page}", name="baldintza_index_paginated", methods={"GET"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/', defaults: ['page' => 1], name: 'baldintza_index', methods: ['GET'])]
+    #[Route(path: '/page{page}', name: 'baldintza_index_paginated', methods: ['GET'])]
     public function index($page)
     {
-        if ($this->isGranted('ROLE_KUDEAKETA')) {
-            $baldintzas = $this->repo->findAll();
+        $baldintzas = $this->repo->findAll();
 
-            $deleteForms = [];
-            foreach ($baldintzas as $baldintza) {
-                $deleteForms[$baldintza->getId()] = $this->createDeleteForm($baldintza)->createView();
-            }
-
-            return $this->render('baldintza/index.html.twig', ['baldintzas' => $baldintzas, 'deleteforms' => $deleteForms]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
+        $deleteForms = [];
+        foreach ($baldintzas as $baldintza) {
+            $deleteForms[$baldintza->getId()] = $this->createDeleteForm($baldintza)->createView();
         }
+
+        return $this->render('baldintza/index.html.twig', ['baldintzas' => $baldintzas, 'deleteforms' => $deleteForms]);
     }
 
     /**
      * Creates a new Baldintza entity.
-     *
-     * @Route("/new", name="baldintza_new", methods={"GET", "POST"})
      */
+    #[IsGranted("ROLE_ADMIN")]
+    #[Route(path: '/new', name: 'baldintza_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
-        if ($this->isGranted('ROLE_ADMIN'))
-        {
-            $baldintza = new Baldintza();
-            $form = $this->createForm(BaldintzaType::class, $baldintza);
-            $form->handleRequest($request);
+        $baldintza = new Baldintza();
+        $form = $this->createForm(BaldintzaType::class, $baldintza);
+        $form->handleRequest($request);
 
-//            $form->getData()->setUdala($this->getUser()->getUdala());
-//            $form->setData($form->getData());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $baldintza = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $udala = $user->getUdala();
+            $baldintza->setUdala($udala);                
+            $this->em->persist($baldintza);
+            $this->em->flush();
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->em->persist($baldintza);
-                $this->em->flush();
+            return $this->redirectToRoute('baldintza_index');
 
-//                return $this->redirectToRoute('baldintza_show', array('id' => $baldintza->getId()));
-                return $this->redirectToRoute('baldintza_index');
-
-            } else
-            {
-                $form->getData()->setUdala($this->getUser()->getUdala());
-                $form->setData($form->getData());
-            }
-
-            return $this->render('baldintza/new.html.twig', ['baldintza' => $baldintza, 'form' => $form->createView()]);
-        }else
-        {
-            return $this->redirectToRoute('backend_errorea');
         }
+
+        return $this->render('baldintza/new.html.twig', ['baldintza' => $baldintza, 'form' => $form->createView()]);
     }
 
     /**
      * Finds and displays a Baldintza entity.
-     *
-     * @Route("/{id}", name="baldintza_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'baldintza_show', methods: ['GET'])]
     public function show(Baldintza $baldintza): Response
     {
         $deleteForm = $this->createDeleteForm($baldintza);
@@ -105,12 +90,14 @@ class BaldintzaController extends AbstractController
 
     /**
      * Displays a form to edit an existing Baldintza entity.
-     *
-     * @Route("/{id}/edit", name="baldintza_edit", methods={"GET", "POST"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}/edit', name: 'baldintza_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Baldintza $baldintza)
     {
-        if((($this->isGranted('ROLE_ADMIN')) && ($baldintza->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($baldintza->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($baldintza);
@@ -127,18 +114,20 @@ class BaldintzaController extends AbstractController
             return $this->render('baldintza/edit.html.twig', ['baldintza' => $baldintza, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 
     /**
      * Deletes a Baldintza entity.
-     *
-     * @Route("/{id}", name="baldintza_delete", methods={"DELETE"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}', name: 'baldintza_delete', methods: ['DELETE'])]
     public function delete(Request $request, Baldintza $baldintza): RedirectResponse
     {
-        if((($this->isGranted('ROLE_ADMIN')) && ($baldintza->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($baldintza->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $form = $this->createDeleteForm($baldintza);
@@ -151,7 +140,7 @@ class BaldintzaController extends AbstractController
         }else
         {
             //baimenik ez
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 

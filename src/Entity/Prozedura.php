@@ -3,59 +3,55 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\ProzeduraRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Prozedura
  *
- * @ORM\Table(name="prozedura")
- * @ORM\Entity(repositoryClass=ProzeduraRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
  */
-class Prozedura
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'prozedura')]
+#[ORM\Entity(repositoryClass: ProzeduraRepository::class)]
+class Prozedura implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="prozeduraeu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'prozeduraeu', type: 'string', length: 255, nullable: true)]
     private $prozeduraeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="prozeduraes", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'prozeduraes', type: 'string', length: 255, nullable: true)]
     private $prozeduraes;
 
 
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
     /**
-     * @var fitxak[]
-     *
-     * @ORM\OneToMany(targetEntity="FitxaProzedura" , mappedBy="prozedura" )
+     * @var ArrayCollection
      */
+    #[ORM\OneToMany(targetEntity: FitxaProzedura::class, mappedBy: 'prozedura')]
     private $fitxak;
 
 
@@ -63,7 +59,7 @@ class Prozedura
      *          TOSTRING
      */
     
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getProzeduraeu();
     }
@@ -73,7 +69,7 @@ class Prozedura
      */
     public function __construct()
     {
-        $this->fitxak = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fitxak = new ArrayCollection();
     }
 
     /**
@@ -137,11 +133,11 @@ class Prozedura
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return Prozedura
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -151,7 +147,7 @@ class Prozedura
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {
@@ -161,11 +157,11 @@ class Prozedura
     /**
      * Add fitxak
      *
-     * @param \App\Entity\FitxaProzedura $fitxak
+     * @param FitxaProzedura $fitxak
      *
      * @return Prozedura
      */
-    public function addFitxak(\App\Entity\FitxaProzedura $fitxak)
+    public function addFitxak(FitxaProzedura $fitxak)
     {
         $this->fitxak[] = $fitxak;
 
@@ -175,9 +171,9 @@ class Prozedura
     /**
      * Remove fitxak
      *
-     * @param \App\Entity\FitxaProzedura $fitxak
+     * @param FitxaProzedura $fitxak
      */
-    public function removeFitxak(\App\Entity\FitxaProzedura $fitxak)
+    public function removeFitxak(FitxaProzedura $fitxak)
     {
         $this->fitxak->removeElement($fitxak);
     }
@@ -185,7 +181,7 @@ class Prozedura
     /**
      * Get fitxak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getFitxak()
     {

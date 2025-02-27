@@ -7,77 +7,68 @@ use App\Repository\OrdenantzaparrafoaRepository;
 
 /**
  * Ordenantzaparrafoa
- *
- * @ORM\Table(name="ordenantzaparrafoa", indexes={@ORM\Index(name="ordenantza_id_idx", columns={"ordenantza_id"})})
- * @ORM\Entity(repositoryClass=OrdenantzaparrafoaRepository::class)
  */
+#[ORM\Table(name: 'ordenantzaparrafoa')]
+#[ORM\Index(name: 'ordenantza_id_idx', columns: ['ordenantza_id'])]
+#[ORM\Entity(repositoryClass: OrdenantzaparrafoaRepository::class)]
 class Ordenantzaparrafoa
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="ordena", type="bigint", nullable=true)
      */
+    #[ORM\Column(name: 'ordena', type: 'bigint', nullable: true)]
     private $ordena;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="testuaeu", type="text", length=65535, nullable=true)
      */
+    #[ORM\Column(name: 'testuaeu', type: 'text', length: 65535, nullable: true)]
     private $testuaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="testuaes", type="text", length=65535, nullable=true)
      */
+    #[ORM\Column(name: 'testuaes', type: 'text', length: 65535, nullable: true)]
     private $testuaes;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
+    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
     private $createdAt;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
+    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: false)]
     private $updatedAt;
-
-
 
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
     /**
-     * @var \App\Entity\Ordenantza
+     * @var Ordenantza
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Ordenantza")
-     * @ORM\JoinColumn(name="ordenantza_id", referencedColumnName="id",onDelete="CASCADE")
      *
      */
+    #[ORM\JoinColumn(name: 'ordenantza_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Ordenantza::class)]
     private $ordenantza;
 
 
@@ -213,10 +204,10 @@ class Ordenantzaparrafoa
     /**
      * Set ordenantza
      *
-     * @param \App\Entity\Ordenantza $ordenantza
+     * @param Ordenantza $ordenantza
      * @return Ordenantzaparrafoa
      */
-    public function setOrdenantza(\App\Entity\Ordenantza $ordenantza = null)
+    public function setOrdenantza(Ordenantza $ordenantza = null)
     {
         $this->ordenantza = $ordenantza;
 
@@ -226,7 +217,7 @@ class Ordenantzaparrafoa
     /**
      * Get ordenantza
      *
-     * @return \App\Entity\Ordenantza 
+     * @return Ordenantza 
      */
     public function getOrdenantza()
     {
@@ -236,10 +227,10 @@ class Ordenantzaparrafoa
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      * @return Ordenantzaparrafoa
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -249,7 +240,7 @@ class Ordenantzaparrafoa
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala 
+     * @return Udala 
      */
     public function getUdala()
     {

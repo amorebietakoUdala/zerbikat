@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Azpiatala;
 use App\Form\AzpiatalaType;
 use App\Repository\AzpiatalaRepository;
@@ -14,120 +14,101 @@ use Pagerfanta\Adapter\ArrayAdapter;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Pagerfanta\Exception\NotValidCurrentPageException;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Azpiatala controller.
- *
- * @Route("/{_locale}/azpiatala")
  */
+#[Route(path: '/{_locale}/azpiatala')]
 class AzpiatalaController extends AbstractController
 {
 
-    private $repo;
-    private $em;
-
-    public function __construct(EntityManagerInterface $em, AzpiatalaRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private AzpiatalaRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
     /**
      * Lists all Azpiatala entities.
-     *
-     * @Route("/", defaults={"page"=1}, name="azpiatala_index", methods={"GET"})
-     * @Route("/page{page}", name="azpiatala_index_paginated", methods={"GET"})
      */
+    #[IsGranted("ROLE_ADMIN")]
+    #[Route(path: '/', defaults: ['page' => 1], name: 'azpiatala_index', methods: ['GET'])]
+    #[Route(path: '/page{page}', name: 'azpiatala_index_paginated', methods: ['GET'])]
     public function index($page)
     {
-        if ($this->isGranted('ROLE_ADMIN')) {
-            $azpiatalas = $this->repo->findBy( [], ['kodea'=>'ASC'] );
+        $azpiatalas = $this->repo->findBy( [], ['kodea'=>'ASC'] );
 
-            $adapter = new ArrayAdapter($azpiatalas);
-            $pagerfanta = new Pagerfanta($adapter);
+        $adapter = new ArrayAdapter($azpiatalas);
+        $pagerfanta = new Pagerfanta($adapter);
 
+        $deleteForms = [];
+        foreach ($azpiatalas as $azpiatala) {
+            $deleteForms[$azpiatala->getId()] = $this->createDeleteForm($azpiatala)->createView();
+        }
 
-            $deleteForms = [];
-            foreach ($azpiatalas as $azpiatala) {
-                $deleteForms[$azpiatala->getId()] = $this->createDeleteForm($azpiatala)->createView();
-            }
-
-
-            try {
-                    $entities = $pagerfanta
-                    // Le nombre maximum d'éléments par page
+        try {
+                $entities = $pagerfanta
+                // Le nombre maximum d'éléments par page
 //                    ->setMaxPerPage(20)
 //                    ->setMaxPerPage($this->getUser()->getUdala()->getOrrikatzea())
-                    // Notre position actuelle (numéro de page)
-                    ->setCurrentPage($page)
-                    // On récupère nos entités via Pagerfanta,
-                    // celui-ci s'occupe de limiter la requête en fonction de nos réglages.
-                    ->getCurrentPageResults()
-                ;
-            } catch (\Pagerfanta\Exception\NotValidCurrentPageException $e) {
-                throw $this->createNotFoundException("Orria ez da existitzen");
-            }
-
-
-
-
-            return $this->render('azpiatala/index.html.twig', [
-                //                'azpiatalas' => $azpiatalas,
-                'azpiatalas' => $entities,
-                'deleteforms' => $deleteForms,
-                'pager' => $pagerfanta,
-            ]);
-        }else
-        {
-//            return $this->redirectToRoute('fitxa_index');
-            return $this->redirectToRoute('backend_errorea');
+                // Notre position actuelle (numéro de page)
+                ->setCurrentPage($page)
+                // On récupère nos entités via Pagerfanta,
+                // celui-ci s'occupe de limiter la requête en fonction de nos réglages.
+                ->getCurrentPageResults()
+            ;
+        } catch (NotValidCurrentPageException) {
+            throw $this->createNotFoundException("Orria ez da existitzen");
         }
+
+        return $this->render('azpiatala/index.html.twig', [
+            //                'azpiatalas' => $azpiatalas,
+            'azpiatalas' => $entities,
+            'deleteforms' => $deleteForms,
+            'pager' => $pagerfanta,
+        ]);
     }
 
     /**
      * Creates a new Azpiatala entity.
-     *
-     * @Route("/new", name="azpiatala_new", methods={"GET", "POST"})
      */
+    #[IsGranted("ROLE_ADMIN")]
+    #[Route(path: '/new', name: 'azpiatala_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
-        if ($this->isGranted('ROLE_ADMIN'))
-        {
-            $azpiatala = new Azpiatala();
-            $form = $this->createForm(AzpiatalaType::class, $azpiatala);
-            $form->handleRequest($request);
+        $azpiatala = new Azpiatala();
+        $form = $this->createForm(AzpiatalaType::class, $azpiatala);
+        $form->handleRequest($request);
 
-//            $form->getData()->setUdala($this->getUser()->getUdala());
-//            $form->setData($form->getData());
-
-            if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
+            // TODO gehitu eremu hauek doctrineExtensions horiekin?
 //                $azpiatala->setCreatedAt(new \DateTime());
 //                $azpiatala->setUpdatedAt(new \DateTime());
-                $this->em->persist($azpiatala);
-                $this->em->flush();
+            $azpiatala = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $udala = $user->getUdala();
+            $azpiatala->setUdala($udala);                
+            $this->em->persist($azpiatala);
+            $this->em->flush();
 
-                return $this->redirectToRoute('azpiatala_show', ['id' => $azpiatala->getId()]);
-            } else
-            {
-                $form->getData()->setUdala($this->getUser()->getUdala());
-                $form->setData($form->getData());
-            }
-
-            return $this->render('azpiatala/new.html.twig', ['azpiatala' => $azpiatala, 'form' => $form->createView()]);
-        }else
-        {
-//            return $this->redirectToRoute('fitxa_index');
-            return $this->redirectToRoute('backend_errorea');
+            return $this->redirectToRoute('azpiatala_show', ['id' => $azpiatala->getId()]);
         }
+
+        return $this->render('azpiatala/new.html.twig', ['azpiatala' => $azpiatala, 'form' => $form->createView()]);
     }
 
     /**
      * Finds and displays a Azpiatala entity.
-     *
-     * @Route("/{id}", name="azpiatala_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'azpiatala_show', methods: ['GET'])]
     public function show(Azpiatala $azpiatala): Response
     {
         $deleteForm = $this->createDeleteForm($azpiatala);
@@ -137,12 +118,14 @@ class AzpiatalaController extends AbstractController
 
     /**
      * Displays a form to edit an existing Azpiatala entity.
-     *
-     * @Route("/{id}/edit", name="azpiatala_edit", methods={"GET", "POST"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}/edit', name: 'azpiatala_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Azpiatala $azpiatala)
     {
-        if((($this->isGranted('ROLE_ADMIN')) && ($azpiatala->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($azpiatala->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             // Create an ArrayCollection of the current Kontzeptuak objects in the database
@@ -191,18 +174,21 @@ class AzpiatalaController extends AbstractController
         }else
         {
 //            return $this->redirectToRoute('fitxa_index');
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
+
         }
     }
 
     /**
      * Deletes a Azpiatala entity.
-     *
-     * @Route("/{id}", name="azpiatala_delete", methods={"DELETE"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}', name: 'azpiatala_delete', methods: ['DELETE'])]
     public function delete(Request $request, Azpiatala $azpiatala): RedirectResponse
     {
-        if((($this->isGranted('ROLE_ADMIN')) && ($azpiatala->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($azpiatala->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $form = $this->createDeleteForm($azpiatala);
@@ -215,7 +201,7 @@ class AzpiatalaController extends AbstractController
         }else
         {
             //baimenik ez
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }            
     }
 

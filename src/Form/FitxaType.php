@@ -18,7 +18,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
-//use App\Entity\FitxaProzedura;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class FitxaType extends AbstractType
@@ -28,8 +27,14 @@ class FitxaType extends AbstractType
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm ( FormBuilderInterface $builder, array $options )
+    public function buildForm ( FormBuilderInterface $builder, array $options ): void
     {
+        $udala = null;
+        /** We are editing and udala check is udala is set */
+        $data = $options['data'];
+        if ( null !== $data ) {
+            $udala = $data->getUdala();
+        }
         $user = $options['user'];
         $api_url = $options[ 'api_url' ];
 
@@ -261,8 +266,15 @@ class FitxaType extends AbstractType
             )
             ->add(
                 'kostuak',
-                CollectionType::class,
-                ['entry_type'   => FitxaKostuaType::class, 'entry_options'  => ['udala' => $user->getUdala() !== null ? $user->getUdala()->getId() : null, 'api_url' => $api_url], 'allow_add'    => true, 'allow_delete' => true, 'by_reference' => false]
+                CollectionType::class, [
+                    'entry_type'   => FitxaKostuaType::class, 
+                    'entry_options'  => [
+                        'udala' => $user->getUdala() !== null ? $user->getUdala()->getId() : $udala, 
+                    'api_url' => $api_url], 
+                    'allow_add'    => true, 
+                    'allow_delete' => true, 
+                    'by_reference' => false
+                ]
             )
 
         ;
@@ -271,7 +283,7 @@ class FitxaType extends AbstractType
     /**
      * @param OptionsResolver $resolver
      */
-    public function configureOptions ( OptionsResolver $resolver )
+    public function configureOptions ( OptionsResolver $resolver ): void
     {
         $resolver->setDefaults(['
             data_class' => Fitxa::class, 

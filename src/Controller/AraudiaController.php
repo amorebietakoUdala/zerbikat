@@ -4,97 +4,83 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Araudia;
 use App\Form\AraudiaType;
 use App\Repository\AraudiaRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Araudia controller.
- *
- * @Route("/{_locale}/araudia")
  */
+#[Route(path: '/{_locale}/araudia')]
 class AraudiaController extends AbstractController
 {
 
-    private $repo;
-    private $em;
-
-    public function __construct(EntityManagerInterface $em, AraudiaRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private AraudiaRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
+
     /**
      * Lists all Araudia entities.
-     *
-     * @Route("/", defaults={"page"=1}, name="araudia_index", methods={"GET"})
-     * @Route("/page{page}", name="araudia_index_paginated", methods={"GET"})
      */
+    #[IsGranted("ROLE_KUDEAKETA")]
+    #[Route(path: '/', defaults: ['page' => 1], name: 'araudia_index', methods: ['GET'])]
+    #[Route(path: '/page{page}', name: 'araudia_index_paginated', methods: ['GET'])]
     public function index($page)
     {
-        if ($this->isGranted('ROLE_KUDEAKETA'))
-        {
-            $araudias = $this->repo->findBy( [], ['kodea'=>'ASC'] );
+        $araudias = $this->repo->findBy( [], ['kodea'=>'ASC'] );
 
-            $deleteForms = [];
-            foreach ($araudias as $araudia) {
-                $deleteForms[$araudia->getId()] = $this->createDeleteForm($araudia)->createView();
-            }
-
-            return $this->render('araudia/index.html.twig', ['araudias' => $araudias, 'deleteforms' => $deleteForms]);
-        }else
-        {
-//            return $this->redirectToRoute('fitxa_index');
-            return $this->redirectToRoute('backend_errorea');
+        $deleteForms = [];
+        foreach ($araudias as $araudia) {
+            $deleteForms[$araudia->getId()] = $this->createDeleteForm($araudia)->createView();
         }
+
+        return $this->render('araudia/index.html.twig', ['araudias' => $araudias, 'deleteforms' => $deleteForms]);
     }
 
 
     /**
      * Creates a new Araudia entity.
-     *
-     * @Route("/new", name="araudia_new", methods={"GET", "POST"})
      */
+    #[IsGranted("ROLE_ADMIN")]
+    #[Route(path: '/new', name: 'araudia_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
-        if ($this->isGranted('ROLE_ADMIN')) {
-            $araudium = new Araudia();
-            $form = $this->createForm(AraudiaType::class, $araudium);
-            $form->handleRequest($request);
+        $araudium = new Araudia();
+        $form = $this->createForm(AraudiaType::class, $araudium);
+        $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->em->persist($araudium);
-                $this->em->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $araudium = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $udala = $user->getUdala();
+            $araudium->setUdala($udala);
+            $this->em->persist($araudium);
+            $this->em->flush();
 
-                return $this->redirectToRoute('araudia_index');
-            }else
-            {
-                $form->getData()->setUdala($this->getUser()->getUdala());
-                $form->setData($form->getData());
-            }
-            
-
-            return $this->render('araudia/new.html.twig', ['araudium' => $araudium, 'form' => $form->createView()]);
-        }else
-        {
-            //Baimenik ez
-//            return $this->redirectToRoute('fitxa_index');
-            return $this->redirectToRoute('backend_errorea');
+            return $this->redirectToRoute('araudia_index');
         }
+
+        return $this->render('araudia/new.html.twig', ['araudium' => $araudium, 'form' => $form->createView()]);
     }
 
     /**
      * Finds and displays a Araudia entity.
-     *
-     * @Route("/{id}", name="araudia_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'araudia_show', methods: ['GET'])]
     public function show(Araudia $araudium): Response
     {
         $deleteForm = $this->createDeleteForm($araudium);
@@ -104,13 +90,16 @@ class AraudiaController extends AbstractController
 
     /**
      * Displays a form to edit an existing Araudia entity.
-     *
-     * @Route("/{id}/edit", name="araudia_edit", methods={"GET", "POST"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}/edit', name: 'araudia_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Araudia $araudium)
     {
-        if((($this->isGranted('ROLE_ADMIN')) && ($araudium->getUdala()==$this->getUser()->getUdala()))
-            ||($this->isGranted('ROLE_SUPER_ADMIN')))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($araudium->getUdala()==$user->getUdala()))
+            || ($this->isGranted('ROLE_SUPER_ADMIN'))
+        )
         {
             $deleteForm = $this->createDeleteForm($araudium);
             $editForm = $this->createForm(AraudiaType::class, $araudium);
@@ -127,18 +116,20 @@ class AraudiaController extends AbstractController
         }else
         {
 //            return $this->redirectToRoute('fitxa_index');
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 
     /**
      * Deletes a Araudia entity.
-     *
-     * @Route("/{id}", name="araudia_delete", methods={"DELETE"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[Route(path: '/{id}', name: 'araudia_delete', methods: ['DELETE'])]
     public function delete(Request $request, Araudia $araudium): RedirectResponse
     {
-        if((($this->isGranted('ROLE_ADMIN')) && ($araudium->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($araudium->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $form = $this->createDeleteForm($araudium);
@@ -152,7 +143,7 @@ class AraudiaController extends AbstractController
         {
             //baimenik ez
 //            return $this->redirectToRoute('fitxa_index');
-            return $this->redirectToRoute('backend_errorea');
+            throw new AccessDeniedHttpException('Access Denied');
         }
     }
 

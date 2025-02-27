@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Arrunta;
 use App\Form\ArruntaType;
 use App\Repository\ArruntaRepository;
@@ -12,32 +12,33 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Exception\NotValidCurrentPageException;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Arrunta controller.
- *
- * @Route("/{_locale}/arrunta")
  */
+#[Route(path: '/{_locale}/arrunta')]
 class ArruntaController extends AbstractController
 {
 
-    private $repo;
-    private $em;
-
-    public function __construct(EntityManagerInterface $em, ArruntaRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private ArruntaRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
     /**
      * Lists all Arrunta entities.
-     *
-     * @Route("/", defaults={"page"=1}, name="arrunta_index", methods={"GET"})
-     * @Route("/page{page}", name="arrunta_index_paginated", methods={"GET"})
      */
+    #[IsGranted("ROLE_KUDEAKETA")]
+    #[Route(path: '/', defaults: ['page' => 1], name: 'arrunta_index', methods: ['GET'])]
+    #[Route(path: '/page{page}', name: 'arrunta_index_paginated', methods: ['GET'])]
     public function index($page)
     {
         if ($this->isGranted('ROLE_KUDEAKETA')) {
@@ -60,57 +61,46 @@ class ArruntaController extends AbstractController
                     // celui-ci s'occupe de limiter la requête en fonction de nos réglages.
                     ->getCurrentPageResults()
                 ;
-            } catch (\Pagerfanta\Exception\NotValidCurrentPageException $e) {
+            } catch (NotValidCurrentPageException) {
                 throw $this->createNotFoundException("Orria ez da existitzen");
             }
             return $this->render('arrunta/index.html.twig', ['arruntas' => $entities, 'deleteforms' => $deleteForms, 'pager' => $pagerfanta]);
         }else
         {
-            return $this->redirectToRoute('backend_errorea');            
+            throw new AccessDeniedHttpException('Access Denied');            
         }
     }
 
     /**
      * Creates a new Arrunta entity.
-     *
-     * @Route("/new", name="arrunta_new", methods={"GET", "POST"})
      */
+    #[IsGranted("ROLE_ADMIN")]
+    #[Route(path: '/new', name: 'arrunta_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
-        if ($this->isGranted('ROLE_ADMIN'))
-        {
-            $arruntum = new Arrunta();
-            $form = $this->createForm(ArruntaType::class, $arruntum);
-            $form->handleRequest($request);
+        $arruntum = new Arrunta();
+        $form = $this->createForm(ArruntaType::class, $arruntum);
+        $form->handleRequest($request);
 
-//            $form->getData()->setUdala($this->getUser()->getUdala());
-//            $form->setData($form->getData());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $arruntum = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $udala = $user->getUdala();
+            $arruntum->setUdala($udala);
+            $this->em->persist($arruntum);
+            $this->em->flush();
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->em->persist($arruntum);
-                $this->em->flush();
-
-//                return $this->redirectToRoute('arrunta_show', array('id' => $arruntum->getId()));
-                return $this->redirectToRoute('arrunta_index');
-            } else
-            {
-                $form->getData()->setUdala($this->getUser()->getUdala());
-                $form->setData($form->getData());
-            }
-
-            return $this->render('arrunta/new.html.twig', ['arruntum' => $arruntum, 'form' => $form->createView()]);
-        }else
-        {
-//            return $this->redirectToRoute('fitxa_index');
-            return $this->redirectToRoute('backend_errorea');            
+            return $this->redirectToRoute('arrunta_index');
         }
+
+        return $this->render('arrunta/new.html.twig', ['arruntum' => $arruntum, 'form' => $form->createView()]);
     }
 
     /**
      * Finds and displays a Arrunta entity.
-     *
-     * @Route("/{id}", name="arrunta_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'arrunta_show', methods: ['GET'])]
     public function show(Arrunta $arruntum): Response
     {
         $deleteForm = $this->createDeleteForm($arruntum);
@@ -120,12 +110,14 @@ class ArruntaController extends AbstractController
 
     /**
      * Displays a form to edit an existing Arrunta entity.
-     *
-     * @Route("/{id}/edit", name="arrunta_edit", methods={"GET", "POST"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]    
+    #[Route(path: '/{id}/edit', name: 'arrunta_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Arrunta $arruntum)
     {
-        if((($this->isGranted('ROLE_ADMIN')) && ($arruntum->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($arruntum->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $deleteForm = $this->createDeleteForm($arruntum);
@@ -142,19 +134,20 @@ class ArruntaController extends AbstractController
             return $this->render('arrunta/edit.html.twig', ['arruntum' => $arruntum, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView()]);
         }else
         {
-//            return $this->redirectToRoute('fitxa_index');
-            return $this->redirectToRoute('backend_errorea');            
+            throw new AccessDeniedHttpException('Access Denied');        
         }
     }
 
     /**
      * Deletes a Arrunta entity.
-     *
-     * @Route("/{id}", name="arrunta_delete", methods={"DELETE"})
      */
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')"))]    
+    #[Route(path: '/{id}', name: 'arrunta_delete', methods: ['DELETE'])]
     public function delete(Request $request, Arrunta $arruntum): RedirectResponse
     {
-        if((($this->isGranted('ROLE_ADMIN')) && ($arruntum->getUdala()==$this->getUser()->getUdala()))
+        /** @var User $user */
+        $user = $this->getUser();
+        if((($this->isGranted('ROLE_ADMIN')) && ($arruntum->getUdala()==$user->getUdala()))
             ||($this->isGranted('ROLE_SUPER_ADMIN')))
         {
             $form = $this->createDeleteForm($arruntum);
@@ -168,8 +161,7 @@ class ArruntaController extends AbstractController
         }else
         {
             //baimenik ez
-//            return $this->redirectToRoute('fitxa_index');
-            return $this->redirectToRoute('backend_errorea');            
+            throw new AccessDeniedHttpException('Access Denied');           
         }
     }
 

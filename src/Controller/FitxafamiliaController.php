@@ -5,7 +5,7 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Fitxafamilia;
 use App\Form\FitxafamiliaType;
 use App\Repository\FitxafamiliaRepository;
@@ -14,28 +14,24 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Fitxafamilia controller.
- *
- * @Route("/{_locale}/fitxafamilia")
  */
+#[Route(path: '/{_locale}/fitxafamilia')]
 class FitxafamiliaController extends AbstractController
 {
 
-    private $repo;
-    private $em;
-
-    public function __construct(EntityManagerInterface $em, FitxafamiliaRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private  FitxafamiliaRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
 
     /**
      * Fitxa-Familiak ordena duen ikusi.
-     *
-     * @Route("/api/fitxafamiliakordenadauka/{id}/{fitxa_id}/{familia_id}", name="api_fitxafamiliahasorden", options={"expose"=true}, methods={"GET"})
      */
-    public function fitxafamiliahasorden ( $id, $fitxa_id, $familia_id )
+    #[Route(path: '/api/fitxafamiliakordenadauka/{id}/{fitxa_id}/{familia_id}', name: 'api_fitxafamiliahasorden', options: ['expose' => true], methods: ['GET'])]
+    public function fitxafamiliahasorden ( $id, $fitxa_id, $familia_id ): \Symfony\Component\HttpFoundation\JsonResponse
     {
         /** @var Fitxafamilia $fitxafamilia */
         $fitxafamilia = $this->repo->find( $id );
@@ -61,10 +57,9 @@ class FitxafamiliaController extends AbstractController
 
     /**
      * Fitxa-Familiak datooren ordena eman.
-     *
-     * @Route("/api/fitxafamilianextorden/{fitxa_id}/{familia_id}", name="api_fitxafamilianextorden", options={"expose"=true}, methods={"GET"})
      */
-    public function fitxafamilianextorden ( $fitxa_id, $familia_id )
+    #[Route(path: '/api/fitxafamilianextorden/{fitxa_id}/{familia_id}', name: 'api_fitxafamilianextorden', options: ['expose' => true], methods: ['GET'])]
+    public function fitxafamilianextorden ( $fitxa_id, $familia_id ): \Symfony\Component\HttpFoundation\JsonResponse
     {
         // 1-. Badagoen begiratu
 
@@ -95,9 +90,8 @@ class FitxafamiliaController extends AbstractController
 
     /**
      * Lists all Fitxafamilia entities.
-     *
-     * @Route("/", name="fitxafamilia_index", methods={"GET"})
      */
+    #[Route(path: '/', name: 'fitxafamilia_index', methods: ['GET'])]
     public function index (): Response
     {
         $fitxafamilias = $this->repo->findAll();
@@ -110,13 +104,14 @@ class FitxafamiliaController extends AbstractController
 
     /**
      * Creates a new Fitxafamilia entity.
-     *
-     * @Route("/newfromfitxa", name="fitxafamilia_newfromfitxa", methods={"GET", "POST"})
      */
+    #[Route(path: '/newfromfitxa', name: 'fitxafamilia_newfromfitxa', methods: ['GET', 'POST'])]
     public function newfromfitxa ( Request $request )
     {
+        /** @var User $user */
+        $user = $this->getUser();
         $fitxafamilium = new Fitxafamilia();
-        $fitxafamilium->setUdala( $this->getUser()->getUdala() );
+        $fitxafamilium->setUdala( $user->getUdala() );
         $form = $this->createForm( FitxafamiliaType::class, $fitxafamilium );
         $form->handleRequest( $request );
 
@@ -140,13 +135,14 @@ class FitxafamiliaController extends AbstractController
 
     /**
      * Creates a new Fitxafamilia entity.
-     *
-     * @Route("/new", name="fitxafamilia_new", methods={"GET", "POST"})
      */
+    #[Route(path: '/new', name: 'fitxafamilia_new', methods: ['GET', 'POST'])]
     public function new ( Request $request )
     {
+        /** @var User $user */
+        $user = $this->getUser();
         $fitxafamilium = new Fitxafamilia();
-        $fitxafamilium->setUdala( $this->getUser()->getUdala() );
+        $fitxafamilium->setUdala( $user->getUdala() );
         $form = $this->createForm( FitxafamiliaType::class, $fitxafamilium );
         $form->handleRequest( $request );
 
@@ -165,9 +161,8 @@ class FitxafamiliaController extends AbstractController
 
     /**
      * Finds and displays a Fitxafamilia entity.
-     *
-     * @Route("/{id}", name="fitxafamilia_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'fitxafamilia_show', methods: ['GET'])]
     public function show ( Fitxafamilia $fitxafamilium ): Response
     {
         $deleteForm = $this->createDeleteForm( $fitxafamilium );
@@ -180,9 +175,8 @@ class FitxafamiliaController extends AbstractController
 
     /**
      * Displays a form to edit an existing Fitxafamilia entity.
-     *
-     * @Route("/{id}/edit", name="fitxafamilia_edit", options={"expose"=true}, methods={"GET", "POST"})
      */
+    #[Route(path: '/{id}/edit', name: 'fitxafamilia_edit', options: ['expose' => true], methods: ['GET', 'POST'])]
     public function edit ( Request $request, Fitxafamilia $fitxafamilium )
     {
         $deleteForm = $this->createDeleteForm( $fitxafamilium );
@@ -220,9 +214,8 @@ class FitxafamiliaController extends AbstractController
 
     /**
      * Deletes a Fitxafamilia entity.
-     *
-     * @Route("/{id}", name="fitxafamilia_delete", options={"expose"=true}, methods={"DELETE"})
      */
+    #[Route(path: '/{id}', name: 'fitxafamilia_delete', options: ['expose' => true], methods: ['DELETE'])]
     public function delete ( Request $request, Fitxafamilia $fitxafamilium )
     {
         if($request->isXmlHttpRequest()) {

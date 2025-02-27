@@ -3,62 +3,51 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\DokumentumotaRepository;
 
-/**
- * Dokumentumota
- *
- * @ORM\Table(name="dokumentumota")
- * @ORM\Entity(repositoryClass=DokumentumotaRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
- */
-class Dokumentumota
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'dokumentumota')]
+#[ORM\Entity(repositoryClass: DokumentumotaRepository::class)]
+class Dokumentumota implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
     
     /**
      * @var string
-     *
-     * @ORM\Column(name="kodea", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'kodea', type: 'string', length: 255, nullable: true)]
     private $kodea;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="motaeu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'motaeu', type: 'string', length: 255, nullable: true)]
     private $motaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="motaes", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'motaes', type: 'string', length: 255, nullable: true)]
     private $motaes;
 
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala $udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
-
-    
     /**
      *      FUNTZIOAK
      * 
@@ -71,7 +60,7 @@ class Dokumentumota
      * 
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getMotaeu();
     }
@@ -159,10 +148,10 @@ class Dokumentumota
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      * @return Dokumentumota
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -172,7 +161,7 @@ class Dokumentumota
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala 
+     * @return Udala 
      */
     public function getUdala()
     {

@@ -10,7 +10,7 @@ import 'datatables.net-buttons-bs';
 import 'datatables.net-buttons/js/buttons.html5.mjs';
 
 let table = new DataTable('#taulazerrenda', {
-    paging: true,
+    paging: false,
     searching: true,
     toolbar: true,
     lengthMenu: [

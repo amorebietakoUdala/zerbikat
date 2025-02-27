@@ -11,151 +11,120 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Udala
  *
- * @ORM\Table(name="udala")
- * @ORM\Entity(repositoryClass=UdalaRepository::class)
- * @ExclusionPolicy("all")
  */
-class Udala
+#[ExclusionPolicy("all")]
+#[ORM\Table(name: 'udala')]
+#[ORM\Entity(repositoryClass: UdalaRepository::class)]
+class Udala implements \Stringable
 {
     /**
      * @var integer
-     * @Expose
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
-
+    #[Expose()]
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
     /**
      * @var string
-     * @Expose
-     *
-     * @ORM\Column(name="izenaeu", type="string", length=255)
      */
+    #[Expose()]
+    #[ORM\Column(name: 'izenaeu', type: 'string', length: 255)]
     private $izenaeu;
 
     /**
      * @var string
-     * @Expose
-     *
-     * @ORM\Column(name="izenaes", type="string", length=255)
      */
+    #[Expose()]
+    #[ORM\Column(name: 'izenaes', type: 'string', length: 255)]
     private $izenaes;
 
     /**
      * @var string
-     * @Expose
-     *
-     * @ORM\Column(name="kodea", type="string", length=255)
      */
+    #[Expose()]
+    #[ORM\Column(name: 'kodea', type: 'string', length: 255)]
     private $kodea;
 
     /**
      * @var string
-     * @Expose
-     *
-     * @ORM\Column(name="logoa", type="string", length=255, nullable=true)
      */
+    #[Expose()]
+    #[ORM\Column(name: 'logoa', type: 'string', length: 255, nullable: true)]
     private $logoa;
 
     /**
      * @var string
-     * @Expose
-     *
-     * @ORM\Column(name="ifk", type="string", length=255, nullable=true)
      */
+    #[Expose()]
+    #[ORM\Column(name: 'ifk', type: 'string', length: 255, nullable: true)]
     private $ifk;
 
     /**
      * @var string
-     * @Expose
-     *
-     * @ORM\Column(name="izendapenaeu", type="string", length=255, nullable=true)
      */
+    #[Expose()]
+    #[ORM\Column(name: 'izendapenaeu', type: 'string', length: 255, nullable: true)]
     private $izendapenaeu;
 
     /**
      * @var string
-     * @Expose
-     *
-     * @ORM\Column(name="izendapenaes", type="string", length=255, nullable=true)
      */
+    #[Expose()]
+    #[ORM\Column(name: 'izendapenaes', type: 'string', length: 255, nullable: true)]
     private $izendapenaes;
 
 
     /**
      * @var string
-     * @Expose
-     *
-     * @ORM\Column(name="lopdeu", type="text", length=65535, nullable=true)
      */
+    #[Expose()]
+    #[ORM\Column(name: 'lopdeu', type: 'text', length: 65535, nullable: true)]
     private $lopdeu;
 
     /**
      * @var string
-     * @Expose
-     *
-     * @ORM\Column(name="lopdes", type="text", length=65535, nullable=true)
      */
+    #[Expose()]
+    #[ORM\Column(name: 'lopdes', type: 'text', length: 65535, nullable: true)]
     private $lopdes;
 
     /**
      * @var integer
-     * @ORM\Column(name="orrikatzea", type="bigint", nullable=false)
      */
+    #[ORM\Column(name: 'orrikatzea', type: 'bigint', nullable: false)]
     private $orrikatzea = 25;
 
 
     /**
      * @var zergaor
-     *
-     * @ORM\Column(name="zergaor", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'zergaor', type: 'boolean', nullable: true, options: ['default' => false])]
     private $zergaor;
 
 
-    /**
-     *      ERLAZIOAK
-     */
-
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Espedientekudeaketa")
-     * @ORM\JoinColumn(name="espedientekudeaketa_id", referencedColumnName="id",onDelete="SET NULL")
-     */
+    #[ORM\JoinColumn(name: 'espedientekudeaketa_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: Espedientekudeaketa::class)]
     private $espedientekudeaketa;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Eremuak",mappedBy="udala",fetch="EAGER")
-     * @ORM\JoinColumn(name="eremuak_id", referencedColumnName="id",onDelete="SET NULL")
-     * @Expose
-     */
+    #[Expose()]
+    #[ORM\OneToOne(targetEntity: Eremuak::class, mappedBy: 'udala', fetch: 'EAGER')]
     protected $eremuak;
 
     /**
-     * @var Collection
-     *
-     * @ORM\OneToMany(targetEntity="Fitxa", mappedBy="udala")
+     * @var ArrayCollection
      */
+    #[ORM\OneToMany(targetEntity: Fitxa::class, mappedBy: 'udala')]
     private $fitxak;
-
-
-
-
 
     /**
      *          TOSTRING
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getKodea() . " - " . $this->getIzenaeu();
     }
-
-
-
-
 
     /**
      * Constructor

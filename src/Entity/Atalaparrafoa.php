@@ -3,59 +3,50 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 
-/**
- * Atalaparrafoa
- *
- * @ORM\Table(name="atalaparrafoa", indexes={@ORM\Index(name="atala_id_idx", columns={"atala_id"})})
- * @ORM\Entity(repositoryClass=Atalaparrafoa::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
- */
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'atalaparrafoa')]
+#[ORM\Index(name: 'atala_id_idx', columns: ['atala_id'])]
+#[ORM\Entity(repositoryClass: Atalaparrafoa::class)]
 class Atalaparrafoa
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
     
     /**
      * @var integer
-     *
-     * @ORM\Column(name="ordena", type="bigint", nullable=true)
      */
+    #[ORM\Column(name: 'ordena', type: 'bigint', nullable: true)]
     private $ordena;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="testuaeu", type="text", length=65535, nullable=true)
      */
+    #[ORM\Column(name: 'testuaeu', type: 'text', length: 65535, nullable: true)]
     private $testuaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="testuaes", type="text", length=65535, nullable=true)
      */
+    #[ORM\Column(name: 'testuaes', type: 'text', length: 65535, nullable: true)]
     private $testuaes;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
+    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
     private $createdAt;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
+    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: false)]
     private $updatedAt;
 
 
@@ -63,23 +54,22 @@ class Atalaparrafoa
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
 
     /**
-     * @var \App\Entity\Atala
+     * @var Atala
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Atala")
-     * @ORM\JoinColumn(name="atala_id", referencedColumnName="id",onDelete="CASCADE")
      *
      */
+    #[ORM\JoinColumn(name: 'atala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Atala::class)]
     private $atala;
 
 
@@ -213,10 +203,10 @@ class Atalaparrafoa
     /**
      * Set atala
      *
-     * @param \App\Entity\Atala $atala
+     * @param Atala $atala
      * @return Atalaparrafoa
      */
-    public function setAtala(\App\Entity\Atala $atala = null)
+    public function setAtala(Atala $atala = null)
     {
         $this->atala = $atala;
 
@@ -226,7 +216,7 @@ class Atalaparrafoa
     /**
      * Get atala
      *
-     * @return \App\Entity\Atala 
+     * @return Atala 
      */
     public function getAtala()
     {
@@ -236,10 +226,10 @@ class Atalaparrafoa
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      * @return Atalaparrafoa
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -249,7 +239,7 @@ class Atalaparrafoa
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala 
+     * @return Udala 
      */
     public function getUdala()
     {

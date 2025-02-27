@@ -3,58 +3,50 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\BaldintzaRepository;
 
-/**
- * Baldintza
- *
- * @ORM\Table(name="baldintza")
- * @ORM\Entity(repositoryClass=BaldintzaRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
- */
-class Baldintza
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'baldintza')]
+#[ORM\Entity(repositoryClass: BaldintzaRepository::class)]
+class Baldintza implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
     
     /**
      * @var string
-     *
-     * @ORM\Column(name="baldintzaeu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'baldintzaeu', type: 'string', length: 255, nullable: true)]
     private $baldintzaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="baldintzaes", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'baldintzaes', type: 'string', length: 255, nullable: true)]
     private $baldintzaes;
 
 
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
     /**
      *          TOSTRING
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getBaldintzaeu();
     }
@@ -120,10 +112,10 @@ class Baldintza
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      * @return Baldintza
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -133,7 +125,7 @@ class Baldintza
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala 
+     * @return Udala 
      */
     public function getUdala()
     {

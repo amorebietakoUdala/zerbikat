@@ -3,66 +3,57 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\AraumotaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 
-/**
- * Araumota
- *
- * @ORM\Table(name="araumota")
- * @ORM\Entity(repositoryClass=AraumotaRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
- */
-class Araumota
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'araumota')]
+#[ORM\Entity(repositoryClass: AraumotaRepository::class)]
+class Araumota implements \Stringable
 {
     /**
      * @var string
-     *
-     * @ORM\Column(name="kodea", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'kodea', type: 'string', length: 255, nullable: true)]
     private $kodea;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="motaeu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'motaeu', type: 'string', length: 255, nullable: true)]
     private $motaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="motaes", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'motaes', type: 'string', length: 255, nullable: true)]
     private $motaes;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
 
     /**
-     * @var araudiak[]
-     *
-     * @ORM\OneToMany(targetEntity="Araudia", mappedBy="araumota")
+     * @var ArrayCollection
      */
+    #[ORM\OneToMany(targetEntity: Araudia::class, mappedBy: 'araumota')]
     private $araudiak;
 
 
@@ -70,7 +61,7 @@ class Araumota
      *      FUNTZIOAK
      */
 
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getMotaeu();
     }
@@ -81,7 +72,7 @@ class Araumota
      */
     public function __construct()
     {
-        $this->araudiak = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->araudiak = new ArrayCollection();
     }
 
     /**
@@ -169,11 +160,11 @@ class Araumota
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return Araumota
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -183,7 +174,7 @@ class Araumota
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {
@@ -193,11 +184,11 @@ class Araumota
     /**
      * Add araudiak
      *
-     * @param \App\Entity\Araudia $araudiak
+     * @param Araudia $araudiak
      *
      * @return Araumota
      */
-    public function addAraudiak(\App\Entity\Araudia $araudiak)
+    public function addAraudiak(Araudia $araudiak)
     {
         $this->araudiak[] = $araudiak;
 
@@ -207,9 +198,9 @@ class Araumota
     /**
      * Remove araudiak
      *
-     * @param \App\Entity\Araudia $araudiak
+     * @param Araudia $araudiak
      */
-    public function removeAraudiak(\App\Entity\Araudia $araudiak)
+    public function removeAraudiak(Araudia $araudiak)
     {
         $this->araudiak->removeElement($araudiak);
     }
@@ -217,7 +208,7 @@ class Araumota
     /**
      * Get araudiak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getAraudiak()
     {

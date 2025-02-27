@@ -4,179 +4,153 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\EremuakRepository;
 
-/**
- * Eremuak
- *
- * @ORM\Table(name="eremuak")
- * @ORM\Entity(repositoryClass=EremuakRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
- */
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'eremuak')]
+#[ORM\Entity(repositoryClass: EremuakRepository::class)]
 class Eremuak
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
 
     /**
      * @var oharraktext
-     *
-     * @ORM\Column(name="oharraktext", type="boolean", nullable=false,options={"default" = true})
      */
+    #[ORM\Column(name: 'oharraktext', type: 'boolean', nullable: false, options: ['default' => true])]
     private $oharraktext = true;
 
     /**
      * @var oharraklabeleu
-     *
-     * @ORM\Column(name="oharraklabeleu", type="string", length=255, nullable=true,options={"default" = "OHARRAK"})
      */
+    #[ORM\Column(name: 'oharraklabeleu', type: 'string', length: 255, nullable: true, options: ['default' => 'OHARRAK'])]
     private $oharraklabeleu = "OHARRAK";
 
     /**
      * @var oharraklabeles
-     *
-     * @ORM\Column(name="oharraklabeles", type="string", length=255, nullable=true,options={"default" = "OBSERVACIONES"})
      */
+    #[ORM\Column(name: 'oharraklabeles', type: 'string', length: 255, nullable: true, options: ['default' => 'OBSERVACIONES'])]
     private $oharraklabeles = "OBSERVACIONES";
 
 
     /**
      * @var helburuatext
-     *
-     * @ORM\Column(name="helburuatext", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'helburuatext', type: 'boolean', nullable: true, options: ['default' => false])]
     private $helburuatext = false;
 
     /**
      * @var helburualabeleu
-     *
-     * @ORM\Column(name="helburualabeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'helburualabeleu', type: 'string', length: 255, nullable: true)]
     private $helburualabeleu = "ZER DA? ZERTARAKO DA?";
 
     /**
      * @var helburualabeles
-     *
-     * @ORM\Column(name="helburualabeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'helburualabeles', type: 'string', length: 255, nullable: true)]
     private $helburualabeles = "¿QUÉ ES? ¿PARA QUÉ?";
 
 
     /**
      * @var ebazpensinpli
-     *
-     * @ORM\Column(name="ebazpensinpli", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'ebazpensinpli', type: 'boolean', nullable: true, options: ['default' => false])]
     private $ebazpensinpli = false;
 
     /**
      * @var ebazpensinplilabeleu
-     *
-     * @ORM\Column(name="ebazpensinplilabeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'ebazpensinplilabeleu', type: 'string', length: 255, nullable: true)]
     private $ebazpensinplilabeleu = "Prozedura sinplifikatua onartzen da? (30 egun)";
 
     /**
      * @var ebazpensinplilabeles
-     *
-     * @ORM\Column(name="ebazpensinplilabeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'ebazpensinplilabeles', type: 'string', length: 255, nullable: true)]
     private $ebazpensinplilabeles = "Admite procedimiento simplificado? ";
 
 
     /**
      * @var arduraaitorpena
-     *
-     * @ORM\Column(name="arduraaitorpena", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'arduraaitorpena', type: 'boolean', nullable: true, options: ['default' => false])]
     private $arduraaitorpena = false;
 
     /**
      * @var arduraaitorpenalabeleu
-     *
-     * @ORM\Column(name="arduraaitorpenalabeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'arduraaitorpenalabeleu', type: 'string', length: 255, nullable: true)]
     private $arduraaitorpenalabeleu = "Erantzunkizun-aitorpena onartzen da? ";
 
     /**
      * @var arduraaitorpenalabeles
-     *
-     * @ORM\Column(name="arduraaitorpenalabeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'arduraaitorpenalabeles', type: 'string', length: 255, nullable: true)]
     private $arduraaitorpenalabeles = "Admite declaración de responsabilidad?";
 
 
 
     /**
      * @var aurreikusi
-     *
-     * @ORM\Column(name="aurreikusi", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'aurreikusi', type: 'boolean', nullable: true, options: ['default' => false])]
     private $aurreikusi = false;
 
     /**
      * @var aurreikusilabeleu
-     *
-     * @ORM\Column(name="aurreikusilabeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'aurreikusilabeleu', type: 'string', length: 255, nullable: true)]
     private $aurreikusilabeleu = "Aurreikusitako epea";
 
     /**
      * @var aurreikusilabeles
-     *
-     * @ORM\Column(name="aurreikusilabeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'aurreikusilabeles', type: 'string', length: 255, nullable: true)]
     private $aurreikusilabeles = "Plazo estimado";
 
     /**
      * @var arrunta
-     *
-     * @ORM\Column(name="arrunta", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'arrunta', type: 'boolean', nullable: true, options: ['default' => false])]
     private $arrunta = false;
 
     /**
      * @var arruntalabeleu
-     *
-     * @ORM\Column(name="arruntalabeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'arruntalabeleu', type: 'string', length: 255, nullable: true)]
     private $arruntalabeleu = "Prozedura arrunta. Legezko gehienezko epea";
 
     /**
      * @var arruntalabeles
-     *
-     * @ORM\Column(name="arruntalabeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'arruntalabeles', type: 'string', length: 255, nullable: true)]
     private $arruntalabeles = "Procedimiento habitual. Plazo limite legal";
 
 
     /**
      * @var isiltasunadmin
-     *
-     * @ORM\Column(name="isiltasunadmin", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'isiltasunadmin', type: 'boolean', nullable: true, options: ['default' => false])]
     private $isiltasunadmin = false;
 
     /**
      * @var isiltasunadminlabeleu
-     *
-     * @ORM\Column(name="isiltasunadminlabeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'isiltasunadminlabeleu', type: 'string', length: 255, nullable: true)]
     private $isiltasunadminlabeleu = "Isiltasun-administratiboaren izaera";
 
     /**
      * @var isiltasunadminlabeles
-     *
-     * @ORM\Column(name="isiltasunadminlabeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'isiltasunadminlabeles', type: 'string', length: 255, nullable: true)]
     private $isiltasunadminlabeles = "Carácter del silencio administrativo";
 
 
@@ -184,154 +158,134 @@ class Eremuak
 
     /**
      * @var norkeskatutext
-     *
-     * @ORM\Column(name="norkeskatutext", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'norkeskatutext', type: 'boolean', nullable: true, options: ['default' => false])]
     private $norkeskatutext = false;
 
     /**
      * @var norkeskatutable
-     *
-     * @ORM\Column(name="norkeskatutable", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'norkeskatutable', type: 'boolean', nullable: true, options: ['default' => false])]
     private $norkeskatutable = false;
 
 
     /**
      * @var norkeskatulabeleu
-     *
-     * @ORM\Column(name="norkeskatulabeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'norkeskatulabeleu', type: 'string', length: 255, nullable: true)]
     private $norkeskatulabeleu = "NORK ESKA DEZAKE?";
 
     /**
      * @var norkeskatulabeles
-     *
-     * @ORM\Column(name="norkeskatulabeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'norkeskatulabeles', type: 'string', length: 255, nullable: true)]
     private $norkeskatulabeles = "¿QUIÉN LO PUEDE SOLICITAR?";
 
 
 
     /**
      * @var dokumentazioatext
-     *
-     * @ORM\Column(name="dokumentazioatext", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'dokumentazioatext', type: 'boolean', nullable: true, options: ['default' => false])]
     private $dokumentazioatext = false;
 
     /**
      * @var dokumentazioatable
-     *
-     * @ORM\Column(name="dokumentazioatable", type="boolean", nullable=true)
      */
+    #[ORM\Column(name: 'dokumentazioatable', type: 'boolean', nullable: true)]
     private $dokumentazioatable = false;
 
 
     /**
      * @var dokumentazioalabeleu
-     *
-     * @ORM\Column(name="dokumentazioalabeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'dokumentazioalabeleu', type: 'string', length: 255, nullable: true)]
     private $dokumentazioalabeleu = "AURKEZTU BEHARREKO AGIRIAK";
 
     /**
      * @var dokumentazioalabeles
-     *
-     * @ORM\Column(name="dokumentazioalabeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'dokumentazioalabeles', type: 'string', length: 255, nullable: true)]
     private $dokumentazioalabeles = "DOCUMENTACIÓN A APORTAR";
 
 
 
     /**
      * @var kostuatext
-     *
-     * @ORM\Column(name="kostuatext", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'kostuatext', type: 'boolean', nullable: true, options: ['default' => false])]
     private $kostuatext = false;
 
     /**
      * @var kostuatable
-     *
-     * @ORM\Column(name="kostuatable", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'kostuatable', type: 'boolean', nullable: true, options: ['default' => false])]
     private $kostuatable = false;
 
 
     /**
      * @var kostualabeleu
-     *
-     * @ORM\Column(name="kostualabeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'kostualabeleu', type: 'string', length: 255, nullable: true)]
     private $kostualabeleu = "ZENBAT KOSTATZEN DA?";
 
     /**
      * @var kostualabeles
-     *
-     * @ORM\Column(name="kostualabeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'kostualabeles', type: 'string', length: 255, nullable: true)]
     private $kostualabeles = "¿CUÁNTO CUESTA?";
 
 
 
     /**
      * @var araudiatext
-     *
-     * @ORM\Column(name="araudiatext", type="boolean", nullable=true,options={"default" = true})
      */
+    #[ORM\Column(name: 'araudiatext', type: 'boolean', nullable: true, options: ['default' => true])]
     private $araudiatext = true;
 
     /**
      * @var araudiatable
-     *
-     * @ORM\Column(name="araudiatable", type="boolean", nullable=true,options={"default" = true})
      */
+    #[ORM\Column(name: 'araudiatable', type: 'boolean', nullable: true, options: ['default' => true])]
     private $araudiatable = true;
 
 
     /**
      * @var araudialabeleu
-     *
-     * @ORM\Column(name="araudialabeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'araudialabeleu', type: 'string', length: 255, nullable: true)]
     private $araudialabeleu = "ARAUDI APLIKAGARRIA";
 
     /**
      * @var araudialabeles
-     *
-     * @ORM\Column(name="araudialabeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'araudialabeles', type: 'string', length: 255, nullable: true)]
     private $araudialabeles = "NORMATIVA APLICABLE";
 
 
     /**
      * @var prozeduratext
-     *
-     * @ORM\Column(name="prozeduratext", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'prozeduratext', type: 'boolean', nullable: true, options: ['default' => false])]
     private $prozeduratext = false;
 
     /**
      * @var prozeduratable
-     *
-     * @ORM\Column(name="prozeduratable", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'prozeduratable', type: 'boolean', nullable: true, options: ['default' => false])]
     private $prozeduratable = false;
 
 
     /**
      * @var prozeduralabeleu
-     *
-     * @ORM\Column(name="prozeduralabeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'prozeduralabeleu', type: 'string', length: 255, nullable: true)]
     private $prozeduralabeleu = "ESKAERA JASO ONDOREN JARRAITU BEHARREKO PROZEDURA";
 
     /**
      * @var prozeduralabeles
-     *
-     * @ORM\Column(name="prozeduralabeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'prozeduralabeles', type: 'string', length: 255, nullable: true)]
     private $prozeduralabeles = "PROCEDIMIENTO A SEGUIR DESPUÉS DE LA SOLICITUD";
 
 
@@ -339,111 +293,96 @@ class Eremuak
 
     /**
      * @var doklaguntext
-     *
-     * @ORM\Column(name="doklaguntext", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'doklaguntext', type: 'boolean', nullable: true, options: ['default' => false])]
     private $doklaguntext = false;
 
     /**
      * @var doklaguntable
-     *
-     * @ORM\Column(name="doklaguntable", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'doklaguntable', type: 'boolean', nullable: true, options: ['default' => false])]
     private $doklaguntable = false;
 
 
     /**
      * @var doklagunlabeleu
-     *
-     * @ORM\Column(name="doklagunlabeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'doklagunlabeleu', type: 'string', length: 255, nullable: true)]
     private $doklagunlabeleu = "DOKUMENTAZIO LAGUNGARRIA";
 
     /**
      * @var doklagunlabeles
-     *
-     * @ORM\Column(name="doklagunlabeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'doklagunlabeles', type: 'string', length: 255, nullable: true)]
     private $doklagunlabeles = "DOCUMENTACIÓN AUXILIAR";
 
 
     /**
      * @var datuenbabesatext
-     *
-     * @ORM\Column(name="datuenbabesatext", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'datuenbabesatext', type: 'boolean', nullable: true, options: ['default' => false])]
     private $datuenbabesatext = false;
 
     /**
      * @var datuenbabesatable
-     *
-     * @ORM\Column(name="datuenbabesatable", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'datuenbabesatable', type: 'boolean', nullable: true, options: ['default' => false])]
     private $datuenbabesatable = false;
 
 
     /**
      * @var datuenbabesalabeleu
-     *
-     * @ORM\Column(name="datuenbabesalabeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'datuenbabesalabeleu', type: 'string', length: 255, nullable: true)]
     private $datuenbabesalabeleu = "DATU PERTSONALEN BABESA";
 
     /**
      * @var datuenbabesalabeles
-     *
-     * @ORM\Column(name="datuenbabesalabeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'datuenbabesalabeles', type: 'string', length: 255, nullable: true)]
     private $datuenbabesalabeles = "PROTECCIÓN DE DATOS DE CARÁCTER PERSONAL";
 
     /**
      * @var azpisailatable
-     *
-     * @ORM\Column(name="azpisailatable", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'azpisailatable', type: 'boolean', nullable: true, options: ['default' => false])]
     private $azpisailatable = false;
 
     /**
      * @var azpisailalabeleu
-     *
-     * @ORM\Column(name="azpisailalabeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'azpisailalabeleu', type: 'string', length: 255, nullable: true)]
     private $azpisailalabeleu = "IZAPIDETZEKO ARDURA DUEN UDAL SAILA";
 
     /**
      * @var azpisailalabeles
-     *
-     * @ORM\Column(name="azpisailalabeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'azpisailalabeles', type: 'string', length: 255, nullable: true)]
     private $azpisailalabeles = "DEPARTAMENTO MUNICIPAL RESPONSABLE DE LA TRAMITACIÓN";
 
     /**
      * @var norkebatzitext
-     *
-     * @ORM\Column(name="norkebatzitext", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'norkebatzitext', type: 'boolean', nullable: true, options: ['default' => false])]
     private $norkebatzitext = false;
 
     /**
      * @var norkebatzitable
-     *
-     * @ORM\Column(name="norkebatzitable", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'norkebatzitable', type: 'boolean', nullable: true, options: ['default' => false])]
     private $norkebatzitable = false;
 
 
     /**
      * @var norkebatzilabeleu
-     *
-     * @ORM\Column(name="norkebatzilabeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'norkebatzilabeleu', type: 'string', length: 255, nullable: true)]
     private $norkebatzilabeleu = "NORK ONARTU BEHAR DU?";
 
     /**
      * @var norkebatzilabeles
-     *
-     * @ORM\Column(name="norkebatzilabeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'norkebatzilabeles', type: 'string', length: 255, nullable: true)]
     private $norkebatzilabeles = "¿QUIÉN LO APRUEBA?";
 
 
@@ -451,159 +390,138 @@ class Eremuak
 
     /**
      * @var besteak1text
-     *
-     * @ORM\Column(name="besteak1text", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'besteak1text', type: 'boolean', nullable: true, options: ['default' => false])]
     private $besteak1text = false;
 
     /**
      * @var besteak1table
-     *
-     * @ORM\Column(name="besteak1table", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'besteak1table', type: 'boolean', nullable: true, options: ['default' => false])]
     private $besteak1table = false;
 
 
     /**
      * @var besteak1labeleu
-     *
-     * @ORM\Column(name="besteak1labeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'besteak1labeleu', type: 'string', length: 255, nullable: true)]
     private $besteak1labeleu = "";
 
     /**
      * @var besteak1labeles
-     *
-     * @ORM\Column(name="besteak1labeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'besteak1labeles', type: 'string', length: 255, nullable: true)]
     private $besteak1labeles = "";
 
     /**
      * @var besteak2text
-     *
-     * @ORM\Column(name="besteak2text", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'besteak2text', type: 'boolean', nullable: true, options: ['default' => false])]
     private $besteak2text = false;
 
     /**
      * @var besteak2table
-     *
-     * @ORM\Column(name="besteak2table", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'besteak2table', type: 'boolean', nullable: true, options: ['default' => false])]
     private $besteak2table = false;
 
 
     /**
      * @var besteak2labeleu
-     *
-     * @ORM\Column(name="besteak2labeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'besteak2labeleu', type: 'string', length: 255, nullable: true)]
     private $besteak2labeleu = "";
 
     /**
      * @var besteak2labeles
-     *
-     * @ORM\Column(name="besteak2labeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'besteak2labeles', type: 'string', length: 255, nullable: true)]
     private $besteak2labeles = "";
 
 
     /**
      * @var besteak3text
-     *
-     * @ORM\Column(name="besteak3text", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'besteak3text', type: 'boolean', nullable: true, options: ['default' => false])]
     private $besteak3text = false;
 
     /**
      * @var besteak3table
-     *
-     * @ORM\Column(name="besteak3table", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'besteak3table', type: 'boolean', nullable: true, options: ['default' => false])]
     private $besteak3table = false;
 
     /**
      * @var besteak3labeleu
-     *
-     * @ORM\Column(name="besteak3labeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'besteak3labeleu', type: 'string', length: 255, nullable: true)]
     private $besteak3labeleu = "";
 
     /**
      * @var besteak3labeles
-     *
-     * @ORM\Column(name="besteak3labeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'besteak3labeles', type: 'string', length: 255, nullable: true)]
     private $besteak3labeles = "";
 
     /**
      * @var kanalatext
-     *
-     * @ORM\Column(name="kanalatext", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'kanalatext', type: 'boolean', nullable: true, options: ['default' => false])]
     private $kanalatext = false;
 
     /**
      * @var kanalatable
-     *
-     * @ORM\Column(name="kanalatable", type="boolean", nullable=true,options={"default" = false})
      */
+    #[ORM\Column(name: 'kanalatable', type: 'boolean', nullable: true, options: ['default' => false])]
     private $kanalatable = false;
 
     /**
      * @var kanalalabeleu
-     *
-     * @ORM\Column(name="kanalalabeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'kanalalabeleu', type: 'string', length: 255, nullable: true)]
     private $kanalalabeleu = "NON ESKATZEN DA?";
 
     /**
      * @var kanalalabeles
-     *
-     * @ORM\Column(name="kanalalabeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'kanalalabeles', type: 'string', length: 255, nullable: true)]
     private $kanalalabeles = "¿DÓNDE SE SOLICITA?";
 
 
     /**
      * @var epealabeleu
-     *
-     * @ORM\Column(name="epealabeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'epealabeleu', type: 'string', length: 255, nullable: true)]
     private $epealabeleu = "PROZEDURAREN EPEA";
 
     /**
      * @var epealabeles
-     *
-     * @ORM\Column(name="epealabeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'epealabeles', type: 'string', length: 255, nullable: true)]
     private $epealabeles = "PLAZO DEL PROCEDIMIENTO";
 
     /**
      * @var doanlabeleu
-     *
-     * @ORM\Column(name="doanlabeleu", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'doanlabeleu', type: 'string', length: 255, nullable: true)]
     private $doanlabeleu = "Doan";
 
     /**
      * @var doanlabeles
-     *
-     * @ORM\Column(name="doanlabeles", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'doanlabeles', type: 'string', length: 255, nullable: true)]
     private $doanlabeles = "Gratuito";
 
 
     /**
      *          ERLAZIOAK
      */
-
     /**
      * @var Udala $udala
-     * @ORM\OneToOne(targetEntity="Udala", inversedBy="eremuak",fetch="EAGER")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
      *
      */
+
+    #[ORM\OneToOne(targetEntity: Udala::class, inversedBy: 'eremuak', fetch: 'EAGER', cascade: ['remove'])]
     private $udala;
 
 
@@ -617,9 +535,6 @@ class Eremuak
         // $this->tramiteatable = false;
         // $this->tramiteatext = true;
     }
-
-
-
 
 
     /**
@@ -1622,102 +1537,6 @@ class Eremuak
         return $this->prozeduralabeles;
     }
 
-    // /**
-    //  * Set tramiteatext
-    //  *
-    //  * @param boolean $tramiteatext
-    //  *
-    //  * @return Eremuak
-    //  */
-    // public function setTramiteatext($tramiteatext)
-    // {
-    //     $this->tramiteatext = $tramiteatext;
-
-    //     return $this;
-    // }
-
-    // /**
-    //  * Get tramiteatext
-    //  *
-    //  * @return boolean
-    //  */
-    // public function getTramiteatext()
-    // {
-    //     return $this->tramiteatext;
-    // }
-
-    // /**
-    //  * Set tramiteatable
-    //  *
-    //  * @param boolean $tramiteatable
-    //  *
-    //  * @return Eremuak
-    //  */
-    // public function setTramiteatable($tramiteatable)
-    // {
-    //     $this->tramiteatable = $tramiteatable;
-
-    //     return $this;
-    // }
-
-    // /**
-    //  * Get tramiteatable
-    //  *
-    //  * @return boolean
-    //  */
-    // public function getTramiteatable()
-    // {
-    //     return $this->tramiteatable;
-    // }
-
-    // /**
-    //  * Set tramitealabeleu
-    //  *
-    //  * @param string $tramitealabeleu
-    //  *
-    //  * @return Eremuak
-    //  */
-    // public function setTramitealabeleu($tramitealabeleu)
-    // {
-    //     $this->tramitealabeleu = $tramitealabeleu;
-
-    //     return $this;
-    // }
-
-    // /**
-    //  * Get tramitealabeleu
-    //  *
-    //  * @return string
-    //  */
-    // public function getTramitealabeleu()
-    // {
-    //     return $this->tramitealabeleu;
-    // }
-
-    // /**
-    //  * Set tramitealabeles
-    //  *
-    //  * @param string $tramitealabeles
-    //  *
-    //  * @return Eremuak
-    //  */
-    // public function setTramitealabeles($tramitealabeles)
-    // {
-    //     $this->tramitealabeles = $tramitealabeles;
-
-    //     return $this;
-    // }
-
-    // /**
-    //  * Get tramitealabeles
-    //  *
-    //  * @return string
-    //  */
-    // public function getTramitealabeles()
-    // {
-    //     return $this->tramitealabeles;
-    // }
-
     /**
      * Set udala
      *
@@ -2413,54 +2232,6 @@ class Eremuak
     {
         return $this->kanalalabeles;
     }
-
-    // /**
-    //  * Set udalsailalabeleu
-    //  *
-    //  * @param string $udalsailalabeleu
-    //  *
-    //  * @return Eremuak
-    //  */
-    // public function setUdalsailalabeleu($udalsailalabeleu)
-    // {
-    //     $this->udalsailalabeleu = $udalsailalabeleu;
-
-    //     return $this;
-    // }
-
-    // /**
-    //  * Get udalsailalabeleu
-    //  *
-    //  * @return string
-    //  */
-    // public function getUdalsailalabeleu()
-    // {
-    //     return $this->udalsailalabeleu;
-    // }
-
-    // /**
-    //  * Set udalsailalabeles
-    //  *
-    //  * @param string $udalsailalabeles
-    //  *
-    //  * @return Eremuak
-    //  */
-    // public function setUdalsailalabeles($udalsailalabeles)
-    // {
-    //     $this->udalsailalabeles = $udalsailalabeles;
-
-    //     return $this;
-    // }
-
-    // /**
-    //  * Get udalsailalabeles
-    //  *
-    //  * @return string
-    //  */
-    // public function getUdalsailalabeles()
-    // {
-    //     return $this->udalsailalabeles;
-    // }
 
     /**
      * Set epealabeleu

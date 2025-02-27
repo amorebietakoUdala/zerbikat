@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use GuzzleHttp;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Fitxa;
 use App\Repository\EremuakRepository;
@@ -19,45 +19,21 @@ use Symfony\Component\HttpFoundation\HeaderUtils;
 
 class FrontendController extends AbstractController
 {
-
-    private $tcpdfController;
-    private $fitxaRepo;
-    private $familiaRepo;
-    private $sailaRepo;
-    private $kanalmotaRepo;
-    private $eremuakRepo;
-    private $zzoo_aplikazioaren_API_url;
-    private $pdfPath;
     
     public function __construct(
-        TCPDFController $tcpdfController,
-        FitxaRepository $fitxaRepo,
-        FamiliaRepository $familiaRepo,
-        SailaRepository $sailaRepo,
-        KanalmotaRepository $kanalmotaRepo,
-        EremuakRepository $eremuakRepo,
-        string $zzoo_aplikazioaren_API_url,
-        string $pdfPath
+        private TCPDFController $tcpdfController,
+        private FitxaRepository $fitxaRepo,
+        private FamiliaRepository $familiaRepo,
+        private SailaRepository $sailaRepo,
+        private KanalmotaRepository $kanalmotaRepo,
+        private EremuakRepository $eremuakRepo,
+        private string $zzoo_aplikazioaren_API_url,
+        private string $pdfPath
     )
     {
-        $this->tcpdfController = $tcpdfController;
-        $this->fitxaRepo = $fitxaRepo;
-        $this->familiaRepo = $familiaRepo;
-        $this->sailaRepo = $sailaRepo;
-        $this->kanalmotaRepo = $kanalmotaRepo;
-        $this->eremuakRepo = $eremuakRepo;
-        $this->zzoo_aplikazioaren_API_url = $zzoo_aplikazioaren_API_url;
-        $this->pdfPath = $pdfPath;
     }
 
-    /**
-     * @Route("/{udala}/{_locale}/", name="frontend_fitxa_index",
-     *         requirements={
-     *           "_locale": "eu|es",
-     *           "udala": "\d+"
-     *     }
-     * )
-     */
+    #[Route(path: '/{udala}/{_locale}/', name: 'frontend_fitxa_index', requirements: ['_locale' => 'eu|es', 'udala' => '\d+'])]
     public function index ( int $udala, Request $request ): Response
     {
         $familia = $request->get('familia') ?? null;
@@ -76,9 +52,8 @@ class FrontendController extends AbstractController
 
     /**
      * Finds and displays a Fitxa entity.
-     *
-     * @Route("/{udala}/{_locale}/{id}", name="frontend_fitxa_show", requirements={"_locale"="eu|es", "udala"="\d+"}, methods={"GET"})
      */
+    #[Route(path: '/{udala}/{_locale}/{id}', name: 'frontend_fitxa_show', requirements: ['_locale' => 'eu|es', 'udala' => '\d+'], methods: ['GET'])]
     public function show ( Fitxa $fitxa, int $udala ): Response
     {
         $kanalmotak = $this->kanalmotaRepo->findAll();
@@ -103,10 +78,9 @@ class FrontendController extends AbstractController
 
     /**
      * Finds and displays a Fitxa entity.
-     *
-     * @Route("/{udala}/{_locale}/pdf/{id}/doklagun", name="frontend_pdf_doklagun", methods={"GET"})
      */
-    public function pdfDocLagun ( Fitxa $fitxa, $udala )
+    #[Route(path: '/{udala}/{_locale}/pdf/{id}/doklagun', name: 'frontend_pdf_doklagun', methods: ['GET'])]
+    public function pdfDocLagun ( Fitxa $fitxa, $udala ): BinaryFileResponse
     {
         $eremuak = $this->eremuakRepo->findOneByUdalKodea($udala);
         $labelak = $this->eremuakRepo->findLabelakByUdalKodea($udala);
@@ -153,10 +127,9 @@ class FrontendController extends AbstractController
 
     /**
      * Finds and displays a Fitxa entity.
-     *
-     * @Route("/{udala}/{_locale}/pdf/{id}", name="frontend_fitxa_pdf", methods={"GET"})
      */
-    public function pdf ( Fitxa $fitxa, $udala )
+    #[Route(path: '/{udala}/{_locale}/pdf/{id}', name: 'frontend_fitxa_pdf', methods: ['GET'])]
+    public function pdf ( Fitxa $fitxa, $udala ): BinaryFileResponse
     {
         $kanalmotak = $this->kanalmotaRepo->findAll();
         $eremuak = $this->eremuakRepo->findOneByUdalKodea($udala);
@@ -184,10 +157,9 @@ class FrontendController extends AbstractController
 
     /**
      * Finds and displays a Fitxa entity.
-     *
-     * @Route("/{udala}/{_locale}/pdfelebi/{id}", name="frontend_fitxa_pdfelebi", methods={"GET"})
      */
-    public function pdfelebi ( Fitxa $fitxa, $udala )
+    #[Route(path: '/{udala}/{_locale}/pdfelebi/{id}', name: 'frontend_fitxa_pdfelebi', methods: ['GET'])]
+    public function pdfelebi ( Fitxa $fitxa, $udala ): BinaryFileResponse
     {
 
         $kanalmotak = $this->kanalmotaRepo->findAll();

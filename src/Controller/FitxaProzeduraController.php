@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\FitxaProzedura;
 use App\Form\FitxaProzeduraType;
 use App\Repository\FitxaProzeduraRepository;
@@ -15,25 +15,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * FitxaProzedura controller.
- *
- * @Route("/{_locale}/fitxaprozedura")
  */
+#[Route(path: '/{_locale}/fitxaprozedura')]
 class FitxaProzeduraController extends AbstractController
 {
-    private $repo;
-    private $em;
-
-    public function __construct(EntityManagerInterface $em, FitxaProzeduraRepository $repo)
+    public function __construct(
+        private EntityManagerInterface $em, 
+        private FitxaProzeduraRepository $repo
+    )
     {
-        $this->repo = $repo;
-        $this->em = $em;
     }
 
     /**
      * Lists all FitxaProzedura entities.
-     *
-     * @Route("/", name="fitxaprozedura_index", methods={"GET"})
      */
+    #[Route(path: '/', name: 'fitxaprozedura_index', methods: ['GET'])]
     public function index(): Response
     {
         $fitxaProzeduras = $this->repo->findAll();
@@ -43,9 +39,8 @@ class FitxaProzeduraController extends AbstractController
 
     /**
      * Creates a new FitxaProzedura entity.
-     *
-     * @Route("/new", name="fitxaprozedura_new", methods={"GET", "POST"})
      */
+    #[Route(path: '/new', name: 'fitxaprozedura_new', methods: ['GET', 'POST'])]
     public function new(Request $request)
     {
         $fitxaProzedura = new FitxaProzedura();
@@ -53,14 +48,14 @@ class FitxaProzeduraController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $fitxaProzedura = $form->getData();
+            /** @var User $user */
+            $user = $this->getUser();
+            $fitxaProzedura->setUdala($user->getUdala());
             $this->em->persist($fitxaProzedura);
             $this->em->flush();
 
             return $this->redirectToRoute('fitxaprozedura_show', ['id' => $fitxaProzedura->getId()]);
-        } else
-        {
-            $form->getData()->setUdala($this->getUser()->getUdala());
-            $form->setData($form->getData());
         }
 
         return $this->render('fitxaprozedura/new.html.twig', ['fitxaProzedura' => $fitxaProzedura, 'form' => $form->createView()]);
@@ -68,9 +63,8 @@ class FitxaProzeduraController extends AbstractController
 
     /**
      * Finds and displays a FitxaProzedura entity.
-     *
-     * @Route("/{id}", name="fitxaprozedura_show", methods={"GET"})
      */
+    #[Route(path: '/{id}', name: 'fitxaprozedura_show', methods: ['GET'])]
     public function show(FitxaProzedura $fitxaProzedura): Response
     {
         $deleteForm = $this->createDeleteForm($fitxaProzedura);
@@ -80,9 +74,8 @@ class FitxaProzeduraController extends AbstractController
 
     /**
      * Displays a form to edit an existing FitxaProzedura entity.
-     *
-     * @Route("/{id}/edit", name="fitxaprozedura_edit", methods={"GET", "POST"})
      */
+    #[Route(path: '/{id}/edit', name: 'fitxaprozedura_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, FitxaProzedura $fitxaProzedura)
     {
         $deleteForm = $this->createDeleteForm($fitxaProzedura);
@@ -102,9 +95,8 @@ class FitxaProzeduraController extends AbstractController
 
     /**
      * Deletes a FitxaProzedura entity.
-     *
-     * @Route("/{id}", name="fitxaprozedura_delete", methods={"DELETE"})
      */
+    #[Route(path: '/{id}', name: 'fitxaprozedura_delete', methods: ['DELETE'])]
     public function delete(Request $request, FitxaProzedura $fitxaProzedura): RedirectResponse
     {
         $form = $this->createDeleteForm($fitxaProzedura);

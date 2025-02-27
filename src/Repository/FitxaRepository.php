@@ -2,7 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\Azpisaila;
+use App\Entity\Familia;
 use App\Entity\Fitxa;
+use App\Entity\Fitxafamilia;
+use App\Entity\Udala;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\OptimisticLockException;
@@ -62,7 +66,7 @@ class FitxaRepository extends ServiceEntityRepository
      */
     public function findAzpisailakOrderedBySailakAzpisailak() {
         return $this->createQueryBuilder('f')
-            ->leftJoin('App:Azpisaila','a', Join::WITH, 'f.azpisaila = a.id')
+            ->leftJoin(Azpisaila::class,'a', Join::WITH, 'f.azpisaila = a.id')
             ->addOrderBy('a.saila', 'ASC')
             ->addOrderBy('f.azpisaila', 'ASC')
             ->getQuery()
@@ -75,7 +79,7 @@ class FitxaRepository extends ServiceEntityRepository
     public function findByAzpisaila($azpisailaid)
     {
         return $this->createQueryBuilder('f')
-            ->innerJoin('App:Azpisaila','a')
+            ->innerJoin(Azpisaila::class,'a')
             ->andWhere('a.id = :azpisailaid')
             ->setParameter('azpisailaid', $azpisailaid)
             ->andWhere('f.publikoa = 1')
@@ -98,8 +102,8 @@ class FitxaRepository extends ServiceEntityRepository
     {
         $result = $this->createQueryBuilder('fi')
             ->select('fi.id,fi.espedientekodea,fi.deskribapenaeu,fi.deskribapenaes')
-            ->leftJoin('App:Fitxafamilia','ff', Join::WITH, 'ff.fitxa = fi.id')
-            ->leftJoin('App:Familia','fa', Join::WITH, 'ff.familia = fa.id')
+            ->leftJoin(Fitxafamilia::class,'ff', Join::WITH, 'ff.fitxa = fi.id')
+            ->leftJoin(Familia::class,'fa', Join::WITH, 'ff.familia = fa.id')
             ->andWhere('fa.id = :familia')
             ->setParameter('familia', $familia)
             ->andWhere('fi.publikoa = 1')
@@ -155,7 +159,7 @@ class FitxaRepository extends ServiceEntityRepository
 
     private function andWhereUdalaQB( QueryBuilder $qb, $udala): QueryBuilder 
     {
-        $qb->leftJoin('App:Udala','u', Join::WITH, 'f.udala = u.id');
+        $qb->leftJoin(Udala::class,'u', Join::WITH, 'f.udala = u.id');
         $qb->andWhere('u.kodea = :udala');
         $qb->setParameter('udala', $udala);
         return $qb;
@@ -163,7 +167,7 @@ class FitxaRepository extends ServiceEntityRepository
 
     private function andWhereAzpisailaQB( QueryBuilder $qb, $azpisaila): QueryBuilder 
     {
-        $qb->leftJoin('App:Azpisaila','az', Join::WITH, 'f.azpisaila = az.id');
+        $qb->leftJoin(Azpisaila::class,'az', Join::WITH, 'f.azpisaila = az.id');
         $qb->andWhere('f.azpisaila = :azpisaila');
         $qb->setParameter('azpisaila', $azpisaila);
         return $qb;

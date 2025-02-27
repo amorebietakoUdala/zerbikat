@@ -3,61 +3,53 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\DokumentazioaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 
-/**
- * Dokumentazioa
- *
- * @ORM\Table(name="dokumentazioa", indexes={@ORM\Index(name="dokumentumota_id_idx", columns={"dokumentumota_id"})})
- * @ORM\Entity(repositoryClass=DokumentazioaRepository::class)
- * @UdalaEgiaztatu(userFieldName="udala_id")
- */
-class Dokumentazioa
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'dokumentazioa')]
+#[ORM\Index(name: 'dokumentumota_id_idx', columns: ['dokumentumota_id'])]
+#[ORM\Entity(repositoryClass: DokumentazioaRepository::class)]
+class Dokumentazioa implements \Stringable
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="kodea", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'kodea', type: 'string', length: 255, nullable: true)]
     private $kodea;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="deskribapenaeu", type="text", length=65535, nullable=true)
      */
+    #[ORM\Column(name: 'deskribapenaeu', type: 'text', length: 65535, nullable: true)]
     private $deskribapenaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="deskribapenaes", type="text", length=65535, nullable=true)
      */
+    #[ORM\Column(name: 'deskribapenaes', type: 'text', length: 65535, nullable: true)]
     private $deskribapenaes;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="estekaeu", type="string", length=1024, nullable=true)
      */
+    #[ORM\Column(name: 'estekaeu', type: 'string', length: 1024, nullable: true)]
     private $estekaeu;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="estekaes", type="string", length=1024, nullable=true)
      */
+    #[ORM\Column(name: 'estekaes', type: 'string', length: 1024, nullable: true)]
     private $estekaes;
 
 
@@ -65,36 +57,34 @@ class Dokumentazioa
     /**
      *          ERLAZIOAK
      */
-
     /**
-     * @var udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+     * @var Udala
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
     /**
-     * @var \App\Entity\Dokumentumota
+     * @var Dokumentumota
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Dokumentumota")
-     * @ORM\JoinColumn(name="dokumentumota_id", referencedColumnName="id",onDelete="SET NULL")
-     * 
+     *
      */
+    #[ORM\JoinColumn(name: 'dokumentumota_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: Dokumentumota::class)]
     private $dokumentumota;
 
     /**
-     * @var fitxak[]
-     *
-     * @ORM\ManyToMany(targetEntity="Fitxa", mappedBy="dokumentazioak", cascade={"persist"}))
+     * @var ArrayCollection
      */
+    #[ORM\ManyToMany(targetEntity: Fitxa::class, mappedBy: 'dokumentazioak', cascade: ['persist'])]
     private $fitxak;
 
 
     /**
      *          TOSTRING
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getKodea()."-".$this->getDeskribapenaeu();
     }
@@ -107,7 +97,7 @@ class Dokumentazioa
      */
     public function __construct()
     {
-        $this->fitxak = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fitxak = new ArrayCollection();
     }
 
     /**
@@ -243,11 +233,11 @@ class Dokumentazioa
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return Dokumentazioa
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -257,7 +247,7 @@ class Dokumentazioa
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {
@@ -267,11 +257,11 @@ class Dokumentazioa
     /**
      * Set dokumentumota
      *
-     * @param \App\Entity\Dokumentumota $dokumentumota
+     * @param Dokumentumota $dokumentumota
      *
      * @return Dokumentazioa
      */
-    public function setDokumentumota(\App\Entity\Dokumentumota $dokumentumota = null)
+    public function setDokumentumota(Dokumentumota $dokumentumota = null)
     {
         $this->dokumentumota = $dokumentumota;
 
@@ -281,7 +271,7 @@ class Dokumentazioa
     /**
      * Get dokumentumota
      *
-     * @return \App\Entity\Dokumentumota
+     * @return Dokumentumota
      */
     public function getDokumentumota()
     {
@@ -291,11 +281,11 @@ class Dokumentazioa
     /**
      * Add fitxak
      *
-     * @param \App\Entity\Fitxa $fitxak
+     * @param Fitxa $fitxak
      *
      * @return Dokumentazioa
      */
-    public function addFitxak(\App\Entity\Fitxa $fitxak)
+    public function addFitxak(Fitxa $fitxak)
     {
         $this->fitxak[] = $fitxak;
 
@@ -305,9 +295,9 @@ class Dokumentazioa
     /**
      * Remove fitxak
      *
-     * @param \App\Entity\Fitxa $fitxak
+     * @param Fitxa $fitxak
      */
-    public function removeFitxak(\App\Entity\Fitxa $fitxak)
+    public function removeFitxak(Fitxa $fitxak)
     {
         $this->fitxak->removeElement($fitxak);
     }
@@ -315,7 +305,7 @@ class Dokumentazioa
     /**
      * Get fitxak
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getFitxak()
     {

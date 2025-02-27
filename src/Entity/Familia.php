@@ -4,73 +4,62 @@
 
     use Doctrine\Common\Collections\ArrayCollection;
     use Doctrine\ORM\Mapping as ORM;
-    use Doctrine\ORM\Mapping\OrderBy;
     use JMS\Serializer\Annotation\ExclusionPolicy;
     use JMS\Serializer\Annotation\Expose;
-    use App\Annotation\UdalaEgiaztatu;
+    use App\Attribute\UdalaEgiaztatu;
     use App\Repository\FamiliaRepository;
 
-    /**
-     * Familia
-     *
-     * @ORM\Table(name="familia")
-     * @ORM\Entity(repositoryClass=FamiliaRepository::class)
-     * @ExclusionPolicy("all")
-     * @UdalaEgiaztatu(userFieldName="udala_id")
-     */
-    class Familia
+    #[ExclusionPolicy("all")]
+    #[UdalaEgiaztatu(userFieldName: "udala_id")]
+    #[ORM\Table(name: 'familia')]
+    #[ORM\Entity(repositoryClass: FamiliaRepository::class)]
+    class Familia implements \Stringable
     {
 
         /**
          * @var integer
-         * @Expose
-         *
-         * @ORM\Column(name="id", type="bigint")
-         * @ORM\Id
-         * @ORM\GeneratedValue(strategy="IDENTITY")
          */
+        #[Expose()]
+        #[ORM\Column(name: 'id', type: 'bigint')]
+        #[ORM\Id]
+        #[ORM\GeneratedValue(strategy: 'IDENTITY')]
         private $id;
 
         /**
          *
          * @var string
-         * @Expose
-         *
-         * @ORM\Column(name="familiaeu", type="string", length=255, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'familiaeu', type: 'string', length: 255, nullable: true)]
         private $familiaeu;
 
 
         /**
          * @var string
-         * @Expose
-         *
-         * @ORM\Column(name="familiaes", type="string", length=255, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'familiaes', type: 'string', length: 255, nullable: true)]
         private $familiaes;
 
         /**
          * @var string
-         * @Expose
-         *
-         * @ORM\Column(name="deskribapenaeu", type="string", length=255, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'deskribapenaeu', type: 'string', length: 255, nullable: true)]
         private $deskribapenaeu;
 
         /**
          * @var string
-         * @Expose
-         *
-         * @ORM\Column(name="deskribapenaes", type="string", length=255, nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'deskribapenaes', type: 'string', length: 255, nullable: true)]
         private $deskribapenaes;
 
         /**
          * @var int
-         * @Expose
-         *
-         * @ORM\Column(name="ordena", type="integer", nullable=true)
          */
+        #[Expose()]
+        #[ORM\Column(name: 'ordena', type: 'integer', nullable: true)]
         private $ordena=0;
 
 
@@ -79,32 +68,26 @@
          ******************      ERLAZIOAK
          **************************************************************************************************************
          *************************************************************************************************************/
-
         /**
-         * @var udala
-         * @ORM\ManyToOne(targetEntity="Udala")
-         * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="CASCADE")
+         * @var Udala
          *
          */
+        #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+        #[ORM\ManyToOne(targetEntity: Udala::class)]
         private $udala;
 
         /**
-         * @var fitxafamilia[]
-         *
-         * @ORM\OneToMany(targetEntity="App\Entity\Fitxafamilia", mappedBy="familia")
-         * @ORM\OrderBy({"ordena" = "ASC"})
+         * @var ArrayCollection
          */
+        #[ORM\OneToMany(targetEntity: Fitxafamilia::class, mappedBy: 'familia')]
+        #[ORM\OrderBy(['ordena' => 'ASC'])]
         private $fitxafamilia;
 
-        /**
-         * @ORM\ManyToOne(targetEntity="App\Entity\Familia", inversedBy="children")
-         */
+        #[ORM\ManyToOne(targetEntity: Familia::class, inversedBy: 'children')]
         private $parent;
 
-        /**
-         * @ORM\OneToMany(targetEntity="App\Entity\Familia", mappedBy="parent")
-         * @ORM\OrderBy({"ordena" = "ASC"})
-         */
+        #[ORM\OneToMany(targetEntity: Familia::class, mappedBy: 'parent')]
+        #[ORM\OrderBy(['ordena' => 'ASC'])]
         private $children;
 
         /**************************************************************************************************************
@@ -122,7 +105,7 @@
          * @return string
          */
 
-        public function __toString ()
+        public function __toString (): string
         {
             return (string) $this->getFamiliaeu();
         }
@@ -134,8 +117,6 @@
         {
             $this->fitxafamilia = new ArrayCollection();
         }
-
-
 
     /**
      * Get id
@@ -246,11 +227,11 @@
     /**
      * Set udala
      *
-     * @param \App\Entity\Udala $udala
+     * @param Udala $udala
      *
      * @return Familia
      */
-    public function setUdala(\App\Entity\Udala $udala = null)
+    public function setUdala(Udala $udala = null)
     {
         $this->udala = $udala;
 
@@ -260,7 +241,7 @@
     /**
      * Get udala
      *
-     * @return \App\Entity\Udala
+     * @return Udala
      */
     public function getUdala()
     {
@@ -270,11 +251,11 @@
     /**
      * Add fitxafamilium
      *
-     * @param \App\Entity\Fitxafamilia $fitxafamilium
+     * @param Fitxafamilia $fitxafamilium
      *
      * @return Familia
      */
-    public function addFitxafamilium(\App\Entity\Fitxafamilia $fitxafamilium)
+    public function addFitxafamilium(Fitxafamilia $fitxafamilium)
     {
         $this->fitxafamilia[] = $fitxafamilium;
 
@@ -284,9 +265,9 @@
     /**
      * Remove fitxafamilium
      *
-     * @param \App\Entity\Fitxafamilia $fitxafamilium
+     * @param Fitxafamilia $fitxafamilium
      */
-    public function removeFitxafamilium(\App\Entity\Fitxafamilia $fitxafamilium)
+    public function removeFitxafamilium(Fitxafamilia $fitxafamilium)
     {
         $this->fitxafamilia->removeElement($fitxafamilium);
     }
@@ -294,7 +275,7 @@
     /**
      * Get fitxafamilia
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getFitxafamilia()
     {
@@ -304,11 +285,11 @@
     /**
      * Set parent
      *
-     * @param \App\Entity\Familia $parent
+     * @param Familia $parent
      *
      * @return Familia
      */
-    public function setParent(\App\Entity\Familia $parent = null)
+    public function setParent(Familia $parent = null)
     {
         $this->parent = $parent;
 
@@ -318,7 +299,7 @@
     /**
      * Get parent
      *
-     * @return \App\Entity\Familia
+     * @return Familia
      */
     public function getParent()
     {
@@ -328,11 +309,11 @@
     /**
      * Add child
      *
-     * @param \App\Entity\Familia $child
+     * @param Familia $child
      *
      * @return Familia
      */
-    public function addChild(\App\Entity\Familia $child)
+    public function addChild(Familia $child)
     {
         $this->children[] = $child;
 
@@ -342,9 +323,9 @@
     /**
      * Remove child
      *
-     * @param \App\Entity\Familia $child
+     * @param Familia $child
      */
-    public function removeChild(\App\Entity\Familia $child)
+    public function removeChild(Familia $child)
     {
         $this->children->removeElement($child);
     }
@@ -352,7 +333,7 @@
     /**
      * Get children
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getChildren()
     {

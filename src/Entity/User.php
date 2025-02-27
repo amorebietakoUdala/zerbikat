@@ -6,80 +6,63 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use AMREU\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
-use App\Annotation\UdalaEgiaztatu;
+use App\Attribute\UdalaEgiaztatu;
 use App\Repository\UserRepository;
 use App\Entity\Udala;
 use App\Entity\Azpisaila;
 
-/**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\Table(name="user")
- * @UdalaEgiaztatu(userFieldName="udala_id")
- */
+#[UdalaEgiaztatu(userFieldName: "udala_id")]
+#[ORM\Table(name: 'user')]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 class User extends BaseUser
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
     protected $username;
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: 'json')]
     protected $roles = [];
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
      */
+    #[ORM\Column(type: 'string')]
     protected $password;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     protected $firstName;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     protected $email;
 
-    /**
-     * @ORM\Column(type="boolean", options={"default":"1"}, nullable=false)
-     */
+    #[ORM\Column(type: 'boolean', options: ['default' => '1'], nullable: false)]
     protected $activated = true;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     protected $lastLogin;
 
     /**
-    *          ERLAZIOAK
-    */
-
+     *          ERLAZIOAK
+     */
     /**
      * @var Azpisaila
      *
-     * @ORM\ManyToOne(targetEntity="Azpisaila")
-     * @ORM\JoinColumn(name="azpisaila_id", referencedColumnName="id",onDelete="SET NULL")
      *
      */
+    #[ORM\JoinColumn(name: 'azpisaila_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: Azpisaila::class)]
     private $azpisaila;
 
     /**
      * @var Udala
-     * @ORM\ManyToOne(targetEntity="Udala")
-     * @ORM\JoinColumn(name="udala_id", referencedColumnName="id",onDelete="SET NULL")
      *
      */
+    #[ORM\JoinColumn(name: 'udala_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: Udala::class)]
     private $udala;
 
     /**
