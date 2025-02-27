@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Eremuak;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Query;
 use GuzzleHttp;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -128,29 +126,7 @@ class FitxaController extends AbstractController
             $kostuZerrenda[] = $array;
         }
 
-        // /** @var Query $query */
-        // $query = $this->em->createQuery(
-        // /** @lang text */
-        //     '
-        //   SELECT f.oharraktext,f.helburuatext,f.ebazpensinpli,f.arduraaitorpena,f.aurreikusi,f.arrunta,f.isiltasunadmin,f.norkeskatutext,f.norkeskatutable,f.dokumentazioatext,f.dokumentazioatable,f.kostuatext,f.kostuatable,f.araudiatext,f.araudiatable,f.prozeduratext,f.prozeduratable,f.doklaguntext,f.doklaguntable,f.datuenbabesatext,f.datuenbabesatable,f.norkebatzitext,f.norkebatzitable,f.besteak1text,f.besteak1table,f.besteak2text,f.besteak2table,f.besteak3text,f.besteak3table,f.kanalatext,f.kanalatable,f.azpisailatable
-        //     FROM App:Eremuak f
-        //     WHERE f.udala = :udala
-        // '
-        // );
-        // $query->setParameter( 'udala', $fitxa->getUdala() );
-        // $eremuak = $query->getSingleResult();
         $eremuak = $this->eremuakRepo->findOneByUdalKodea($fitxa->getUdala());
-
-        // $query = $this->em->createQuery(
-        // /** @lang text */
-        //     '
-        //   SELECT f.oharraklabeleu,f.oharraklabeles,f.helburualabeleu,f.helburualabeles,f.ebazpensinplilabeleu,f.ebazpensinplilabeles,f.arduraaitorpenalabeleu,f.arduraaitorpenalabeles,f.aurreikusilabeleu,f.aurreikusilabeles,f.arruntalabeleu,f.arruntalabeles,f.isiltasunadminlabeleu,f.isiltasunadminlabeles,f.norkeskatulabeleu,f.norkeskatulabeles,f.dokumentazioalabeleu,f.dokumentazioalabeles,f.kostualabeleu,f.kostualabeles,f.araudialabeleu,f.araudialabeles,f.prozeduralabeleu,f.prozeduralabeles,f.doklagunlabeleu,f.doklagunlabeles,f.datuenbabesalabeleu,f.datuenbabesalabeles,f.norkebatzilabeleu,f.norkebatzilabeles,f.besteak1labeleu,f.besteak1labeles,f.besteak2labeleu,f.besteak2labeles,f.besteak3labeleu,f.besteak3labeles,f.kanalalabeleu,f.kanalalabeles,f.epealabeleu,f.epealabeles,f.doanlabeleu,f.doanlabeles,f.azpisailalabeleu,f.azpisailalabeles
-        //     FROM App:Eremuak f
-        //     WHERE f.udala = :udala
-        // '
-        // );
-        // $query->setParameter( 'udala', $fitxa->getUdala() );
-        // $labelak = $query->getSingleResult();
         $labelak = $this->eremuakRepo->findLabelakByUdala($fitxa->getUdala());
 
         return $this->render(
@@ -170,7 +146,6 @@ class FitxaController extends AbstractController
         $udala = ( $isRoleSuperAdmin ? $id : $user->getUdala());
         $fitxak = $this->repo->findBy([
             'udala' => $udala,
-    //	    'espedientekodea' => 'IL01400'
             ],
             ['espedientekodea' => 'ASC'] // order
         );
@@ -192,7 +167,6 @@ class FitxaController extends AbstractController
         $udala = ( $isRoleSuperAdmin ? $id : $user->getUdala());
         $fitxak = $this->repo->findBy([
             'udala' => $udala,
-    //	    'espedientekodea' => 'IL01400'
             ],
             ['espedientekodea' => 'ASC'] // order
         );
@@ -213,27 +187,7 @@ class FitxaController extends AbstractController
          $user = $this->getUser();
          $udala = $fitxak[0]->getUdala();
          $kanalmotak = $this->kanalmotaRepo->findAll();
-        // $query = $this->em->createQuery(
-        //         /** @lang text */
-        //         '
-        //     SELECT f.oharraktext,f.helburuatext,f.ebazpensinpli,f.arduraaitorpena,f.aurreikusi,f.arrunta,f.isiltasunadmin,f.norkeskatutext,f.norkeskatutable,f.dokumentazioatext,f.dokumentazioatable,f.kostuatext,f.kostuatable,f.araudiatext,f.araudiatable,f.prozeduratext,f.prozeduratable,f.doklaguntext,f.doklaguntable,f.datuenbabesatext,f.datuenbabesatable,f.norkebatzitext,f.norkebatzitable,f.besteak1text,f.besteak1table,f.besteak2text,f.besteak2table,f.besteak3text,f.besteak3table,f.kanalatext,f.kanalatable,f.azpisailatable
-        //         FROM App:Eremuak f
-        //         WHERE f.udala = :udala            
-        //     '
-        // );
-        // $query->setParameter( 'udala', $udala );
-        // $eremuak = $query->getSingleResult();
         $eremuak = $this->eremuakRepo->findOneByUdala($udala);
-        // $query = $this->em->createQuery(
-        //         /** @lang text */
-        //         '
-        //     SELECT f.oharraklabeleu,f.oharraklabeles,f.helburualabeleu,f.helburualabeles,f.ebazpensinplilabeleu,f.ebazpensinplilabeles,f.arduraaitorpenalabeleu,f.arduraaitorpenalabeles,f.aurreikusilabeleu,f.aurreikusilabeles,f.arruntalabeleu,f.arruntalabeles,f.isiltasunadminlabeleu,f.isiltasunadminlabeles,f.norkeskatulabeleu,f.norkeskatulabeles,f.dokumentazioalabeleu,f.dokumentazioalabeles,f.kostualabeleu,f.kostualabeles,f.araudialabeleu,f.araudialabeles,f.prozeduralabeleu,f.prozeduralabeles,f.doklagunlabeleu,f.doklagunlabeles,f.datuenbabesalabeleu,f.datuenbabesalabeles,f.norkebatzilabeleu,f.norkebatzilabeles,f.besteak1labeleu,f.besteak1labeles,f.besteak2labeleu,f.besteak2labeles,f.besteak3labeleu,f.besteak3labeles,f.kanalalabeleu,f.kanalalabeles,f.epealabeleu,f.epealabeles,f.doanlabeleu,f.doanlabeles,f.azpisailalabeleu,f.azpisailalabeles
-        //         FROM App:Eremuak f
-        //         WHERE f.udala = :udala
-        //     '
-        // );
-        // $query->setParameter( 'udala', $udala );
-        // $labelak = $query->getSingleResult();
         $labelak = $this->eremuakRepo->findLabelakByUdala($udala);
         $pdf = $this->tcpdfController->create('vertical',PDF_UNIT, PDF_PAGE_FORMAT,true,'UTF-8', false);
         $pdf->SetAuthor( $user->getUdala() );
@@ -314,31 +268,8 @@ class FitxaController extends AbstractController
     public function pdf( Fitxa $fitxa )
     {
         $deleteForm = $this->createDeleteForm( $fitxa );
-
         $kanalmotak = $this->kanalmotaRepo->findAll();
-
-        // /** @var Query $query */
-        // $query = $this->em->createQuery(
-        //     /** @lang text */
-        //     '
-        //   SELECT f.oharraktext,f.helburuatext,f.ebazpensinpli,f.arduraaitorpena,f.aurreikusi,f.arrunta,f.isiltasunadmin,f.norkeskatutext,f.norkeskatutable,f.dokumentazioatext,f.dokumentazioatable,f.kostuatext,f.kostuatable,f.araudiatext,f.araudiatable,f.prozeduratext,f.prozeduratable,f.doklaguntext,f.doklaguntable,f.datuenbabesatext,f.datuenbabesatable,f.norkebatzitext,f.norkebatzitable,f.besteak1text,f.besteak1table,f.besteak2text,f.besteak2table,f.besteak3text,f.besteak3table,f.kanalatext,f.kanalatable,f.azpisailatable
-        //     FROM App:Eremuak f
-        //     WHERE f.udala = :udala            
-        // '
-        // );
-        // $query->setParameter( 'udala', $fitxa->getUdala() );
-        // $eremuak = $query->getSingleResult();
-        $eremuak = $this->eremuakRepo->findOneByUdala($fitxa->getUdala());
-        // $query = $this->em->createQuery(
-        //     /** @lang text */
-        //     '
-        //   SELECT f.oharraklabeleu,f.oharraklabeles,f.helburualabeleu,f.helburualabeles,f.ebazpensinplilabeleu,f.ebazpensinplilabeles,f.arduraaitorpenalabeleu,f.arduraaitorpenalabeles,f.aurreikusilabeleu,f.aurreikusilabeles,f.arruntalabeleu,f.arruntalabeles,f.isiltasunadminlabeleu,f.isiltasunadminlabeles,f.norkeskatulabeleu,f.norkeskatulabeles,f.dokumentazioalabeleu,f.dokumentazioalabeles,f.kostualabeleu,f.kostualabeles,f.araudialabeleu,f.araudialabeles,f.prozeduralabeleu,f.prozeduralabeles,f.doklagunlabeleu,f.doklagunlabeles,f.datuenbabesalabeleu,f.datuenbabesalabeles,f.norkebatzilabeleu,f.norkebatzilabeles,f.besteak1labeleu,f.besteak1labeles,f.besteak2labeleu,f.besteak2labeles,f.besteak3labeleu,f.besteak3labeles,f.kanalalabeleu,f.kanalalabeles,f.epealabeleu,f.epealabeles,f.doanlabeleu,f.doanlabeles,f.azpisailalabeleu,f.azpisailalabeles
-        //     FROM App:Eremuak f
-        //     WHERE f.udala = :udala
-        // '
-        // );
-        // $query->setParameter( 'udala', $fitxa->getUdala() );
-        // $labelak = $query->getSingleResult();
+        $eremuak = $this->eremuakRepo->findOneByUdala($fitxa->getUdala());    
         $labelak = $this->eremuakRepo->findLabelakByUdala($fitxa->getUdala());
         $kostuZerrenda = [];
         foreach ( $fitxa->getKostuak() as $kostu ) {
@@ -467,29 +398,7 @@ class FitxaController extends AbstractController
 
                 return $this->redirectToRoute( 'fitxa_edit', ['id' => $fitxa->getId()] );
             }
-
-            // /** @var Query $query */
-            // $query = $this->em->createQuery(
-            // /** @lang text */
-            //     '
-            //   SELECT f.oharraktext,f.helburuatext,f.ebazpensinpli,f.arduraaitorpena,f.aurreikusi,f.arrunta,f.isiltasunadmin,f.norkeskatutext,f.norkeskatutable,f.dokumentazioatext,f.dokumentazioatable,f.kostuatext,f.kostuatable,f.araudiatext,f.araudiatable,f.prozeduratext,f.prozeduratable,f.doklaguntext,f.doklaguntable,f.datuenbabesatext,f.datuenbabesatable,f.norkebatzitext,f.norkebatzitable,f.besteak1text,f.besteak1table,f.besteak2text,f.besteak2table,f.besteak3text,f.besteak3table,f.kanalatext,f.kanalatable,f.azpisailatable
-            //     FROM App:Eremuak f
-            //     WHERE f.udala = :udala                
-            // '
-            // );
-            // $query->setParameter( 'udala', $fitxa->getUdala() );
-            // $eremuak = $query->getSingleResult();
             $eremuak = $this->eremuakRepo->findOneByUdala($fitxa->getUdala());
-            // $query = $this->em->createQuery(
-            // /** @lang text */
-            //     '
-            //   SELECT f.oharraklabeleu,f.oharraklabeles,f.helburualabeleu,f.helburualabeles,f.ebazpensinplilabeleu,f.ebazpensinplilabeles,f.arduraaitorpenalabeleu,f.arduraaitorpenalabeles,f.aurreikusilabeleu,f.aurreikusilabeles,f.arruntalabeleu,f.arruntalabeles,f.isiltasunadminlabeleu,f.isiltasunadminlabeles,f.norkeskatulabeleu,f.norkeskatulabeles,f.dokumentazioalabeleu,f.dokumentazioalabeles,f.kostualabeleu,f.kostualabeles,f.araudialabeleu,f.araudialabeles,f.prozeduralabeleu,f.prozeduralabeles,f.doklagunlabeleu,f.doklagunlabeles,f.datuenbabesalabeleu,f.datuenbabesalabeles,f.norkebatzilabeleu,f.norkebatzilabeles,f.besteak1labeleu,f.besteak1labeles,f.besteak2labeleu,f.besteak2labeles,f.besteak3labeleu,f.besteak3labeles,f.kanalalabeleu,f.kanalalabeles,f.epealabeleu,f.epealabeles,f.doanlabeleu,f.doanlabeles,f.azpisailalabeleu,f.azpisailalabeles
-            //     FROM App:Eremuak f
-            //     WHERE f.udala = :udala                
-            // '
-            // );
-            // $query->setParameter( 'udala', $fitxa->getUdala() );
-            // $labelak = $query->getSingleResult();
             $labelak = $this->eremuakRepo->findLabelakByUdala($fitxa->getUdala());
             $fitxafamilium = new Fitxafamilia();
             $fitxafamilium->setFitxa( $fitxa );

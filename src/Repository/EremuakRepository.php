@@ -63,8 +63,6 @@ class EremuakRepository extends ServiceEntityRepository
 //            ->orderBy('s.kodea', 'DESC')
         ;
 
-        dump($qb->getQuery()->getSQL());
-
         return $qb->getQuery()->getSingleResult();
     }
 
