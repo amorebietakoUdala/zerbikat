@@ -8,11 +8,6 @@ import '../common/select2.js';
 const routes = require('../../../public/js/fos_js_routes.json');
 import Routing from '../../../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.min.js';
 
-function funcEzabatu(nirediv) {
-   console.log(nirediv);
-   $(nirediv).remove();
-}
-
 function addKostuaFormDeleteLink($tagFormLi) {
    var $removeFormA = $('<div class="col-sm-1"><a href="#"><i class="fa fa-times text-danger"></i></a></div>');
    $tagFormLi.append($removeFormA);
@@ -648,8 +643,9 @@ $(function () {
       var niez = parseInt(kostuaCount);
       kostuaCount++;
       var newLi = $('<li></li>').html(newWidget);
-
-      var $removeFormA = '<div class="col-sm-1"><a href="javascript:void(0);" onclick="funcEzabatu(\'.nirerow' + niez + '\')" class="cmdEzabatuRow"><i class="fa fa-times text-danger cmdEzabatuRow"></i></a></div>';
+      
+      var $removeFormA = '<div class="col-sm-1"><a href="javascript:void(0);" onclick="$(\'.nirerow' + niez + '\').remove()" class="cmdEzabatuRow"><i class="fa fa-times text-danger cmdEzabatuRow"></i></a></div>';
+      // var $removeFormA = '<div class="col-sm-1"><a href="javascript:void(0);" onclick="funcEzabatu(\'.nirerow' + niez + '\')" class="cmdEzabatuRow"><i class="fa fa-times text-danger cmdEzabatuRow"></i></a></div>';
       $(newLi).appendTo($removeFormA);
 
       newLi.appendTo(kostuaList);
