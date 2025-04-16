@@ -74,7 +74,7 @@ class FitxaController extends AbstractController
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted('ROLE_KUDEAKETA')]
     #[Route(path: '/new', name: 'fitxa_new', methods: ['GET', 'POST'])]
     public function new( Request $request )
     {
@@ -334,13 +334,13 @@ class FitxaController extends AbstractController
      * @param Fitxa   $fitxa
      * @return RedirectResponse|Response
      */
-    #[IsGranted(new Expression("is_granted('ROLE_USER') or is_granted('ROLE_SUPER_ADMIN')"))]
+    #[IsGranted(new Expression("is_granted('ROLE_KUDEAKETA') or is_granted('ROLE_SUPER_ADMIN')"))]
     #[Route(path: '/{id}/edit', name: 'fitxa_edit', methods: ['GET', 'POST'])]
     public function edit( Request $request, Fitxa $fitxa )
     {
         /** @var User $user */
         $user = $this->getUser();
-        if ( ( ( $this->isGranted( 'ROLE_USER' ) ) && ( $fitxa->getUdala() == $user->getUdala() ) )
+        if ( ( ( $this->isGranted( 'ROLE_KUDEAKETA' ) ) && ( $fitxa->getUdala() == $user->getUdala() ) )
             || ( $this->isGranted( 'ROLE_SUPER_ADMIN' ) )
         ) {
             $deleteForm = $this->createDeleteForm( $fitxa );
@@ -440,6 +440,7 @@ class FitxaController extends AbstractController
      * @param Fitxa   $fitxa
      * @return RedirectResponse
      */
+    #[IsGranted('ROLE_KUDEAKETA')]
     #[Route(path: '/{id}/del', name: 'fitxa_delete', methods: ['DELETE'])]
     public function delete( Request $request, Fitxa $fitxa ): RedirectResponse
     {
