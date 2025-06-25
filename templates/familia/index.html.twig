@@ -22,8 +22,8 @@
     <table  class="table" id="taulazerrenda">
         <thead>
             <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'|trans }}</th>{% endif %}
                 <th>{{ 'messages.ordena' |trans }}</th>
+                {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'|trans }}</th>{% endif %}
                 <th>{{ 'messages.familia'|trans }}</th>
                 <th>{{ 'messages.deskribapena'|trans }}</th>
                 <th>{{ 'messages.azpifamiliak'|trans }}</th>

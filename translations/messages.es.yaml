@@ -236,3 +236,41 @@
 "Saila / Azpisaila": "Área / Subárea"
 "Familia / Azpifamilia": "Familia / Subfamilia"
 "Udala": "Ayuntamiento"
+message.intro: |
+  <b>Bienvenido/a al manual de trámites del Ayuntamiento de Amorebieta-Etxano.</b><br>
+  <br>
+  En este espacio puedes consultar y realizar de forma sencilla todos los trámites que<br>
+  necesites: empadronamiento, licencias, ayudas, participación en actividades,<br>
+  realización de pagos, gestión de impuestos o acceso a servicios municipales.<br>
+  <br>
+  Los trámites están organizados por temas y situaciones de la vida diaria, para facilitar<br>
+  su comprensión y acceso, según lo que necesites en cada momento: cuidar de alguien,<br>
+  cambiar de casa, buscar empleo, abrir un local comercial, organizar un evento,<br>
+  apuntarte a un curso, resolver una duda o solicitar una ayuda.<br>
+
+
+# FOOTER
+footer.ubicacion1: UBICACIÓN
+
+footer.ubicacion2: |
+  <b>Amorebieta-Etxanoko Udala</b><br>
+  Herriko Plaza, z/g 48340<br>
+  Amorebieta-Etxano (Bizkaia)
+
+footer.horario1: "HORARIO"
+footer.horario2: "7:30 - 15:00"
+footer.whatsapp1: "WHATSAPP"
+footer.whatsapp2: "688 866 600"
+footer.escribe1: "ESCRIBE AL"
+footer.escribe2: "AYUNTAMIENTO"
+
+footer.SAC: "SAC"
+footer.contacto1: "CONTACTO"
+footer.contacto2: "Servicio de Atención Ciudadana"
+footer.telefono1: "TELEFONO"
+footer.y: " y "
+footer.correo1: "CORREO ELECTRÓNICO"
+footer.politica: "Política De cookies"
+footer.aviso: "Aviso Legal"
+footer.cookies: "Política De Cookiess"
+footer.accesibilidad: "Accesbilidad"

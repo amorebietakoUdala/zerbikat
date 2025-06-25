@@ -81,7 +81,7 @@ class FamiliaRepository extends ServiceEntityRepository
         if ( null !== $familiaId ) {
             $this->andWhereFamiliaId($qb, $familiaId);
         }
-        $qb->orderBy("f.familia$locale", "ASC");
+        $qb->orderBy("f.ordena", "ASC");
         return $qb->getQuery()->getResult();
     }
 

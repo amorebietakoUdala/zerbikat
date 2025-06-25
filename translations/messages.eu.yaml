@@ -235,3 +235,14 @@
 "messages.goiburua": "Izapideen liburua"
 "Saila / Azpisaila": "Saila / Azpisaila"
 "Udala": "Udala"
+message.intro: |
+  <b>Ongi etorri Amorebieta-Etxanoko Udalaren izapideen eskuliburura.</b><br>
+  <br>
+  Gune honetan, behar dituzun izapide guztiak kontsultatu eta erraz egin ditzakezu: <br>
+  erroldatzea, lizentziak, laguntzak, jardueretan parte hartzea, ordainketak egitea,<br>
+  zergak kudeatzea edo udal-zerbitzuak eskuratzea.<br>
+  <br>
+  Izapideak eguneroko bizitzako gaien eta egoeren arabera antolatzen dira, <br>
+  ulertzeko eta sarbidea izateko, une bakoitzean behar duzunaren arabera: <br>
+  Norbait zaintzea, etxez aldatzea, enplegua bilatzea, merkataritza-lokal bat irekitzea,<br>
+  ekitaldi bat antolatzea, ikastaro batean izena ematea, zalantza bat argitzea edo laguntza bat eskatzea.<br>

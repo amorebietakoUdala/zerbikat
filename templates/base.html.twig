@@ -142,11 +142,12 @@
 {% endblock %}
 
 <div class="container theme-showcase" role="main">
-    {% block body %}
-
-    {% endblock %}
+    {% block body %}{% endblock %}
 </div>
 
+<div class="footer">
+    {% block footer %}{% endblock %}
+</div>
 
 {% block javascripts %}
     {{ encore_entry_script_tags('app') }}

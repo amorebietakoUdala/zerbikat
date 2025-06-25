@@ -111,6 +111,539 @@ button.list-group-item-success {
     text-decoration: none;
 }
 
+/** Start New styles  **/
+h1 {
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+.divider {
+    line-height: 4px;
+    background-color: #009ED5;
+}
+
+h2.tituloFamilia {
+    font-size: 2.8rem;
+    font-weight: 600;
+}
+
+.hrGray {
+    display: block;
+    border: 0;
+    border-top: 1px solid #C0C0C0;
+    margin: 0;
+    padding: 0;
+}
+
+.hr-1first-line-width {
+    width: 45%;
+}
+
+.hr-1first-line-width-right {
+    width: 15%;
+    margin-left: auto;
+}
+
+#intro {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.gray-bg {
+    background-color: #F5F5F5 !important;
+}
+
+.gray-text {
+    color: #828282;
+}
+
+.themed-grid-col {
+    padding-left: 1.75rem;
+    padding-top: 1.75rem;
+    background-color:  #F5F5F5 !important;
+    border: none;
+    border-radius: 40px;
+    padding-left: 15px;
+}
+
+.input-group-addon#filtrarLogo {
+    border-top-left-radius: 35px;
+    border-bottom-left-radius: 35px;
+    background-color: white; 
+    border-right-style: none;
+    padding-right: 1px !important;
+}
+
+.input-group-addon#filtrarText {
+    border-top-right-radius: 35px;
+    border-bottom-right-radius: 35px;
+    background-color: white; 
+    border-left-style: solid;
+    border-left-color: #828282;
+    /* border-bottom-left-radius: 35px;*/
+}
+
+#divFiltrar {
+    padding-right: 5px !important;
+}
+
+#inputFiltrar {
+    border-right-style: solid;
+    border-right-color: #ccc;
+    border-left-style: none;
+    box-shadow: none;
+}
+
+#inputFiltrar:focus {
+    border-top-color: #ccc;
+    border-bottom-color: #ccc;
+}
+
+#filtrarImg {
+    max-height: 20px;
+    max-width: auto;
+}
+
+.mb-2 {
+    margin-bottom: 25px;
+}
+
+.btn-azpifamilia {
+    border-style: 2px solid;
+    border-color: #004E89;
+    border-radius: 10px;
+    background-color: white;
+    color: #004E89;
+    padding-top: 15px;
+    padding-left: 100px;
+    padding-bottom: 15px;
+    padding-right: 15px;
+    height: 120px;
+    width: 260px;
+    text-align: left;
+    margin-top: 15px;
+    margin-left: 15px;
+    background-position: 25px 30px !important;
+    background-repeat: no-repeat;
+}
+
+/* .btn-azpifamilia:hover {
+    background-color: #004E89 !important;
+    color: white;
+} */
+
+.w70-float-left {
+    width: 70%; 
+    float: left;
+}
+
+.font-weight {
+    font-size: 1.7rem;
+    font-weight: 400;
+}
+
+.bg-fam-9 {
+    background-image: url('../images/fam-9.png');
+    opacity: 1;
+}
+
+.bg-fam-9-active {
+    background-image: url('../images/fam-9-active.png');
+}
+
+.bg-fam-10 {
+    background-image: url('../images/fam-10.png');
+    opacity: 1;
+}
+
+.bg-fam-10-active {
+    background-image: url('../images/fam-10-active.png');
+}
+
+.bg-fam-11 {
+    background-image: url('../images/fam-11.png');
+    opacity: 1;
+}
+
+.bg-fam-11-active {
+    background-image: url('../images/fam-11-active.png');
+}
+
+
+.bg-fam-12 {
+    background-image: url('../images/fam-12.png');
+    opacity: 1;
+}
+
+.bg-fam-12-active {
+    background-image: url('../images/fam-12-active.png');
+}
+
+.bg-fam-13 {
+    background-image: url('../images/fam-13.png');
+    opacity: 1;
+}
+
+.bg-fam-13-active {
+    background-image: url('../images/fam-13-active.png');
+}
+
+.bg-fam-14 {
+    background-image: url('../images/fam-14.png');
+    opacity: 1;
+}
+
+.bg-fam-14-active {
+    background-image: url('../images/fam-14-active.png');
+}
+
+.bg-fam-17 {
+    background-image: url('../images/fam-17.png');
+    opacity: 1;
+}
+
+.bg-fam-17-active {
+    background-image: url('../images/fam-17-active.png');
+}
+
+.bg-fam-18 {
+    background-image: url('../images/fam-18.png');
+}
+
+.bg-fam-18-active {
+    background-image: url('../images/fam-18-active.png');
+}
+
+.bg-fam-19 {
+    background-image: url('../images/fam-19.png');
+}
+
+.bg-fam-19-active {
+    background-image: url('../images/fam-19-active.png');
+}
+
+
+.bg-fam-20 {
+    background-image: url('../images/fam-20.png');
+}
+
+.bg-fam-20-active {
+    background-image: url('../images/fam-20-active.png');
+}
+
+.bg-fam-21 {
+    background-image: url('../images/fam-21.png');
+}
+
+.bg-fam-21-active {
+    background-image: url('../images/fam-21-active.png');
+}
+
+.bg-fam-24 {
+    background-image: url('../images/fam-24.png');
+}
+
+.bg-fam-24-active {
+    background-image: url('../images/fam-24-active.png');
+}
+
+.bg-fam-25 {
+    background-image: url('../images/fam-25.png');
+}
+
+.bg-fam-25-active {
+    background-image: url('../images/fam-25-active.png');
+}
+
+.bg-fam-27 {
+    /* background-image: url('../images/fam-27.png'); */
+}
+
+.bg-fam-27-active {
+    background-image: url('../images/fam-27-active.png');
+}
+
+.bg-fam-28 {
+    /* background-image: url('../images/fam-28.png'); */
+}
+
+.bg-fam-28-active {
+    background-image: url('../images/fam-28-active.png');
+}
+
+.bg-fam-29 {
+    /* background-image: url('../images/fam-29.png'); */
+}
+
+.bg-fam-29-active {
+    background-image: url('../images/fam-29-active.png');
+}
+
+.bg-fam-30 {
+    /* background-image: url('../images/fam-30.png'); */
+}
+
+.bg-fam-30-active {
+    background-image: url('../images/fam-30-active.png');
+}
+
+.bg-fam-31 {
+    /* background-image: url('../images/fam-31.png'); */
+}
+
+.bg-fam-31-active {
+    background-image: url('../images/fam-31-active.png');
+}
+
+.bg-fam-32 {
+    /* background-image: url('../images/fam-32.png'); */
+}
+
+.bg-fam-32-active {
+    background-image: url('../images/fam-32-active.png');
+}
+
+.bg-fam-34 {
+    /* background-image: url('../images/fam-34.png'); */
+}
+
+.bg-fam-34-active {
+    background-image: url('../images/fam-34-active.png');
+}
+
+.bg-fam-36 {
+    /* background-image: url('../images/fam-36.png'); */
+}
+
+.bg-fam-36-active {
+    background-image: url('../images/fam-36-active.png');
+}
+
+.bg-fam-37 {
+    /* background-image: url('../images/fam-37.png'); */
+}
+
+.bg-fam-37-active {
+    background-image: url('../images/fam-37-active.png');
+}
+
+.bg-fam-38 {
+    /* background-image: url('../images/fam-38.png'); */
+}
+
+.bg-fam-38-active {
+    background-image: url('../images/fam-38-active.png');
+}
+
+.bg-fam-40 {
+    /* background-image: url('../images/fam-40.png'); */
+}
+
+.bg-fam-40-active {
+    background-image: url('../images/fam-40-active.png');
+}
+
+.bg-fam-42 {
+    /* background-image: url('../images/fam-42.png'); */
+}
+
+.bg-fam-42-active {
+    background-image: url('../images/fam-42-active.png');
+}
+
+.famButtonActive {
+    transition: background-color 0.5s ease, color 0.5s ease;
+    background-color: #004E89 !important;
+    color: white;
+}
+
+.btnActive {
+    background-color: white !important;
+    color: #004E89 !important;
+    border-color: #004E89 !important;
+}
+
+.espedienteKodeaBtn {
+    font-size: 1.8rem !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    padding-left: 23px !important;
+    padding-right: 23px !important;
+    background-color: white;
+    border: 2px solid #626262;
+    border-radius: 30px !important;
+    height: 46px !important;
+    color: #626262;
+}
+
+.flex-row-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-top: 5px;
+    flex-wrap: wrap;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+button {
+    text-decoration: none;
+}
+
+button:hover {
+    text-decoration: none !important;
+}
+
+.fitxa-lerroa-impar-bg {
+    background-color: #EEEEEE;
+}
+
+.fitxa-lerroa-par-bg {
+    background-color: white;
+}
+
+.fitxa-lerroa-margin {
+    margin-top: 10px;
+}
+
+.fitxa-lerroa-active {
+    background-color: #D1E5F3;
+}
+
+.fitxa-lerroa-impar-bg:hover {
+    background-color: #D1E5F3;
+}
+
+.fitxa-lerroa-par-bg:hover {
+    background-color: #D1E5F3;
+}
+
+.fitxa-lerroa {
+    text-decoration: none !important;
+    text-align: left;
+    font-size: 1.8rem;
+    height: 46px;
+    padding: 10px;
+    padding-left: 25px;
+    padding-left: 25px;
+    width: 95%;
+    color: black !important;
+}
+
+.gezia
+{
+    background-repeat: no-repeat !important;
+    background-position: 98% center !important;
+    background-image: url('../images/flecha_derecha.png') !important;
+    min-width: 48px !important;
+}
+
+.text-align-right {
+    text-align: right;
+}
+
+.margin-bottom-25 {
+    margin-bottom: 25px;
+}
+
+
+footer {
+    margin-top: 50px;
+    background-color: #202020;
+    width: 100%;
+}
+
+#ubicacion-column {
+    padding-top: 50px;
+}
+
+#horario-column {
+    padding-top: 50px;
+    padding-left: 50px;
+}
+
+#SAC-column {
+    padding-top: 10px;
+    /* padding-left: 180px; */
+}
+
+.ubicacion-bg {
+    background: no-repeat url('../images/ubicacion.png') !important;
+}
+
+.horario-bg {
+    background: no-repeat url('../images/horario.png') !important;
+}
+
+.whatsapp-bg {
+    background: no-repeat url('../images/whatsapp.png') !important;
+}
+
+.escribe-bg {
+    background: no-repeat url('../images/mail.png') !important;
+}
+
+.contacto-bg {
+    background: no-repeat url('../images/web.png') !important;
+}
+
+.telefono-bg {
+    background: no-repeat url('../images/telefono.png') !important;
+}
+
+.correo-bg {
+    background: no-repeat url('../images/mail.png') !important;
+}
+
+.footer-text {
+    font-size: 1.5rem;
+    color: white;
+}
+
+.footer-sac-title {
+    font-size: 1.8rem;
+}
+
+footer a {
+    font-size: 1.5rem !important;
+    color: white !important;
+    text-decoration: underline !important;
+}
+
+.ml-auto {
+    margin-left: auto;
+}
+
+.mt-1 {
+    margin-top: 25px;
+}
+
+.pl-1 {
+    padding-left: 25px;
+}
+
+.pl-2 {
+    padding-left: 50px;
+}
+
+.pr-2 {
+    padding-right: 50px;
+}
+
+.p-2 {
+    padding: 50px;
+}
+
+#social-media {
+    margin-left: 0px;
+}
+
+
+/** End New styles  **/
+
 @media only screen and (max-width: 990px) {
     #logo_lerroa .nav>li>a:focus,
     .nav>li>a:hover {

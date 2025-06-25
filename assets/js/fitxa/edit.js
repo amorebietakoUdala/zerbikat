@@ -408,7 +408,7 @@ $(function () {
 
 
       $("#fitxafamilia_familia").val(aukera).trigger("change");
-      var url = global.base + Routing.generate('app_api_getfamiliak', { id: aukera });
+      var url = global.base + Routing.generate('app_api_getazpifamiliak', { id: aukera });
 
       var jqxhr = $.getJSON(url, function (result) {
          $.each(result, function (i, field) {
