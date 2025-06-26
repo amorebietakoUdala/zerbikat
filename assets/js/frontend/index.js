@@ -32,7 +32,6 @@ function aplicarColoresAlternos(selector) {
       const $el = $(this);
       const $children = $el.find('.fitxa-lerroa');
       const visibles = $children.filter(':visible');
-      console.log(visibles);
       if (visibles.length >= 0) {
          $(visibles).each(function(){
             count++;
@@ -48,9 +47,6 @@ function aplicarColoresAlternos(selector) {
          console.log(count);
       }
    });
-
-   // 
-   // const visibles = $children.filter(':visible');
 }
 
 function ocultarSiTodosLosHijosEstanOcultos(selector) {
@@ -79,7 +75,10 @@ $(document).ready(function () {
 
       const rex = new RegExp($(this).val(), 'i');
 
-      $(".btn-azpifamilia").hide();
+      // Ocultar los botones y flechas de volver al buscar
+      $(".btn-azpifamilia, .js-children-block").hide();
+      // Recuperar las familias que se habían ocultado en un keyup anterior, sino no se muestran los resultados de esa familia aunque se filtren correctamente.
+      $(".familia").show();
       let count = 0;
 
       $(".js-lista-servicios").each(function () {
@@ -87,8 +86,8 @@ $(document).ready(function () {
          let text = $el.text();
          if (rex.test(text)) {
             console.log(text + $el.attr('id'));
-            $el.children().show();
             $el.show();
+            $el.children().show();
             $el.parent().show();
             $el.parent().parent().show();
             $el.parent().parent().children('.js-children-block-close').hide();
