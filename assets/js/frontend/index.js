@@ -25,6 +25,34 @@ function reset() {
    aplicarColoresIniciales('.fitxa-lerroa');
 }
 
+function aplicarColoresAlternos(selector) {
+   let count = 0;
+   $(selector).filter(":visible").each(function() {
+      count = 0;
+      const $el = $(this);
+      const $children = $el.find('.fitxa-lerroa');
+      const visibles = $children.filter(':visible');
+      console.log(visibles);
+      if (visibles.length >= 0) {
+         $(visibles).each(function(){
+            count++;
+            const $el = $(this);
+            console.log($el);
+            $el.removeClass('fitxa-lerroa-par-bg fitxa-lerroa-impar-bg');
+            if (count % 2 === 0) {
+               $el.addClass('fitxa-lerroa-par-bg');
+            } else {
+               $el.addClass('fitxa-lerroa-impar-bg');
+            }
+         });
+         console.log(count);
+      }
+   });
+
+   // 
+   // const visibles = $children.filter(':visible');
+}
+
 function ocultarSiTodosLosHijosEstanOcultos(selector) {
    $(selector).each(function () {
       const $parent = $(this);
@@ -32,6 +60,7 @@ function ocultarSiTodosLosHijosEstanOcultos(selector) {
       const visibles = $children.filter(':visible');
       if (visibles.length === 0) {
          $parent.hide();
+         $parent.find('.js-children-block-close').hide();
       }
    });
 }
@@ -70,6 +99,7 @@ $(document).ready(function () {
          }
       });
       ocultarSiTodosLosHijosEstanOcultos('.familia');
+      aplicarColoresAlternos('.familia');
       console.log("Total Matching: " + count);
    });
 });
