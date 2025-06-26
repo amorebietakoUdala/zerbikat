@@ -2,40 +2,46 @@
 
 {% block menua %}
     <nav id="logo_lerroa" class="navbar navbar-fixed-top">
-        <div class="container ">
-            <div class="navbar-header">
-		<ul class="nav navbar-nav">
-		    <li><img id="logoa" src="{{ asset('build/images/logo.png') }}" alt="Amorebieta-Etxanoko Udala"/></li>
-		    <li id="goiburua" class="list-inline">{{ "messages.goiburua" | trans }}</li>
-		    <li id="itzuli_esteka" class="list-inline"><a href="https://www.amorebieta-etxano.eus/">{{ "Volver a la web del ayuntamiento" | trans }}</a></li>
-		</ul>
-            </div>
-        </div>
-    </nav>
-    <nav id="menu_lerroa" class="navbar navbar-default">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand"></a>
                 <ul class="nav navbar-nav">
-                    <li class="list-inline"><a
-                                href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'es'})) }}">ES</a>
-                    </li>
-                    <li class="list-inline"><a
-                                href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'eu'})) }}">EU</a>
+                    <li><img id="logoa" src="{{ asset('build/images/logo.png') }}" alt="Amorebieta-Etxanoko Udala"/></li>
+                    <li id="goiburua" class="list-inline">{{ "messages.goiburua" | trans }}</li>
+                    <li id="goiburua-spacer">&nbsp;</li>
+                    <li id="itzuli_esteka" class="list-inline"><a href="https://www.amorebieta-etxano.eus/">{{ "Volver a la web del ayuntamiento" | trans }}</a></li>
+                    <li class="list-inline ml-1 hizkuntza"><a class="{{ app.request.locale == 'eu' ? 'blue-active' : '' }}"
+                        href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'eu'})) }}">EU</a>
+                    </li>            
+                    <li class="list-inline ml-1 hizkuntza"><a class="{{ app.request.locale == 'es' ? 'blue-active' : '' }}"
+                        href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'es'})) }}">ES</a>
                     </li>
                 </ul>
             </div>
-            <div id="navbar" class="navbar-collapse collapse navbar-right">
-            </div>
         </div>
     </nav>
-{% endblock %}
+    {% block breadcrumbs %}
+        <nav id="menu_lerroa" class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand"></a>
+                    {# <ul class="nav navbar-nav">
+                        <li class="list-inline"><a
+                                    href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'es'})) }}">ES</a>
+                        </li>
+                        <li class="list-inline"><a
+                                    href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'eu'})) }}">EU</a>
+                        </li>
+                    </ul> #}
+                </div>
+                <div id="navbar" class="navbar-collapse collapse navbar-right">
+                </div>
+            </div>
+        </nav>
+    {% endblock breadcrumbs %}    
+{% endblock menua %}
 
 {% block body %}
-    <br/>
     {{ parent() }}
-
-    {# <div class="alert alert-info" role="alert">{{ "La información ofrecida a continuación carece de validez jurídica y se ofrece sólo a efectos informativos" | trans }}</div> #}
 
     <div class="row">
         <div class="col-lg-12">
@@ -45,25 +51,14 @@
     </div>
 
     <div id="intro" class="row">
-        <div class="col-lg-12">{{ 'message.intro' | trans | raw }}
-            {# <b>Bienvenido/a al manual de trámites del Ayuntamiento de Amorebieta-Etxano.</b><br/>
-            <br/>
-            En este espacio puedes consultar y realizar de forma sencilla todos los trámites que<br/>
-            necesites: empadronamiento, licencias, ayudas, participación en actividades,<br/>
-            realización de pagos, gestión de impuestos o acceso a servicios municipales.<br/>
-            <br/>
-            Los trámites están organizados por temas y situaciones de la vida diaria, para facilitar<br/>
-            su comprensión y acceso, según lo que necesites en cada momento: cuidar de alguien,<br/>
-            cambiar de casa, buscar empleo, abrir un local comercial, organizar un evento,<br/>
-            apuntarte a un curso, resolver una duda o solicitar una ayuda.<br/> #}
-        </div>
+        <div class="col-lg-12">{{ 'message.intro' | trans | raw }}</div>
     </div>
 
-    <div class="col-lg-12 gray-bg themed-grid-col mb-2">
-        <div class="col-lg-6">
+    <div class="col-lg-12 col-md-12 col-sm-12 gray-bg themed-grid-col mb-3">
+        <div class="col-lg-5 col-md-5 col-sm-5">
         
         </div>
-        <div id="divFiltrar" class="col-lg-6">
+        <div id="divFiltrar" class="col-lg-7 col-md-7 col-sm-7">
             <div class="form-group">
                 <label class="sr-only" for="inputFiltrar">{{ "messages.bilatu_placeholder" | trans | capitalize }}</label>
                 <div class="input-group">
@@ -76,12 +71,15 @@
         </div>
     </div>
 
-    <br/>
     {% set azpisailaId = app.request.get('azpisaila') %}
-    <div class="col-lg-12 ">
+    {# Si pulsamos cualquier botón el resto se tienen que apagar aunque sean de otra familia con lo cual hay que poner el controlador en un punto en el que abarque todos los botones #}
+    <div class="familia-list-wrapper" {{ stimulus_controller('subfamilias-button', {
+        'activeClass' : 'famButtonActive',
+        'backgroundClassTemplate':'bg-fam-${number}-active',
+    }) }}>
         {% set familiaId = app.request.get('familia') %}
         {% for familia in familiak %}
-            <div class="familia">
+            <div class="familia mt-4" data-action="erakutsi-ezkutatu:close->subfamilias-button#onListClose">
                 {# START Familia titulua #}
                 <div class="tituloFamilia-block">
                     <h2 class="tituloFamilia">
@@ -92,7 +90,7 @@
                 </div>
                 {# END Familia titulua #}
                 {% if (familiaId is not null and familiaId == familia.id) or familiaId is null %}
-                    <div class="listaServicios" id='fam-{{ familia.id }}' {{ stimulus_controller('subfamilias-button') }} data-action="erakutsi-ezkutatu:close->subfamilias-button#onListClose">
+                    <div class="listaServicios" id='fam-{{ familia.id }}'>
                         {# START azpifamiliak eta euren semeak #}
                         <div class="flex-row-wrap subfamilias">
                             {% for c in familia.children | sort %}
@@ -112,9 +110,9 @@
                         </div>
 
                         {% for c in familia.children | sort %}
-                            <div id="fam-{{c.id}}-children-block" class="text-align-right margin-bottom-25 js-children-block" style="display: none">
+                            <div id="fam-{{c.id}}-children-block" class="text-align-right js-children-block" style="display: none">
                                 <div class="js-children-block-close" data-action="click->erakutsi-ezkutatu#onClick" {{ stimulus_controller('erakutsi-ezkutatu', { 'id' : 'fam-'~c.id~'-children-block', 'button': 'fam-'~c.id~'-button', 'children-class' : 'js-children-block'})}}>
-                                    <img src="{{ asset('build/images/flecha desplegable_subcategorias.png') }}">
+                                    <img class="cursor-pointer" src="{{ asset('build/images/flecha desplegable_subcategorias.png') }}">
                                     <hr class="hrGray hr-1first-line-width-right">
                                     <hr class="hrGray">
                                 </div>
@@ -127,7 +125,7 @@
                                                 data-action="mouseover->listaservicios-row#onMouseOver mouseout->listaservicios-row#onMouseOut">
                                                 {{ fitx.fitxa.espedienteKodea }}
                                             </button>
-                                            <div class="fitxa-lerroa {{ ( loop.index % 2 ) == 0 ? 'fitxa-lerroa-par-bg' : 'fitxa-lerroa-impar-bg' }} gezia" 
+                                            <div class="fitxa-lerroa {{ ( loop.index % 2 ) == 0 ? 'fitxa-lerroa-par-bg' : 'fitxa-lerroa-impar-bg' }} gezia"  data-loop-index="{{ loop.index }}"
                                                 data-listaservicios-row-target="row"
                                                 data-action="mouseover->listaservicios-row#onMouseOver mouseout->listaservicios-row#onMouseOut">
                                                 {% if app.request.locale == 'eu' %}{{ fitx.fitxa.deskribapenaeu }}{% else %} {{ fitx.fitxa.deskribapenaes }}{% endif %}
@@ -140,13 +138,14 @@
                         {# END azpifamiliak eta euren semeak #}
                     </div>
                 {% endif %}
+            </div>
             {% endfor %}
         </div>
     </div>
 {% endblock %}
 
 {% block footer %}
-    <footer class="container footer-bg footer-text">
+    <footer class="footer footer-bg footer-text">
         <div id="columnas-footer" class="mt-1 pl-2 flex-row">
             <div id="ubicacion-column" class="col-lg-4">
                 <div class="row ubicacion-bg pl-2">

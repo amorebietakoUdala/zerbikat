@@ -4,6 +4,7 @@
 
 body {
     margin-top: 50px;
+    font-size: 16px;
     /*    font-family: 'Alegreya Sans', sans-serif;  */
 }
 
@@ -65,46 +66,67 @@ button.list-group-item-success {
     color: #0071bd;
 }
 
+.navbar .navbar-fixed-top {
+    background-color: #FFFFFF;
+}
+
 #logo_lerroa img {
-    height: 70px;
+    height: 65px;
+    width: 160px;
 }
 
 #logo_lerroa {
-    height: 70px;
     background-color: #FFFFFF;
+    height: 70px;
     border-bottom: 1px solid #e7e7e7;
 }
 
 #menu_lerroa {
     margin-top: 70px;
     margin-bottom: 0px;
+    height: 60px !important;
+    background-color: #004E89;
 }
 
-#itzuli_esteka {
-    margin-top: 5px;
+#itzuli_esteka, .hizkuntza {
+    margin-top: 8px;
     text-decoration: none;
-    background-color: #fff;
+    font-size: 1.0rem;
+    /* background-color: #fff !important; */
+    font-weight: 700;
 }
 
-#itzuli_esteka a {
+#itzuli_esteka a, .hizkuntza a {
     padding-left: 0px !important;
     padding-right: 0px !important;
     text-decoration: none;
 }
 
-#itzuli_esteka a:hover {
+#itzuli_esteka a:hover, .hizkuntza a:hover {
     text-decoration: none;
-    background-color: #fff;
+    background-color: #fff !important;
+    color: #009ED5 !important;
     padding-left: 0px !important;
     padding-right: 0px !important;
+}
+
+.blue-active {
+    color: #009ED5 !important;
 }
 
 #goiburua {
-    margin-left: 5px;
-    margin-top: 5px;
-    width: 55rem;
-    text-align: center;
-    font-size: 4rem;
+    margin-left: 32px;
+    margin-top: 20px;
+   /* width: 45rem; */
+    min-width: 175px;
+    max-width: 450px;
+    font-size: 1.8rem;
+}
+
+#goiburua-spacer {
+    width: auto;
+    min-width: 400px;
+    max-width: 550px;
 }
 
 #goiburua a {
@@ -112,7 +134,10 @@ button.list-group-item-success {
 }
 
 /** Start New styles  **/
+
 h1 {
+    margin-top: 54px !important;
+    margin-bottom: 0px !important;
     font-size: 3rem;
     font-weight: 700;
 }
@@ -120,10 +145,12 @@ h1 {
 .divider {
     line-height: 4px;
     background-color: #009ED5;
+    margin-top: 16px;
+    margin-bottom: 36px;
 }
 
 h2.tituloFamilia {
-    font-size: 2.8rem;
+    font-size: 2.6rem;
     font-weight: 600;
 }
 
@@ -144,11 +171,6 @@ h2.tituloFamilia {
     margin-left: auto;
 }
 
-#intro {
-    margin-top: 25px;
-    margin-bottom: 25px;
-}
-
 .gray-bg {
     background-color: #F5F5F5 !important;
 }
@@ -158,12 +180,15 @@ h2.tituloFamilia {
 }
 
 .themed-grid-col {
-    padding-left: 1.75rem;
-    padding-top: 1.75rem;
+    margin-top: 80px;
+    /* padding-left: 1.75rem; */
+    padding-top: 2rem;
+    padding-bottom: 2rem;
     background-color:  #F5F5F5 !important;
     border: none;
     border-radius: 40px;
-    padding-left: 15px;
+    padding-left: 25px;
+    padding-right: 25px;
 }
 
 .input-group-addon#filtrarLogo {
@@ -187,6 +212,10 @@ h2.tituloFamilia {
     padding-right: 5px !important;
 }
 
+#divFiltrar .form-group {
+    margin-bottom: 0px !important;
+}
+
 #inputFiltrar {
     border-right-style: solid;
     border-right-color: #ccc;
@@ -197,6 +226,10 @@ h2.tituloFamilia {
 #inputFiltrar:focus {
     border-top-color: #ccc;
     border-bottom-color: #ccc;
+}
+
+#filtrarText {
+    width: 92px;
 }
 
 #filtrarImg {
@@ -211,7 +244,7 @@ h2.tituloFamilia {
 .btn-azpifamilia {
     border-style: 2px solid;
     border-color: #004E89;
-    border-radius: 10px;
+    border-radius: 8px;
     background-color: white;
     color: #004E89;
     padding-top: 15px;
@@ -219,7 +252,7 @@ h2.tituloFamilia {
     padding-bottom: 15px;
     padding-right: 15px;
     height: 120px;
-    width: 260px;
+    width: 270px;
     text-align: left;
     margin-top: 15px;
     margin-left: 15px;
@@ -238,7 +271,7 @@ h2.tituloFamilia {
 }
 
 .font-weight {
-    font-size: 1.7rem;
+    font-size: 1.5rem;
     font-weight: 400;
 }
 
@@ -356,7 +389,7 @@ h2.tituloFamilia {
 }
 
 .bg-fam-27 {
-    /* background-image: url('../images/fam-27.png'); */
+    background-image: url('../images/fam-27.png');
 }
 
 .bg-fam-27-active {
@@ -364,7 +397,7 @@ h2.tituloFamilia {
 }
 
 .bg-fam-28 {
-    /* background-image: url('../images/fam-28.png'); */
+    background-image: url('../images/fam-28.png');
 }
 
 .bg-fam-28-active {
@@ -372,7 +405,7 @@ h2.tituloFamilia {
 }
 
 .bg-fam-29 {
-    /* background-image: url('../images/fam-29.png'); */
+    background-image: url('../images/fam-29.png');
 }
 
 .bg-fam-29-active {
@@ -380,7 +413,7 @@ h2.tituloFamilia {
 }
 
 .bg-fam-30 {
-    /* background-image: url('../images/fam-30.png'); */
+    background-image: url('../images/fam-30.png');
 }
 
 .bg-fam-30-active {
@@ -388,7 +421,7 @@ h2.tituloFamilia {
 }
 
 .bg-fam-31 {
-    /* background-image: url('../images/fam-31.png'); */
+    background-image: url('../images/fam-31.png');
 }
 
 .bg-fam-31-active {
@@ -396,7 +429,7 @@ h2.tituloFamilia {
 }
 
 .bg-fam-32 {
-    /* background-image: url('../images/fam-32.png'); */
+    background-image: url('../images/fam-32.png');
 }
 
 .bg-fam-32-active {
@@ -404,7 +437,7 @@ h2.tituloFamilia {
 }
 
 .bg-fam-34 {
-    /* background-image: url('../images/fam-34.png'); */
+    background-image: url('../images/fam-34.png');
 }
 
 .bg-fam-34-active {
@@ -412,7 +445,7 @@ h2.tituloFamilia {
 }
 
 .bg-fam-36 {
-    /* background-image: url('../images/fam-36.png'); */
+    background-image: url('../images/fam-36.png');
 }
 
 .bg-fam-36-active {
@@ -420,7 +453,7 @@ h2.tituloFamilia {
 }
 
 .bg-fam-37 {
-    /* background-image: url('../images/fam-37.png'); */
+    background-image: url('../images/fam-37.png');
 }
 
 .bg-fam-37-active {
@@ -428,7 +461,7 @@ h2.tituloFamilia {
 }
 
 .bg-fam-38 {
-    /* background-image: url('../images/fam-38.png'); */
+    background-image: url('../images/fam-38.png');
 }
 
 .bg-fam-38-active {
@@ -436,7 +469,7 @@ h2.tituloFamilia {
 }
 
 .bg-fam-40 {
-    /* background-image: url('../images/fam-40.png'); */
+    background-image: url('../images/fam-40.png');
 }
 
 .bg-fam-40-active {
@@ -444,7 +477,7 @@ h2.tituloFamilia {
 }
 
 .bg-fam-42 {
-    /* background-image: url('../images/fam-42.png'); */
+    background-image: url('../images/fam-42.png');
 }
 
 .bg-fam-42-active {
@@ -463,16 +496,21 @@ h2.tituloFamilia {
     border-color: #004E89 !important;
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
 .espedienteKodeaBtn {
-    font-size: 1.8rem !important;
-    padding-top: 10px !important;
-    padding-bottom: 10px !important;
-    padding-left: 23px !important;
-    padding-right: 23px !important;
+    font-size: 1.6rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 23px;
+    padding-right: 23px;
     background-color: white;
     border: 2px solid #626262;
-    border-radius: 30px !important;
-    height: 46px !important;
+    border-radius: 30px;
+    height: 48px;
+    width: 104px;
     color: #626262;
 }
 
@@ -524,8 +562,8 @@ button:hover {
 .fitxa-lerroa {
     text-decoration: none !important;
     text-align: left;
-    font-size: 1.8rem;
-    height: 46px;
+    font-size: 1.6rem;
+    height: 48px;
     padding: 10px;
     padding-left: 25px;
     padding-left: 25px;
@@ -549,11 +587,9 @@ button:hover {
     margin-bottom: 25px;
 }
 
-
 footer {
     margin-top: 50px;
     background-color: #202020;
-    width: 100%;
 }
 
 #ubicacion-column {
@@ -599,16 +635,16 @@ footer {
 }
 
 .footer-text {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     color: white;
 }
 
 .footer-sac-title {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
 }
 
 footer a {
-    font-size: 1.5rem !important;
+    font-size: 1.6rem !important;
     color: white !important;
     text-decoration: underline !important;
 }
@@ -617,9 +653,43 @@ footer a {
     margin-left: auto;
 }
 
+.js-children-block-close {
+    height: 50px;
+}
+
 .mt-1 {
     margin-top: 25px;
 }
+
+.mt-2 {
+    margin-top: 50px;
+}
+
+.mt-3 {
+    margin-top: 75px;
+}
+
+.mt-4 {
+    margin-top: 100px;
+}
+
+
+.mb-2 {
+    margin-bottom: 50px;
+}
+
+.mb-3 {
+    margin-bottom: 75px;
+}
+
+.ml-auto {
+    margin-left: auto;
+}
+
+.ml-1 {
+    margin-left: 25px;
+}
+
 
 .pl-1 {
     padding-left: 25px;
@@ -643,26 +713,35 @@ footer a {
 
 
 /** End New styles  **/
+@media (min-width: 1250px) {
+    .container {
+        width: 1216px;
+    }
+}
 
-@media only screen and (max-width: 990px) {
+@media only screen and (max-width: 1200px) {
     #logo_lerroa .nav>li>a:focus,
     .nav>li>a:hover {
         text-decoration: none;
         background-color: transparent !important;
     }
     #goiburua {
-        text-align: center;
-        font-size: 3rem;
         width: auto;
-        margin-left: auto;
     }
+    #goiburua-spacer {
+        width: auto;
+        min-width: 100px;
+        max-width: 200px;
+      }
+
     .container {
-        width: 100%;
+        width: 990px;
     }
+
     #itzuli_esteka {
-        float: right;
-        text-align: right;
+        float: left;
     }
+
     .navbar-header {
         float: left;
         width: 100%;
@@ -672,29 +751,70 @@ footer a {
     }
 }
 
+@media only screen and (max-width: 990px) {
+    #logo_lerroa .nav>li>a:focus,
+    .nav>li>a:hover {
+        text-decoration: none;
+        background-color: transparent !important;
+    }
+
+    .container {
+        width: 768px;
+    }
+
+    .navbar-header {
+        float: left;
+        width: 100%;
+    }
+
+    #logo_lerroa div.navbar-header>ul.nav {
+        width: 100%;
+    }
+}
+
 @media only screen and (max-width: 768px) {
     .container {
-        width: auto;
-        padding-left: 15px;
-        padding-right: 15px;
+        width: 100%;
     }
+
+    .footer {
+        width: 100% !important;
+    }
+
     #goiburua {
-        font-size: 2rem;
-        text-align: center;
-        width: 40%;
-        margin-left: auto;
+        width: auto !important;
+        min-width: 0px !important;
+        max-width: 250px !important;
     }
+    #goiburua-spacer {
+        display: none;
+    }
+
     #itzuli_esteka {
-        float: right;
+        float: left;
         width: auto;
-        text-align: right;
-        font-size: 1rem;
+        margin-left: 30px;
     }
+
+    .pl-2 {
+        padding-left: 30px;
+    }
+
+    #itzuli_esteka, .hizkuntza {
+        margin-top: 12px;
+        padding-top: 0px;
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+        width: auto;
+        font-size: 1.0rem;
+    }
+
     ul.nav li {
         float: left;
         width: auto;
     }
     img#logoa {
+        padding-top: 10px;
         padding-left: 15px;
         max-width: 100px;
         max-width: auto;
