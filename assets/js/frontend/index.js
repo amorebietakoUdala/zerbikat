@@ -36,7 +36,6 @@ function aplicarColoresAlternos(selector) {
          $(visibles).each(function(){
             count++;
             const $el = $(this);
-            console.log($el);
             $el.removeClass('fitxa-lerroa-par-bg fitxa-lerroa-impar-bg');
             if (count % 2 === 0) {
                $el.addClass('fitxa-lerroa-par-bg');
@@ -44,7 +43,6 @@ function aplicarColoresAlternos(selector) {
                $el.addClass('fitxa-lerroa-impar-bg');
             }
          });
-         console.log(count);
       }
    });
 }
@@ -63,15 +61,16 @@ function ocultarSiTodosLosHijosEstanOcultos(selector) {
 
 $(document).ready(function () {
    $("#inputFiltrar").keyup(function () {
-      const filtro = $(this).val();
+      let filtro = $(this).val();
       if (filtro === '' || filtro === null) {
          console.log("vacío");
          reset();
-      }
-      // No buscar hasta tener 3 caracteres
-      if (filtro.length < 3) {
          return;
       }
+      // No buscar hasta tener 3 caracteres
+      // if (filtro.length < 3) {
+      //    return;
+      // }
 
       const rex = new RegExp($(this).val(), 'i');
 
@@ -85,7 +84,6 @@ $(document).ready(function () {
          let $el = $(this);
          let text = $el.text();
          if (rex.test(text)) {
-            console.log(text + $el.attr('id'));
             $el.show();
             $el.children().show();
             $el.parent().show();

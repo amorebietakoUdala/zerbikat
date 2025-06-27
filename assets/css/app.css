@@ -91,8 +91,7 @@ button.list-group-item-success {
 #itzuli_esteka, .hizkuntza {
     margin-top: 8px;
     text-decoration: none;
-    font-size: 1.0rem;
-    /* background-color: #fff !important; */
+    font-size: 1.2rem;
     font-weight: 700;
 }
 
@@ -527,6 +526,10 @@ h2.tituloFamilia {
     flex-direction: row;
 }
 
+.flex-justify-content-space-evenly{
+    justify-content: space-evenly;
+}
+
 button {
     text-decoration: none;
 }
@@ -601,10 +604,9 @@ footer {
     padding-left: 50px;
 }
 
-#SAC-column {
+/* #SAC-column {
     padding-top: 10px;
-    /* padding-left: 180px; */
-}
+} */
 
 .ubicacion-bg {
     background: no-repeat url('../images/ubicacion.png') !important;
@@ -647,6 +649,10 @@ footer a {
     font-size: 1.6rem !important;
     color: white !important;
     text-decoration: underline !important;
+}
+
+#columnas-footer {
+    padding: 50px;
 }
 
 .ml-auto {
@@ -699,6 +705,10 @@ footer a {
     padding-left: 50px;
 }
 
+.pr-1 {
+    padding-right: 25px;
+}
+
 .pr-2 {
     padding-right: 50px;
 }
@@ -707,8 +717,12 @@ footer a {
     padding: 50px;
 }
 
+.pb-2 {
+    padding-bottom: 50px;
+}
+
 #social-media {
-    margin-left: 0px;
+    margin-left: -15px;
 }
 
 
@@ -733,6 +747,10 @@ footer a {
         min-width: 100px;
         max-width: 200px;
       }
+    
+    #SAC-column {
+        padding-top: 0px;
+    }
 
     .container {
         width: 990px;
@@ -746,8 +764,13 @@ footer a {
         float: left;
         width: 100%;
     }
+
     #logo_lerroa div.navbar-header>ul.nav {
         width: 100%;
+    }
+
+    #columnas-footer {
+        padding-top: 25px;
     }
 }
 
@@ -762,6 +785,10 @@ footer a {
         width: 768px;
     }
 
+    #goiburua-spacer {
+        display: none;
+    }
+
     .navbar-header {
         float: left;
         width: 100%;
@@ -769,6 +796,22 @@ footer a {
 
     #logo_lerroa div.navbar-header>ul.nav {
         width: 100%;
+    }
+
+    #horario-column {
+        padding-left: 15px;
+    }
+
+    .footer {
+        padding-top: 0px;
+    }
+
+    #SAC-column {
+        padding-top: 25px;
+    }
+
+    .footer-sac-title {
+        padding-left: 0px !important;
     }
 }
 
@@ -782,10 +825,9 @@ footer a {
     }
 
     #goiburua {
-        width: auto !important;
-        min-width: 0px !important;
-        max-width: 250px !important;
+        display: none;
     }
+
     #goiburua-spacer {
         display: none;
     }
@@ -796,8 +838,8 @@ footer a {
         margin-left: 30px;
     }
 
-    .pl-2 {
-        padding-left: 30px;
+    .pl-2#columnas-footer {
+        padding-left: 60px;
     }
 
     #itzuli_esteka, .hizkuntza {
@@ -825,11 +867,23 @@ footer a {
         margin-top: 70px;
         margin-bottom: 0px;
     }
+    
+    #politica {
+        padding-left: 30px;
+    }
+
+    #copy {
+        display: none;
+    }
 }
 
 @media only screen and (max-width: 500px) {
     #goiburua {
         display: none;
+    }
+
+    #columnas-footer {
+        padding-left: 50px;
     }
 }
 

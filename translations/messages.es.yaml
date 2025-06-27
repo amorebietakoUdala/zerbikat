@@ -236,6 +236,7 @@
 "Saila / Azpisaila": "Área / Subárea"
 "Familia / Azpifamilia": "Familia / Subfamilia"
 "Udala": "Ayuntamiento"
+
 message.intro: |
   <b>Bienvenido/a al manual de trámites del Ayuntamiento de Amorebieta-Etxano.</b><br>
   <br>
@@ -270,7 +271,7 @@ footer.contacto2: "Servicio de Atención Ciudadana"
 footer.telefono1: "TELEFONO"
 footer.y: " y "
 footer.correo1: "CORREO ELECTRÓNICO"
-footer.politica: "Política De cookies"
+footer.politica: "Política de privacidad"
 footer.aviso: "Aviso Legal"
-footer.cookies: "Política De Cookiess"
+footer.cookies: "Política De Cookies"
 footer.accesibilidad: "Accesbilidad"

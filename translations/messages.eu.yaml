@@ -246,3 +246,29 @@ message.intro: |
   ulertzeko eta sarbidea izateko, une bakoitzean behar duzunaren arabera: <br>
   Norbait zaintzea, etxez aldatzea, enplegua bilatzea, merkataritza-lokal bat irekitzea,<br>
   ekitaldi bat antolatzea, ikastaro batean izena ematea, zalantza bat argitzea edo laguntza bat eskatzea.<br>
+
+# FOOTER
+footer.ubicacion1: KOKAPENA
+
+footer.ubicacion2: |
+  <b>Amorebieta-Etxanoko Udala</b><br>
+  Herriko Plaza, z/g 48340<br>
+  Amorebieta-Etxano (Bizkaia)
+
+footer.horario1: "ORDUTEGIA"
+footer.horario2: "7:30 - 15:00"
+footer.whatsapp1: "WHATSAPP"
+footer.whatsapp2: "688 866 600"
+footer.escribe1: "IDATZI"
+footer.escribe2: "UDALARI"
+
+footer.SAC: "HAZ"
+footer.contacto1: "KONTACTUA"
+footer.contacto2: "Herritarren Arreta Zerbitzua"
+footer.telefono1: "TELEFONO"
+footer.y: " eta "
+footer.correo1: "POSTA ELEKTRONIKOA"
+footer.politica: "Pribatutasun politika"
+footer.aviso: "Lege-Oharra"
+footer.cookies: "Cookien politika"
+footer.accesibilidad: "Irisgarritasuna"
