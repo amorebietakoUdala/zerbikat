@@ -3,6 +3,7 @@ import $ from 'jquery';
 function aplicarColoresIniciales(selector) {
    $(selector).each(function() {
       const $el = $(this);
+      $el.removeClass('fitxa-lerroa-par-bg fitxa-lerroa-impar-bg');
       if ($el.data('loop-index') % 2 === 0) {
          $el.addClass('fitxa-lerroa-par-bg');
       } else {
