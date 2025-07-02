@@ -5,7 +5,6 @@
 body {
     margin-top: 50px;
     font-size: 16px;
-    /*    font-family: 'Alegreya Sans', sans-serif;  */
 }
 
 .fitxaMenua {
@@ -13,7 +12,6 @@ body {
     margin-right: auto;
     padding-top: 40px;
     display: block;
-    /*        background: rgba(255, 255, 165, 0.5);*/
     position: fixed;
     /* could be absolute */
     top: 0;
@@ -85,6 +83,7 @@ img#logoa {
     margin-top: 70px;
     margin-bottom: 0px;
     height: 30px !important;
+    min-height: 30px !important;
     background-color: #004E89;
 }
 
@@ -116,7 +115,6 @@ img#logoa {
 #goiburua {
     margin-left: 32px;
     margin-top: 20px;
-   /* width: 45rem; */
     min-width: 175px;
     max-width: 450px;
     font-size: 1.8rem;
@@ -180,7 +178,6 @@ h2.tituloFamilia {
 
 .themed-grid-col {
     margin-top: 80px;
-    /* padding-left: 1.75rem; */
     padding-top: 2rem;
     padding-bottom: 2rem;
     background-color:  #F5F5F5 !important;
@@ -204,7 +201,6 @@ h2.tituloFamilia {
     background-color: white; 
     border-left-style: solid;
     border-left-color: #828282;
-    /* border-bottom-left-radius: 35px;*/
 }
 
 #divFiltrar {
@@ -258,11 +254,6 @@ h2.tituloFamilia {
     background-position: 25px 30px !important;
     background-repeat: no-repeat;
 }
-
-/* .btn-azpifamilia:hover {
-    background-color: #004E89 !important;
-    color: white;
-} */
 
 .w70-float-left {
     width: 70%; 
@@ -604,10 +595,6 @@ footer {
     padding-left: 50px;
 }
 
-/* #SAC-column {
-    padding-top: 10px;
-} */
-
 .ubicacion-bg {
     background: no-repeat url('../images/ubicacion.png') !important;
 }
@@ -727,9 +714,27 @@ footer a {
 
 
 /** End New styles  **/
-@media (min-width: 1250px) {
+@media (min-width: 1251px) {
     .container {
         width: 1216px;
+    }
+
+    .hizkuntza-eu {
+        margin-left: 25px !important;
+    }
+
+    #itzuli-esteka {
+        margin-right: 25px !important;
+    }
+}
+
+@media only screen and (max-width: 1250px) {
+    .hizkuntza-eu {
+        margin-left: 25px !important;
+    }
+
+    #itzuli-esteka {
+        margin-right: 25px !important;
     }
 }
 
@@ -742,6 +747,7 @@ footer a {
     #goiburua {
         width: auto;
     }
+
     #goiburua-spacer {
         width: auto;
         min-width: 100px;
@@ -754,10 +760,6 @@ footer a {
 
     .container {
         width: 990px;
-    }
-
-    #itzuli_esteka {
-        float: left;
     }
 
     .navbar-header {
@@ -824,10 +826,6 @@ footer a {
         width: 100% !important;
     }
 
-    /* #goiburua {
-        display: none;
-    } */
-
     #goiburua-spacer {
         display: none;
     }
@@ -853,7 +851,6 @@ footer a {
 
     #itzuli_esteka a {
         overflow: hidden;
-        /* text-overflow: ellipsis; */
         white-space: nowrap;
         max-width: 58px; 
     }
@@ -866,15 +863,6 @@ footer a {
     .navbar .nav {
         margin: 0px 0px;
     }
-
-    /* img#logoa {
-        padding-top: 10px;
-        padding-left: 25px;
-        max-width: 100px;
-        max-width: auto;
-        height: auto;
-        width: auto;
-    } */
 
     #menu_lerroa {
         margin-top: 70px;
@@ -895,10 +883,12 @@ footer a {
         height: 100px !important;
     }
 
+    #menu_lerroa {
+        margin-top: 100px;
+    }
+
     #itzuli_esteka {
         clear: both;
-        /* float: left;
-        width: auto; */
         margin-left: 25px;
     }
 
@@ -913,14 +903,6 @@ footer a {
         float: right;
         min-width: 0px;
     }
-
-    /* img#logoa {
-        padding-left: 25px;
-        max-width: 100px;
-        height: auto;
-        width: auto;
-    } */
-
 
     .hizkuntza {
         margin-left: 20px;
@@ -957,24 +939,12 @@ footer a {
 .affix {
     top: 2;
     width: 100%;
-    /*-webkit-transition: all .5s ease-in-out;*/
-    /*transition: all .5s ease-in-out;*/
-    /*background-color: #F44336;*/
-    /*border-color: #F44336;*/
     z-index: 1010;
 }
 
-/*.affix :hover*/
-/*{*/
-/*padding: 15px !important;*/
-/*}*/
 .affix a {
-    /*color: #777777 !important;*/
-    /*padding: 15px !important;*/
     color: #777777;
     padding: 15px;
-    /*-webkit-transition: all .5s ease-in-out;*/
-    /*transition: all .5s ease-in-out;*/
 }
 
 .affix a:hover {
@@ -985,10 +955,6 @@ footer a {
 .affix-top a {
     /*padding: 25px !important;*/
 }
-
-/*.affix + .container-fluid {*/
-/*/*padding-top: 5px;*/
-/*}*/
 
 .help-block {
     color: #902b2b;
