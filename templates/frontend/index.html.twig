@@ -4,16 +4,25 @@
     <nav id="logo_lerroa" class="navbar navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav flex-row-wrap">
                     <li><img id="logoa" src="{{ asset('build/images/logo.png') }}" alt="Amorebieta-Etxanoko Udala"/></li>
                     <li id="goiburua" class="list-inline">{{ "messages.goiburua" | trans }}</li>
                     <li id="goiburua-spacer">&nbsp;</li>
-                    <li id="itzuli_esteka" class="list-inline"><a href="https://www.amorebieta-etxano.eus/">{{ "Volver a la web del ayuntamiento" | trans }}</a></li>
-                    <li class="list-inline ml-1 hizkuntza"><a class="{{ app.request.locale == 'eu' ? 'blue-active' : '' }}"
-                        href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'eu'})) }}">EU</a>
+                    <li id="itzuli_esteka" class="list-inline">
+                        <a href="https://www.amorebieta-etxano.eus/">
+                            <img id="itzultzeko-gezia" src="{{ asset('build/images/flecha_header.png') }}" alt="{{ "Volver a la web del ayuntamiento" | trans }}" title="{{ "Volver a la web del ayuntamiento" | trans }}">
+                            &nbsp;{{ "Volver a la web del ayuntamiento" | trans | raw }}
+                       </a>
+                    </li>
+                    <li class="list-inline ml-auto hizkuntza hizkuntza-eu">
+                        <a class="{{ app.request.locale == 'eu' ? 'blue-active' : '' }}"
+                            href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'eu'})) }}">EU
+                        </a>
                     </li>            
-                    <li class="list-inline ml-1 hizkuntza"><a class="{{ app.request.locale == 'es' ? 'blue-active' : '' }}"
-                        href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'es'})) }}">ES</a>
+                    <li class="list-inline ml-1 hizkuntza hizkuntza-es">
+                        <a class="{{ app.request.locale == 'es' ? 'blue-active' : '' }}"
+                            href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'es'})) }}">ES
+                        </a>
                     </li>
                 </ul>
             </div>

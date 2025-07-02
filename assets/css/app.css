@@ -70,7 +70,7 @@ button.list-group-item-success {
     background-color: #FFFFFF;
 }
 
-#logo_lerroa img {
+img#logoa {
     height: 65px;
     width: 160px;
 }
@@ -84,7 +84,7 @@ button.list-group-item-success {
 #menu_lerroa {
     margin-top: 70px;
     margin-bottom: 0px;
-    height: 60px !important;
+    height: 30px !important;
     background-color: #004E89;
 }
 
@@ -824,9 +824,9 @@ footer a {
         width: 100% !important;
     }
 
-    #goiburua {
+    /* #goiburua {
         display: none;
-    }
+    } */
 
     #goiburua-spacer {
         display: none;
@@ -851,18 +851,31 @@ footer a {
         font-size: 1.0rem;
     }
 
+    #itzuli_esteka a {
+        overflow: hidden;
+        /* text-overflow: ellipsis; */
+        white-space: nowrap;
+        max-width: 58px; 
+    }
+    
     ul.nav li {
         float: left;
         width: auto;
     }
-    img#logoa {
+
+    .navbar .nav {
+        margin: 0px 0px;
+    }
+
+    /* img#logoa {
         padding-top: 10px;
-        padding-left: 15px;
+        padding-left: 25px;
         max-width: 100px;
         max-width: auto;
         height: auto;
         width: auto;
-    }
+    } */
+
     #menu_lerroa {
         margin-top: 70px;
         margin-bottom: 0px;
@@ -877,13 +890,67 @@ footer a {
     }
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 537px) {
+    #logo_lerroa {
+        height: 100px !important;
+    }
+
+    #itzuli_esteka {
+        clear: both;
+        /* float: left;
+        width: auto; */
+        margin-left: 25px;
+    }
+
+    .hizkuntza-es {
+        margin-top: 0px !important;
+    }
+}
+
+@media only screen and (max-width: 508px) {
+
     #goiburua {
-        display: none;
+        float: right;
+        min-width: 0px;
+    }
+
+    /* img#logoa {
+        padding-left: 25px;
+        max-width: 100px;
+        height: auto;
+        width: auto;
+    } */
+
+
+    .hizkuntza {
+        margin-left: 20px;
     }
 
     #columnas-footer {
         padding-left: 50px;
+    }
+}
+
+@media screen and (max-width: 476px) {
+    .hizkuntza-eu {
+        margin-top: 0px !important;
+    }
+}
+
+@media screen and (max-width: 442px) {
+    #goiburua {
+        margin-left: auto;
+    }    
+
+    #itzuli_esteka {
+        margin-top: 12px !important;
+    }
+}
+
+@media screen and (max-width: 410px) {
+    #itzuli_esteka {
+        margin-top: 0px !important;
+        margin-right: auto;
     }
 }
 
