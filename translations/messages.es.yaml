@@ -233,9 +233,16 @@
 "messages.esportatu_doklaguntzailea": "PDF de documentación a aportar"
 "messages.resumen_doklaguntzailea": "Resumen documentación a aportar en PDF"
 "messages.goiburua": "Manual de trámites"
+"messages.inicio": "Inicio"
+"messages.atzera": "Atras"
+"messages.azkenEguneraketa": "Última actualización"
+"messages.aurkibidea": "Índice"
+"messages.emaila": "Correo electrónico"
+"messages.masInfo": "Más información"
 "Saila / Azpisaila": "Área / Subárea"
 "Familia / Azpifamilia": "Familia / Subfamilia"
 "Udala": "Ayuntamiento"
+
 
 message.intro: |
   <b>Bienvenido/a al manual de trámites del Ayuntamiento de Amorebieta-Etxano.</b><br>

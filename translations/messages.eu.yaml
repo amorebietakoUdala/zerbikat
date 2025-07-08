@@ -233,6 +233,12 @@
 "messages.esportatu_doklaguntzailea": "Dokumentazio laguntzailearen PDFa esportatu"
 "messages.resumen_doklaguntzailea": "Aurkeztu beharreko dokumentazioaren laburpena PDFan"
 "messages.goiburua": "Izapideen liburua"
+"messages.inicio": "Hasiera"
+"messages.atzera": "Atzera"
+"messages.azkenEguneraketa": "Azken eguneraketa"
+"messages.aurkibidea": "Aurkibidea"
+"messages.masInfo": "Informazio gehiago"
+"messages.emaila": "Posta elektronikoa"
 "Saila / Azpisaila": "Saila / Azpisaila"
 "Udala": "Udala"
 message.intro: |

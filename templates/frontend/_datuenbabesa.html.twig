@@ -1,0 +1,37 @@
+{% if (eremuak.datuenbabesatext or eremuak.datuenbabesatable) %}
+   <div id="datuenbabesa" class="row seccion">
+      <div class="pl-0 col-sm-12">
+            <div class="page-header border-none mb-0">
+               <h3>
+                  {% if app.request.locale == 'eu' %}{{ labelak.datuenbabesalabeleu }}
+                  {% else %}{{ labelak.datuenbabesalabeles }}
+                  {% endif %}
+               </h3>
+            </div>
+            <div>
+               {% if eremuak.datuenbabesatable %}
+                  {% if fitxa.datuenbabesa %}
+                        {% if app.request.locale == 'eu' %}
+                           {{ fitxa.udala.lopdeu|replace({ ('$$$fitxa.datuenbabesa.izenaeu$$$'): fitxa.datuenbabesa.izenaeu })
+                           |replace({ ('$$$fitxa.datuenbabesa.kodea$$$'): fitxa.datuenbabesa.kodea })
+                           |replace({ ('$$$fitxa.datuenbabesa.xedeaeu$$$'): fitxa.datuenbabesa.xedeaeu })
+                           |replace({ ('$$$fitxa.datuenbabesa.lagapenakeu$$$'): fitxa.datuenbabesa.lagapenakeu })
+                           |raw }}
+                        {% else %}
+                           {{ fitxa.udala.lopdes|replace({ ('$$$fitxa.datuenbabesa.izenaes$$$'): fitxa.datuenbabesa.izenaes })
+                           |replace({ ('$$$fitxa.datuenbabesa.kodea$$$'): fitxa.datuenbabesa.kodea })
+                           |replace({ ('$$$fitxa.datuenbabesa.xedeaes$$$'): fitxa.datuenbabesa.xedeaes })
+                           |replace({ ('$$$fitxa.datuenbabesa.lagapenakes$$$'): fitxa.datuenbabesa.lagapenakes })
+                           |raw }}
+                        {% endif %}
+                  {% endif %}
+               {% endif %}
+               {% if eremuak.datuenbabesatext %}
+                  {% if app.request.locale == 'eu' %}{{ fitxa.datuenbabesaeu |raw }}
+                  {% else %}{{ fitxa.datuenbabesaes |raw }}
+                  {% endif %}
+               {% endif %}
+            </div>
+      </div>
+   </div>
+{% endif %}

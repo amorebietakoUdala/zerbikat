@@ -1,5 +1,8 @@
 {% extends 'base.html.twig' %}
 
+{# Importar la macro desde el propio archivo #}
+{% import 'fitxa/fitxa_macros.html.twig' as macros %}
+
 {% block menua %}
     {{ parent() }}
     <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
@@ -344,39 +347,13 @@
                     <h3>{{ labelak.kostualabeleu }}</h3>
                 </div>
                 <div>
-                    {% set kont=0 %}
+                    {% set kont = 0 %}
                     {% if eremuak.kostuatable %}
                         {% if fitxa.udala.zergaor %}
                             {#{% for kostutaula in fitxa.kostuak %}#}
                             {% for kostutaula in kostuZerrenda %}
-                                <table class="table table-bordered">
-                                    <tr>
-                                        <th colspan="2" class="text-center">
-                                            {{ kostutaula['kodea_prod'] | raw }}
-                                            - {{ kostutaula['izenburuaeu_prod'] | raw }}
-                                        </th>
-                                    </tr>
-                                    {% for parrafo in kostutaula['parrafoak'] %}
-                                        <tr>
-                                            <td colspan="2">
-                                                {% if parrafo['testuaeu_prod'] is defined %}
-                                                    {{ parrafo['testuaeu_prod']| raw }}
-                                                {% endif %}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    {% for kontzeptu in kostutaula['kontzeptuak'] %}
-                                        <tr>
-                                            <td>{% if kontzeptu['kontzeptuaeu_prod'] is defined %}{{ kontzeptu['kontzeptuaeu_prod'] }}{% endif %}</td>
-                                            <td NOWRAP>
-                                                {% if kontzeptu['kopurua_prod'] is defined %}
-                                                    {{ kontzeptu['kopurua_prod'] }} {% if kontzeptu['unitatea_prod'] is defined %}{{ kontzeptu['unitatea_prod'] }}{% endif %}
-                                                {% endif %}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </table>
-                                {% set kont=kont+1 %}
+                                {{ macros.kostuTaulaMargostu(kostutaula,'eu') }}
+                                {% set kont = kont + 1 %}
                             {% endfor %}
                         {% else %}
                             {% for azpiatal in fitxa.azpiatalak %}
@@ -419,36 +396,12 @@
                     <h3>{{ labelak.kostualabeles }}</h3>
                 </div>
                 <div>
-                    {% set kont=0 %}
+                    {% set kont = 0 %}
                     {% if eremuak.kostuatable %}
                         {% if fitxa.udala.zergaor %}
                             {% for kostutaula in kostuZerrenda %}
-                                <table class="table table-bordered">
-                                    <tr>
-                                        <th colspan="2" class="text-center">
-                                            {{ kostutaula['kodea_prod'] | raw }}
-                                            - {{ kostutaula['izenburuaes_prod'] | raw }}
-                                        </th>
-                                    </tr>
-                                    {% for parrafo in kostutaula['parrafoak'] %}
-                                        <tr>
-                                            <td colspan="2">
-                                                {% if parrafo['testuaes_prod'] is defined %}{{ parrafo['testuaes_prod']| raw }}{% endif %}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    {% for kontzeptu in kostutaula['kontzeptuak'] %}
-                                        <tr>
-                                            <td>{% if kontzeptu['kontzeptuaes_prod'] is defined %}{{ kontzeptu['kontzeptuaes_prod'] }}{% endif %}</td>
-                                            <td NOWRAP>
-                                                {% if kontzeptu.kopurua_prod is defined %}
-                                                    {{ kontzeptu['kopurua_prod'] }} {% if kontzeptu.unitatea_prod is defined %}{{ kontzeptu['unitatea_prod'] }}{% endif %}
-                                                {% endif %}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </table>
-                                {% set kont=kont+1 %}
+                                {{ macros.kostuTaulaMargostu(kostutaula,'es') }}
+                                {% set kont = kont + 1 %}
                             {% endfor %}
                         {% else %}
                             {% for azpiatal in fitxa.azpiatalak %}

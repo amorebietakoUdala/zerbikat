@@ -70,9 +70,24 @@ class FrontendController extends AbstractController
             $kostuZerrenda[] = $array;
         }
 
+        $familiak = $fitxa->getFitxafamilia();
+        foreach ($familiak as $fitxaFamilia) {
+            $familiaEs = $fitxaFamilia->getFamilia()->getFamiliaEs();
+            $familiaEu = $fitxaFamilia->getFamilia()->getFamiliaEu();
+            break;
+        }
+
         return $this->render(
-            'frontend/show.html.twig',
-            ['fitxa'         => $fitxa, 'kanalmotak'    => $kanalmotak, 'eremuak'       => $eremuak, 'labelak'       => $labelak, 'udala'         => $udala, 'kostuZerrenda' => $kostuZerrenda]
+            'frontend/show.html.twig',  [
+                'fitxa'         => $fitxa,
+                'familiaEs'     => $familiaEs,
+                'familiaEu'     => $familiaEu,
+                'kanalmotak'    => $kanalmotak, 
+                'eremuak'       => $eremuak, 
+                'labelak'       => $labelak, 
+                'udala'         => $udala, 
+                'kostuZerrenda' => $kostuZerrenda
+            ]
         );
     }
 

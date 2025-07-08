@@ -19,7 +19,7 @@ body {
 }
 
 .fitxaMenua UL {
-    list-style: none;
+    -style: none;
 }
 
 .fitxaMenua UL LI {
@@ -82,9 +82,10 @@ img#logoa {
 #menu_lerroa {
     margin-top: 70px;
     margin-bottom: 0px;
-    height: 30px !important;
+    height: 53px !important;
     min-height: 30px !important;
     background-color: #004E89;
+    padding-top: 10px;
 }
 
 #itzuli_esteka, .hizkuntza {
@@ -130,7 +131,7 @@ img#logoa {
     text-decoration: none;
 }
 
-/** Start New styles  **/
+/** END New styles  **/
 
 h1 {
     margin-top: 54px !important;
@@ -504,12 +505,33 @@ h2.tituloFamilia {
     color: #626262;
 }
 
+.espedienteKodeaBtn-active {
+    font-size: 1.8rem;
+    padding-top: 6px;
+    padding-bottom: 8px;
+    padding-left: 17px;
+    padding-right: 17px;
+    background-color: white;
+    border: 2px solid #004E89;
+    border-radius: 30px;
+    height: 40px;
+    width: 94px;
+    color: #004E89;
+}
+
 .flex-row-wrap {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    margin-top: 5px;
     flex-wrap: wrap;
+}
+
+.justify-content-flex-end {
+    justify-content: flex-end !important;
+}
+
+.mt-5px {
+    margin-top: 5px;
 }
 
 .flex-row {
@@ -596,31 +618,31 @@ footer {
 }
 
 .ubicacion-bg {
-    background: no-repeat url('../images/ubicacion.png') !important;
+    background: no-repeat url('../images/presencial-active.png') !important;
 }
 
 .horario-bg {
-    background: no-repeat url('../images/horario.png') !important;
+    background: no-repeat url('../images/horario-active.png') !important;
 }
 
 .whatsapp-bg {
-    background: no-repeat url('../images/whatsapp.png') !important;
+    background: no-repeat url('../images/whatsApp-active.png') !important;
 }
 
 .escribe-bg {
-    background: no-repeat url('../images/mail.png') !important;
+    background: no-repeat url('../images/correoElectronico-active.png') !important;
 }
 
 .contacto-bg {
-    background: no-repeat url('../images/web.png') !important;
+    background: no-repeat url('../images/telematicamente-active.png') !important;
 }
 
 .telefono-bg {
-    background: no-repeat url('../images/telefono.png') !important;
+    background: no-repeat url('../images/telefono-active.png') !important;
 }
 
 .correo-bg {
-    background: no-repeat url('../images/mail.png') !important;
+    background: no-repeat url('../images/correoPostal-active.png') !important;
 }
 
 .footer-text {
@@ -642,12 +664,20 @@ footer a {
     padding: 50px;
 }
 
+.max-width-100 {
+    max-width: 100%;
+}
+
 .ml-auto {
     margin-left: auto;
 }
 
 .js-children-block-close {
     height: 50px;
+}
+
+.mt-10px {
+    margin-top: 10px;
 }
 
 .mt-1 {
@@ -667,6 +697,10 @@ footer a {
 }
 
 
+.mb-0 {
+    margin-bottom: 0px !important;
+}
+
 .mb-2 {
     margin-bottom: 50px;
 }
@@ -683,6 +717,13 @@ footer a {
     margin-left: 25px;
 }
 
+.mr-auto {
+    margin-right: auto;
+}
+
+.pl-0 {
+    padding-left: 0px !important;
+}
 
 .pl-1 {
     padding-left: 25px;
@@ -690,6 +731,10 @@ footer a {
 
 .pl-2 {
     padding-left: 50px;
+}
+
+.pr-0 {
+    padding-right: 0px !important;
 }
 
 .pr-1 {
@@ -700,6 +745,18 @@ footer a {
     padding-right: 50px;
 }
 
+.p-10px {
+    padding: 10px;
+}
+
+.p-15px {
+    padding: 15px !important;
+}
+
+.p-1 {
+    padding: 25px;
+}
+
 .p-2 {
     padding: 50px;
 }
@@ -708,12 +765,194 @@ footer a {
     padding-bottom: 50px;
 }
 
+.w100 {
+    width: 100%;
+}
+
 #social-media {
     margin-left: -15px;
 }
+/*  START Fitxa Styles */
+.seccion {
+    scroll-margin-top: 75px; /* o el valor que necesites */
+}
 
+table.kostuTaula {
+    border-width: 0px;
+    border-style: none;
+    border-top: 0px !important;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    overflow: hidden;
+}
 
-/** End New styles  **/
+table.kostuTaula th {
+    background-color: #F5F5F5;
+    border-top: 0px !important;
+    border-bottom: 1px solid #ddd;
+}
+
+table.kostuTaula td {
+    border-top: 0px !important;
+    border-bottom: 1px solid #ddd;
+}
+
+.breadcrum {
+    color: white;
+    width: auto;
+    font-weight: 700;
+    font-size: 1.2rem !important;
+}
+
+.breadcrum a, .breadcrum a:visited {
+    color: white;
+}
+
+#breadcrum-text {
+    max-width: 90%;
+}
+
+#azken_eguneraketa_lerroa {
+    height: 40px !important;
+    min-height: 40px !important;    
+    border: 0px;
+    color: #828282;
+    font-weight: 700;
+    font-size: 1.2rem !important;
+}
+
+#ifk {
+    padding-left: 20px;
+}
+
+.flex-align-items-center {
+    align-items: center !important;
+}
+
+.fitxaTitle-block {
+    background-color:#E5F1F8;
+    border-radius: 10px;
+    padding: 25px 0px 25px 25px;
+    color: #004E89;
+}
+
+#fitxaTitleDiv {
+    border-right: 1px solid #004E89;
+    max-width: 80%;
+}
+
+.fitxaTitle {
+    font-size: 2.3rem;
+}
+
+#fitxaTitleEspedienteKodea {
+    display: flex;
+    justify-content: center;
+    width: max-content;
+    min-width: 100px;
+    align-items: center;
+}
+
+h3 {
+    font-size: 2.0rem;
+    font-weight: 700;
+}
+
+.border-none {
+    border: none !important;
+}
+
+#eskumako-zutabea {
+    margin-top: 20px;
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+
+.aurkibide-titulua {
+    border-bottom: 2px solid #C2C2C2;
+    padding-bottom: 5px;
+}
+
+.aurkibide-zerrenda {
+    padding-left: 5px !important;
+}
+
+.aurkibide-zerrenda a {
+    color: #626262;
+}
+
+.aurkibide-zerrenda li {
+    padding-top: 10px;
+    border-bottom: 1px solid #E8E8E8;
+}
+
+.dokumentu-zerrenda {
+    list-style: none;
+    padding-left: 0;
+}
+
+.kanal-zerrenda {
+    list-style: none;
+    padding-left: 0;
+}
+
+a.underline {
+    text-decoration: underline !important;
+}
+
+div#oharrak a {
+    text-decoration: underline !important;
+}
+
+/*  END Fitxa Styles */
+
+ul.kanal-zerrenda li {
+    position: relative;
+    padding-left: 30px; /* Deja espacio para la imagen */
+  }
+
+ul.kanal-zerrenda li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.2em;
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.bordered-box {
+    border: 2px solid black ;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+#informazio-gehiagoTitle {
+    font-weight: 700;
+}
+
+li.mail-kanala {
+    font-size: 1.5rem;
+}
+
+ul.kanal-zerrenda.mt-10px > li > a {
+    font-size: 1.3rem;
+}
+
+li.mail-kanala::before{
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.2em;
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('../images/presencial.png');
+}
+
+/** END New styles  **/
 @media (min-width: 1251px) {
     .container {
         width: 1216px;
@@ -739,6 +978,10 @@ footer a {
 }
 
 @media only screen and (max-width: 1200px) {
+    #fitxaTitleDiv {
+        max-width: 80%;
+    }
+
     #logo_lerroa .nav>li>a:focus,
     .nav>li>a:hover {
         text-decoration: none;
@@ -777,10 +1020,18 @@ footer a {
 }
 
 @media only screen and (max-width: 990px) {
+    aside {
+        display: none;
+    }
+
     #logo_lerroa .nav>li>a:focus,
     .nav>li>a:hover {
         text-decoration: none;
         background-color: transparent !important;
+    }
+
+    #fitxaTitleDiv {
+        max-width: 75%;
     }
 
     .container {
@@ -818,6 +1069,10 @@ footer a {
 }
 
 @media only screen and (max-width: 768px) {
+    #fitxaTitleDiv {
+        max-width: 67%;
+    }
+
     .container {
         width: 100%;
     }
@@ -879,6 +1134,15 @@ footer a {
 }
 
 @media only screen and (max-width: 537px) {
+
+    #fitxaTitleDiv {
+        max-width: 60%;
+    }
+
+    #eskumako-zutabea {
+        display: none;
+    }
+
     #logo_lerroa {
         height: 100px !important;
     }
@@ -914,12 +1178,29 @@ footer a {
 }
 
 @media screen and (max-width: 476px) {
+    #breadcrum-text {
+        max-width: 83%;
+    }
+
+    #breadcrum-text {
+        max-width: 345px;
+    }
+
     .hizkuntza-eu {
         margin-top: 0px !important;
     }
 }
 
 @media screen and (max-width: 442px) {
+    #breadcrum-text {
+        max-width: 80%;
+    }
+
+    #fitxaTitleDiv {
+        max-width: 50%;
+        border-right: 0px;
+    }
+
     #goiburua {
         margin-left: auto;
     }    
@@ -930,11 +1211,26 @@ footer a {
 }
 
 @media screen and (max-width: 410px) {
+    #fitxaTitleDiv {
+        border-right: 0px;
+        max-width: max-content;
+    }
+
+    #fitxaTitleEspedienteKodea {
+        max-width: max-content;
+        margin-left: auto;
+    }
+
     #itzuli_esteka {
         margin-top: 0px !important;
         margin-right: auto;
         margin-left: 5px;
     }
+
+    #breadcrum-text {
+        max-width: 250px;
+    }
+
 }
 
 .affix {

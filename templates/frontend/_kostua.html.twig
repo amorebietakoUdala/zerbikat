@@ -1,0 +1,85 @@
+{# Importar la macro desde el propio archivo #}
+{% import 'fitxa/fitxa_macros.html.twig' as macros %}
+
+{% if (eremuak.kostuatext or eremuak.kostuatable) %}
+   <div id="kostua" class="row seccion">
+      <div class="pl-0 col-sm-12">
+            <div class="page-header border-none mb-0">
+               <h3>
+                  {% if app.request.locale == 'eu' %}{{ labelak.kostualabeleu }}
+                  {% else %}{{ labelak.kostualabeles }}
+                  {% endif %}
+               </h3>
+            </div>
+            <div>
+               {% set kont=0 %}
+               {% if eremuak.kostuatable %}
+                  {% if fitxa.udala.zergaor %}
+                        {% for kostutaula in kostuZerrenda %}
+                           {{ macros.kostuTaulaMargostu(kostutaula,'eu') }}
+                           {% set kont = kont + 1 %}
+                        {% endfor %}
+                  {% else %}
+                        {% for azpiatal in fitxa.azpiatalak %}
+                           <table class="table table-bordered">
+                              <tr>
+                                    <th colspan=2>
+                                       {% if app.request.locale == 'eu' %}
+                                          {{ azpiatal.kodea }}-{{ azpiatal.izenburuaeu }}
+                                       {% else %}
+                                          {{ azpiatal.kodea }}-{{ azpiatal.izenburuaes }}
+                                       {% endif %}
+                                    </th>
+                              </tr>
+                              {% for parrafo in azpiatal.parrafoak %}
+                                    <tr>
+                                       <td colspan="2">
+                                          {% if app.request.locale == 'eu' %}
+                                                {{ parrafo.testuaeu }}
+                                          {% else %}
+                                                {{ parrafo.testuaes }}
+                                          {% endif %}
+                                       </td>
+                                    </tr>
+                              {% endfor %}
+
+                              {% for kontzeptu in azpiatal.kontzeptuak %}
+                                    <tr>
+                                       <td>
+                                          {% if app.request.locale == 'eu' %}{{ kontzeptu.kontzeptuaeu }}
+                                                {% if kontzeptu.baldintza %}
+                                                   ({{ kontzeptu.baldintza.baldintzaeu }})
+                                                {% endif %}
+                                          {% else %}{{ kontzeptu.kontzeptuaes }}
+                                                {% if kontzeptu.baldintza %}
+                                                   ({{ kontzeptu.baldintza.baldintzaes }})
+                                                {% endif %}
+                                          {% endif %}
+                                       </td>
+                                       <td>{{ kontzeptu.kopurua }} {{ kontzeptu.unitatea }}</td>
+
+                                    </tr>
+                              {% endfor %}
+                           </table>
+                           {% set kont=kont+1 %}
+                        {% endfor %}
+                  {% endif %}
+               {% endif %}
+               {% if eremuak.kostuatext %}
+                  {% if app.request.locale == 'eu' %}
+                        {{ fitxa.kostuaeu |raw }}
+                  {% else %}
+                        {{ fitxa.kostuaes |raw }}
+                  {% endif %}
+               {% endif %}
+
+               {% if (fitxa.kostuaeu is empty and kont==0 and app.request.locale == 'eu') %}
+                  {{ labelak.doanlabeleu }}
+               {% endif %}
+               {% if (fitxa.kostuaes is empty and kont==0 and app.request.locale == 'es') %}
+                  {{ labelak.doanlabeles }}
+               {% endif %}
+            </div>
+      </div>
+   </div>
+{% endif %}

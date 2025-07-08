@@ -1,0 +1,50 @@
+{% if (eremuak.ebazpensinpli or eremuak.arduraaitorpena or eremuak.aurreikusi or eremuak.arrunta or eremuak.isiltasunadmin) %}
+   <div id="ebazpen" class="row seccion">
+      <div class="pl-0 col-sm-12">
+            <div class="page-header border-none mb-0">
+               <h3>
+                  {% if app.request.locale == 'eu' %}{{ labelak.epealabeleu }}
+                  {% else %}{{ labelak.epealabeles }}
+                  {% endif %}
+               </h3>
+            </div>
+            <div>
+               {% if eremuak.aurreikusi %}
+                  {% if fitxa.aurreikusi %}
+                        {% if app.request.locale == 'eu' %}{{ labelak.aurreikusilabeleu }}: {{ fitxa.aurreikusi.epeaeu }}
+                        {% else %}{{ labelak.aurreikusilabeles }}: {{ fitxa.aurreikusi.epeaes }}
+                        {% endif %}
+                  {% endif %}<br>
+               {% endif %}
+               {% if eremuak.arrunta %}
+                  {% if fitxa.arrunta %}
+                        {% if app.request.locale == 'eu' %}{{ labelak.arruntalabeleu }}: {{ fitxa.arrunta.epeaeu }}
+                        {% else %}{{ labelak.arruntalabeles }}: {{ fitxa.arrunta.epeaes }}
+                        {% endif %}
+                  {% endif %}<br>
+               {% endif %}
+               {% if eremuak.ebazpensinpli %}
+                  {% if fitxa.ebazpensinpli %}
+                        {% if app.request.locale == 'eu' %}{{ labelak.ebazpensinplilabeleu }} <br>
+                        {% else %}{{ labelak.ebazpensinplilabeles }} <br>
+                        {% endif %}
+                  {% endif %}
+               {% endif %}
+               {% if eremuak.arduraaitorpena %}
+                  {% if fitxa.arduraaitorpena %}
+                        {% if app.request.locale == 'eu' %}{{ labelak.arduraaitorpenalabeleu }}<br>
+                        {% else %}{{ labelak.arduraaitorpenalabeles }}<br>
+                        {% endif %}
+                  {% endif %}
+               {% endif %}
+               {% if eremuak.isiltasunadmin %}
+                  {% if fitxa.isiltasunadmin %}
+                        {% if app.request.locale == 'eu' %}{{ labelak.isiltasunadminlabeleu }}: {{ fitxa.isiltasunadmin.isiltasuneu }}
+                        {% else %}{{ labelak.isiltasunadminlabeles }}: {{ fitxa.isiltasunadmin.isiltasunes }}
+                        {% endif %}
+                  {% endif %}
+               {% endif %}
+            </div>
+      </div>
+   </div>
+{% endif %}

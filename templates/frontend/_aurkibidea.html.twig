@@ -1,0 +1,114 @@
+<div id="eskumako-zutabea">
+   <div class="bg-gray p-1">
+      <div class="aurkibide-titulua"><b>{{ 'messages.aurkibidea' | trans }}</b></div>
+      <ol class="aurkibide-zerrenda">
+         <li class="list-inline">
+            <a href="#helburua">
+                  {% if app.request.locale == 'eu' %}
+                     {{ labelak.helburualabeleu }}
+                  {% else %} 
+                     {{ labelak.helburualabeles }}
+                  {% endif %}
+            </a>
+         </li>
+         <li class="list-inline">
+            <a href="#norkeskatu">
+                  {% if app.request.locale == 'eu' %}
+                     {{ labelak.norkeskatulabeleu }}
+                  {% else %} 
+                     {{ labelak.norkeskatulabeles }}
+                  {% endif %}
+            </a>
+         </li>
+         <li class="list-inline">
+            <a href="#dokumentazioa">
+                  {% if app.request.locale == 'eu' %}
+                     {{ labelak.dokumentazioalabeleu }}
+                  {% else %} 
+                     {{ labelak.dokumentazioalabeles }}
+                  {% endif %}
+            </a>
+         </li>
+         <li class="list-inline">
+            <a href="#kanala">
+                  {% if app.request.locale == 'eu' %}
+                     {{ labelak.kanalalabeleu }}
+                  {% else %} 
+                     {{ labelak.kanalalabeles }}
+                  {% endif %}
+            </a>
+         </li>
+         <li class="list-inline">
+            <a href="#kostua">
+                  {% if app.request.locale == 'eu' %}
+                     {{ labelak.kostualabeleu }}
+                  {% else %} 
+                     {{ labelak.kostualabeles }}
+                  {% endif %}
+            </a>
+         </li>
+         <li class="list-inline">
+            <a href="#epea">
+                  {% if app.request.locale == 'eu' %}
+                     {{ labelak.epealabeleu }}
+                  {% else %} 
+                     {{ labelak.epealabeles }}
+                  {% endif %}
+            </a>
+         </li>
+         <li class="list-inline">
+            <a href="#araudia">
+                  {% if app.request.locale == 'eu' %}
+                     {{ labelak.araudialabeleu }}
+                  {% else %} 
+                     {{ labelak.araudialabeles }}
+                  {% endif %}
+            </a>
+         </li>
+         <li class="list-inline">
+            <a href="#prozedura">
+                  {% if app.request.locale == 'eu' %}
+                     {{ labelak.prozeduralabeleu }}
+                  {% else %} 
+                     {{ labelak.prozeduralabeles }}
+                  {% endif %}
+            </a>
+         </li>
+         <li class="list-inline">
+            <a href="#norkebatzi">
+                  {% if app.request.locale == 'eu' %}
+                     {{ labelak.norkebatzilabeleu }}
+                  {% else %} 
+                     {{ labelak.norkebatzilabeles }}
+                  {% endif %}
+            </a>
+         </li>
+         <li class="list-inline">
+            <a href="#azpisaila">
+                  {% if app.request.locale == 'eu' %}
+                     {{ labelak.azpisailalabeleu }}
+                  {% else %} 
+                     {{ labelak.azpisailalabeles }}
+                  {% endif %}
+            </a>
+         </li>
+         <li class="list-inline">
+            <a href="#oharrak">
+                  {% if app.request.locale == 'eu' %}
+                     {{ labelak.oharraklabeleu }}
+                  {% else %} 
+                     {{ labelak.oharraklabeles }}
+                  {% endif %}
+            </a>
+         </li>
+      <ol>
+   </div>
+</div>
+<div id="informazio-gehiago" class="bordered-box mt-2 p-15px">
+   <div id="informazio-gehiagoTitle">{{ 'messages.masInfo' | trans }}</div>
+   <ul class="kanal-zerrenda mt-10px">
+      <li class="mail-kanala"><b>{{ 'messages.emaila' | trans }}</b></li>
+      <li><a class="underline" href="mailto:{{ fitxa.azpisaila.email}}">{{ fitxa.azpisaila.email }}</a></li>
+   </ul>
+</div>
+

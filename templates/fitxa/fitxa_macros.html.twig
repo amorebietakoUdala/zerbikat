@@ -1,0 +1,37 @@
+{% macro kostuTaulaMargostu(kostutaula,locale) %}
+    <table class="table kostuTaula">
+        <tr>
+            <th colspan="2" style="padding-left: 2">
+                {{ kostutaula['kodea_prod'] | raw }} - {{ kostutaula['izenburua'~locale~'_prod'] | raw }}
+            </th>
+        </tr>
+
+        {% for parrafo in kostutaula['parrafoak'] %}
+            <tr>
+                <td colspan="2">
+                    {% if parrafo['testua'~locale~'_prod'] is defined %}
+                        {{ parrafo['testua'~locale~'_prod'] | raw }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+
+        {% for kontzeptu in kostutaula['kontzeptuak'] %}
+            <tr>
+                <td>
+                    {% if kontzeptu['kontzeptua'~locale~'_prod'] is defined %}
+                        {{ kontzeptu['kontzeptua'~locale~'_prod'] }}
+                    {% endif %}
+                </td>
+                <td class="text-align-right" NOWRAP>
+                    {% if kontzeptu['kopurua_prod'] is defined %}
+                        {{ kontzeptu['kopurua_prod'] }}
+                        {% if kontzeptu['unitatea_prod'] is defined %}
+                            {{ kontzeptu['unitatea_prod'] }}
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endmacro %}
