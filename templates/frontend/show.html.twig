@@ -20,7 +20,7 @@
     <nav id="azken_eguneraketa_lerroa" class="navbar navbar-default">
         <div class="container">
             <div class="navbar-header w100 flex-row-wrap">
-                <div id="ifk" class="pl-0">{{ fitxa.udala.ifk }}</div>
+                <div id="ifk">{{ fitxa.udala.ifk }}</div>
                 <div class="list-inline ml-auto">
                     {% if fitxa.updatedAt %}
                         {{ 'messages.azkenEguneraketa' | trans }}: {{ fitxa.updatedAt|date('Y-m-d H:i:s') }}

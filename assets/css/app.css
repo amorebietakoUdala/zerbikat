@@ -821,9 +821,9 @@ table.kostuTaula td {
     font-size: 1.2rem !important;
 }
 
-#ifk {
+/* #ifk {
     padding-left: 20px;
-}
+} */
 
 .flex-align-items-center {
     align-items: center !important;
@@ -1071,6 +1071,10 @@ li.mail-kanala::before{
 @media only screen and (max-width: 768px) {
     #fitxaTitleDiv {
         max-width: 67%;
+    }
+
+    #ifk {
+        padding-left: 20px;
     }
 
     .container {
