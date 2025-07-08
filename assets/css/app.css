@@ -86,6 +86,7 @@ img#logoa {
     min-height: 30px !important;
     background-color: #004E89;
     padding-top: 10px;
+    overflow: hidden;
 }
 
 #itzuli_esteka, .hizkuntza {
@@ -810,6 +811,7 @@ table.kostuTaula td {
 
 #breadcrum-text {
     max-width: 90%;
+    max-height: 53px !important;
 }
 
 #azken_eguneraketa_lerroa {
@@ -819,11 +821,8 @@ table.kostuTaula td {
     color: #828282;
     font-weight: 700;
     font-size: 1.2rem !important;
+    padding-top: 10px;
 }
-
-/* #ifk {
-    padding-left: 20px;
-} */
 
 .flex-align-items-center {
     align-items: center !important;
@@ -1184,10 +1183,6 @@ li.mail-kanala::before{
 @media screen and (max-width: 476px) {
     #breadcrum-text {
         max-width: 83%;
-    }
-
-    #breadcrum-text {
-        max-width: 345px;
     }
 
     .hizkuntza-eu {
