@@ -21,7 +21,6 @@
                         {% for araua in fitxa.araudiak %}
                            <li>
                               {% if app.request.locale == 'eu' %}
-                                    {#<a href="{{ araua.araudia.estekaeu }}">{{ araua.araudia.arauaeu }}</a> {{ araua.atalaeu }}#}
                                     {% if araua.araudia.estekaeu %}
                                     <a class="underline" href="{{ araua.araudia.estekaeu }}" target="_blank">
                                        {{ araua.araudia.arauaeu }} </a>{{ araua.atalaeu }}
@@ -29,7 +28,6 @@
                                        {{ araua.araudia.arauaeu }} - {{ araua.atalaeu }}
                                     {% endif %}
                               {% else %}
-                                    {#<a href="{{ araua.araudia.estekaes }}">{{ araua.araudia.arauaes }}</a> {{ araua.atalaes }}#}
                                     {% if araua.araudia.estekaes %}
                                     <a class="underline" href="{{ araua.araudia.estekaes }}" target="_blank">
                                        {{ araua.araudia.arauaes }}</a>{{ araua.atalaes }}

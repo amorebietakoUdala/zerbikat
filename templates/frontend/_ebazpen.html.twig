@@ -11,15 +11,15 @@
             <div>
                {% if eremuak.aurreikusi %}
                   {% if fitxa.aurreikusi %}
-                        {% if app.request.locale == 'eu' %}{{ labelak.aurreikusilabeleu }}: {{ fitxa.aurreikusi.epeaeu }}
-                        {% else %}{{ labelak.aurreikusilabeles }}: {{ fitxa.aurreikusi.epeaes }}
+                        {% if app.request.locale == 'eu' %}{{ labelak.aurreikusilabeleu }}: <b>{{ fitxa.aurreikusi.epeaeu }}</b>
+                        {% else %}{{ labelak.aurreikusilabeles }}: <b>{{ fitxa.aurreikusi.epeaes }}</b>
                         {% endif %}
                   {% endif %}<br>
                {% endif %}
                {% if eremuak.arrunta %}
                   {% if fitxa.arrunta %}
-                        {% if app.request.locale == 'eu' %}{{ labelak.arruntalabeleu }}: {{ fitxa.arrunta.epeaeu }}
-                        {% else %}{{ labelak.arruntalabeles }}: {{ fitxa.arrunta.epeaes }}
+                        {% if app.request.locale == 'eu' %}{{ labelak.arruntalabeleu }}: <b>{{ fitxa.arrunta.epeaeu }}</b>
+                        {% else %}{{ labelak.arruntalabeles }}: <b>{{ fitxa.arrunta.epeaes }}</b>
                         {% endif %}
                   {% endif %}<br>
                {% endif %}
@@ -39,8 +39,8 @@
                {% endif %}
                {% if eremuak.isiltasunadmin %}
                   {% if fitxa.isiltasunadmin %}
-                        {% if app.request.locale == 'eu' %}{{ labelak.isiltasunadminlabeleu }}: {{ fitxa.isiltasunadmin.isiltasuneu }}
-                        {% else %}{{ labelak.isiltasunadminlabeles }}: {{ fitxa.isiltasunadmin.isiltasunes }}
+                        {% if app.request.locale == 'eu' %}{{ labelak.isiltasunadminlabeleu }}: <b>{{ fitxa.isiltasunadmin.isiltasuneu }}</b>
+                        {% else %}{{ labelak.isiltasunadminlabeles }}: <b>{{ fitxa.isiltasunadmin.isiltasunes }}</b>
                         {% endif %}
                   {% endif %}
                {% endif %}

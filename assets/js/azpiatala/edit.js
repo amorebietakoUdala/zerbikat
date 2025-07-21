@@ -27,7 +27,7 @@ $(document).ready(function() {
 
    $('#add-parrafoa').click(function(e) {
        e.preventDefault();
-//                alert ("sartu da!!");
+
        var parrafoaList = $('#parrafoa-fields-list');
 
        // grab the prototype template
@@ -47,7 +47,7 @@ $(document).ready(function() {
 
    $('#add-kontzeptua').click(function(e) {
        e.preventDefault();
-//                alert ("sartu da!!");
+
        var kontzeptuaList = $('#kontzeptua-fields-list');
 
        // grab the prototype template

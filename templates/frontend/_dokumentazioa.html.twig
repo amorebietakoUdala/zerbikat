@@ -10,38 +10,40 @@
                   {% endif %}
                </h3>
             </div>
-            <div>
-               {% if eremuak.dokumentazioatable %}
-                  <ul class="dokumentu-zerrenda">
-                        {% for dokumentua in fitxa.dokumentazioak %}
-                           <li>
-                              {% if app.request.locale == 'eu' %}
-                                    {% if dokumentua.estekaeu %}
-                                       <a class="underline" href="{{ dokumentua.estekaeu }}" target="_blank">
-                                          {{ dokumentua.kodea }} {{ dokumentua.deskribapenaeu }}
-                                       </a>
-                                    {% else %}
+            {% if eremuak.dokumentazioatable %}
+               <ul class="dokumentu-zerrenda">
+                     {% for dokumentua in fitxa.dokumentazioak %}
+                        <li>
+                           {% if app.request.locale == 'eu' %}
+                                 {% if dokumentua.estekaeu %}
+                                    <a class="underline" href="{{ dokumentua.estekaeu }}" target="_blank">
                                        {{ dokumentua.kodea }} {{ dokumentua.deskribapenaeu }}
-                                    {% endif %}
-                              {% else %}
-                                    {% if dokumentua.estekaes %}
-                                       <a class="underline" href="{{ dokumentua.estekaes }}" target="_blank">
-                                          {{ dokumentua.kodea }} {{ dokumentua.deskribapenaes }}
-                                       </a>
-                                    {% else %}
+                                    </a>
+                                 {% else %}
+                                    {{ dokumentua.kodea }} {{ dokumentua.deskribapenaeu }}
+                                 {% endif %}
+                           {% else %}
+                                 {% if dokumentua.estekaes %}
+                                    <a class="underline" href="{{ dokumentua.estekaes }}" target="_blank">
                                        {{ dokumentua.kodea }} {{ dokumentua.deskribapenaes }}
-                                    {% endif %}
-                              {% endif %}
-                           </li>
-                        {% endfor %}
-                  </ul>
-               {% endif %}
-               {% if eremuak.dokumentazioatext %}
-                  {% if app.request.locale == 'eu' %}{{ fitxa.dokumentazioaeu|raw }}
-                  {% else %}{{ fitxa.dokumentazioaes|raw }}
+                                    </a>
+                                 {% else %}
+                                    {{ dokumentua.kodea }} {{ dokumentua.deskribapenaes }}
+                                 {% endif %}
+                           {% endif %}
+                        </li>
+                     {% endfor %}
+               </ul>
+            {% endif %}
+            {% if eremuak.dokumentazioatext %}
+               <div class="dokumentazioa-texto">
+                  {% if app.request.locale == 'eu' %}
+                     {{ fitxa.dokumentazioaeu | raw }}
+                  {% else %}
+                     {{ fitxa.dokumentazioaes | raw }}
                   {% endif %}
-               {% endif %}
-            </div>
+               </div>
+            {% endif %}
       </div>
    </div>
 {% endif %}

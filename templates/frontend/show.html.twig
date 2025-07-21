@@ -11,7 +11,7 @@
             {% endif %}
         </div>
         <div id="return-button" class="ml-auto breadcrum">
-            <a href="{{ path('frontend_fitxa_index', { 'udala': udala }) }}" class="fa fa-undo">&nbsp;{{ 'messages.atzera' | trans }}</a>
+            <a href="{{ path('frontend_fitxa_index', { 'udala': udala }) }}"><i class="fa fa-undo"></i>&nbsp;{{ 'messages.atzera' | trans }}</a>
         </div>
     </div>
 {% endblock breadcrumbs %}    
@@ -44,7 +44,7 @@
                             </b>
                         </h2>
                     </div>
-                    <div id="fitxaTitleEspedienteKodea" class="max-width-100 w100 pr-2">
+                    <div id="fitxaTitleEspedienteKodea" class="max-width-100 w100 mr-auto">
                         <div class="espedienteKodeaBtn-active">
                             {{ fitxa.espedienteKodea }}
                         </div>                    
@@ -72,7 +72,7 @@
                 {% endblock %}
             </div>
             {% block aurkibidea %}
-            <aside class="col-lg-4 col-md-4 pr-0 pl-0">
+            <aside class="col-lg-4 col-md-4 pr-0 pl-0 position-sticky-90px">
                 {{ include('frontend/_aurkibidea.html.twig') }}
             </aside>
             {% endblock aurkibidea %}

@@ -71,6 +71,7 @@ button.list-group-item-success {
 img#logoa {
     height: 65px;
     width: 160px;
+    margin-left: 5px !important;
 }
 
 #logo_lerroa {
@@ -131,6 +132,11 @@ img#logoa {
 #goiburua a {
     text-decoration: none;
 }
+
+.text-decoration-none {
+    text-decoration: none !important;
+}
+
 
 /** END New styles  **/
 
@@ -520,6 +526,10 @@ h2.tituloFamilia {
     color: #004E89;
 }
 
+.d-flex {
+    display: flex;
+}
+
 .flex-row-wrap {
     display: flex;
     flex-direction: row;
@@ -532,7 +542,11 @@ h2.tituloFamilia {
 }
 
 .mt-5px {
-    margin-top: 5px;
+    margin-top: 5px !important;
+}
+
+.ml-5px {
+    margin-left: 5px !important;
 }
 
 .flex-row {
@@ -542,6 +556,10 @@ h2.tituloFamilia {
 
 .flex-justify-content-space-evenly{
     justify-content: space-evenly;
+}
+
+.flex-justify-content-space-between {
+    justify-content: space-between;
 }
 
 button {
@@ -643,16 +661,15 @@ footer {
 }
 
 .correo-bg {
-    background: no-repeat url('../images/correoPostal-active.png') !important;
+    background: no-repeat url('../images/correoElectronico-active.png') !important;
 }
 
 .footer-text {
-    font-size: 1.3rem;
     color: white;
 }
 
 .footer-sac-title {
-    font-size: 1.6rem;
+    font-size: 2.0rem;
 }
 
 footer a {
@@ -770,9 +787,10 @@ footer a {
     width: 100%;
 }
 
-#social-media {
-    margin-left: -15px;
+.h100 {
+    height: 100%;
 }
+
 /*  START Fitxa Styles */
 .seccion {
     scroll-margin-top: 75px; /* o el valor que necesites */
@@ -812,6 +830,8 @@ table.kostuTaula td {
 #breadcrum-text {
     max-width: 90%;
     max-height: 53px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #azken_eguneraketa_lerroa {
@@ -842,6 +862,7 @@ table.kostuTaula td {
 
 .fitxaTitle {
     font-size: 2.3rem;
+    line-height: 3.0rem;
 }
 
 #fitxaTitleEspedienteKodea {
@@ -861,10 +882,16 @@ h3 {
     border: none !important;
 }
 
-#eskumako-zutabea {
+.aurkibidea {
     margin-top: 20px;
     background-color: #F5F5F5;
     border-radius: 10px;
+}
+
+.position-sticky-90px {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 90px; /* required */
 }
 
 .aurkibide-titulua {
@@ -890,6 +917,17 @@ h3 {
     padding-left: 0;
 }
 
+.dokumentazioa-texto ul {
+    list-style: none;
+    padding-left: 15px;
+}
+
+.dokumentazioa-texto li {
+    list-style: outside;
+    margin-bottom: 10px;
+}
+
+
 .kanal-zerrenda {
     list-style: none;
     padding-left: 0;
@@ -901,6 +939,10 @@ a.underline {
 
 div#oharrak a {
     text-decoration: underline !important;
+}
+
+div#oharrak p {
+    margin-bottom: 10px;
 }
 
 /*  END Fitxa Styles */
@@ -922,9 +964,8 @@ ul.kanal-zerrenda li::before {
 }
 
 .bordered-box {
-    border: 2px solid black ;
-    border-radius: 10px;
-    padding: 10px;
+	border: 1px solid #626262;
+	border-radius: 10px;
 }
 
 #informazio-gehiagoTitle {
@@ -948,8 +989,33 @@ li.mail-kanala::before{
     height: 20px;
     background-size: contain;
     background-repeat: no-repeat;
-    background-image: url('../images/presencial.png');
+    background-image: url('../images/correoElectronico.png');
 }
+
+li.telefono-kanala::before{
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.2em;
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('../images/telefono.png');
+}
+
+li.whatsapp-kanala::before{
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.2em;
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('../images/whatsApp.png');
+}
+
 
 /** END New styles  **/
 @media (min-width: 1251px) {
@@ -1059,7 +1125,7 @@ li.mail-kanala::before{
     }
 
     #SAC-column {
-        padding-top: 25px;
+        padding-top: 50px;
     }
 
     .footer-sac-title {
@@ -1137,7 +1203,6 @@ li.mail-kanala::before{
 }
 
 @media only screen and (max-width: 537px) {
-
     #fitxaTitleDiv {
         max-width: 60%;
     }
@@ -1195,6 +1260,10 @@ li.mail-kanala::before{
         max-width: 80%;
     }
 
+    .fitxaTitle-block {
+        padding: 10px 10px 10px 10px;
+    }
+
     #fitxaTitleDiv {
         max-width: 50%;
         border-right: 0px;
@@ -1217,7 +1286,8 @@ li.mail-kanala::before{
 
     #fitxaTitleEspedienteKodea {
         max-width: max-content;
-        margin-left: auto;
+        margin-right: auto;
+        padding-left: 25px;
     }
 
     #itzuli_esteka {
@@ -1229,7 +1299,6 @@ li.mail-kanala::before{
     #breadcrum-text {
         max-width: 250px;
     }
-
 }
 
 .affix {
