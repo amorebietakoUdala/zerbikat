@@ -787,6 +787,10 @@ footer a {
     width: 100%;
 }
 
+.w96 {
+    width: 96%;
+}
+
 .h100 {
     height: 100%;
 }
@@ -1085,6 +1089,10 @@ li.whatsapp-kanala::before{
 }
 
 @media only screen and (max-width: 990px) {
+    .w96 {
+        width: 93%;
+    }
+    
     aside {
         display: none;
     }
@@ -1279,6 +1287,10 @@ li.whatsapp-kanala::before{
 }
 
 @media screen and (max-width: 410px) {
+    .w96 {
+        width: 90%;
+    }
+
     #fitxaTitleDiv {
         border-right: 0px;
         max-width: max-content;

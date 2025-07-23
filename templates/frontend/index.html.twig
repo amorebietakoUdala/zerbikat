@@ -87,7 +87,7 @@
                                                 <div class="fitxa-lerroa {{ ( loop.index % 2 ) == 0 ? 'fitxa-lerroa-par-bg' : 'fitxa-lerroa-impar-bg' }} gezia"  data-loop-index="{{ loop.index }}"
                                                     data-listaservicios-row-target="row"
                                                     data-action="mouseover->listaservicios-row#onMouseOver mouseout->listaservicios-row#onMouseOut">
-                                                    {% if app.request.locale == 'eu' %}{{ fitx.fitxa.deskribapenaeu }}{% else %} {{ fitx.fitxa.deskribapenaes }}{% endif %}
+                                                    <div class="w96">{% if app.request.locale == 'eu' %}{{ fitx.fitxa.deskribapenaeu }}{% else %} {{ fitx.fitxa.deskribapenaes }}{% endif %}</div>
                                                 </div>
                                             </div>
                                         </a>
