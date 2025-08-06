@@ -16,8 +16,17 @@
     </div>
 {% endblock breadcrumbs %}    
 
+{% block azkenEguneraketa %}
+    <div id="ifk">{{ fitxa.udala.ifk }}</div>
+    <div class="list-inline ml-auto">
+        {% if fitxa.updatedAt %}
+            {{ 'messages.azkenEguneraketa' | trans }}: {{ fitxa.updatedAt|date('Y-m-d H:i:s') }}
+        {% endif %}
+    </div>
+{% endblock azkenEguneraketa %}
+
 {% block body %}
-    <nav id="azken_eguneraketa_lerroa" class="navbar navbar-default">
+    {# <nav id="azken_eguneraketa_lerroa" class="navbar navbar-default">
         <div class="container">
             <div class="navbar-header w100 flex-row-wrap">
                 <div id="ifk">{{ fitxa.udala.ifk }}</div>
@@ -28,7 +37,7 @@
                 </div>
             </div>
         </div>
-    </nav>
+    </nav> #}
     <div class="container" role="main">
         {% block fitxaTitle %}
             <div class="fitxaTitle-block mt-1">
@@ -53,7 +62,12 @@
             </div>
         {% endblock fitxaTitle %}
         <div class="container-fluid pl-0 pr-0">
-            <div id="eduki-nagusia" class="col-lg-8 col-md-8">
+            {% block aurkibidea %}
+                <aside class="col-lg-4 col-md-4 col-sm-4 pr-0 pl-0 position-sticky-170px">
+                    {{ include('frontend/_aurkibidea.html.twig') }}
+                </aside>
+            {% endblock aurkibidea %}
+            <div id="eduki-nagusia" class="col-lg-8 col-md-8 col-sm-8 left">
                 {% block edukiNagusia %}
                     {{ include('frontend/_helburua.html.twig') }}
                     {{ include('frontend/_norkeskatu.html.twig') }}
@@ -71,11 +85,6 @@
                     {{ include('frontend/_datuenbabesa.html.twig') }}
                 {% endblock %}
             </div>
-            {% block aurkibidea %}
-            <aside class="col-lg-4 col-md-4 pr-0 pl-0 position-sticky-90px">
-                {{ include('frontend/_aurkibidea.html.twig') }}
-            </aside>
-            {% endblock aurkibidea %}
         </div>
     </div>
 {% endblock body %}

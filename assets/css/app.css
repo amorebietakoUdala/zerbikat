@@ -3,7 +3,6 @@
 @import '~font-awesome/css/font-awesome.css';
 
 body {
-    margin-top: 50px;
     font-size: 16px;
 }
 
@@ -68,26 +67,34 @@ button.list-group-item-success {
     background-color: #FFFFFF;
 }
 
+.barra-fija {
+    left: 0;
+    right: 0;
+    z-index: 1030;
+}
+
 img#logoa {
-    height: 65px;
-    width: 160px;
+    height: 50px;
+    width: auto;
     margin-left: 5px !important;
 }
 
 #logo_lerroa {
+    margin-bottom: 0px !important;
     background-color: #FFFFFF;
-    height: 70px;
     border-bottom: 1px solid #e7e7e7;
 }
 
 #menu_lerroa {
-    margin-top: 70px;
-    margin-bottom: 0px;
-    height: 53px !important;
-    min-height: 30px !important;
+    margin-bottom: 0px !important;
     background-color: #004E89;
     padding-top: 10px;
+    padding-bottom: 10px;
     overflow: hidden;
+}
+
+#menu_lerroko_brand {
+    height: auto !important;
 }
 
 #itzuli_esteka, .hizkuntza {
@@ -136,8 +143,6 @@ img#logoa {
 .text-decoration-none {
     text-decoration: none !important;
 }
-
-
 /** END New styles  **/
 
 h1 {
@@ -513,17 +518,18 @@ h2.tituloFamilia {
 }
 
 .espedienteKodeaBtn-active {
-    font-size: 1.8rem;
-    padding-top: 6px;
-    padding-bottom: 8px;
+    font-size: 2.4rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
     padding-left: 17px;
     padding-right: 17px;
     background-color: white;
     border: 2px solid #004E89;
-    border-radius: 30px;
-    height: 40px;
-    width: 94px;
+    border-radius: 40px;
+    height: 60px;
+    width: 120px;
     color: #004E89;
+    text-align: center;
 }
 
 .d-flex {
@@ -833,7 +839,6 @@ table.kostuTaula td {
 
 #breadcrum-text {
     max-width: 90%;
-    max-height: 53px !important;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -892,10 +897,15 @@ h3 {
     border-radius: 10px;
 }
 
-.position-sticky-90px {
+.position-sticky-170px {
+    float: right;
     position: sticky;
     position: -webkit-sticky;
-    top: 90px; /* required */
+    top: 170px; /* required */
+}
+
+.left {
+    float: left;
 }
 
 .aurkibide-titulua {
@@ -946,7 +956,7 @@ div#oharrak a {
 }
 
 div#oharrak p {
-    margin-bottom: 10px;
+    margin-bottom: 25px;
 }
 
 /*  END Fitxa Styles */
@@ -1093,10 +1103,6 @@ li.whatsapp-kanala::before{
         width: 93%;
     }
     
-    aside {
-        display: none;
-    }
-
     #logo_lerroa .nav>li>a:focus,
     .nav>li>a:hover {
         text-decoration: none;
@@ -1142,6 +1148,17 @@ li.whatsapp-kanala::before{
 }
 
 @media only screen and (max-width: 768px) {
+    .left, .position-sticky-170px {
+        float: none;
+        width: 100%;
+    }
+
+    .position-sticky-170px {
+        order: -1; /* no tiene efecto sin flex, pero útil si cambias de layout */
+        position: relative; /* Cambia de sticky a relative */
+        top: auto; /* Resetea el top */
+    }
+
     #fitxaTitleDiv {
         max-width: 67%;
     }
@@ -1197,7 +1214,6 @@ li.whatsapp-kanala::before{
     }
 
     #menu_lerroa {
-        margin-top: 70px;
         margin-bottom: 0px;
     }
     
@@ -1213,18 +1229,6 @@ li.whatsapp-kanala::before{
 @media only screen and (max-width: 537px) {
     #fitxaTitleDiv {
         max-width: 60%;
-    }
-
-    #eskumako-zutabea {
-        display: none;
-    }
-
-    #logo_lerroa {
-        height: 100px !important;
-    }
-
-    #menu_lerroa {
-        margin-top: 100px;
     }
 
     #itzuli_esteka {

@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block menua %}
-    <nav id="logo_lerroa" class="navbar navbar-fixed-top">
+    <nav id="logo_lerroa" class="navbar barra-fija">
         <div class="container">
             <div class="navbar-header w100">
                 <ul class="nav navbar-nav flex-row-wrap mt-5px w100">
@@ -28,13 +28,20 @@
             </div>
         </div>
     </nav>
-    <nav id="menu_lerroa" class="navbar navbar-default">
+    <nav id="menu_lerroa" class="navbar navbar-default barra-fija">
         <div class="container pl-0">
             <div class="navbar-header w100">
-                <a class="navbar-brand"></a>
-                {% block breadcrumbs %}{% endblock breadcrumbs %}    
+                <a id="menu_lerroko_brand" class="navbar-brand"></a>
+                {% block breadcrumbs %}{% endblock breadcrumbs %}
             </div>
             <div id="navbar" class="navbar-collapse collapse navbar-right">
+            </div>
+        </div>
+    </nav>
+    <nav id="azken_eguneraketa_lerroa" class="navbar navbar-default barra-fija">
+        <div class="container">
+            <div class="navbar-header w100 flex-row-wrap">
+                {% block azkenEguneraketa %}{% endblock azkenEguneraketa %}
             </div>
         </div>
     </nav>
