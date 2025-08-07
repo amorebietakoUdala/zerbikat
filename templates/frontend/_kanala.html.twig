@@ -13,7 +13,7 @@
                            {% if kanal.kanalmota == k and kanal.erakutsi == 1 %}
                                  {% if aurkitua == 0 %}
                                     {% if app.request.locale == 'eu' %}{% set mota =  k.motaeu %}{% else %}{% set mota =  k.motaes %}{% endif %}
-                                    <li {% if k.ikonoa %} style="background-image: url('{{ asset('build/images/'~k.ikonoa) }}') !important;  background-size: contain;  background-repeat: no-repeat;"{% endif %}>
+                                    <li class="h4" {% if k.ikonoa %} style="background-image: url('{{ asset('build/images/'~k.ikonoa) }}') !important;  background-size: contain;  background-repeat: no-repeat;"{% endif %}>
                                        <b>{{ mota }}:</b>
                                     </li>
                                     {% set aurkitua = 1 %}

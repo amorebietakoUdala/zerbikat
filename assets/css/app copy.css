@@ -2,15 +2,13 @@
 
 @import '~font-awesome/css/font-awesome.css';
 
-html{
+/* html{
     font-size: 16px;
-}
+} */
 
 body {
-    /* Con html font-size 10 */
-    /* font-size: 16px; */
-    /* Con html font-size 16 */
-    font-size: 1rem; /* ? */
+    font-size: 16px;
+    /* font-size: 1rem; */
 }
 
 .fitxaMenua {
@@ -93,9 +91,6 @@ img#logoa {
 }
 
 #menu_lerroa {
-    display: flex;
-    align-items: center;
-    min-height: 50px !important;
     margin-bottom: 0px !important;
     background-color: #004E89;
     padding-top: 10px;
@@ -104,20 +99,13 @@ img#logoa {
 }
 
 #menu_lerroko_brand {
-    padding-left: 15px !important;
-    padding-right: 15px !important;
-    padding-top: 15px !important;
-    padding-top: 0px !important;
     height: auto !important;
 }
 
 #itzuli_esteka, .hizkuntza {
     margin-top: 8px;
     text-decoration: none;
-    /* Con html font-size 10 */
-    /* font-size: 1.2rem; */
-    /* Con html font-size 16 */
-    font-size: 0.75rem;
+    font-size: 1.2rem;
     font-weight: 700;
 }
 
@@ -144,10 +132,7 @@ img#logoa {
     margin-top: 20px;
     min-width: 175px;
     max-width: 450px;
-    /* Con html font-size 10 */
-    /* font-size: 1.8rem; */
-    /* Con html font-size 16 */
-    font-size: 1.2rem;
+    font-size: 1.8rem;
 }
 
 #goiburua-spacer {
@@ -165,43 +150,11 @@ img#logoa {
 }
 /** END New styles  **/
 
-h1, .h1 {
+h1 {
     margin-top: 54px !important;
     margin-bottom: 0px !important;
-    /* Con html font-size 10 */
-    /* font-size: 3rem; */
-    /* Con html font-size 16 */
-    font-size: 1.85rem;
+    font-size: 3rem;
     font-weight: 700;
-}
-
-/* Los he metido para ir cambiado poco a poco los estilos a los tamaños recomendados, pero no están aplicados a ningún elemento */
-.h2 {
-    /* Con html font-size 10 */
-    /* font-size: 2.6rem; */
-    /* Con html font-size 16 */
-    font-size: 1.625rem;
-    font-weight: 700;
-}
-
-h3, .h3 {
-    /* Con html font-size 10 */
-    /* font-size: 2.0rem; */
-    /* line-height: 3.0rem; */
-    /* Con html font-size 16 */
-    font-size: 1.625rem;
-    font-weight: 700;
-}
-
-/* Los he metido para ir cambiado poco a poco los estilos a los tamaños recomendados, pero no están aplicados a ningún elemento */
-.h4 {
-    font-size: 1.125rem;
-    font-weight: 500;
-}
-
-/* Los he metido para ir cambiado poco a poco los estilos a los tamaños recomendados, pero no están aplicados a ningún elemento */
-.h5 {
-    font-size: 1.125rem;
 }
 
 .divider {
@@ -209,6 +162,11 @@ h3, .h3 {
     background-color: #009ED5;
     margin-top: 16px;
     margin-bottom: 36px;
+}
+
+h2.tituloFamilia {
+    font-size: 2.6rem;
+    font-weight: 600;
 }
 
 .hrGray {
@@ -321,10 +279,7 @@ h3, .h3 {
 }
 
 .font-weight {
-    /* Con html font-size 10 */
-    /* font-size: 1.5rem; */
-    /* Con html font-size 16 */
-    font-size: 0.99rem;
+    font-size: 1.5rem;
     font-weight: 400;
 }
 
@@ -554,10 +509,7 @@ h3, .h3 {
 }
 
 .espedienteKodeaBtn {
-    /* Con html font-size 10 */
-    /* font-size: 1.6rem; */
-    /* Con html font-size 16 */
-    font-size: 1rem;
+    font-size: 1.6rem;
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 23px;
@@ -571,19 +523,16 @@ h3, .h3 {
 }
 
 .espedienteKodeaBtn-active {
-    /* Con html font-size 10 */
-    /* font-size: 2.4rem; */
-    /* padding-left: 17px; */
-    /* padding-right: 17px; */
-    /* height: 60px; */
-    /* Con html font-size 16 */
-    font-size: 1.6rem;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    font-size: 2.4rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 17px;
+    padding-right: 17px;
     background-color: white;
     border: 2px solid #004E89;
     border-radius: 40px;
-    width: 140px;
+    height: 60px;
+    width: 120px;
     color: #004E89;
     text-align: center;
 }
@@ -659,12 +608,8 @@ button:hover {
 .fitxa-lerroa {
     text-decoration: none !important;
     text-align: left;
-    /* Con html font-size 10 */
-    /* font-size: 1.6rem; */
-    /* Con html font-size 16 */
-    font-size: 1rem;
-    /* Comentado para que se muestre correctamente en móvil */
-    /* height: 48px; */
+    font-size: 1.6rem;
+    height: 48px;
     padding: 10px;
     padding-left: 25px;
     padding-left: 25px;
@@ -731,23 +676,15 @@ footer {
 }
 
 .footer-text {
-    /* Con html font-size 16 */
-    font-size: 1rem;
     color: white;
 }
 
 .footer-sac-title {
-    /* Con html font-size 10 */
-    /* font-size: 2.0rem; */
-    /* Con html font-size 16 */
-    font-size: 1.375rem;
+    font-size: 2.0rem;
 }
 
 footer a {
-    /* Con html font-size 10 */
-    /* font-size: 1.6rem !important; */
-    /* Con html font-size 16 */
-    font-size: 1rem !important;
+    font-size: 1.6rem !important;
     color: white !important;
     text-decoration: underline !important;
 }
@@ -887,8 +824,6 @@ table.kostuTaula th {
     background-color: #F5F5F5;
     border-top: 0px !important;
     border-bottom: 1px solid #ddd;
-    padding: 20px !important;
-    font-size: 1.375rem;
 }
 
 table.kostuTaula td {
@@ -900,10 +835,7 @@ table.kostuTaula td {
     color: white;
     width: auto;
     font-weight: 700;
-    /* Con html font-size 10 */
-    /* font-size: 1.2rem !important; */
-    /* Con html font-size 16 */
-    font-size: 0.75rem !important;
+    font-size: 1.2rem !important;
 }
 
 .breadcrum a, .breadcrum a:visited {
@@ -922,10 +854,7 @@ table.kostuTaula td {
     border: 0px;
     color: #828282;
     font-weight: 700;
-    /* Con html font-size 10 */
-    /* font-size: 1.2rem !important; */
-    /* Con html font-size 16 */
-    font-size: 0.75rem !important;
+    font-size: 1.2rem !important;
     padding-top: 10px;
 }
 
@@ -946,11 +875,8 @@ table.kostuTaula td {
 }
 
 .fitxaTitle {
-    /* Con html font-size 10 */
-    /* font-size: 2.3rem; */
-    /* line-height: 3.0rem; */
-    /* Con html font-size 16 */
-    font-size: 2rem;
+    font-size: 2.3rem;
+    line-height: 3.0rem;
 }
 
 #fitxaTitleEspedienteKodea {
@@ -962,11 +888,7 @@ table.kostuTaula td {
 }
 
 h3 {
-    /* Con html font-size 10 */
-    /* font-size: 2.0rem; */
-    /* line-height: 3.0rem; */
-    /* Con html font-size 16 */
-    font-size: 1.625rem;
+    font-size: 2.0rem;
     font-weight: 700;
 }
 
@@ -992,10 +914,6 @@ h3 {
 }
 
 .aurkibide-titulua {
-    /* Con html font-size 10 */
-    /* font-size: 1rem; */
-    /* Con html font-size 16 */
-    font-size: 1rem;
     border-bottom: 2px solid #C2C2C2;
     padding-bottom: 5px;
 }
@@ -1070,27 +988,15 @@ ul.kanal-zerrenda li::before {
 }
 
 #informazio-gehiagoTitle {
-    /* Con html font-size 10 */
-    /* font-size: 1rem;     */
-    /* Con html font-size 16 */
-    margin-top: 0px;
-    margin-bottom: 0px;
-    font-size: 1.625rem;
     font-weight: 700;
 }
 
 li.mail-kanala {
-    /* Con html font-size 10 */
-    /* font-size: 1.5rem;     */
-    /* Con html font-size 16 */
-    font-size: 1.125rem;   
+    font-size: 1.5rem;
 }
 
 ul.kanal-zerrenda.mt-10px > li > a {
-    /* Con html font-size 10 */
-    /* font-size: 1.3rem;     */
-    /* Con html font-size 16 */
-    font-size: 1rem;
+    font-size: 1.3rem;
 }
 
 li.mail-kanala::before{
@@ -1294,10 +1200,7 @@ li.whatsapp-kanala::before{
         margin-bottom: 0px;
         padding-bottom: 0px;
         width: auto;
-        /** Con html font-size 10 */
-        /* font-size: 1.0rem; */
-        /** Con html font-size 16 */
-        font-size: 0.66rem;
+        font-size: 1.0rem;
     }
 
     #itzuli_esteka a {
@@ -1340,13 +1243,6 @@ li.whatsapp-kanala::before{
 
     .hizkuntza-es {
         margin-top: 0px !important;
-    }
-
-    ul.kanal-zerrenda.mt-10px > li > a {
-        /* Con html font-size 10 */
-        /* font-size: 1.3rem;     */
-        /* Con html font-size 16 */
-        font-size: 1rem;
     }
 }
 

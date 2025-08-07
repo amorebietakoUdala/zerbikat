@@ -1,5 +1,14 @@
 {% extends 'frontend/index.html.twig' %}
 
+{% block title %} 
+    ZERBItzuen KATalogoa - 
+    {% if app.request.locale == 'eu' %}
+        {{ fitxa.deskribapenaeu }}
+    {% else %}
+        {{ fitxa.deskribapenaes }}
+    {% endif %}
+{% endblock %}
+
 {% block breadcrumbs %}
     <div class="flex-row-wrap">
         <div id="breadcrum-text" class="nav navbar-nav breadcrum">
@@ -63,11 +72,11 @@
         {% endblock fitxaTitle %}
         <div class="container-fluid pl-0 pr-0">
             {% block aurkibidea %}
-                <aside class="col-lg-4 col-md-4 col-sm-4 pr-0 pl-0 position-sticky-170px">
+                <aside class="col-lg-4 col-md-4 col-sm-5 pr-0 pl-0 position-sticky-170px">
                     {{ include('frontend/_aurkibidea.html.twig') }}
                 </aside>
             {% endblock aurkibidea %}
-            <div id="eduki-nagusia" class="col-lg-8 col-md-8 col-sm-8 left">
+            <div id="eduki-nagusia" class="col-lg-8 col-md-8 col-sm-7 left">
                 {% block edukiNagusia %}
                     {{ include('frontend/_helburua.html.twig') }}
                     {{ include('frontend/_norkeskatu.html.twig') }}
