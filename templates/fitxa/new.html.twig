@@ -1,52 +1,49 @@
 {% extends 'base.html.twig' %}
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">Fitxak</a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse navbar-right">
-                <ul class="nav navbar-nav">
-                    <li><a href="#" onclick="document.forms['{{ form.vars.name }}'].submit()" class="fa fa-floppy-o"> Gorde</a></li>
-                    <li><a href="{{ path('fitxa_index') }}" class="fa fa-undo"> Utzi</a></li>
-                    {#<li><a href="{{ path('fitxa_show', { 'id': fitxa.id }) }}" >Fitxa ikusi</a></li>#}
-                </ul>
-            </div>
-        </div>
-    </nav>
-{% endblock %}
+
+{% block menuTitle %}
+    <a class="navbar-brand"> {{ 'messages.fitxak'| trans }}</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    <ul class="nav navbar-nav">
+        <li><a href="#" onclick="document.forms['{{ form.vars.name }}'].submit()" class="fa fa-floppy-o"> Gorde</a></li>
+        <li><a href="{{ path('fitxa_index') }}" class="fa fa-undo"> Utzi</a></li>
+    </ul>
+{% endblock menuOptions %}
+
 {% block body %}
-    {{ form_start(form) }}
+    <div class="container" role="main">
+        {{ form_start(form) }}
 
-    <div class="row">
-        <div class="col-md-2 text-center">
-            <img src='{{ fitxa.udala.logoa }}' />
-            <h4>{{ fitxa.udala.izendapenaeu }}</h4>
-            <h5>{{ fitxa.udala.ifk }}</h5>
+        <div class="row">
+            <div class="col-md-2 text-center">
+                <img src='{{ fitxa.udala.logoa }}' />
+                <h4>{{ fitxa.udala.izendapenaeu }}</h4>
+                <h5>{{ fitxa.udala.ifk }}</h5>
+            </div>
+
+            <div class="col-md-2"><br /><br />
+                <h1>
+                    {{ form_label(form.espedientekodea, 'KODEA: ', { 'label_attr': {'class': 'control-label'} }) }}
+                    {{ form_errors(form.espedientekodea) }}
+                    {{ form_widget(form.espedientekodea, {'attr': {'class': 'form-control ckeditor'}}) }}
+                </h1>
+            </div>
+
+            <div class="col-md-8">
+                <h1>
+                    {{ form_label(form.deskribapenaeu, 'Deskribapena: ', { 'label_attr': {'class': 'control-label'} }) }}
+                    {{ form_errors(form.deskribapenaeu) }}
+                    {{ form_widget(form.deskribapenaeu, {'attr': {'class': 'form-control'}}) }}
+                </h1>
+                <h3>
+                    {{ form_label(form.deskribapenaes, 'Descripción: ', { 'label_attr': {'class': 'control-label'} }) }}
+                    {{ form_errors(form.deskribapenaes) }}
+                    {{ form_widget(form.deskribapenaes, {'attr': {'class': 'form-control'}}) }}
+                </h3>
+            </div>
         </div>
 
-        <div class="col-md-2"><br /><br />
-            <h1>
-                {{ form_label(form.espedientekodea, 'KODEA: ', { 'label_attr': {'class': 'control-label'} }) }}
-                {{ form_errors(form.espedientekodea) }}
-                {{ form_widget(form.espedientekodea, {'attr': {'class': 'form-control ckeditor'}}) }}
-            </h1>
-        </div>
-
-        <div class="col-md-8">
-            <h1>
-                {{ form_label(form.deskribapenaeu, 'Deskribapena: ', { 'label_attr': {'class': 'control-label'} }) }}
-                {{ form_errors(form.deskribapenaeu) }}
-                {{ form_widget(form.deskribapenaeu, {'attr': {'class': 'form-control'}}) }}
-            </h1>
-            <h3>
-                {{ form_label(form.deskribapenaes, 'Descripción: ', { 'label_attr': {'class': 'control-label'} }) }}
-                {{ form_errors(form.deskribapenaes) }}
-                {{ form_widget(form.deskribapenaes, {'attr': {'class': 'form-control'}}) }}
-            </h3>
-        </div>
+        {{ form_end(form) }}
     </div>
-
-    {{ form_end(form) }}
-{% endblock %}
+{% endblock body %}

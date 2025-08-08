@@ -3,34 +3,28 @@
 {# Importar la macro desde el propio archivo #}
 {% import 'fitxa/fitxa_macros.html.twig' as macros %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">{{ 'messages.fitxak'|trans }}</a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse navbar-right">
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ path('fitxa_index') }}" class="fa fa-undo"> {{ 'messages.zerrendara'|trans }}</a>
-                    </li>
-                    {% if is_granted('ROLE_KUDEAKETA') %}
-                        <li><a href="{{ path('fitxa_edit', { 'id': fitxa.id }) }}" class="fa fa-pencil"> {{ 'messages.aldatu'|trans }}</a></li>
-                    {% endif %}
-                    <li><a href="{{ path('fitxa_pdf', { 'id': fitxa.id }) }}" target="_blank"
-                           class="fa fa-file-pdf-o"> {{ 'messages.pdf'|trans }} ({{ 'messages.barne'|trans }})</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-{% endblock %}
+{% block menuTitle %}
+    <a class="navbar-brand">{{ 'messages.fitxak'| trans }}</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    <ul class="nav navbar-nav">
+        <li><a href="{{ path('fitxa_index') }}" class="fa fa-undo"> {{ 'messages.zerrendara'| trans }}</a>
+        </li>
+        {% if is_granted('ROLE_KUDEAKETA') %}
+            <li><a href="{{ path('fitxa_edit', { 'id': fitxa.id }) }}" class="fa fa-pencil"> {{ 'messages.aldatu'| trans }}</a></li>
+        {% endif %}
+        <li><a href="{{ path('fitxa_pdf', { 'id': fitxa.id }) }}" target="_blank"
+                class="fa fa-file-pdf-o"> {{ 'messages.pdf'| trans }} ({{ 'messages.barne'| trans }})</a></li>
+    </ul>
+{% endblock menuOptions %}
 
 {% block body %}
-<div class="container">
+<div class="container" role="main">
     <table class="table table-bordered">
         <tr>
             <td colspan="3" class="text-right">
-                {% if fitxa.updatedAt %}{{ 'messages.updated'|trans }}: {{ fitxa.updatedAt|date('Y-m-d H:i:s') }}{% endif %}
+                {% if fitxa.updatedAt %}{{ 'messages.updated'| trans }}: {{ fitxa.updatedAt|date('Y-m-d H:i:s') }}{% endif %}
             </td>
         </tr>
         <tr>

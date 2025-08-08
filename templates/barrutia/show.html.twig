@@ -1,32 +1,36 @@
 {% extends 'base.html.twig' %}
 
+{% block bigarren_menua %}{% endblock bigarren_menua %}
+
 {% block body %}
-    <h1>Barrutia - Auzoa</h1>
+    <div class="container" role="main">
+        <h1>Barrutia - Auzoa</h1>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Izena</th>
-                <td>{{ barrutium.izena }}</td>
-            </tr>
-            <tr>
-                <th>Id</th>
-                <td>{{ barrutium.id }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <table>
+            <tbody>
+                <tr>
+                    <th>Izena</th>
+                    <td>{{ barrutium.izena }}</td>
+                </tr>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ barrutium.id }}</td>
+                </tr>
+            </tbody>
+        </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('barrutia_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('barrutia_edit', { 'id': barrutium.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
-{% endblock %}
+        <ul>
+            <li>
+                <a href="{{ path('barrutia_index') }}">Back to the list</a>
+            </li>
+            <li>
+                <a href="{{ path('barrutia_edit', { 'id': barrutium.id }) }}">Edit</a>
+            </li>
+            <li>
+                {{ form_start(delete_form) }}
+                    <input type="submit" value="Delete">
+                {{ form_end(delete_form) }}
+            </li>
+        </ul>
+    </div>
+{% endblock body %}

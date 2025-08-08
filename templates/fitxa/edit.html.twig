@@ -1,106 +1,103 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">{{ 'messages.fitxak'|trans }}
-                            <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            {% if (eremuak["helburuatext"]==1) %}
-                                <li><a href="#helburua">Helburua</a></li>
-                            {% endif %}
-                            {% if ((eremuak["norkeskatutext"]==1) or (eremuak["norkeskatutable"]==1)) %}
-                                <li><a href="#norkeskatu">Nork eska dezake?</a></li>
-                            {% endif %}
-                            {% if ((eremuak["dokumentazioatext"]==1) or (eremuak["dokumentazioatable"]==1)) %}
-                                <li><a href="#dokumentazioa">Dokumentazioa</a></li>
-                            {% endif %}
+{% block menuTitle %}
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">{{ 'messages.fitxak'| trans }}
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    {% if (eremuak["helburuatext"]==1) %}
+                        <li><a href="#helburua">Helburua</a></li>
+                    {% endif %}
+                    {% if ((eremuak["norkeskatutext"]==1) or (eremuak["norkeskatutable"]==1)) %}
+                        <li><a href="#norkeskatu">Nork eska dezake?</a></li>
+                    {% endif %}
+                    {% if ((eremuak["dokumentazioatext"]==1) or (eremuak["dokumentazioatable"]==1)) %}
+                        <li><a href="#dokumentazioa">Dokumentazioa</a></li>
+                    {% endif %}
 
-                            {% if ((eremuak["doklaguntext"]==1) or (eremuak["doklaguntable"]==1)) %}
-                                <li><a href="#dokumentuLaguntzaileak">Dokumentazio Laguntzailea</a></li>
-                            {% endif %}
+                    {% if ((eremuak["doklaguntext"]==1) or (eremuak["doklaguntable"]==1)) %}
+                        <li><a href="#dokumentuLaguntzaileak">Dokumentazio Laguntzailea</a></li>
+                    {% endif %}
 
-                            {% if ((eremuak["kanalatext"]==1) or (eremuak["kanalatable"]==1)) %}
-                                <li><a href="#kanala">Kanala</a></li>
-                            {% endif %}
+                    {% if ((eremuak["kanalatext"]==1) or (eremuak["kanalatable"]==1)) %}
+                        <li><a href="#kanala">Kanala</a></li>
+                    {% endif %}
 
-                            {% if ((eremuak["kostuatext"]==1) or (eremuak["kostuatable"]==1)) %}
-                                <li><a href="#kostua">Kostua</a></li>
-                            {% endif %}
+                    {% if ((eremuak["kostuatext"]==1) or (eremuak["kostuatable"]==1)) %}
+                        <li><a href="#kostua">Kostua</a></li>
+                    {% endif %}
 
-                            {% if ((eremuak["ebazpensinpli"]==1) or (eremuak["arduraaitorpena"]==1) or (eremuak["aurreikusi"]==1) or (eremuak["arrunta"]==1) or (eremuak["isiltasunadmin"]==1)) %}
-                                <li><a href="#epeak">Epeak</a></li>
-                            {% endif %}
+                    {% if ((eremuak["ebazpensinpli"]==1) or (eremuak["arduraaitorpena"]==1) or (eremuak["aurreikusi"]==1) or (eremuak["arrunta"]==1) or (eremuak["isiltasunadmin"]==1)) %}
+                        <li><a href="#epeak">Epeak</a></li>
+                    {% endif %}
 
-                            {% if ((eremuak["araudiatext"]==1) or (eremuak["araudiatable"]==1)) %}
-                                <li><a href="#araudia">Araudia</a></li>
-                            {% endif %}
+                    {% if ((eremuak["araudiatext"]==1) or (eremuak["araudiatable"]==1)) %}
+                        <li><a href="#araudia">Araudia</a></li>
+                    {% endif %}
 
-                            {% if ((eremuak["prozeduratext"]==1) or (eremuak["prozeduratable"]==1)) %}
-                                <li><a href="#prozedurak">Prozedurak</a></li>
-                            {% endif %}
+                    {% if ((eremuak["prozeduratext"]==1) or (eremuak["prozeduratable"]==1)) %}
+                        <li><a href="#prozedurak">Prozedurak</a></li>
+                    {% endif %}
 
-                            {% if ((eremuak["norkebatzitext"]==1) or (eremuak["norkebatzitable"]==1)) %}
-                                <li><a href="#norkebatzi">nork onartu behar du?</a></li>
-                            {% endif %}
+                    {% if ((eremuak["norkebatzitext"]==1) or (eremuak["norkebatzitable"]==1)) %}
+                        <li><a href="#norkebatzi">nork onartu behar du?</a></li>
+                    {% endif %}
 
-                            <li><a href="#azpisaila">Azpisaila</a></li>
+                    <li><a href="#azpisaila">Azpisaila</a></li>
 
-                            {% if ((eremuak["oharraktext"]==1)) %}
-                                <li><a href="#oharrak">Oharrak</a></li>
-                            {% endif %}
+                    {% if ((eremuak["oharraktext"]==1)) %}
+                        <li><a href="#oharrak">Oharrak</a></li>
+                    {% endif %}
 
-                            {% if ((eremuak["besteak1text"]==1) or (eremuak["besteak1table"]==1)) %}
-                                <li><a href="#besteak1">Besteak1</a></li>
-                            {% endif %}
+                    {% if ((eremuak["besteak1text"]==1) or (eremuak["besteak1table"]==1)) %}
+                        <li><a href="#besteak1">Besteak1</a></li>
+                    {% endif %}
 
-                            {% if ((eremuak["besteak2text"]==1) or (eremuak["besteak2table"]==1)) %}
-                                <li><a href="#besteak2">Besteak2</a></li>
-                            {% endif %}
+                    {% if ((eremuak["besteak2text"]==1) or (eremuak["besteak2table"]==1)) %}
+                        <li><a href="#besteak2">Besteak2</a></li>
+                    {% endif %}
 
-                            {% if ((eremuak["besteak3text"]==1) or (eremuak["besteak3table"]==1)) %}
-                                <li><a href="#besteak3">Besteak3</a></li>
-                            {% endif %}
+                    {% if ((eremuak["besteak3text"]==1) or (eremuak["besteak3table"]==1)) %}
+                        <li><a href="#besteak3">Besteak3</a></li>
+                    {% endif %}
 
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#familia">Familiak</a></li>
-                                <li><a href="#etiketak">Etiketak</a></li>
-                                <li><a href="#espedienteKudeaketa">Espediente Kudeaketa</a></li>
-                                <li><a href="#admin">Admin</a></li>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#familia">Familiak</a></li>
+                        <li><a href="#etiketak">Etiketak</a></li>
+                        <li><a href="#espedienteKudeaketa">Espediente Kudeaketa</a></li>
+                        <li><a href="#admin">Admin</a></li>
 
-                            {% endif %}
-                        </ul>
-                    </li>
-                    <li><a href="#">{% if app.request.getLocale()=="eu" %}
-                                {{ fitxa.espedientekodea }} - {{ fitxa.deskribapenaeu|length > 100 ? fitxa.deskribapenaeu|slice(0, 100) ~ '...' : fitxa.deskribapenaeu }}
-                            {% else %}
-                                {{ fitxa.espedientekodea }} - {{ fitxa.deskribapenaes|length > 100 ? fitxa.deskribapenaes|slice(0, 100) ~ '...' : fitxa.deskribapenaes }}
-                            {% endif %}</a></li>
+                    {% endif %}
                 </ul>
+            </li>
+            <li><a href="#">{% if app.request.getLocale()=="eu" %}
+                        {{ fitxa.espedientekodea }} - {{ fitxa.deskribapenaeu|length > 100 ? fitxa.deskribapenaeu|slice(0, 100) ~ '...' : fitxa.deskribapenaeu }}
+                    {% else %}
+                        {{ fitxa.espedientekodea }} - {{ fitxa.deskribapenaes|length > 100 ? fitxa.deskribapenaes|slice(0, 100) ~ '...' : fitxa.deskribapenaes }}
+                    {% endif %}</a></li>
+        </ul>
+    </div>
+{% endblock menuTitle %}
 
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        {#<a href="javascript:void(0);" onclick="document.forms['{{ edit_form.vars.name }}'].submit()" class="fa fa-floppy-o"> {{ 'messages.gorde'|trans }}</a>#}
-                        <a href="javascript:void(0);" id="btnFitxaGrabatu" class="fa fa-floppy-o"> {{ 'messages.gorde'|trans }}</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('fitxa_show', { 'id': fitxa.id }) }}"
-                           class="fa fa-search"> {{ 'messages.fitxaikusi'|trans }}</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-{% endblock %}
+{% block menuOptions %}
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            {#<a href="javascript:void(0);" onclick="document.forms['{{ edit_form.vars.name }}'].submit()" class="fa fa-floppy-o"> {{ 'messages.gorde'| trans }}</a>#}
+            <a href="javascript:void(0);" id="btnFitxaGrabatu" class="fa fa-floppy-o"> {{ 'messages.gorde'| trans }}</a>
+        </li>
+        <li>
+            <a href="{{ path('fitxa_show', { 'id': fitxa.id }) }}"
+                class="fa fa-search"> {{ 'messages.fitxaikusi'| trans }}</a>
+        </li>
+    </ul>
+{% endblock menuOptions %}
 
 {% block body %}
-    <div class="container">
+    <div class="container" role="main">
 
         <div id="nireloader" class=""></div>
         {{ form_start(edit_form, {'attr': {'id':'frm_fitxa_edit'}}) }}
@@ -123,7 +120,7 @@
             <h4 class="pull-right">
                 {{ form_errors(edit_form.publikoa) }}
                 {{ form_widget(edit_form.publikoa, {'attr': {'class': 'c-checkbox'}}) }}
-                {{ 'messages.publikoa'|trans }}
+                {{ 'messages.publikoa'| trans }}
             </h4>
             {%endif%}
                 <h1>
@@ -362,7 +359,7 @@
                     </div>
                     {% if udal != null and udal.zergaor == true %}
                         <button type="button" id="add-kostua" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalSelectOrdenantza">
-                            {{ 'messages.gehitukostu'|trans }}
+                            {{ 'messages.gehitukostu'| trans }}
                         </button>
                     {% endif %}
 
@@ -463,10 +460,10 @@
                                 <ul class="list-unstyled" id="araudia-fields-list" data-prototype="{% apply escape %}
                     {% include 'fitxaaraudia/prototype_new.html.twig' with {'form': edit_form.araudiak.vars.prototype,'fitxa':fitxa} %}{% endapply %}">
                                     <li class="burua">
-                                        <div class="col-sm-7"><b>{{ 'messages.araudia'|trans }}</b></div>
-                                        <div class="col-sm-2"><b>{{ 'messages.atala'|trans }} ({{ 'messages.eu'|trans }}
+                                        <div class="col-sm-7"><b>{{ 'messages.araudia'| trans }}</b></div>
+                                        <div class="col-sm-2"><b>{{ 'messages.atala'| trans }} ({{ 'messages.eu'| trans }}
                                                 )</b></div>
-                                        <div class="col-sm-2"><b>{{ 'messages.atala'|trans }} ({{ 'messages.es'|trans }}
+                                        <div class="col-sm-2"><b>{{ 'messages.atala'| trans }} ({{ 'messages.es'| trans }}
                                                 )</b></div>
                                     </li>
                                     {% for araudia in edit_form.araudiak %}
@@ -480,7 +477,7 @@
                                     {% endfor %}
                                 </ul>
                                 <a href="#" id="add-araudia"
-                                class="col-sm-12 text-right">{{ 'messages.gehituaraudia'|trans }}</a>
+                                class="col-sm-12 text-right">{{ 'messages.gehituaraudia'| trans }}</a>
                             </div>
                         </div>
                         <div class="col-dm-1"></div>
@@ -521,8 +518,8 @@
                             <ul class="list-unstyled" id="prozedura-fields-list" data-prototype="{% apply escape %}
                     {% include 'fitxaprozedura/prototype_new.html.twig' with {'form': edit_form.prozedurak.vars.prototype,'udal':fitxa.udala,'fitxa':fitxa} %}{% endapply %}">
                                 <li class="burua">
-                                    <div class="col-sm-9"><b>{{ 'messages.prozedura'|trans }}</b></div>
-                                    <div class="col-sm-2"><b>{{ 'messages.ordena'|trans }}</b></div>
+                                    <div class="col-sm-9"><b>{{ 'messages.prozedura'| trans }}</b></div>
+                                    <div class="col-sm-2"><b>{{ 'messages.ordena'| trans }}</b></div>
                                 </li>
                                 {% for prozedura in edit_form.prozedurak %}
                                     <li>
@@ -535,7 +532,7 @@
                             </ul>
                             <br/>
                             <a href="#" id="add-prozedura"
-                            class="col-sm-12 text-right">{{ 'messages.gehituprozedura'|trans }}</a>
+                            class="col-sm-12 text-right">{{ 'messages.gehituprozedura'| trans }}</a>
                         </div>
                     </div>
                 {% endif %}
@@ -877,20 +874,20 @@
         </div>
         <div class="col-sm-7">
             <div class="form-group">
-                <b>{{ 'messages.zerbitzua'|trans }}</b>
+                <b>{{ 'messages.zerbitzua'| trans }}</b>
                 {{ form_errors(edit_form.zerbitzua) }}
                 {{ form_widget(edit_form.zerbitzua, {'attr': {'class': 'form-control'}}) }}
             </div>
         </div>
         <div class="col-sm-2">
             <div class="form-group">
-                <b>{{ 'messages.parametroa'|trans }}</b>
+                <b>{{ 'messages.parametroa'| trans }}</b>
                 {{ form_errors(edit_form.parametroa) }}
                 {{ form_widget(edit_form.parametroa, {'attr': {'class': 'form-control'}}) }}
             </div>
         </div>
         <div class="col-sm-2">
-            <b>{{ 'messages.expedientes'|trans }}</b>
+            <b>{{ 'messages.expedientes'| trans }}</b>
             {{ form_errors(edit_form.expedientes) }}
             {{ form_widget(edit_form.expedientes, {'attr': {'class': 'form-control'}}) }}
 
@@ -969,7 +966,7 @@
             <div class="row">
                 <div class="col-sm-9 hidden">
                     <div class="form-group col-sm-4">
-                        <b>{{ 'messages.kontsultak'|trans }}</b>
+                        <b>{{ 'messages.kontsultak'| trans }}</b>
                         {#{{ form_label(edit_form.kontsultak, 'Kontsulta kopurua:', { 'label_attr': {'class': 'control-label'} }) }}#}
                         {{ form_errors(edit_form.kontsultak) }}
                         {{ form_widget(edit_form.kontsultak, {'attr': {'class': 'form-control'}}) }}
@@ -978,7 +975,7 @@
                         {{ form_errors(edit_form.hitzarmena) }}
                         {{ form_widget(edit_form.hitzarmena, {'attr': {'class': 'c-checkbox'}}) }}
                         {#{{ form_label(edit_form.hitzarmena, 'Hitzarmenean?', { 'label_attr': {'class': 'control-label'} }) }}#}
-                        <b>{{ 'messages.hitzarmenean'|trans }}</b>
+                        <b>{{ 'messages.hitzarmenean'| trans }}</b>
                     </div>
                 </div>
             </div>
@@ -987,17 +984,17 @@
         {% if is_granted('ROLE_SUPER_ADMIN') %}
             <div class="row">
                 <div class="form-group col-sm-4">
-                    <b>{{ 'messages.udala'|trans }}</b>
+                    <b>{{ 'messages.udala'| trans }}</b>
                     {{ form_errors(edit_form.udala) }}
                     {{ form_widget(edit_form.udala, {'attr': {'class': 'form-control'}}) }}
                 </div>
                 <div class="form-group col-sm-4">
-                    <b>{{ 'messages.created'|trans }}</b>
+                    <b>{{ 'messages.created'| trans }}</b>
                     {{ form_errors(edit_form.createdAt) }}
                     {{ form_widget(edit_form.createdAt, {'attr': {'class': 'form-control'}}) }}
                 </div>
                 <div class="form-group col-sm-4">
-                    <b>{{ 'messages.updated'|trans }}</b>
+                    <b>{{ 'messages.updated'| trans }}</b>
                     {{ form_errors(edit_form.updatedAt) }}
                     {{ form_widget(edit_form.updatedAt, {'attr': {'class': 'form-control'}}) }}
                 </div>

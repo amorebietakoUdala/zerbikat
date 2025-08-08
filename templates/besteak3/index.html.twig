@@ -1,68 +1,61 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                {#<a class="navbar-brand">{% if app.user.udala.eremuak %}{{ app.user.udala.eremuak.besteak3labeleu }}{% endif %}</a>#}
-                {% if app.user.udala is defined and app.user.udala != null and app.user.udala.eremuak %}
-                    {% if app.request.locale == 'es'%}{{ app.user.udala.eremuak.besteak3labeles }}
-                    {% else %}{{ app.user.udala.eremuak.besteak3labeleu }}
-                    {% endif %}
-                {% endif %}
-            </div>
-            {% if is_granted('ROLE_ADMIN') %}
-                <div id="navbar" class="navbar-collapse collapse navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{ path('besteak3_new') }}" class="fa fa-plus"> {{ 'messages.berria'|trans }}</a></li>
-                    </ul>
-                </div>
-            {% endif %}
-        </div>
-    </nav>
-{% endblock %}
+{% block menuTitle %}
+    {% if app.user.udala is defined and app.user.udala != null and app.user.udala.eremuak %}
+        {% if app.request.locale == 'es'%}{{ app.user.udala.eremuak.besteak3labeles }}
+        {% else %}{{ app.user.udala.eremuak.besteak3labeleu }}
+        {% endif %}
+    {% endif %}
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <ul class="nav navbar-nav">
+            <li><a href="{{ path('besteak3_new') }}" class="fa fa-plus"> {{ 'messages.berria'| trans }}</a></li>
+        </ul>
+    {% endif %}
+{% endblock menuOptions %}
 
 {% block body %}
+    <div class="container" role="main">
+        <table class="table" id="taulazerrenda">
+            <thead>
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'| trans }}</th>{% endif %}
+                    <th>{{ 'messages.kodea'| trans }}</th>
+                    <th>{{ 'messages.izenburua'| trans }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for besteak3 in besteak3s %}
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ besteak3.udala }}</td>{% endif %}
+                    <td>{{ besteak3.kodea }}</td>
+                    <td>{{ besteak3.izenburuaeu }}</td>
+                    <td NOWRAP class="text-right">
+                        <ul class="list-inline">
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('besteak3_edit', { 'id': besteak3.id }) }}" class="fa fa-pencil"></a></li>
+                            <li>{{ form_start(deleteforms[besteak3.id],{'attr': {'id': besteak3.id}}) }}
+                                <a href="#" {{ stimulus_controller('confirmation', {
+                                            id: besteak3.id,
+                                            mezua: 'messages.ziurzaude'| trans}) 
+                                        }} 
+                                        data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
+                                {{ form_end(deleteforms[besteak3.id]) }}</li>
+                        {% endif %}
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <table class="table" id="taulazerrenda">
-        <thead>
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'|trans }}</th>{% endif %}
-                <th>{{ 'messages.kodea'|trans }}</th>
-                <th>{{ 'messages.izenburua'|trans }}</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for besteak3 in besteak3s %}
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ besteak3.udala }}</td>{% endif %}
-                <td>{{ besteak3.kodea }}</td>
-                <td>{{ besteak3.izenburuaeu }}</td>
-                <td NOWRAP class="text-right">
-                    <ul class="list-inline">
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <li><a href="{{ path('besteak3_edit', { 'id': besteak3.id }) }}" class="fa fa-pencil"></a></li>
-                        <li>{{ form_start(deleteforms[besteak3.id],{'attr': {'id': besteak3.id}}) }}
-                            <a href="#" {{ stimulus_controller('confirmation', {
-                                        id: besteak3.id,
-                                        mezua: 'messages.ziurzaude'|trans}) 
-                                    }} 
-                                    data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
-                            {{ form_end(deleteforms[besteak3.id]) }}</li>
-                    {% endif %}
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    {% if besteak3s is empty %}
-        <div class="text-center">
-            <p>{{ 'messages.emaitzarikez'|trans }}</p>
-        </div>
-    {% endif %}
-
+        {% if besteak3s is empty %}
+            <div class="text-center">
+                <p>{{ 'messages.emaitzarikez'| trans }}</p>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

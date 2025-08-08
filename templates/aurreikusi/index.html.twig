@@ -1,69 +1,63 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">{{ 'messages.aurreikusi'|trans }}</a>
-            </div>
-            {% if is_granted('ROLE_ADMIN') %}
-                <div id="navbar" class="navbar-collapse collapse navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{ path('aurreikusi_new') }}" class="fa fa-plus"> {{ 'messages.epeberria'|trans }}</a></li>
-                    </ul>
-                </div>
-            {% endif %}
-        </div>
-    </nav>
-{% endblock %}
+{% block menuTitle %}
+    <a class="navbar-brand">{{ 'messages.aurreikusi'| trans }}</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <ul class="nav navbar-nav">
+            <li><a href="{{ path('aurreikusi_new') }}" class="fa fa-plus"> {{ 'messages.epeberria'| trans }}</a></li>
+        </ul>
+    {% endif %}
+{% endblock menuOptions %}
 
 {% block body %}
-    {#<h1>Aurreikusitako epeak</h1>#}
-
-    <table class="table" id="taulazerrenda">
-        <thead>
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'|trans }}</th>{% endif %}
-                <th>{{ 'messages.epea'|trans }}</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for aurreikusi in aurreikusis %}
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ aurreikusi.udala }}</td>{% endif %}
-                <td>
-                    {% if app.request.locale == 'es'%}{{ aurreikusi.epeaes }}
-                    {% else %}{{ aurreikusi.epeaeu }}
-                    {% endif %}
-                </td>
-                <td NOWRAP class="text-right">
-                    <ul class="list-inline">
-                        {% if is_granted('ROLE_ADMIN') %}
-                        <li><a href="{{ path('aurreikusi_edit', { 'id': aurreikusi.id }) }}" class="fa fa-pencil"></a></li>
-                            <li>{{ form_start(deleteforms[aurreikusi.id],{'attr': {'id': aurreikusi.id}}) }}
-                                <a href="#" {{ stimulus_controller('confirmation', {
-                                        id: aurreikusi.id,
-                                        mezua: 'messages.ziurzaude'|trans}) 
-                                    }} 
-                                    data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
-                                {{ form_end(deleteforms[aurreikusi.id]) }}</li>
+    <div class="container" role="main">
+        <table class="table" id="taulazerrenda">
+            <thead>
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'| trans }}</th>{% endif %}
+                    <th>{{ 'messages.epea'| trans }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for aurreikusi in aurreikusis %}
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ aurreikusi.udala }}</td>{% endif %}
+                    <td>
+                        {% if app.request.locale == 'es'%}{{ aurreikusi.epeaes }}
+                        {% else %}{{ aurreikusi.epeaeu }}
                         {% endif %}
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                    </td>
+                    <td NOWRAP class="text-right">
+                        <ul class="list-inline">
+                            {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('aurreikusi_edit', { 'id': aurreikusi.id }) }}" class="fa fa-pencil"></a></li>
+                                <li>{{ form_start(deleteforms[aurreikusi.id],{'attr': {'id': aurreikusi.id}}) }}
+                                    <a href="#" {{ stimulus_controller('confirmation', {
+                                            id: aurreikusi.id,
+                                            mezua: 'messages.ziurzaude'| trans}) 
+                                        }} 
+                                        data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
+                                    {{ form_end(deleteforms[aurreikusi.id]) }}</li>
+                            {% endif %}
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <div class="text-center">
-        {% if aurreikusis is not empty %}
-            {% if pager.haveToPaginate %}
-                {{ pagerfanta(pager, 'twitter_bootstrap3', {'routeName': 'aurreikusi_index_paginated'}) }}
+        <div class="text-center">
+            {% if aurreikusis is not empty %}
+                {% if pager.haveToPaginate %}
+                    {{ pagerfanta(pager, 'twitter_bootstrap3', {'routeName': 'aurreikusi_index_paginated'}) }}
+                {% endif %}
+            {% else %}
+                <p>{{ 'messages.emaitzarikez'| trans }}</p>
             {% endif %}
-        {% else %}
-            <p>{{ 'messages.emaitzarikez'|trans }}</p>
-        {% endif %}
+        </div>
     </div>
-{% endblock %}
+{% endblock body %}

@@ -1,55 +1,53 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">{{ 'messages.eraikinak'|trans }}</a>
-            </div>
-            {% if is_granted('ROLE_ADMIN') %}
-                <div id="navbar" class="navbar-collapse collapse navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{ path('eraikina_new') }}" class="fa fa-plus"> {{ 'messages.eraikinberria'|trans }}</a></li>
-                    </ul>
-                </div>
-            {% endif %}
+{% block menuTitle %}
+    <a class="navbar-brand">{{ 'messages.eraikinak'| trans }}</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <div id="navbar" class="navbar-collapse collapse navbar-right">
+            <ul class="nav navbar-nav">
+                <li><a href="{{ path('eraikina_new') }}" class="fa fa-plus"> {{ 'messages.eraikinberria'| trans }}</a></li>
+            </ul>
         </div>
-    </nav>
-{% endblock %}
+    {% endif %}
+{% endblock menuOptions %}
 
 {% block body %}
-    <table class="table" id="taulazerrenda">
-        <thead>
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'|trans }}</th>{% endif %}
-                <th>{{ 'messages.izena'|trans }}</th>
-                <th>{{ 'messages.koordenadak'|trans }}</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for eraikina in eraikinas %}
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ eraikina.udala }}</td>{% endif %}
-                <td>{{ eraikina.izena }}</td>
-                <td>({{ eraikina.longitudea }}, {{ eraikina.latitudea }})</td>
-                <td NOWRAP class="text-right">
-                    <ul class="list-inline">
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <li><a href="{{ path('eraikina_edit', { 'id': eraikina.id }) }}" class="fa fa-pencil"></a></li>
-                        <li>{{ form_start(deleteforms[eraikina.id],{'attr': {'id': eraikina.id}}) }}
-                            <a href="#" {{ stimulus_controller('confirmation', {
-                                        id: eraikina.id,
-                                        mezua: 'messages.ziurzaude'|trans}) 
-                                    }} 
-                                    data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
-                            {{ form_end(deleteforms[eraikina.id]) }}</li>
-                    {% endif %}
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-{% endblock %}
+    <div class="container" role="main">
+        <table class="table" id="taulazerrenda">
+            <thead>
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'| trans }}</th>{% endif %}
+                    <th>{{ 'messages.izena'| trans }}</th>
+                    <th>{{ 'messages.koordenadak'| trans }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for eraikina in eraikinas %}
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ eraikina.udala }}</td>{% endif %}
+                    <td>{{ eraikina.izena }}</td>
+                    <td>({{ eraikina.longitudea }}, {{ eraikina.latitudea }})</td>
+                    <td NOWRAP class="text-right">
+                        <ul class="list-inline">
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('eraikina_edit', { 'id': eraikina.id }) }}" class="fa fa-pencil"></a></li>
+                            <li>{{ form_start(deleteforms[eraikina.id],{'attr': {'id': eraikina.id}}) }}
+                                <a href="#" {{ stimulus_controller('confirmation', {
+                                            id: eraikina.id,
+                                            mezua: 'messages.ziurzaude'| trans}) 
+                                        }} 
+                                        data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
+                                {{ form_end(deleteforms[eraikina.id]) }}</li>
+                        {% endif %}
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock body %}

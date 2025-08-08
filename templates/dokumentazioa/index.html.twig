@@ -1,69 +1,65 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">{{ 'messages.agiriak'|trans }}</a>
-            </div>
-            {% if is_granted('ROLE_ADMIN') %}
-                <div id="navbar" class="navbar-collapse collapse navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{ path('dokumentazioa_new') }}" class="fa fa-plus"> {{ 'messages.agiriberria'|trans }}</a></li>
-                    </ul>
-                </div>
-            {% endif %}
-        </div>
-    </nav>
-{% endblock %}
+{% block menuTitle %}
+    <a class="navbar-brand">{{ 'messages.agiriak' | trans }}</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <ul class="nav navbar-nav">
+            <li><a href="{{ path('dokumentazioa_new') }}" class="fa fa-plus"> {{ 'messages.agiriberria'| trans }}</a></li>
+        </ul>
+    {% endif %}
+{% endblock menuOptions %}
 
 {% block body %}
-    <table class="table" id="taulazerrenda">
-        <thead>
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'|trans }}</th>{% endif %}
-                <th>{{ 'messages.kodea'|trans }}</th>
-                <th>{{ 'messages.deskribapena'|trans }}</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for dokumentazioa in dokumentazioas %}
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ dokumentazioa.udala }}</td>{% endif %}
-                <td>{{ dokumentazioa.kodea }}</td>
-                <td>
-                    {% if app.request.locale == 'es'%}{{ dokumentazioa.deskribapenaes }}
-                    {% else %}{{ dokumentazioa.deskribapenaeu }}
-                    {% endif %}
-                </td>
-                <td NOWRAP class="text-right">
-                    <ul class="list-inline">
-                        {% if is_granted('ROLE_ADMIN') %}
-                        <li><a href="{{ path('dokumentazioa_edit', { 'id': dokumentazioa.id }) }}" class="fa fa-pencil"></a></li>
-                            {#<li>{{ form_start(deleteforms[dokumentazioa.id],{'attr': {'id': dokumentazioa.id}}) }}#}
-                                {#<a href="#" onclick="document.getElementById({{ dokumentazioa.id }}).submit();" ><i class="fa fa-trash text-danger"></i></a>#}
-                                {#{{ form_end(deleteforms[dokumentazioa.id]) }}</li>#}
-                            <li>{{ form_start(deleteforms[dokumentazioa.id],{'attr': {'id': dokumentazioa.id}}) }}
-                                <a href="#" {{ stimulus_controller('confirmation', {
-                                        id: dokumentazioa.id,
-                                        mezua: 'messages.ziurzaude'|trans}) 
-                                    }} 
-                                    data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
-                                {{ form_end(deleteforms[dokumentazioa.id]) }}</li>
+    <div class="container" role="main">
+        <table class="table" id="taulazerrenda">
+            <thead>
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'| trans }}</th>{% endif %}
+                    <th>{{ 'messages.kodea'| trans }}</th>
+                    <th>{{ 'messages.deskribapena'| trans }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for dokumentazioa in dokumentazioas %}
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ dokumentazioa.udala }}</td>{% endif %}
+                    <td>{{ dokumentazioa.kodea }}</td>
+                    <td>
+                        {% if app.request.locale == 'es'%}{{ dokumentazioa.deskribapenaes }}
+                        {% else %}{{ dokumentazioa.deskribapenaeu }}
                         {% endif %}
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <div class="text-center">
-        {% if dokumentazioas is not empty %}
+                    </td>
+                    <td NOWRAP class="text-right">
+                        <ul class="list-inline">
+                            {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('dokumentazioa_edit', { 'id': dokumentazioa.id }) }}" class="fa fa-pencil"></a></li>
+                                {#<li>{{ form_start(deleteforms[dokumentazioa.id],{'attr': {'id': dokumentazioa.id}}) }}#}
+                                    {#<a href="#" onclick="document.getElementById({{ dokumentazioa.id }}).submit();" ><i class="fa fa-trash text-danger"></i></a>#}
+                                    {#{{ form_end(deleteforms[dokumentazioa.id]) }}</li>#}
+                                <li>{{ form_start(deleteforms[dokumentazioa.id],{'attr': {'id': dokumentazioa.id}}) }}
+                                    <a href="#" {{ stimulus_controller('confirmation', {
+                                            id: dokumentazioa.id,
+                                            mezua: 'messages.ziurzaude'| trans}) 
+                                        }} 
+                                        data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
+                                    {{ form_end(deleteforms[dokumentazioa.id]) }}</li>
+                            {% endif %}
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="text-center">
+            {% if dokumentazioas is not empty %}
 
-        {% else %}
-            <p>{{ 'messages.emaitzarikez'|trans }}</p>
-        {% endif %}
+            {% else %}
+                <p>{{ 'messages.emaitzarikez'| trans }}</p>
+            {% endif %}
+        </div>
     </div>
-{% endblock %}
+{% endblock body %}

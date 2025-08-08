@@ -1,82 +1,84 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">{{ 'messages.kanalak'|trans }}</a>
-            </div>
-            {% if is_granted('ROLE_ADMIN') %}
-                <div id="navbar" class="navbar-collapse collapse navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{ path('kanala_new') }}" class="fa fa-plus"> {{ 'messages.kanalberria'|trans }}</a></li>
-                    </ul>
-                </div>
-            {% endif %}
+{% block menuTitle %}
+    <a class="navbar-brand">{{ 'messages.kanalak'| trans }}</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <div id="navbar" class="navbar-collapse collapse navbar-right">
+            <ul class="nav navbar-nav">
+                <li><a href="{{ path('kanala_new') }}" class="fa fa-plus"> {{ 'messages.kanalberria'| trans }}</a></li>
+            </ul>
         </div>
-    </nav>
-{% endblock %}
+    {% endif %}
+{% endblock menuOptions %}
 
 {% block body %}
-    <table class="table" id="taulazerrenda">
-        <thead>
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'|trans }}</th>{% endif %}
-                <th>{{ 'messages.kanalmota'|trans }}</th>
-                <th>{{ 'messages.izena'|trans }}</th>
-                <th>{{ 'messages.deskribapena'|trans }}</th>
-                <th>{{ 'messages.kanaltelematikoa'|trans }}</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for kanala in kanalas %}
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ kanala.udala }}</td>{% endif %}
-                <td>
-                    {% if app.request.locale == 'es'%}{{ kanala.kanalmota.motaes }}
-                    {% else %}{{ kanala.kanalmota.motaeu }}
-                    {% endif %}
-                </td>
-                <td>
-                    {% if app.request.locale == 'es'%}{{ kanala.izenaes }}
-                    {% else %}{{ kanala.izenaeu }}
-                    {% endif %}
-                </td>
-                <td>
-                    {% if app.request.locale == 'es'%}{{ kanala.deskribapenaes }}
-                    {% else %}{{ kanala.deskribapenaeu }}
-                    {% endif %}
-                </td>
-                <td>{% if kanala.telematikoa %}
-                        {{ 'messages.bai'|trans }}{% else %}{{ 'messages.ez'|trans }}{% endif %}</td>
-                <td NOWRAP class="text-right">
-                    <ul class="list-inline">
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <li><a href="{{ path('kanala_edit', { 'id': kanala.id }) }}" class="fa fa-pencil"></a></li>
-                            {#<li>{{ form_start(deleteforms[kanala.id],{'attr': {'id': kanala.id}}) }}#}
-                                {#<a href="#" onclick="document.getElementById({{ kanala.id }}).submit();" ><i class="fa fa-trash text-danger"></i></a>#}
-                                {#{{ form_end(deleteforms[kanala.id]) }}</li>#}
-                            <li>{{ form_start(deleteforms[kanala.id],{'attr': {'id': kanala.id}}) }}
-                                <a href="#" {{ stimulus_controller('confirmation', {
-                                        id: kanala.id,
-                                        mezua: 'messages.ziurzaude'|trans}) 
-                                    }} 
-                                    data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
-                                {{ form_end(deleteforms[kanala.id]) }}</li>
+    <div class="container" role="main">
+        <table class="table" id="taulazerrenda">
+            <thead>
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'| trans }}</th>{% endif %}
+                    <th>{{ 'messages.kanalmota'| trans }}</th>
+                    <th>{{ 'messages.izena'| trans }}</th>
+                    <th>{{ 'messages.deskribapena'| trans }}</th>
+                    <th>{{ 'messages.kanaltelematikoa'| trans }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for kanala in kanalas %}
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ kanala.udala }}</td>{% endif %}
+                    <td>
+                        {% if kanala.kanalmota is not null %}
+                            {% if app.request.locale == 'es'%}
+                                {{ kanala.kanalmota.motaes }}
+                            {% else %}
+                                {{ kanala.kanalmota.motaeu }}
+                            {% endif %}
                         {% endif %}
+                    </td>
+                    <td>
+                        {% if app.request.locale == 'es'%}{{ kanala.izenaes }}
+                        {% else %}{{ kanala.izenaeu }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if app.request.locale == 'es'%}{{ kanala.deskribapenaes }}
+                        {% else %}{{ kanala.deskribapenaeu }}
+                        {% endif %}
+                    </td>
+                    <td>{% if kanala.telematikoa %}
+                            {{ 'messages.bai'| trans }}{% else %}{{ 'messages.ez'| trans }}{% endif %}</td>
+                    <td NOWRAP class="text-right">
+                        <ul class="list-inline">
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li><a href="{{ path('kanala_edit', { 'id': kanala.id }) }}" class="fa fa-pencil"></a></li>
+                                {#<li>{{ form_start(deleteforms[kanala.id],{'attr': {'id': kanala.id}}) }}#}
+                                    {#<a href="#" onclick="document.getElementById({{ kanala.id }}).submit();" ><i class="fa fa-trash text-danger"></i></a>#}
+                                    {#{{ form_end(deleteforms[kanala.id]) }}</li>#}
+                                <li>{{ form_start(deleteforms[kanala.id],{'attr': {'id': kanala.id}}) }}
+                                    <a href="#" {{ stimulus_controller('confirmation', {
+                                            id: kanala.id,
+                                            mezua: 'messages.ziurzaude'| trans}) 
+                                        }} 
+                                        data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
+                                    {{ form_end(deleteforms[kanala.id]) }}</li>
+                            {% endif %}
 
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <div class="text-center">
-        {% if kanalas is empty %}
-            <p>{{ 'messages.emaitzarikez'|trans }}</p>
-        {% endif %}
+        <div class="text-center">
+            {% if kanalas is empty %}
+                <p>{{ 'messages.emaitzarikez'| trans }}</p>
+            {% endif %}
+        </div>
     </div>
-{% endblock %}
+{% endblock body %}

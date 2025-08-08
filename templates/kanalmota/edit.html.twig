@@ -1,64 +1,61 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">{{ 'messages.kanalmotak'|trans }}</a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse navbar-right">
-                <ul class="nav navbar-nav">
-                    <li><a href="#" onclick="document.forms['{{ edit_form.vars.name }}'].submit()" class="fa fa-floppy-o"> {{ 'messages.gorde'|trans }}</a></li>
-                    <li><a href="{{ path('kanalmota_index') }}" class="fa fa-undo"> {{ 'messages.zerrendara'|trans }}</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-{% endblock %}
+{% block menuTitle %}
+    <a class="navbar-brand">{{ 'messages.kanalmotak'| trans }}</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    <ul class="nav navbar-nav">
+        <li><a href="#" onclick="document.forms['{{ edit_form.vars.name }}'].submit()" class="fa fa-floppy-o"> {{ 'messages.gorde'| trans }}</a></li>
+        <li><a href="{{ path('kanalmota_index') }}" class="fa fa-undo"> {{ 'messages.zerrendara'| trans }}</a></li>
+    </ul>
+{% endblock menuOptions %}
 
 {% block body %}
-    {{ form_start(edit_form) }}
-    <div class="row">
-        <div class="col-sm-4">
-            <div class="form-group">
-                <b>{{ 'messages.estekabehar'|trans }}</b>
-                {#{{ form_label(edit_form.esteka, 'Esteka behar du?: ', { 'label_attr': {'class': 'control-label'} }) }}#}
-                {{ form_errors(edit_form.esteka) }}
-                {{ form_widget(edit_form.esteka, {'attr': {'class': 'c-checkbox'}}) }}
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                <b>{{ 'messages.kanalmota'|trans }} (<b>{{ 'messages.eu'|trans }}</b>)</b>
-                {#{{ form_label(edit_form.motaeu, 'Kanal-mota (eu): ', { 'label_attr': {'class': 'control-label'} }) }}#}
-                {{ form_errors(edit_form.motaeu) }}
-                {{ form_widget(edit_form.motaeu, {'attr': {'class': 'form-control'}}) }}
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                <b>{{ 'messages.kanalmota'|trans }} (<b>{{ 'messages.es'|trans }}</b>)</b>
-                {#{{ form_label(edit_form.motaes, 'Kanal-mota (es): ', { 'label_attr': {'class': 'control-label'} }) }}#}
-                {{ form_errors(edit_form.motaes) }}
-                {{ form_widget(edit_form.motaes, {'attr': {'class': 'form-control'}}) }}
-            </div>
-        </div>
-    </div>
+    <div class="container" role="main">
 
-    {% if is_granted('ROLE_SUPER_ADMIN') %}
-    <div class="row">
-    {% else %}
-    <div class="row hidden">
-    {% endif %}
-        <div class="col-sm-6">
-            <div class="form-group">
-                <b>{{ 'messages.udala'|trans }}</b>
-                {#{{ form_label(edit_form.udala, 'Udala: ', { 'label_attr': {'class': 'control-label'} }) }}#}
-                {{ form_errors(edit_form.udala) }}
-                {{ form_widget(edit_form.udala, {'attr': {'class': 'form-control'}}) }}
+        {{ form_start(edit_form) }}
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <b>{{ 'messages.estekabehar'| trans }}</b>
+                    {#{{ form_label(edit_form.esteka, 'Esteka behar du?: ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    {{ form_errors(edit_form.esteka) }}
+                    {{ form_widget(edit_form.esteka, {'attr': {'class': 'c-checkbox'}}) }}
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <b>{{ 'messages.kanalmota'| trans }} (<b>{{ 'messages.eu'| trans }}</b>)</b>
+                    {#{{ form_label(edit_form.motaeu, 'Kanal-mota (eu): ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    {{ form_errors(edit_form.motaeu) }}
+                    {{ form_widget(edit_form.motaeu, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <b>{{ 'messages.kanalmota'| trans }} (<b>{{ 'messages.es'| trans }}</b>)</b>
+                    {#{{ form_label(edit_form.motaes, 'Kanal-mota (es): ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    {{ form_errors(edit_form.motaes) }}
+                    {{ form_widget(edit_form.motaes, {'attr': {'class': 'form-control'}}) }}
+                </div>
             </div>
         </div>
+
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <div class="row">
+        {% else %}
+        <div class="row hidden">
+        {% endif %}
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <b>{{ 'messages.udala'| trans }}</b>
+                    {#{{ form_label(edit_form.udala, 'Udala: ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    {{ form_errors(edit_form.udala) }}
+                    {{ form_widget(edit_form.udala, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+        </div>
+        {{ form_end(edit_form) }}
     </div>
-    {{ form_end(edit_form) }}
-{% endblock %}
+{% endblock body %}

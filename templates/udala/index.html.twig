@@ -1,77 +1,74 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">{{ 'messages.udalak'|trans }}</a>
-            </div>
-            {% if is_granted('ROLE_ADMIN') %}
-                <div id="navbar" class="navbar-collapse collapse navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{ path('udala_new') }}" class="fa fa-plus"> {{ 'messages.udalberria'|trans }}</a></li>
-                    </ul>
-                </div>
-            {% endif %}
-        </div>
-    </nav>
-{% endblock %}
+{% block menuTitle %}
+    <a class="navbar-brand">{{ 'messages.udalak'| trans }}</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <ul class="nav navbar-nav">
+            <li><a href="{{ path('udala_new') }}" class="fa fa-plus"> {{ 'messages.udalberria'| trans }}</a></li>
+        </ul>
+    {% endif %}
+{% endblock menuOptions %}
 
 {% block body %}
-    <table class="table">
-        <thead>
-        <tr>
-            <th>{{ 'messages.kodea'|trans }}</th>
-            <th>{{ 'messages.ifk'|trans }}</th>
-            <th>{{ 'messages.udala'|trans }}</th>
-            <th></th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for udala in udalas %}
-            <tr>
-                <td>{{ udala.kodea }}</td>
-                <td>{{ udala.ifk }}</td>
-                <td>
-                    {% if app.request.locale == 'es'%}{{ udala.izenaes }}
-                    {% else %}{{ udala.izenaeu }}
-                    {% endif %}
-                </td>
-                <td>
-                    {% if app.request.locale == 'es'%}{{ udala.izendapenaes }}
-                    {% else %}{{ udala.izendapenaeu }}
-                    {% endif %}
-                </td>
-                <td NOWRAP class="text-right">
-                    <ul class="list-inline">
-                        <li><a href="{{ path('udala_show', { 'id': udala.id }) }}" class="fa fa-search"></a></li>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            {#<li>{{ form_start(deleteforms[udala.id],{'attr': {'id': udala.id}}) }}#}
-                            {#<a href="#" onclick="document.getElementById({{ udala.id }}).submit();" ><i class="fa fa-trash text-danger"></i></a>#}
-                            {#{{ form_end(deleteforms[udala.id]) }}</li>#}
-                            <li>{{ form_start(deleteforms[udala.id],{'attr': {'id': udala.id}}) }}
-                                <a href="#" {{ stimulus_controller('confirmation', {id: udala.id,mezua: 'messages.ziurzaude'|trans}) }} 
-                                    data-action="confirmation#onClick">
-                                    <i class="fa fa-trash text-danger"></i>
-                                </a>
-                                {{ form_end(deleteforms[udala.id]) }}</li>
-                        {% endif %}
+    <div class="container" role="main">
 
-                    </ul>
-                </td>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>{{ 'messages.kodea'| trans }}</th>
+                <th>{{ 'messages.ifk'| trans }}</th>
+                <th>{{ 'messages.udala'| trans }}</th>
+                <th></th>
+                <th></th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <div class="text-center">
-        {% if udalas is not empty %}
-            {% if pager.haveToPaginate %}
-                {{ pagerfanta(pager, 'twitter_bootstrap3', {'routeName': 'udala_index_paginated'}) }}
+            </thead>
+            <tbody>
+            {% for udala in udalas %}
+                <tr>
+                    <td>{{ udala.kodea }}</td>
+                    <td>{{ udala.ifk }}</td>
+                    <td>
+                        {% if app.request.locale == 'es'%}{{ udala.izenaes }}
+                        {% else %}{{ udala.izenaeu }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if app.request.locale == 'es'%}{{ udala.izendapenaes }}
+                        {% else %}{{ udala.izendapenaeu }}
+                        {% endif %}
+                    </td>
+                    <td NOWRAP class="text-right">
+                        <ul class="list-inline">
+                            <li><a href="{{ path('udala_show', { 'id': udala.id }) }}" class="fa fa-search"></a></li>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                {#<li>{{ form_start(deleteforms[udala.id],{'attr': {'id': udala.id}}) }}#}
+                                {#<a href="#" onclick="document.getElementById({{ udala.id }}).submit();" ><i class="fa fa-trash text-danger"></i></a>#}
+                                {#{{ form_end(deleteforms[udala.id]) }}</li>#}
+                                <li>{{ form_start(deleteforms[udala.id],{'attr': {'id': udala.id}}) }}
+                                    <a href="#" {{ stimulus_controller('confirmation', {id: udala.id,mezua: 'messages.ziurzaude'| trans}) }} 
+                                        data-action="confirmation#onClick">
+                                        <i class="fa fa-trash text-danger"></i>
+                                    </a>
+                                    {{ form_end(deleteforms[udala.id]) }}</li>
+                            {% endif %}
+
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="text-center">
+            {% if udalas is not empty %}
+                {% if pager.haveToPaginate %}
+                    {{ pagerfanta(pager, 'twitter_bootstrap3', {'routeName': 'udala_index_paginated'}) }}
+                {% endif %}
+            {% else %}
+                <p>{{ 'messages.emaitzarikez'| trans }}</p>
             {% endif %}
-        {% else %}
-            <p>{{ 'messages.emaitzarikez'|trans }}</p>
-        {% endif %}
+        </div>
     </div>
-{% endblock %}
+{% endblock body %}

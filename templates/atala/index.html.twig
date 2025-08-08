@@ -1,59 +1,55 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">Atalak</a>
-            </div>
-            {% if is_granted('ROLE_ADMIN') %}
-                <div id="navbar" class="navbar-collapse collapse navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{ path('atala_new') }}" class="fa fa-plus"> Atal berria</a></li>
-                    </ul>
-                </div>
-            {% endif %}
-        </div>
-    </nav>
-{% endblock %}
+{% block menuTitle %}
+    <a class="navbar-brand">Atalak</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <ul class="nav navbar-nav">
+            <li><a href="{{ path('atala_new') }}" class="fa fa-plus"> Atal berria</a></li>
+        </ul>
+    {% endif %}
+{% endblock menuOptions %}
 
 {% block body %}
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Kodea</th>
-                <th>Izenburua</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for atala in atalas %}
-            <tr>
-                <td>{% if atala.ordenantza %}{{ atala.ordenantza.kodea }}.{% endif %}{{ atala.kodea }}</td>
-                <td>{{ atala.izenburuaeu }}</td>
-                <td NOWRAP class="text-right">
-                    <ul class="list-inline">
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <li><a href="{{ path('atala_edit', { 'id': atala.id }) }}" class="fa fa-pencil"></a></li>
-                            <li>{{ form_start(deleteforms[atala.id],{'attr': {'id': atala.id}}) }}
-                                <a href="#" onclick="document.getElementById({{ atala.id }}).submit();" ><i class="fa fa-trash text-danger"></i></a>
-                                {{ form_end(deleteforms[atala.id]) }}</li>
-                        {% endif %}
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="container" role="main">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Kodea</th>
+                    <th>Izenburua</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for atala in atalas %}
+                <tr>
+                    <td>{% if atala.ordenantza %}{{ atala.ordenantza.kodea }}.{% endif %}{{ atala.kodea }}</td>
+                    <td>{{ atala.izenburuaeu }}</td>
+                    <td NOWRAP class="text-right">
+                        <ul class="list-inline">
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li><a href="{{ path('atala_edit', { 'id': atala.id }) }}" class="fa fa-pencil"></a></li>
+                                <li>{{ form_start(deleteforms[atala.id],{'attr': {'id': atala.id}}) }}
+                                    <a href="#" onclick="document.getElementById({{ atala.id }}).submit();" ><i class="fa fa-trash text-danger"></i></a>
+                                    {{ form_end(deleteforms[atala.id]) }}</li>
+                            {% endif %}
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <div class="text-center">
-        {% if atalas is not empty %}
-            {% if pager.haveToPaginate %}
-                {{ pagerfanta(pager, 'twitter_bootstrap3', {'routeName': 'atala_index_paginated'}) }}
+        <div class="text-center">
+            {% if atalas is not empty %}
+                {% if pager.haveToPaginate %}
+                    {{ pagerfanta(pager, 'twitter_bootstrap3', {'routeName': 'atala_index_paginated'}) }}
+                {% endif %}
+            {% else %}
+                <p>Ez da emaitzarik topatu</p>
             {% endif %}
-        {% else %}
-            <p>Ez da emaitzarik topatu</p>
-        {% endif %}
+        </div>
     </div>
-{% endblock %}
+{% endblock body %}

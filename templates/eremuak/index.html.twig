@@ -1,64 +1,60 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">{{ 'messages.eremuak'|trans }}</a>
-            </div>
-            {% if is_granted('ROLE_SUPER_ADMIN') %}
-                <div id="navbar" class="navbar-collapse collapse navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{ path('eremuak_new') }}" class="fa fa-plus"> {{ 'messages.eremuberria'|trans }}</a></li>
-                    </ul>
-                </div>
-            {% endif %}
-        </div>
-    </nav>
-{% endblock %}
+{% block menuTitle %}
+    <a class="navbar-brand">{{ 'messages.eremuak'| trans }}</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <ul class="nav navbar-nav">
+            <li><a href="{{ path('eremuak_new') }}" class="fa fa-plus"> {{ 'messages.eremuberria'| trans }}</a></li>
+        </ul>
+    {% endif %}
+{% endblock menuOptions %}
 
 {% block body %}
-    <table class="table">
-        <thead>
-            <tr>
-                <th>{{ 'messages.udala'|trans }}</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for eremuak in eremuaks %}
-            <tr>
-                <td>{{ eremuak.udala }}</td>
-                <td NOWRAP class="text-right">
-                    <ul class="list-inline">
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <li><a href="{{ path('eremuak_edit', { 'id': eremuak.id }) }}" class="fa fa-pencil"></a></li>
-                            {#<li>{{ form_start(deleteforms[eremuak.id],{'attr': {'id': eremuak.id}}) }}#}
-                                {#<a href="#" onclick="document.getElementById({{ eremuak.id }}).submit();" ><i class="fa fa-trash text-danger"></i></a>#}
-                                {#{{ form_end(deleteforms[eremuak.id]) }}</li>#}
-                            <li>{{ form_start(deleteforms[eremuak.id],{'attr': {'id': eremuak.id}}) }}
-                                <a href="#" {{ stimulus_controller('confirmation', {
-                                        id: eremuak.id,
-                                        mezua: 'messages.ziurzaude'|trans}) 
-                                    }} 
-                                    data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
-                                {{ form_end(deleteforms[eremuak.id]) }}</li>
-                        {% endif %}
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="container" role="main">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>{{ 'messages.udala'| trans }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for eremuak in eremuaks %}
+                <tr>
+                    <td>{{ eremuak.udala }}</td>
+                    <td NOWRAP class="text-right">
+                        <ul class="list-inline">
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li><a href="{{ path('eremuak_edit', { 'id': eremuak.id }) }}" class="fa fa-pencil"></a></li>
+                                {#<li>{{ form_start(deleteforms[eremuak.id],{'attr': {'id': eremuak.id}}) }}#}
+                                    {#<a href="#" onclick="document.getElementById({{ eremuak.id }}).submit();" ><i class="fa fa-trash text-danger"></i></a>#}
+                                    {#{{ form_end(deleteforms[eremuak.id]) }}</li>#}
+                                <li>{{ form_start(deleteforms[eremuak.id],{'attr': {'id': eremuak.id}}) }}
+                                    <a href="#" {{ stimulus_controller('confirmation', {
+                                            id: eremuak.id,
+                                            mezua: 'messages.ziurzaude'| trans}) 
+                                        }} 
+                                        data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
+                                    {{ form_end(deleteforms[eremuak.id]) }}</li>
+                            {% endif %}
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <div class="text-center">
-        {% if eremuaks is not empty %}
-            {% if pager.haveToPaginate %}
-                {{ pagerfanta(pager, 'twitter_bootstrap3', {'routeName': 'eremuak_index_paginated'}) }}
+        <div class="text-center">
+            {% if eremuaks is not empty %}
+                {% if pager.haveToPaginate %}
+                    {{ pagerfanta(pager, 'twitter_bootstrap3', {'routeName': 'eremuak_index_paginated'}) }}
+                {% endif %}
+            {% else %}
+                <p>{{ 'messages.emaitzarikez'| trans }}</p>
             {% endif %}
-        {% else %}
-            <p>{{ 'messages.emaitzarikez'|trans }}</p>
-        {% endif %}
+        </div>
     </div>
-{% endblock %}
+{% endblock body %}

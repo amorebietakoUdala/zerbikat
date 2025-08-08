@@ -40,7 +40,7 @@
                         </a></li>
                     <li><a href="{{ path('frontend_pdf_doklagun', { 'id': fitxa.id ,'udala': udala}) }}"
                            target="_blank" class="fa fa-file-pdf-o">
-                            {{ 'messages.resumen_doklaguntzailea'|trans }}
+                            {{ 'messages.resumen_doklaguntzailea'| trans }}
                         </a></li>
 
                 </ul>

@@ -7,7 +7,7 @@
     {% else %}
         {{ fitxa.deskribapenaes }}
     {% endif %}
-{% endblock %}
+{% endblock title %}
 
 {% block breadcrumbs %}
     <div class="flex-row-wrap">
@@ -52,7 +52,7 @@
             <div class="fitxaTitle-block mt-1">
                 <div class="container-fluid pr-0 flex-row-wrap justify-content-flex-end pl-0">
                     <div id="fitxaTitleDiv" class="col-md-10 col-sm-12 w100 mr-auto pl-1">
-                        <h2 class="fitxaTitle">
+                        <h2 class="fitxaTitle h1">
                             <b>
                                 {% if app.request.locale == 'eu' %}
                                     {{ fitxa.deskribapenaeu }}

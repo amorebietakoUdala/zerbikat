@@ -1,83 +1,79 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">{{ 'messages.azpisailak'|trans }}</a>
-            </div>
-            {% if is_granted('ROLE_ADMIN') %}
-                <div id="navbar" class="navbar-collapse collapse navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{ path('azpisaila_new') }}"
-                            class="fa fa-plus"> {{ 'messages.azpisailberria'|trans }}</a></li>
-                    </ul>
-                </div>
-            {% endif %}
-        </div>
-    </nav>
-{% endblock %}
+{% block menuTitle %}
+    <a class="navbar-brand">{{ 'messages.azpisailak' | trans }}</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <ul class="nav navbar-nav">
+            <li><a href="{{ path('azpisaila_new') }}"
+                class="fa fa-plus"> {{ 'messages.azpisailberria' | trans }}</a></li>
+        </ul>
+    {% endif %}
+{% endblock menuOptions %}
 
 {% block body %}
-    <table class="table" id="taulazerrenda">
-        <thead>
-        <tr>
-            {% if is_granted('ROLE_SUPER_ADMIN') %}
-                <th>{{ 'messages.udala'|trans }}</th>{% endif %}
-            <th>{{ 'messages.kodea'|trans }}</th>
-            <th>{{ 'messages.azpisaila'|trans }}</th>
-            <th>{{ 'messages.arduraduna'|trans }}</th>
-            <th>{{ 'messages.kontaktua'|trans }}</th>
-            <th>{{ 'messages.helbidea'|trans }}</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for azpisaila in azpisailas %}
+    <div class="container" role="main">
+        <table class="table" id="taulazerrenda">
+            <thead>
             <tr>
                 {% if is_granted('ROLE_SUPER_ADMIN') %}
-                    <td>{{ azpisaila.udala }}</td>{% endif %}
-
-                <td>{{ azpisaila.kodea }}</td>
-                <td>
-                    {% if app.request.locale == 'es' %}{{ azpisaila.hizkia }}-{{ azpisaila.azpisailaes }}
-                    {% else %}{{ azpisaila.hizkia }}-{{ azpisaila.azpisailaeu }}
-                    {% endif %}
-                </td>
-                <td>{{ azpisaila.arduraduna }}</td>
-                <td>{% if azpisaila.email %}{{ azpisaila.email }}<br/>{% endif %}
-                    {% if azpisaila.telefonoa %}{{ azpisaila.telefonoa }}<br/>{% endif %}
-                    {% if azpisaila.fax %}{{ azpisaila.fax }}<br/>{% endif %}
-                    {% if azpisaila.ordutegia %}{{ azpisaila.ordutegia }}{% endif %}
-                <td>{{ azpisaila.kalea }} {{ azpisaila.kaleZbkia }}, {{ azpisaila.barrutia }}<br/>
-                    {{ azpisaila.eraikina }}
-                </td>
-                <td NOWRAP class="text-right">
-                    <ul class="list-inline">
-                        {% if is_granted('ROLE_ADMIN') %}
-                        <li><a href="{{ path('azpisaila_edit', { 'id': azpisaila.id }) }}" class="fa fa-pencil"></a></li>
-                        <li>{{ form_start(deleteforms[azpisaila.id],{'attr': {'id': azpisaila.id}}) }}
-                            <a href="#" {{ stimulus_controller('confirmation', {
-                                    id: azpisaila.id,
-                                    mezua: 'messages.ziurzaude'|trans}) 
-                                }} 
-                                data-action="confirmation#onClick"><i
-                                        class="fa fa-trash text-danger"></i></a>
-                            {{ form_end(deleteforms[azpisaila.id]) }}</li>
-                        {% endif %}
-                    </ul>
-                </td>
+                    <th>{{ 'messages.udala'| trans }}</th>{% endif %}
+                <th>{{ 'messages.kodea'| trans }}</th>
+                <th>{{ 'messages.azpisaila'| trans }}</th>
+                <th>{{ 'messages.arduraduna'| trans }}</th>
+                <th>{{ 'messages.kontaktua'| trans }}</th>
+                <th>{{ 'messages.helbidea'| trans }}</th>
+                <th></th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for azpisaila in azpisailas %}
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                        <td>{{ azpisaila.udala }}</td>{% endif %}
 
-    <div class="text-center">
-        {% if azpisailas is not empty %}
+                    <td>{{ azpisaila.kodea }}</td>
+                    <td>
+                        {% if app.request.locale == 'es' %}{{ azpisaila.hizkia }}-{{ azpisaila.azpisailaes }}
+                        {% else %}{{ azpisaila.hizkia }}-{{ azpisaila.azpisailaeu }}
+                        {% endif %}
+                    </td>
+                    <td>{{ azpisaila.arduraduna }}</td>
+                    <td>{% if azpisaila.email %}{{ azpisaila.email }}<br/>{% endif %}
+                        {% if azpisaila.telefonoa %}{{ azpisaila.telefonoa }}<br/>{% endif %}
+                        {% if azpisaila.fax %}{{ azpisaila.fax }}<br/>{% endif %}
+                        {% if azpisaila.ordutegia %}{{ azpisaila.ordutegia }}{% endif %}
+                    <td>{{ azpisaila.kalea }} {{ azpisaila.kaleZbkia }}, {{ azpisaila.barrutia }}<br/>
+                        {{ azpisaila.eraikina }}
+                    </td>
+                    <td NOWRAP class="text-right">
+                        <ul class="list-inline">
+                            {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('azpisaila_edit', { 'id': azpisaila.id }) }}" class="fa fa-pencil"></a></li>
+                            <li>{{ form_start(deleteforms[azpisaila.id],{'attr': {'id': azpisaila.id}}) }}
+                                <a href="#" {{ stimulus_controller('confirmation', {
+                                        id: azpisaila.id,
+                                        mezua: 'messages.ziurzaude'| trans}) 
+                                    }} 
+                                    data-action="confirmation#onClick"><i
+                                            class="fa fa-trash text-danger"></i></a>
+                                {{ form_end(deleteforms[azpisaila.id]) }}</li>
+                            {% endif %}
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-        {% else %}
-            <p>{{ 'messages.emaitzarikez'|trans }}</p>
-        {% endif %}
+        <div class="text-center">
+            {% if azpisailas is not empty %}
+
+            {% else %}
+                <p>{{ 'messages.emaitzarikez'| trans }}</p>
+            {% endif %}
+        </div>
     </div>
-{% endblock %}
+{% endblock body %}
