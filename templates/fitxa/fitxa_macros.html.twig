@@ -1,7 +1,7 @@
 {% macro kostuTaulaMargostu(kostutaula,locale) %}
     <table class="table kostuTaula">
         <tr>
-            <th colspan="2">
+            <th class="h3" colspan="2">
                 {{ kostutaula['kodea_prod'] | raw }} - {{ kostutaula['izenburua'~locale~'_prod'] | raw }}
             </th>
         </tr>

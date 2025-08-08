@@ -20,7 +20,7 @@ h1, .h1 {
     /* Con html font-size 10 */
     /* font-size: 3rem; */
     /* Con html font-size 16 */
-    font-size: 1.85rem;
+    font-size: 2rem;
     font-weight: 700;
 }
 
@@ -38,7 +38,7 @@ h3, .h3 {
     /* font-size: 2.0rem; */
     /* line-height: 3.0rem; */
     /* Con html font-size 16 */
-    font-size: 1.625rem;
+    font-size: 1.375rem;
     font-weight: 700;
 }
 
@@ -314,7 +314,7 @@ img#logoa {
     padding-bottom: 15px;
     padding-right: 15px;
     height: 120px;
-    width: 270px;
+    width: 272px;
     text-align: left;
     margin-top: 15px;
     margin-left: 15px;
@@ -327,11 +327,11 @@ img#logoa {
     float: left;
 }
 
-.font-weight {
+.font-weight-400 {
     /* Con html font-size 10 */
     /* font-size: 1.5rem; */
     /* Con html font-size 16 */
-    font-size: 0.99rem;
+    /* font-size: 0.99rem; */
     font-weight: 400;
 }
 
@@ -564,7 +564,7 @@ img#logoa {
     /* Con html font-size 10 */
     /* font-size: 1.6rem; */
     /* Con html font-size 16 */
-    font-size: 1rem;
+    /* font-size: 1rem; */
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 23px;
@@ -584,7 +584,7 @@ img#logoa {
     /* padding-right: 17px; */
     /* height: 60px; */
     /* Con html font-size 16 */
-    font-size: 1.6rem;
+    /* font-size: 1.6rem; */
     padding-top: 8px;
     padding-bottom: 8px;
     background-color: white;
@@ -593,6 +593,7 @@ img#logoa {
     width: 140px;
     color: #004E89;
     text-align: center;
+    font-weight: 400 !important;
 }
 
 .d-flex {
@@ -669,7 +670,7 @@ button:hover {
     /* Con html font-size 10 */
     /* font-size: 1.6rem; */
     /* Con html font-size 16 */
-    font-size: 1rem;
+    /* font-size: 1rem; */
     /* Comentado para que se muestre correctamente en móvil */
     /* height: 48px; */
     padding: 10px;
@@ -739,7 +740,7 @@ footer {
 
 .footer-text {
     /* Con html font-size 16 */
-    font-size: 1rem;
+    /* font-size: 1rem; */
     color: white;
 }
 
@@ -747,14 +748,14 @@ footer {
     /* Con html font-size 10 */
     /* font-size: 2.0rem; */
     /* Con html font-size 16 */
-    font-size: 1.375rem;
+    /* font-size: 1.375rem; */
 }
 
 footer a {
     /* Con html font-size 10 */
     /* font-size: 1.6rem !important; */
     /* Con html font-size 16 */
-    font-size: 1rem !important;
+    /* font-size: 1rem !important; */
     color: white !important;
     text-decoration: underline !important;
 }
@@ -895,7 +896,7 @@ table.kostuTaula th {
     border-top: 0px !important;
     border-bottom: 1px solid #ddd;
     padding: 20px !important;
-    font-size: 1.375rem;
+    /* font-size: 1.375rem; */
 }
 
 table.kostuTaula td {
@@ -952,13 +953,13 @@ table.kostuTaula td {
     max-width: 80%;
 }
 
-.fitxaTitle {
+/* .fitxaTitle { */
     /* Con html font-size 10 */
     /* font-size: 2.3rem; */
     /* line-height: 3.0rem; */
     /* Con html font-size 16 */
-    font-size: 2rem;
-}
+    /* font-size: 2rem; */
+/* } */
 
 #fitxaTitleEspedienteKodea {
     display: flex;
@@ -966,15 +967,6 @@ table.kostuTaula td {
     width: max-content;
     min-width: 100px;
     align-items: center;
-}
-
-h3 {
-    /* Con html font-size 10 */
-    /* font-size: 2.0rem; */
-    /* line-height: 3.0rem; */
-    /* Con html font-size 16 */
-    font-size: 1.625rem;
-    font-weight: 700;
 }
 
 .border-none {
@@ -1002,7 +994,7 @@ h3 {
     /* Con html font-size 10 */
     /* font-size: 1rem; */
     /* Con html font-size 16 */
-    font-size: 1rem;
+    /* font-size: 1rem; */
     border-bottom: 2px solid #C2C2C2;
     padding-bottom: 5px;
 }
@@ -1082,23 +1074,24 @@ ul.kanal-zerrenda li::before {
     /* Con html font-size 16 */
     margin-top: 0px;
     margin-bottom: 0px;
-    font-size: 1.625rem;
-    font-weight: 700;
+    /* font-size: 1.625rem;
+    font-weight: 700; */
 }
 
 li.mail-kanala {
     /* Con html font-size 10 */
     /* font-size: 1.5rem;     */
     /* Con html font-size 16 */
-    font-size: 1.125rem;   
+    /* font-size: 1.125rem;    */
+    margin: 0px;
 }
 
-ul.kanal-zerrenda.mt-10px > li > a {
+/* ul.kanal-zerrenda.mt-10px > li > a { */
     /* Con html font-size 10 */
     /* font-size: 1.3rem;     */
     /* Con html font-size 16 */
-    font-size: 1rem;
-}
+    /* font-size: 1rem; */
+/* } */
 
 li.mail-kanala::before{
     content: '';
@@ -1349,12 +1342,12 @@ li.whatsapp-kanala::before{
         margin-top: 0px !important;
     }
 
-    ul.kanal-zerrenda.mt-10px > li > a {
+    /* ul.kanal-zerrenda.mt-10px > li > a { */
         /* Con html font-size 10 */
         /* font-size: 1.3rem;     */
         /* Con html font-size 16 */
-        font-size: 1rem;
-    }
+        /* font-size: 1rem; */
+    /* } */
 }
 
 @media only screen and (max-width: 508px) {
