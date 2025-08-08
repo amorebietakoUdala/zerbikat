@@ -247,7 +247,7 @@ h2.tituloFamilia {
 
 #filtrarImg {
     max-height: 20px;
-    max-width: auto;
+    max-width: max-content;
 }
 
 .mb-2 {

@@ -295,7 +295,7 @@ img#logoa {
 
 #filtrarImg {
     max-height: 20px;
-    max-width: auto;
+    max-width: none;
 }
 
 .mb-2 {
@@ -303,7 +303,8 @@ img#logoa {
 }
 
 .btn-azpifamilia {
-    border-style: 2px solid;
+    border-width: 2px;
+    border-style: solid;
     border-color: #004E89;
     border-radius: 8px;
     background-color: white;
@@ -877,7 +878,7 @@ footer a {
 
 /*  START Fitxa Styles */
 .seccion {
-    scroll-margin-top: 75px; /* o el valor que necesites */
+    scroll-margin-top: 150px; /* o el valor que necesites */
 }
 
 table.kostuTaula {
@@ -1204,6 +1205,10 @@ li.whatsapp-kanala::before{
 }
 
 @media only screen and (max-width: 990px) {
+    .seccion {
+        scroll-margin-top: 150px; /* o el valor que necesites */
+    }
+
     .w96 {
         width: 93%;
     }
@@ -1406,6 +1411,10 @@ li.whatsapp-kanala::before{
 }
 
 @media screen and (max-width: 410px) {
+    .seccion {
+        scroll-margin-top: 200px; /* o el valor que necesites */
+    }
+
     .w96 {
         width: 90%;
     }
@@ -1433,14 +1442,14 @@ li.whatsapp-kanala::before{
 }
 
 .affix {
-    top: 2;
+    top: 0px;
     width: 100%;
     z-index: 1010;
 }
 
 .affix a {
     color: #777777;
-    padding: 15px;
+    /* padding: 15px; */
 }
 
 .affix a:hover {
@@ -1455,19 +1464,3 @@ li.whatsapp-kanala::before{
 .help-block {
     color: #902b2b;
 }
-
-/*
-* IE10 viewport hack for Surface/desktop Windows 8 bug
-* Copyright 2014-2015 Twitter, Inc.
-* Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-*/
-
-/*
-* See the Getting Started docs for more information:
-* http://getbootstrap.com/getting-started/#support-ie10-width
-*/
-@-webkit-viewport { width: device-width; }
-@-moz-viewport    { width: device-width; }
-@-ms-viewport     { width: device-width; }
-@-o-viewport      { width: device-width; }
-@viewport         { width: device-width; }
