@@ -1205,10 +1205,6 @@ li.whatsapp-kanala::before{
 }
 
 @media only screen and (max-width: 990px) {
-    .seccion {
-        scroll-margin-top: 150px; /* o el valor que necesites */
-    }
-
     .w96 {
         width: 93%;
     }
