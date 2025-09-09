@@ -204,6 +204,17 @@ img#logoa {
     text-decoration: none;
 }
 
+#aurkibidea {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+#aurkibidea-btn {
+    background: #f8f8f8 !important;
+    z-index: 1;
+    display: none;
+}
+
 .text-decoration-none {
     text-decoration: none !important;
 }
@@ -1418,7 +1429,18 @@ li.last-item {
 }
 
 @media screen and (max-width: 410px) {
+    #aurkibidea-btn {
+        display: block;
+        position: sticky;
+        position: -webkit-sticky;
+        top: 193px; /* required */
+    }
+    
     .seccion {
+        scroll-margin-top: 200px; /* o el valor que necesites */
+    }
+
+    #eskumako-zutabea{
         scroll-margin-top: 200px; /* o el valor que necesites */
     }
 
