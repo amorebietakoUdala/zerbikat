@@ -128,7 +128,6 @@ button.list-group-item-success {
 img#logoa {
     height: 50px;
     width: auto;
-    margin-left: 5px !important;
 }
 
 #logo_lerroa {
@@ -577,6 +576,7 @@ img#logoa {
     color: #626262;
 }
 
+
 .espedienteKodeaBtn-active {
     /* Con html font-size 10 */
     /* font-size: 2.4rem; */
@@ -585,12 +585,12 @@ img#logoa {
     /* height: 60px; */
     /* Con html font-size 16 */
     /* font-size: 1.6rem; */
-    padding-top: 8px;
-    padding-bottom: 8px;
+    font-size: 1.6rem;
+    padding: 10px;
     background-color: white;
     border: 2px solid #004E89;
     border-radius: 40px;
-    width: 140px;
+    width: 120px;
     color: #004E89;
     text-align: center;
     font-weight: 400 !important;
@@ -780,6 +780,10 @@ footer a {
     margin-top: 10px;
 }
 
+.mt-0 {
+    margin-top: 0px;
+}
+
 .mt-1 {
     margin-top: 25px;
 }
@@ -847,10 +851,6 @@ footer a {
 
 .p-10px {
     padding: 10px;
-}
-
-.p-15px {
-    padding: 15px !important;
 }
 
 .p-1 {
@@ -951,6 +951,11 @@ table.kostuTaula td {
 #fitxaTitleDiv {
     border-right: 1px solid #004E89;
     max-width: 80%;
+    padding: 0px !important;
+}
+
+div#fitxaTitleDiv h2 {
+    padding: 0px !important;
 }
 
 /* .fitxaTitle { */
@@ -1129,6 +1134,9 @@ li.whatsapp-kanala::before{
     background-image: url('../images/whatsApp.png');
 }
 
+li.last-item {
+    border-bottom: none !important;
+}
 
 /** END New styles  **/
 @media (min-width: 1251px) {
@@ -1142,6 +1150,10 @@ li.whatsapp-kanala::before{
 
     #itzuli-esteka {
         margin-right: 25px !important;
+    }
+
+    #fitxaTitleDiv {
+        padding-right: 25px !important;
     }
 }
 
@@ -1194,6 +1206,7 @@ li.whatsapp-kanala::before{
 
     #columnas-footer {
         padding-top: 25px;
+        padding-left: 40px;
     }
 }
 
@@ -1210,6 +1223,7 @@ li.whatsapp-kanala::before{
 
     #fitxaTitleDiv {
         max-width: 75%;
+        padding-right: 25px !important;
     }
 
     .container {
@@ -1247,6 +1261,10 @@ li.whatsapp-kanala::before{
 }
 
 @media only screen and (max-width: 768px) {
+    img#logoa {
+        margin-left: 15px !important;
+    }
+
     .left, .position-sticky-170px {
         float: none;
         width: 100%;
@@ -1263,7 +1281,7 @@ li.whatsapp-kanala::before{
     }
 
     #ifk {
-        padding-left: 20px;
+        padding-left: 15px;
     }
 
     .container {
@@ -1285,7 +1303,7 @@ li.whatsapp-kanala::before{
     }
 
     .pl-2#columnas-footer {
-        padding-left: 60px;
+        padding-left: 40px;
     }
 
     #itzuli_esteka, .hizkuntza {
@@ -1381,9 +1399,9 @@ li.whatsapp-kanala::before{
         max-width: 80%;
     }
 
-    .fitxaTitle-block {
+    /* .fitxaTitle-block {
         padding: 10px 10px 10px 10px;
-    }
+    } */
 
     #fitxaTitleDiv {
         max-width: 50%;
@@ -1416,13 +1434,12 @@ li.whatsapp-kanala::before{
     #fitxaTitleEspedienteKodea {
         max-width: max-content;
         margin-right: auto;
-        padding-left: 25px;
     }
 
     #itzuli_esteka {
         margin-top: 0px !important;
         margin-right: auto;
-        margin-left: 5px;
+        margin-left: 15px;
     }
 
     #breadcrum-text {
