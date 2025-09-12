@@ -23,7 +23,8 @@ fos_ck_editor:
                         "Link",
                         "PasteText",
                         "PasteFromWord",
-                        "Table"
+                        "Table",
+                        "Source"
                     ],
                 }
             jquery: true

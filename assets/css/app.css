@@ -324,7 +324,7 @@ img#logoa {
     padding-bottom: 15px;
     padding-right: 15px;
     height: 120px;
-    width: 272px;
+    width: 290px;
     text-align: left;
     margin-top: 15px;
     margin-left: 15px;
@@ -343,6 +343,10 @@ img#logoa {
     /* Con html font-size 16 */
     /* font-size: 0.99rem; */
     font-weight: 400;
+}
+
+.font-weight-700 {
+    font-weight: 700;
 }
 
 .bg-fam-9 {
@@ -605,6 +609,8 @@ img#logoa {
     color: #004E89;
     text-align: center;
     font-weight: 400 !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
 }
 
 .d-flex {
@@ -615,6 +621,10 @@ img#logoa {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.flex-wrap {
     flex-wrap: wrap;
 }
 
@@ -635,7 +645,7 @@ img#logoa {
     flex-direction: row;
 }
 
-.flex-justify-content-space-evenly{
+.flex-justify-content-space-evenly {
     justify-content: space-evenly;
 }
 
@@ -707,17 +717,26 @@ button:hover {
     margin-bottom: 25px;
 }
 
-footer {
-    margin-top: 50px;
+.footer-bg {
     background-color: #202020;
 }
 
+.footer {
+    margin-top: 0px;
+}
+
+footer.container {
+    max-width: 100% !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
 #ubicacion-column {
-    padding-top: 50px;
+    padding-top: 57px;
 }
 
 #horario-column {
-    padding-top: 50px;
+    padding-top: 57px;
     padding-left: 50px;
 }
 
@@ -772,7 +791,7 @@ footer a {
 }
 
 #columnas-footer {
-    padding: 50px;
+    padding: 0px;
 }
 
 .max-width-100 {
@@ -848,6 +867,14 @@ footer a {
     padding-left: 50px;
 }
 
+.pl-3 {
+    padding-left: 75px;
+}
+
+.pl-40px {
+    padding-left: 40px !important;
+}
+
 .pr-0 {
     padding-right: 0px !important;
 }
@@ -860,6 +887,10 @@ footer a {
     padding-right: 50px;
 }
 
+.pt-10px {
+    padding-top: 10px !important;
+}
+
 .p-10px {
     padding: 10px;
 }
@@ -870,6 +901,10 @@ footer a {
 
 .p-2 {
     padding: 50px;
+}
+
+.pb-10px {
+    padding-bottom: 10px !important;
 }
 
 .pb-2 {
@@ -892,6 +927,43 @@ footer a {
 .seccion {
     scroll-margin-top: 150px; /* o el valor que necesites */
 }
+
+.oharra tr {
+    background-image: url('../images/download-icon.png') !important;
+    background-repeat: no-repeat;
+    background-position: 10px center !important;
+}
+
+.oharra td {
+	border: 0px none #fff !important;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 75px;
+}
+
+.oharra {
+	border-top: 1px solid #626262;
+	width: 100%;
+	border-bottom: 1px solid #626262;
+	border-left: 0px solid;
+	border-right: 0px solid;
+    margin-top: 15px;
+}
+
+.plain td {
+	border: 0px none #fff !important;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.plain {
+    /* margin-left: 15px; */
+    border: 0px none #fff !important;
+	width: 100%;
+    margin-top: 15px;
+    line-height: normal;
+}
+
 
 table.kostuTaula {
     border-width: 0px;
@@ -1049,6 +1121,10 @@ div#fitxaTitleDiv h2 {
     padding-left: 0;
 }
 
+.kanal-mota-btn {
+    height: 48px;
+}
+
 a.underline {
     text-decoration: underline !important;
 }
@@ -1082,6 +1158,35 @@ ul.kanal-zerrenda li::before {
 .bordered-box {
 	border: 1px solid #626262;
 	border-radius: 10px;
+}
+
+.border-right {
+	border-right: 1px solid #F2F2F2;
+}
+
+.border-right-blue {
+    border-right: 1px solid #004E89;
+}
+
+.border-none {
+	border-right: 0px none #F2F2F2;
+}
+
+.btn-dokumentua {
+    padding: 15px;
+   	border: 2px solid #626262;
+	border-radius: 10px;
+    text-decoration: none;
+    width: 49%;
+    margin-bottom: 15px;
+}
+
+.btn-dokumentua a {
+    color:#000 !important;
+}
+
+.download-icon {
+    height: 38px;
 }
 
 #informazio-gehiagoTitle {
@@ -1150,9 +1255,9 @@ li.last-item {
 }
 
 /** END New styles  **/
-@media (min-width: 1251px) {
+@media (min-width: 1260px) {
     .container {
-        width: 1216px;
+        width: 1260px;
     }
 
     .hizkuntza-eu {
@@ -1268,6 +1373,21 @@ li.last-item {
 
     .footer-sac-title {
         padding-left: 0px !important;
+    }
+
+    .btn-dokumentua {
+        width: 98%;
+    }
+
+    #arduraaitorpena, #ebazpensinpli, #isiltasunadmin, #arrunta, #aurreikusi {
+        border: 0px none #000 !important;
+        margin-top: 15px !important;
+        padding-left: 0px !important;
+    }
+
+    .kanal-mota-btn{
+        border: 0px none #000 !important;
+        background-position: 0px 10px !important;
     }
 }
 
@@ -1461,7 +1581,7 @@ li.last-item {
     #itzuli_esteka {
         margin-top: 0px !important;
         margin-right: auto;
-        margin-left: 15px;
+        margin-left: 25px;
     }
 
     #breadcrum-text {

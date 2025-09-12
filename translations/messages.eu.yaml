@@ -243,6 +243,13 @@
 "messages.whatsapp": "Whatsapp"
 "Saila / Azpisaila": "Saila / Azpisaila"
 "Udala": "Udala"
+btn.download: "Jaitsi"
+messages.aukera: "Aukera"
+messages.kokapena: "Kokapena"
+messages.kokapenaIkusi: "Kokapena ikusi"
+messages.izapideaHasi: "Izapidea hasi"
+messages.izapideraSartu: "Online fitxara sartu"
+
 message.intro: |
   <b>Ongi etorri Amorebieta-Etxanoko Udalaren izapideen eskuliburura.</b><br>
   <br>
@@ -271,7 +278,7 @@ footer.escribe1: "IDATZI"
 footer.escribe2: "UDALARI"
 
 footer.SAC: "HAZ"
-footer.contacto1: "KONTACTUA"
+footer.contacto1: "KONTAKTUA"
 footer.contacto2: "Herritarren Arreta Zerbitzua"
 footer.telefono1: "TELEFONO"
 footer.y: " eta "

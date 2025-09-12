@@ -35,6 +35,7 @@
 {% endblock azkenEguneraketa %}
 
 {% block body %}
+    <!-- Hamburgesa menua aurkibidearentzat -->
     <a href="#eskumako-zutabea" id="aurkibidea-btn" class="btn navbar-toggler" type="button" data-toggle="collapse" data-target="#aurkibidea"
         aria-controls="aurkibidea" aria-expanded="false" aria-label="{{ 'messages.aurkibidea' | trans }}">
         <span class="navbar-toggler-icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
@@ -44,8 +45,8 @@
         {% block fitxaTitle %}
             <div class="fitxaTitle-block mt-1">
                 <div class="container-fluid pr-0 flex-row-wrap justify-content-flex-end pl-0">
-                    <div id="fitxaTitleDiv" class="col-md-10 col-sm-12 w100 mr-auto pl-1">
-                        <h2 class="h1">
+                    <div id="fitxaTitleDiv" class="col-md-10 col-sm-12 w100 mr-auto pl-1 d-flex flex-align-items-center">
+                        <h2 class="h1 mt-0 mb-0">
                             <b>
                                 {% if app.request.locale == 'eu' %}
                                     {{ fitxa.deskribapenaeu }}

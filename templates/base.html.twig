@@ -48,9 +48,7 @@
 
 {% block body %}{% endblock %}
 
-<div class="container">
-    {% block footer %}{% endblock %}
-</div>
+{% block footer %}{% endblock %}
 
 {% block javascripts %}
     {{ encore_entry_script_tags('app') }}
