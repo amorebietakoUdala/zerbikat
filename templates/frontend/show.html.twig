@@ -20,7 +20,7 @@
             {% endif %}
         </div>
         <div id="return-button" class="ml-auto breadcrum">
-            <a href="{{ path('frontend_fitxa_index', { 'udala': udala }) }}"><i class="fa fa-arrow-left"></i>&nbsp;{{ 'messages.atzera' | trans }}</a>
+            <a href="{{ path('frontend_fitxa_index', { 'udala': udala }) }}"><img src="{{ asset('build/images/atras.png') }}">&nbsp;{{ 'messages.atzera' | trans }}</a>
         </div>
     </div>
 {% endblock breadcrumbs %}    
