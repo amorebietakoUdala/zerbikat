@@ -10,7 +10,12 @@
                   <div id="horario-column" class="col-lg-4 col-md-4  col-sm-6">
                         <div class="row horario-bg pl-2"><b>{{ 'footer.horario1' | trans | raw }}</b><br>{{ 'footer.horario2' | trans | raw }}<br><br></div>
                         <div class="row whatsapp-bg pl-2"><b>{{ 'footer.whatsapp1' | trans | raw }}</b><br><a class="text-decoration-none" href="https://wa.me/34688866600?text={{ 'messages.whatsapp.default' | trans | url_encode }}" target="_blank">688 866 600</a><br><br></div>
-                        <div class="row escribe-bg pl-2"><u><b>{{ 'footer.escribe1' | trans | raw }}</u><br><u>{{ 'footer.escribe2' | trans | raw }}</u></b><br></div>
+                        {% if app.request.locale == 'eu' %}
+                              {% set url = 'https://amorebieta-etxano.eus/eu/idatzi-udalari/' %}
+                        {% else %} 
+                              {% set url = 'https://amorebieta-etxano.eus/es/escribe-al-ayuntamiento/' %}
+                        {% endif %}
+                        <a href="{{ url }}" target="_blank"><div class="row escribe-bg pl-2"><u><b>{{ 'footer.escribe1' | trans | raw }}</u><br><u>{{ 'footer.escribe2' | trans | raw }}</u></b><br></div></a>
                   </div>
                   <div id="SAC-column" class="col-lg-4 col-md-4 col-sm-6">
                         <div class="row pl-2 footer-sac-title h3 mt-0"><b>{{ 'footer.SAC' | trans | raw }}</b></div>
