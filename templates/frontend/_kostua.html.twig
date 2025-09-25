@@ -6,8 +6,10 @@
       <div class="pl-0 col-sm-12">
             <div class="page-header border-none mb-0">
                <h3 class="h2">
-                  {% if app.request.locale == 'eu' %}{{ labelak.kostualabeleu }}
-                  {% else %}{{ labelak.kostualabeles }}
+                  {% if app.request.locale == 'eu' %}
+                     {{ labelak.kostualabeleu }}
+                  {% else %}
+                     {{ labelak.kostualabeles }}
                   {% endif %}
                </h3>
             </div>
@@ -16,7 +18,7 @@
                {% if eremuak.kostuatable %}
                   {% if fitxa.udala.zergaor %}
                         {% for kostutaula in kostuZerrenda %}
-                           {{ macros.kostuTaulaMargostu(kostutaula,'eu') }}
+                           {{ macros.kostuTaulaMargostu(kostutaula, app.request.locale ) }}
                            {% set kont = kont + 1 %}
                         {% endfor %}
                   {% else %}
