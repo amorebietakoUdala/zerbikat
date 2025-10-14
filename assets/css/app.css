@@ -253,7 +253,6 @@ img#logoa {
 }
 
 .themed-grid-col {
-    margin-top: 80px;
     padding-top: 2rem;
     padding-bottom: 2rem;
     background-color:  #F5F5F5 !important;
@@ -611,6 +610,12 @@ img#logoa {
 
 .d-flex {
     display: flex;
+}
+
+.justify-content-end-align-items-start {
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: start;
 }
 
 .flex-row-wrap {
@@ -1022,6 +1027,10 @@ table.kostuTaula td {
 
 .flex-align-items-center {
     align-items: center !important;
+}
+
+.flex-align-items-start {
+    align-items: start !important;
 }
 
 .fitxaTitle-block {
