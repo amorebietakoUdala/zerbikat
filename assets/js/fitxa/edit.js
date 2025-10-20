@@ -284,7 +284,7 @@ $(function () {
          var midest = $('#dest').val();
          $('#' + midest).val(kontzeptuaid).trigger('change');
          console.log("vbalioa da : " + kontzeptuaid);
-         $('#modalSelectOrdenantza').modal('toggle')
+         $('#modalSelectOrdenantza').modal('toggle');
       }
    });
 
@@ -624,7 +624,7 @@ $(function () {
    });
    $('#add-kostua').click(function (e) {
       e.preventDefault();
-      var locale = "{{ app.request.getLocale() }}";
+      var locale = global.locale;
       $('#cmbOrdenantza').val(-1).trigger("change");
       $('#cmbAtala').empty();
       $("#cmbKontzeptua").empty();
@@ -633,7 +633,6 @@ $(function () {
       } else {
          $("#cmbKontzeptua").append($("<option></option>").attr("value", -1).text("Aukeratu"));
       }
-
 
       var kostuaList = $('#kostua-fields-list');
       var newWidget = kostuaList.attr('data-prototype');

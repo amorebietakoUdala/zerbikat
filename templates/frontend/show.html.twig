@@ -70,22 +70,24 @@
                     {{ include('frontend/_aurkibidea.html.twig') }}
                 </aside>
             {% endblock aurkibidea %}
-            <div id="eduki-nagusia" class="col-lg-8 col-md-8 col-sm-7 left">
+            <div id="eduki-nagusia" class="col-lg-8 col-md-8 col-sm-7 left pr-1">
                 {% block edukiNagusia %}
                     {{ include('frontend/_helburua.html.twig') }}
                     {{ include('frontend/_norkeskatu.html.twig') }}
                     {{ include('frontend/_dokumentazioa.html.twig') }}
-                    {{ include('frontend/_doklagun.html.twig') }}
-                    {{ include('frontend/_kanala.html.twig') }}
+                    {# {{ include('frontend/_doklagun.html.twig') }} #}
                     {{ include('frontend/_kostua.html.twig') }}
                     {{ include('frontend/_ebazpen.html.twig') }}
-                    {{ include('frontend/_araudia.html.twig') }}
+                    {{ include('frontend/_kanala.html.twig') }}
                     {{ include('frontend/_prozedura.html.twig') }}
-                    {{ include('frontend/_norkebatzi.html.twig') }}
-                    {{ include('frontend/_azpisaila.html.twig') }}
-                    {{ include('frontend/_oharrak.html.twig') }}
-                    {{ include('frontend/_besteak.html.twig') }}
+
+                    {# {{ include('frontend/_norkebatzi.html.twig') }}
+                    {{ include('frontend/_azpisaila.html.twig') }} #}
+
+                    {# {{ include('frontend/_oharrak.html.twig') }} #}
+                    {{ include('frontend/_araudia.html.twig') }}
                     {{ include('frontend/_datuenbabesa.html.twig') }}
+                    {{ include('frontend/_besteak.html.twig') }}
                 {% endblock %}
             </div>
         </div>

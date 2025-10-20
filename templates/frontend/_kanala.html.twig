@@ -20,9 +20,9 @@
       <div class="mt-1 mb-1"><b>{{ 'messages.aukera' | trans }}:&nbsp;{{ mota }}</b></div>
       {# Telematikoa #}
       {% if kanal.telematikoa %}
-            <ul class="mt-1">
+            {# <ul class="mt-1">
                <li>{{ deskribapena }}</li>
-            </ul>
+            </ul> #}
             {% if esteka != '' %}
                <div class="ml-1"><a href="{{esteka}}" class="btn btn-primary" title="" alt="" target="_blank">{{ 'messages.izapideaHasi' | trans }}</a></div>
             {% endif %}

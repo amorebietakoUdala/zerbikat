@@ -31,15 +31,6 @@
                </a>
             </li>
             <li class="list-inline h5 mt-0 mb-0 pt-10px pb-10px">
-               <a href="#kanala">
-                     {% if app.request.locale == 'eu' %}
-                        {{ labelak.kanalalabeleu }}
-                     {% else %} 
-                        {{ labelak.kanalalabeles }}
-                     {% endif %}
-               </a>
-            </li>
-            <li class="list-inline h5 mt-0 mb-0 pt-10px pb-10px">
                <a href="#kostua">
                      {% if app.request.locale == 'eu' %}
                         {{ labelak.kostualabeleu }}
@@ -49,20 +40,29 @@
                </a>
             </li>
             <li class="list-inline h5 mt-0 mb-0 pt-10px pb-10px">
-               <a href="#epea">
+               <a href="#ebazpen">
                      {% if app.request.locale == 'eu' %}
-                        {{ labelak.epealabeleu }}
+                        {{ labelak.aurreikusilabeleu }}
                      {% else %} 
-                        {{ labelak.epealabeles }}
+                        {{ labelak.aurreikusilabeles }}
                      {% endif %}
                </a>
             </li>
-            <li class="list-inline h5 mt-0 mb-0 pt-10px pb-10px">
-               <a href="#araudia">
+            {# <li class="list-inline h5 mt-0 mb-0 pt-10px pb-10px">
+               <a href="#norkebatzi">
                      {% if app.request.locale == 'eu' %}
-                        {{ labelak.araudialabeleu }}
+                        {{ labelak.norkebatzilabeleu }}
                      {% else %} 
-                        {{ labelak.araudialabeles }}
+                        {{ labelak.norkebatzilabeles }}
+                     {% endif %}
+               </a>
+            </li> #}
+            <li class="list-inline h5 mt-0 mb-0 pt-10px pb-10px">
+               <a href="#kanala">
+                     {% if app.request.locale == 'eu' %}
+                        {{ labelak.kanalalabeleu }}
+                     {% else %} 
+                        {{ labelak.kanalalabeles }}
                      {% endif %}
                </a>
             </li>
@@ -75,16 +75,44 @@
                      {% endif %}
                </a>
             </li>
-            <li class="list-inline h5 mt-0 mb-0 pt-10px pb-10px">
-               <a href="#norkebatzi">
+            {# <li class="list-inline h5 mt-0 mb-0 pt-10px pb-10px">
+               <a href="#epea">
                      {% if app.request.locale == 'eu' %}
-                        {{ labelak.norkebatzilabeleu }}
+                        {{ labelak.epealabeleu }}
                      {% else %} 
-                        {{ labelak.norkebatzilabeles }}
+                        {{ labelak.epealabeles }}
+                     {% endif %}
+               </a>
+            </li> #}
+            <li class="list-inline h5 mt-0 mb-0 pt-10px pb-10px">
+               <a href="#araudia">
+                     {% if app.request.locale == 'eu' %}
+                        {{ labelak.araudialabeleu }}
+                     {% else %} 
+                        {{ labelak.araudialabeles }}
                      {% endif %}
                </a>
             </li>
             <li class="list-inline h5 mt-0 mb-0 pt-10px pb-10px">
+               <a href="#datuenbabesa">
+                     {% if app.request.locale == 'eu' %}
+                        {{ labelak.datuenbabesalabeleu }}
+                     {% else %} 
+                        {{ labelak.datuenbabesalabeles }}
+                     {% endif %}
+               </a>
+            </li>
+            <li class="list-inline h5 mt-0 mb-0 pt-10px pb-10px">
+               <a href="#besteak1">
+                     {% if app.request.locale == 'eu' %}
+                        {{ labelak.besteak1labeleu }}
+                     {% else %} 
+                        {{ labelak.besteak1labeles }}
+                     {% endif %}
+               </a>
+            </li>
+
+            {# <li class="list-inline h5 mt-0 mb-0 pt-10px pb-10px">
                <a href="#azpisaila">
                      {% if app.request.locale == 'eu' %}
                         {{ labelak.azpisailalabeleu }}
@@ -101,7 +129,7 @@
                         {{ labelak.oharraklabeles }}
                      {% endif %}
                </a>
-            </li>
+            </li> #}
          <ol>
       </div>
       <div id="informazio-gehiago" class="bordered-box mt-2 p-1">

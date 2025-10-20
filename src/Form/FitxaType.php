@@ -32,6 +32,7 @@ class FitxaType extends AbstractType
         $udala = null;
         /** We are editing and udala check is udala is set */
         $data = $options['data'];
+        $locale = $options['locale'];
         if ( null !== $data ) {
             $udala = $data->getUdala();
         }
@@ -270,7 +271,9 @@ class FitxaType extends AbstractType
                     'entry_type'   => FitxaKostuaType::class, 
                     'entry_options'  => [
                         'udala' => $user->getUdala() !== null ? $user->getUdala()->getId() : $udala, 
-                    'api_url' => $api_url], 
+                        'api_url' => $api_url,
+                        'locale' => $locale
+                    ], 
                     'allow_add'    => true, 
                     'allow_delete' => true, 
                     'by_reference' => false
@@ -285,10 +288,11 @@ class FitxaType extends AbstractType
      */
     public function configureOptions ( OptionsResolver $resolver ): void
     {
-        $resolver->setDefaults(['
-            data_class' => Fitxa::class, 
+        $resolver->setDefaults([
+            'data_class' => Fitxa::class, 
             'user' => null, 
-            'api_url' => null
+            'api_url' => null,
+            'locale' => 'eu'   
         ]);
     }
 }
