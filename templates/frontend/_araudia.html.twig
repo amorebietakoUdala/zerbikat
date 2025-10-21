@@ -23,16 +23,28 @@
                               {% if app.request.locale == 'eu' %}
                                     {% if araua.araudia.estekaeu %}
                                     <a class="underline" href="{{ araua.araudia.estekaeu }}" target="_blank">
-                                       {{ araua.araudia.arauaeu }} </a>{{ araua.atalaeu }}
+                                       {{ araua.araudia.arauaeu }}</a>
+                                       {% if araua.atalaeu %}
+                                          &nbsp;{{ araua.atalaeu }}
+                                       {% endif %}
                                     {% else %}
-                                       {{ araua.araudia.arauaeu }} - {{ araua.atalaeu }}
+                                       {{ araua.araudia.arauaeu }} 
+                                       {% if araua.atalaeu %}
+                                          - {{ araua.atalaeu }}
+                                       {% endif %}
                                     {% endif %}
                               {% else %}
                                     {% if araua.araudia.estekaes %}
                                     <a class="underline" href="{{ araua.araudia.estekaes }}" target="_blank">
-                                       {{ araua.araudia.arauaes }}</a>{{ araua.atalaes }}
+                                       {{ araua.araudia.arauaes }}</a>
+                                       {% if araua.atalaes %}
+                                          &nbsp;{{ araua.atalaes }}
+                                       {% endif %}
                                     {% else %}
-                                       {{ araua.araudia.arauaes }} - {{ araua.atalaes }}
+                                       {{ araua.araudia.arauaes }} 
+                                       {% if araua.atalaes %}
+                                          - {{ araua.atalaes }}
+                                       {% endif %}
                                     {% endif %}
                               {% endif %}
                            </li>
