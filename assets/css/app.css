@@ -58,6 +58,23 @@ h3, .h3 {
     top: 50px;
 } */
 
+ul, ol {
+    padding-left: 15px;
+}
+
+li {
+    list-style: outside;
+    margin-bottom: 10px;
+}
+
+ul.list-unstyled {
+    list-style: none;    
+}
+
+ul.list-unstyled li {
+    list-style: none;    
+}
+
 .fitxaMenua {
     margin-left: auto;
     margin-right: auto;
@@ -1120,21 +1137,12 @@ div#fitxaTitleDiv h2 {
     padding-left: 0;
 }
 
-.dokumentazioa-texto ul {
+.dokumentazioa-texto ul, .dokumentazioa-texto ol {
     list-style: none;
     padding-left: 15px;
 }
 
 .dokumentazioa-texto li {
-    list-style: outside;
-    margin-bottom: 10px;
-}
-
-ul {
-    padding-left: 15px;
-}
-
-li {
     list-style: outside;
     margin-bottom: 10px;
 }
@@ -1223,29 +1231,9 @@ ul.kanal-zerrenda li::before {
 }
 
 #informazio-gehiagoTitle {
-    /* Con html font-size 10 */
-    /* font-size: 1rem;     */
-    /* Con html font-size 16 */
     margin-top: 0px;
     margin-bottom: 0px;
-    /* font-size: 1.625rem;
-    font-weight: 700; */
 }
-
-li.mail-kanala {
-    /* Con html font-size 10 */
-    /* font-size: 1.5rem;     */
-    /* Con html font-size 16 */
-    /* font-size: 1.125rem;    */
-    margin: 0px;
-}
-
-/* ul.kanal-zerrenda.mt-10px > li > a { */
-    /* Con html font-size 10 */
-    /* font-size: 1.3rem;     */
-    /* Con html font-size 16 */
-    /* font-size: 1rem; */
-/* } */
 
 li.mail-kanala::before{
     content: '';
