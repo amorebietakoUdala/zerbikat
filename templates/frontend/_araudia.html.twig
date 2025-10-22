@@ -10,12 +10,13 @@
             </div>
             {% set kont=0 %}
             <div>
-               {% if eremuak.araudiatext %}
-                  {% if app.request.locale == 'eu' %}{{ fitxa.araudiaeu |raw }}
-                  {% else %}{{ fitxa.araudiaes |raw }}
+               {% if eremuak.araudiatext and ( fitxa.araudiaeu != '' or fitxa.araudiaes != '')%}
+                  {% if app.request.locale == 'eu' %}
+                     {{ fitxa.araudiaeu |raw }}<br>
+                  {% else %}
+                     {{ fitxa.araudiaes |raw }}<br>
                   {% endif %}
                {% endif %}
-               <br>
                {% if eremuak.araudiatable %}
                   <ul>
                         {% for araua in fitxa.araudiak %}
