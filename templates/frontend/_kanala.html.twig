@@ -24,7 +24,7 @@
                <li>{{ deskribapena }}</li>
             </ul> #}
             {% if esteka != '' %}
-               <div class="ml-1"><a href="{{esteka}}" class="btn btn-primary" title="" alt="" target="_blank">{{ 'messages.izapideaHasi' | trans }}</a></div>
+               <div><a href="{{esteka}}" class="btn btn-primary" title="" alt="" target="_blank">{{ 'messages.izapideaHasi' | trans }}</a></div>
             {% endif %}
 
       {# Aurrez-Aurrekoa #}
@@ -37,7 +37,7 @@
                         {% if deskribapena %}<li>{{ deskribapena }}<br/></li>{% endif %}
                      </ul>
                   {% endif %}
-                  <span class="ml-1">
+                  <span>
                      <b>{{ 'messages.kokapena' | trans  }}:</b>
                      {% if kanal.eraikina %}{{ kanal.eraikina.izena }}&nbsp;-&nbsp;{% endif %}
                      {% if kanal.kalea %}{{ kanal.kalea }}{% endif %}{% if kanal.kalezbkia %}&nbsp;{{ kanal.kalezbkia }}, {% endif %}
@@ -47,8 +47,8 @@
                      {% else %}
                            <a class="underline" href="{{ esteka }}" target="_blank" title="{{ 'messages.kokapenaIkusi' | trans }}" alt="{{ 'messages.kokapenaIkusi' | trans }}"><img src="{{ asset('build/images/'~kanalmota.ikonoa) }}"></a><br>
                      {% endif %}
-                     {% if kanal.ordutegia %}<span class="ml-1"><b>{{ 'messages.ordutegia' | trans }}:</b> {{ kanal.ordutegia }}<br/></span>{% endif %}
-                     {% if kanal.telefonoa %}<span class="ml-1">{{ kanal.telefonoa }}<br/></span>{% endif %}
+                     {% if kanal.ordutegia %}<b>{{ 'messages.ordutegia' | trans }}:</b> {{ kanal.ordutegia }}<br/></span>{% endif %}
+                     {% if kanal.telefonoa %}{{ kanal.telefonoa }}<br/></span>{% endif %}
                      {% if kanal.fax %}<span class="ml-1">Faxa: {{ kanal.fax }}<br/></span>{% endif %}
                   </span>
                </div>

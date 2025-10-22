@@ -36,7 +36,7 @@ function ajustarPadding() {
    var alturaTotal = 0;
    document.querySelectorAll('.barra-fija').forEach(function(nav) {
      nav.style.position = "fixed";
-     nav.style.top = alturaTotal+"px";
+     nav.style.top = alturaTotal + "px";
      alturaTotal += nav.offsetHeight;
    });
    var mainDiv = document.querySelector('div[role="main"]');

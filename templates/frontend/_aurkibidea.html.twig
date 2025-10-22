@@ -132,17 +132,18 @@
             </li> #}
          <ol>
       </div>
-      <div id="informazio-gehiago" class="bordered-box mt-2 p-1">
+      <div id="informazio-gehiago" class="bordered-box mt-1 p-1">
          <div id="informazio-gehiagoTitle" class="h3">{{ 'messages.masInfo' | trans }}</div>
-         <ul class="kanal-zerrenda mt-10px">
-            <li class="mail-kanala h5 font-weight-400"><b>{{ 'messages.emaila' | trans }}</b></li>
-            <li><a class="underline" href="mailto:{{ fitxa.azpisaila.email}}">{{ fitxa.azpisaila.email }}</a></li>
+         <ul class="kanal-zerrenda">
             <br>
             <li class="telefono-kanala h5 font-weight-400"><b>{{ 'messages.telefonoa' | trans }}</b></li>
             <li><a class="underline" href="tel:+34946300002">94 630 00 02</a></li>
             <br>
             <li class="whatsapp-kanala h5 font-weight-400"><b>{{ 'messages.whatsapp' | trans }}</b></li>
             <li><a class="underline" href="https://wa.me/34688866600?text={{ 'messages.whatsapp.default' | trans | url_encode }}" target="_blank">688 866 600</a></li>
+            <br>
+            <li class="mail-kanala h5 font-weight-400"><b>{{ 'messages.emaila' | trans }}</b></li>
+            <li><a class="underline" href="mailto:{{ fitxa.azpisaila.email}}">{{ fitxa.azpisaila.email }}</a></li>
          </ul>
       </div>
    </div>

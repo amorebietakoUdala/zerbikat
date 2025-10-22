@@ -205,6 +205,7 @@ img#logoa {
 }
 
 #aurkibidea {
+    margin-top: 0px;
     padding-left: 0px !important;
     padding-right: 0px !important;
 }
@@ -943,7 +944,8 @@ footer a {
 	border: 0px none #fff !important;
     padding-top: 15px;
     padding-bottom: 15px;
-    padding-left: 75px;
+    padding-left: 65px;
+    line-height: normal;
 }
 
 .oharra {
@@ -952,7 +954,7 @@ footer a {
 	border-bottom: 1px solid #626262;
 	border-left: 0px solid;
 	border-right: 0px solid;
-    margin-top: 15px;
+    margin-top: 30px;
 }
 
 .plain td {
@@ -1071,16 +1073,16 @@ div#fitxaTitleDiv h2 {
 }
 
 .aurkibidea {
-    margin-top: 20px;
+    margin-top: 40px;
     background-color: #F5F5F5;
     border-radius: 10px;
 }
 
-.position-sticky-170px {
+.position-sticky-190px {
     float: right;
     position: sticky;
     position: -webkit-sticky;
-    top: 170px; /* required */
+    top: 193px; /* required */
 }
 
 .left {
@@ -1124,9 +1126,25 @@ div#fitxaTitleDiv h2 {
     margin-bottom: 10px;
 }
 
+ul {
+    padding-left: 15px;
+}
+
+li {
+    list-style: outside;
+    margin-bottom: 10px;
+}
+
+/* #kanala ul, #prozedura ul, #oharrak ul {
+    padding-left: 15px;
+}
+
+#kanala li, #prozedura li, #oharrak li {
+    list-style: outside;
+    margin-bottom: 10px;
+} */
 
 .kanal-zerrenda {
-    list-style: none;
     padding-left: 0;
 }
 
@@ -1149,6 +1167,7 @@ div#oharrak p {
 /*  END Fitxa Styles */
 
 ul.kanal-zerrenda li {
+    list-style: none;
     position: relative;
     padding-left: 30px; /* Deja espacio para la imagen */
   }
@@ -1182,6 +1201,7 @@ ul.kanal-zerrenda li::before {
 }
 
 .btn-dokumentua {
+    list-style: none;
     padding: 15px;
    	border: 2px solid #626262;
 	border-radius: 10px;
