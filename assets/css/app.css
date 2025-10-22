@@ -934,6 +934,10 @@ footer a {
     scroll-margin-top: 150px; /* o el valor que necesites */
 }
 
+.familia {
+    scroll-margin-top: 170px; /* o el valor que necesites */
+}
+
 .oharra tr {
     background-image: url('../images/advertencia.png') !important;
     background-repeat: no-repeat;

@@ -14,6 +14,7 @@ export default class extends Controller {
     if (isHidden) {
       this.hideAll();
       target.style.display = 'block';
+      target.closest('.familia').scrollIntoView({ behavior: 'smooth', block: 'start' });;
       this.dispatch('open');
     } else {
       target.style.display = 'none';
