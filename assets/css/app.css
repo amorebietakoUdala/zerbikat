@@ -241,7 +241,7 @@ img#logoa {
 .divider {
     line-height: 4px;
     background-color: #009ED5;
-    margin-top: 16px;
+    margin-top: 5px;
     margin-bottom: 36px;
 }
 
@@ -275,7 +275,7 @@ img#logoa {
     padding-bottom: 2rem;
     background-color:  #F5F5F5 !important;
     border: none;
-    border-radius: 40px;
+    border-radius: 60px;
     padding-left: 25px;
     padding-right: 25px;
 }
@@ -787,6 +787,10 @@ footer.container {
     background: no-repeat url('../images/correoElectronico-active.png') !important;
 }
 
+.line-height-1-5 {
+    line-height: 1.5 !important;
+}
+
 .footer-text {
     /* Con html font-size 16 */
     /* font-size: 1rem; */
@@ -926,6 +930,16 @@ footer a {
     padding: 50px;
 }
 
+.p-3
+{
+    padding: 75px;
+}
+
+.p-4
+{
+    padding: 100px;
+}
+
 .pb-10px {
     padding-bottom: 10px !important;
 }
@@ -936,6 +950,10 @@ footer a {
 
 .w100 {
     width: 100%;
+}
+
+.w70px {
+    width: 70px;
 }
 
 .w96 {
@@ -966,7 +984,6 @@ footer a {
     padding-top: 15px;
     padding-bottom: 15px;
     padding-left: 65px;
-    line-height: normal;
 }
 
 .oharra {
@@ -976,6 +993,10 @@ footer a {
 	border-left: 0px solid;
 	border-right: 0px solid;
     margin-top: 30px;
+}
+
+.oharra p {
+    margin: 0 0 0px;
 }
 
 .plain td {
@@ -1015,6 +1036,10 @@ table.kostuTaula td {
     border-bottom: 1px solid #ddd;
 }
 
+.grey-bg {
+    background-color: #F5F5F5;
+}
+
 .breadcrum {
     color: white;
     width: auto;
@@ -1045,7 +1070,7 @@ table.kostuTaula td {
     /* font-size: 1.2rem !important; */
     /* Con html font-size 16 */
     font-size: 0.75rem !important;
-    padding-top: 10px;
+    /*padding-top: 10px;*/
 }
 
 .flex-align-items-center {

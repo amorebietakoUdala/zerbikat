@@ -26,7 +26,8 @@
 {% endblock breadcrumbs %}    
 
 {% block azkenEguneraketa %}
-    <div id="ifk">{{ fitxa.udala.ifk }}</div>
+    <div><img src="{{ asset('build/images/sello-cclara-header.png') }}"></div>
+    <div id="ifk">&nbsp;| &nbsp;{{ fitxa.udala.ifk }}</div>
     <div class="list-inline ml-auto">
         {% if fitxa.updatedAt %}
             {{ 'messages.azkenEguneraketa' | trans }}: {{ fitxa.updatedAt|date('Y-m-d H:i:s') }}
