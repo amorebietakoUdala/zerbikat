@@ -36,15 +36,14 @@ class FrontendController extends AbstractController
     public function index ( int $udala, Request $request ): Response
     {
         $familia = $request->get('familia') ?? null;
-        $azpisaila = $request->get('azpisaila') ?? null ;
 
-        $fitxak = $this->fitxaRepo->findPublicByUdalaAndAzpisaila($udala, $azpisaila);
         $familiak = $this->familiaRepo->findByUdalaAndParentAndFamiliaId($udala, $request->getLocale(), null, $familia);
-        $sailak = $this->sailaRepo->findByUdalaAndAzpisaila($udala, $azpisaila);
-
         return $this->render(
             'frontend\index.html.twig',
-            ['fitxak'   => $fitxak, 'familiak' => $familiak, 'sailak'   => $sailak, 'udala'    => $udala]
+            [
+                'familiak' => $familiak, 
+                'udala'    => $udala
+            ]
         );
     }
 

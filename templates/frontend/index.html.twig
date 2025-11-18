@@ -77,20 +77,22 @@
                                     </div>
                                 
                                     {% for fitx in c.fitxafamilia %}
-                                        <a data-orden="{{ fitx.fitxa.espedienteKodea }}" data-id="{{ fitx.id }}" href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitx.fitxa.id }) }}">
-                                            <div class="flex-row fitxa-lerroa-margin js-lista-servicios" {{ stimulus_controller('listaservicios-row')}}>
-                                                <button class="espedienteKodeaBtn" 
-                                                    data-listaservicios-row-target="rowButton" 
-                                                    data-action="mouseover->listaservicios-row#onMouseOver mouseout->listaservicios-row#onMouseOut">
-                                                    {{ fitx.fitxa.espedienteKodea }}
-                                                </button>
-                                                <div class="fitxa-lerroa {{ ( loop.index % 2 ) == 0 ? 'fitxa-lerroa-par-bg' : 'fitxa-lerroa-impar-bg' }} gezia"  data-loop-index="{{ loop.index }}"
-                                                    data-listaservicios-row-target="row"
-                                                    data-action="mouseover->listaservicios-row#onMouseOver mouseout->listaservicios-row#onMouseOut">
-                                                    <div class="w96">{% if app.request.locale == 'eu' %}{{ fitx.fitxa.deskribapenaeu }}{% else %} {{ fitx.fitxa.deskribapenaes }}{% endif %}</div>
+                                        {% if fitx.fitxa.publikoa %}
+                                            <a data-orden="{{ fitx.fitxa.espedienteKodea }}" data-id="{{ fitx.id }}" href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitx.fitxa.id }) }}">
+                                                <div class="flex-row fitxa-lerroa-margin js-lista-servicios" {{ stimulus_controller('listaservicios-row')}}>
+                                                    <button class="espedienteKodeaBtn" 
+                                                        data-listaservicios-row-target="rowButton" 
+                                                        data-action="mouseover->listaservicios-row#onMouseOver mouseout->listaservicios-row#onMouseOut">
+                                                        {{ fitx.fitxa.espedienteKodea }}
+                                                    </button>
+                                                    <div class="fitxa-lerroa {{ ( loop.index % 2 ) == 0 ? 'fitxa-lerroa-par-bg' : 'fitxa-lerroa-impar-bg' }} gezia"  data-loop-index="{{ loop.index }}"
+                                                        data-listaservicios-row-target="row"
+                                                        data-action="mouseover->listaservicios-row#onMouseOver mouseout->listaservicios-row#onMouseOut">
+                                                        <div class="w96">{% if app.request.locale == 'eu' %}{{ fitx.fitxa.deskribapenaeu }}{% else %} {{ fitx.fitxa.deskribapenaes }}{% endif %}</div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </a>
+                                            </a>
+                                        {% endif %}
                                     {% endfor %}
                                 </div>
                             {% endfor %}
