@@ -54,6 +54,10 @@
                </div>
          {% endif %}
       {# Posta elektronikoa #}
+      {% elseif kanalmota.id == 3 %}
+         <a class="underline" href='mailto:{{ esteka }}'>{{ izena }}</a><br/>
+      {% elseif kanalmota.id == 2 %}
+         <a class="underline" href='tel:{{ kanal.telefonoa }}'>{{ kanal.telefonoa }}</a><br/>
       {% else %}
          <p>{{ deskribapena }}</p>
       {% endif %}
