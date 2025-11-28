@@ -1,58 +1,53 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">{{ 'messages.baldintzak'|trans }}</a>
-            </div>
-            {% if is_granted('ROLE_ADMIN') %}
-                <div id="navbar" class="navbar-collapse collapse navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{ path('baldintza_new') }}" class="fa fa-plus"> {{ 'messages.baldintzaberria'|trans }}</a></li>
-                    </ul>
-                </div>
-            {% endif %}
-        </div>
-    </nav>
-{% endblock %}
+{% block menuTitle %}
+    <a class="navbar-brand">{{ 'messages.baldintzak' | trans }}</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    {% if is_granted('ROLE_ADMIN') %}
+            <ul class="nav navbar-nav">
+                <li><a href="{{ path('baldintza_new') }}" class="fa fa-plus"> {{ 'messages.baldintzaberria'| trans }}</a></li>
+            </ul>
+    {% endif %}
+{% endblock menuOptions %}
 
 {% block body %}
-    <table class="table" id="taulazerrenda">
-        <thead>
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'|trans }}</th>{% endif %}
-                <th>{{ 'messages.baldintza'|trans }}</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for baldintza in baldintzas %}
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ baldintza.udala }}</td>{% endif %}
-                <td>
-                    {% if app.request.locale == 'es'%}{{ baldintza.baldintzaes }}
-                    {% else %}{{ baldintza.baldintzaeu }}
-                    {% endif %}
-                </td>
-                <td NOWRAP class="text-right">
-                    <ul class="list-inline">
-                        {% if is_granted('ROLE_ADMIN') %}
-                        <li><a href="{{ path('baldintza_edit', { 'id': baldintza.id }) }}" class="fa fa-pencil"></a></li>
-                            <li>{{ form_start(deleteforms[baldintza.id],{'attr': {'id': baldintza.id}}) }}
-                                <a href="#" {{ stimulus_controller('confirmation', {
-                                        id: baldintza.id,
-                                        mezua: 'messages.ziurzaude'|trans}) 
-                                    }} 
-                                    data-action="confirmation#onClick" ><i class="fa fa-trash text-danger"></i></a>
-                                {{ form_end(deleteforms[baldintza.id]) }}</li>
+    <div class="container" role="main">
+        <table class="table" id="taulazerrenda">
+            <thead>
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'| trans }}</th>{% endif %}
+                    <th>{{ 'messages.baldintza'| trans }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for baldintza in baldintzas %}
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ baldintza.udala }}</td>{% endif %}
+                    <td>
+                        {% if app.request.locale == 'es'%}{{ baldintza.baldintzaes }}
+                        {% else %}{{ baldintza.baldintzaeu }}
                         {% endif %}
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-{% endblock %}
+                    </td>
+                    <td NOWRAP class="text-right">
+                        <ul class="list-inline">
+                            {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('baldintza_edit', { 'id': baldintza.id }) }}" class="fa fa-pencil"></a></li>
+                                <li>{{ form_start(deleteforms[baldintza.id],{'attr': {'id': baldintza.id}}) }}
+                                    <a href="#" {{ stimulus_controller('confirmation', {
+                                            id: baldintza.id,
+                                            mezua: 'messages.ziurzaude'| trans}) 
+                                        }} 
+                                        data-action="confirmation#onClick" ><i class="fa fa-trash text-danger"></i></a>
+                                    {{ form_end(deleteforms[baldintza.id]) }}</li>
+                            {% endif %}
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock body %}

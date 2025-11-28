@@ -1,0 +1,68 @@
+{% if (eremuak.araudiatext or eremuak.araudiatable) %}
+   <div id="araudia" class="row seccion">
+      <div class="pl-0 col-sm-12">
+            <div class="page-header border-none mb-0">
+               <h3 class="h2">
+                  {% if app.request.locale == 'eu' %}{{ labelak.araudialabeleu }}
+                  {% else %}{{ labelak.araudialabeles }}
+                  {% endif %}
+               </h3>
+            </div>
+            {% set kont=0 %}
+            <div>
+               {% if eremuak.araudiatext and ( fitxa.araudiaeu != '' or fitxa.araudiaes != '')%}
+                  {% if app.request.locale == 'eu' %}
+                     {{ fitxa.araudiaeu |raw }}<br>
+                  {% else %}
+                     {{ fitxa.araudiaes |raw }}<br>
+                  {% endif %}
+               {% endif %}
+               {% if eremuak.araudiatable %}
+                  <ul>
+                        {% for araua in fitxa.araudiak %}
+                           <li>
+                              {% if app.request.locale == 'eu' %}
+                                    {% if araua.araudia.estekaeu %}
+                                    <a class="underline" href="{{ araua.araudia.estekaeu }}" target="_blank">
+                                       {{ araua.araudia.arauaeu }}</a>
+                                       {% if araua.atalaeu %}
+                                          &nbsp;{{ araua.atalaeu }}
+                                       {% endif %}
+                                    {% else %}
+                                       {{ araua.araudia.arauaeu }} 
+                                       {% if araua.atalaeu %}
+                                          - {{ araua.atalaeu }}
+                                       {% endif %}
+                                    {% endif %}
+                              {% else %}
+                                    {% if araua.araudia.estekaes %}
+                                    <a class="underline" href="{{ araua.araudia.estekaes }}" target="_blank">
+                                       {{ araua.araudia.arauaes }}</a>
+                                       {% if araua.atalaes %}
+                                          &nbsp;{{ araua.atalaes }}
+                                       {% endif %}
+                                    {% else %}
+                                       {{ araua.araudia.arauaes }} 
+                                       {% if araua.atalaes %}
+                                          - {{ araua.atalaes }}
+                                       {% endif %}
+                                    {% endif %}
+                              {% endif %}
+                           </li>
+                           {% set kont=kont+1 %}
+                        {% endfor %}
+                  </ul>
+               {% endif %}
+               {% if app.request.locale == 'eu' %}
+                  {% if (fitxa.araudiaeu is empty and kont==0) %}
+                        Ez dagokio
+                  {% endif %}
+               {% else %}
+                  {% if (fitxa.araudiaes is empty and kont==0) %}
+                        No corresponde
+                  {% endif %}
+               {% endif %}
+            </div>
+      </div>
+   </div>
+{% endif %}

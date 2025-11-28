@@ -1,0 +1,121 @@
+{% import _self as kanalaMargoztu %}
+
+{% macro kanalaMargoztu(kanalmota, kanal, locale) %}
+   {# {{ dump(kanalmota, kanal, locale) }} #}
+   {% if locale == 'eu' %}
+      {% set mota = kanalmota.motaeu %}
+      {% set deskribapena = kanal.deskribapenaeu | default('') %}
+      {% set izena = kanal.izenaeu | default('') %}
+      {% set esteka = kanal.estekaeu | default('') %}
+      {% set udala = fitxa.udala.izenaeu | default('') %}
+   {% else %}
+      {% set mota =  kanalmota.motaes %}
+      {% set deskribapena = kanal.deskribapenaes | default('') %}
+      {% set izena = kanal.izenaes | default('') %}
+      {% set esteka = kanal.estekaes | default('') %}
+      {% set udala = fitxa.udala.izenaes | default('') %}
+   {% endif %}
+   
+   <div class="h4">
+      <div class="mt-1 mb-1"><b>{{ 'messages.aukera' | trans }}:&nbsp;{{ mota }}</b></div>
+      {# Telematikoa #}
+      {% if kanal.telematikoa %}
+            {# <ul class="mt-1">
+               <li>{{ deskribapena }}</li>
+            </ul> #}
+            {% if esteka != '' %}
+               <div><a href="{{esteka}}" class="btn btn-primary" title="" alt="" target="_blank">{{ 'messages.izapideaHasi' | trans }}</a></div>
+            {% endif %}
+
+      {# Aurrez-Aurrekoa #}
+      {% elseif kanalmota.id == 1 %}
+         {% if esteka %}
+               <div class="mb-1">
+                  {% if izena %}
+                     <ul class="mt-1">
+                        {% if izena %}<li>{{ izena }}:<br/></li>{% endif %}
+                        {% if deskribapena %}<li>{{ deskribapena }}<br/></li>{% endif %}
+                     </ul>
+                  {% endif %}
+                  <span>
+                     <b>{{ 'messages.kokapena' | trans  }}:</b>
+                     {% if kanal.eraikina %}{{ kanal.eraikina.izena }}&nbsp;-&nbsp;{% endif %}
+                     {% if kanal.kalea %}{{ kanal.kalea }}{% endif %}{% if kanal.kalezbkia %}&nbsp;{{ kanal.kalezbkia }}, {% endif %}
+                     {% if kanal.postakodea %}{{ kanal.postakodea }} {{ udala }}{% endif %}
+                     {% if '@' in esteka and 'maps' not in esteka %}
+                           <a class="underline" href='mailto:{{ esteka }}'>{{ izena }}</a><br/>
+                     {% else %}
+                           <a class="underline" href="{{ esteka }}" target="_blank" title="{{ 'messages.kokapenaIkusi' | trans }}" alt="{{ 'messages.kokapenaIkusi' | trans }}"><img src="{{ asset('build/images/'~kanalmota.ikonoa) }}"></a><br>
+                     {% endif %}
+                     {% if kanal.ordutegia %}<b>{{ 'messages.ordutegia' | trans }}:</b> {{ kanal.ordutegia }}<br/></span>{% endif %}
+                     {% if kanal.telefonoa %}{{ kanal.telefonoa }}<br/></span>{% endif %}
+                     {% if kanal.fax %}<span class="ml-1">Faxa: {{ kanal.fax }}<br/></span>{% endif %}
+                  </span>
+               </div>
+         {% endif %}
+      {# Posta elektronikoa #}
+      {% elseif kanalmota.id == 3 %}
+         <a class="underline" href='mailto:{{ esteka }}'>{{ izena }}</a><br/>
+      {% elseif kanalmota.id == 2 %}
+         <a class="underline" href='tel:{{ kanal.telefonoa }}'>{{ kanal.telefonoa }}</a><br/>
+      {% else %}
+         <p>{{ deskribapena }}</p>
+      {% endif %}
+   </div>
+{% endmacro %}
+
+{% if (eremuak.kanalatext or eremuak.kanalatable) %}
+   <div id="kanala" class="row seccion">
+      <div class="pl-0 col-sm-12">
+         <div class="page-header border-none mb-0">
+            <h3 class="h2">{{ app.request.locale == 'eu' ? labelak.kanalalabeleu : labelak.kanalalabeles }}</h3>
+         </div>
+         <div>
+            {% if eremuak.kanalatable %}
+               {# {% for k in kanalmotak %}
+                     {% set aurkitua = 0 %} #}
+                        {# START kanal indizea #}
+                           <div class="d-flex flex-wrap">
+                              {# kanal motak ordenean ateratzeko egiten dugu horrela, bestela beste for-arekin nahiko izango litzateke #}
+                              {% set erakutsiak = 0 %}
+                              {% for k in kanalmotak %}
+                                 {% set aurkitua = 0 %}
+                                    {% for kanal in fitxa.kanalak %}
+                                       {% if kanal.kanalmota == k and kanal.erakutsi == 1 %}
+                                          {% set erakutsiak = erakutsiak + 1 %}
+                                          {% set kanalmota = kanal.kanalmota %}
+                                          {% if app.request.locale == 'eu' %}{% set mota = kanalmota.motaeu %}{% else %}{% set mota =  kanalmota.motaes %}{% endif %}
+                                             <div class="{{ erakutsiak % 3 == 0 ? 'border-none' : 'border-right-blue' }} h4 col-lg-4 col-sm-12 kanal-mota-btn pl-3"
+                                                   {% if kanalmota.ikonoa %} 
+                                                      style="background-image: url('{{ asset('build/images/'~kanalmota.ikonoa) }}') !important;  background-size: auto;  background-repeat: no-repeat; background-position: 30px 10px"
+                                                   {% endif %}>
+                                                <b>{{ 'messages.aukera' | trans }}:<br>{{ mota }}</b>
+                                             </div>
+                                          {% set aurkitua = 1 %}
+                                       {% endif %}
+                                    {% endfor %}
+                              {% endfor %}
+                           </div>
+                        {# END kanal indizea #}
+                        {# START kanal xehetasunak #}
+                           {# kanal motak ordenean ateratzeko egiten dugu horrela, bestela beste for-arekin nahiko izango litzateke #}
+                           {% for k in kanalmotak %}
+                              {% set aurkitua = 0 %}
+                                 {% for kanal in fitxa.kanalak %}
+                                    {% if kanal.kanalmota == k and kanal.erakutsi == 1 %}
+                                       {% set kanalmota = kanal.kanalmota %}
+                                          {{ kanalaMargoztu.kanalaMargoztu(kanalmota, kanal, app.request.locale) }}
+                                          {% set aurkitua = 1 %}
+                                    {% endif %}
+                                 {% endfor %}
+                           {% endfor %}
+                        {# END kanal xehetasunak #}
+
+            {% endif %}
+            {% if eremuak.kanalatext %}
+               {{ app.request.locale == 'eu' ? fitxa.kanalaeu | raw : fitxa.kanalaes | raw }}
+            {% endif %}
+         </div>
+      </div>
+   </div>
+{% endif %}

@@ -1,53 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">{{ 'messages.barrutiak'|trans }}</a>
-            </div>
-            {% if is_granted('ROLE_ADMIN') %}
-                <div id="navbar" class="navbar-collapse collapse navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{ path('barrutia_new') }}" class="fa fa-plus"> {{ 'messages.barrutiberria'|trans }}</a></li>
-                    </ul>
-                </div>
-            {% endif %}
-        </div>
-    </nav>
-{% endblock %}
+{% block menuTitle %}
+    <a class="navbar-brand">{{ 'messages.barrutiak' | trans }}</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <ul class="nav navbar-nav">
+            <li><a href="{{ path('barrutia_new') }}" class="fa fa-plus"> {{ 'messages.barrutiberria'| trans }}</a></li>
+        </ul>
+    {% endif %}
+{% endblock menuOptions %}
 
 {% block body %}
-    <table class="table" id="taulazerrenda">
-        <thead>
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'|trans }}</th>{% endif %}
-                <th>{{ 'messages.barrutia'|trans }}</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for barrutium in barrutias %}
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ barrutium.udala }}</td>{% endif %}
-                <td>{{ barrutium.izena }}</td>
-                <td NOWRAP class="text-right">
-                    <ul class="list-inline">
-                        {% if is_granted('ROLE_ADMIN') %}
-                        <li><a href="{{ path('barrutia_edit', { 'id': barrutium.id }) }}" class="fa fa-pencil"></a></li>
-                            <li>{{ form_start(deleteforms[barrutium.id],{'attr': {'id': barrutium.id}}) }}
-                                <a href="#" {{ stimulus_controller('confirmation', {
-                                        id: barrutium.id,
-                                        mezua: 'messages.ziurzaude'|trans}) 
-                                    }} 
-                                    data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
-                                {{ form_end(deleteforms[barrutium.id]) }}</li>
-                        {% endif %}
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-{% endblock %}
+    <div class="container" role="main">
+        <table class="table" id="taulazerrenda">
+            <thead>
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'| trans }}</th>{% endif %}
+                    <th>{{ 'messages.barrutia'| trans }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for barrutium in barrutias %}
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ barrutium.udala }}</td>{% endif %}
+                    <td>{{ barrutium.izena }}</td>
+                    <td NOWRAP class="text-right">
+                        <ul class="list-inline">
+                            {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('barrutia_edit', { 'id': barrutium.id }) }}" class="fa fa-pencil"></a></li>
+                                <li>{{ form_start(deleteforms[barrutium.id],{'attr': {'id': barrutium.id}}) }}
+                                    <a href="#" {{ stimulus_controller('confirmation', {
+                                            id: barrutium.id,
+                                            mezua: 'messages.ziurzaude'| trans}) 
+                                        }} 
+                                        data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
+                                    {{ form_end(deleteforms[barrutium.id]) }}</li>
+                            {% endif %}
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock body %}

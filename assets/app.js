@@ -32,3 +32,16 @@ const baseValue = htmlElement.getAttribute('base') || '';
 global.base = baseValue;
 global.locale = $('html').attr("lang");
 
+function ajustarPadding() {
+   var alturaTotal = 0;
+   document.querySelectorAll('.barra-fija').forEach(function(nav) {
+     nav.style.position = "fixed";
+     nav.style.top = alturaTotal + "px";
+     alturaTotal += nav.offsetHeight;
+   });
+   var mainDiv = document.querySelector('div[role="main"]');
+   mainDiv.style.paddingTop = ( alturaTotal ) + 'px';
+ }
+
+window.addEventListener('load', ajustarPadding);
+window.addEventListener('resize', ajustarPadding);

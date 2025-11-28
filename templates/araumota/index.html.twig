@@ -1,70 +1,66 @@
 {% extends 'base.html.twig' %}
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">{{ 'messages.araumotak'|trans }}</a>
-            </div>
-            {% if is_granted('ROLE_ADMIN') %}
-                <div id="navbar" class="navbar-collapse collapse navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{ path('araumota_new') }}" class="fa fa-plus"> {{ 'messages.araumotaberria'|trans }}</a></li>
-                    </ul>
-                </div>
-            {% endif %}
-        </div>
-    </nav>
-{% endblock %}
+
+{% block menuTitle %}
+   <a class="navbar-brand">{{ 'messages.araumotak' | trans }}</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <ul class="nav navbar-nav">
+            <li><a href="{{ path('araumota_new') }}" class="fa fa-plus"> {{ 'messages.araumotaberria'| trans }}</a></li>
+        </ul>
+    {% endif %}
+{% endblock menuOptions %}
 
 {% block body %}
-
-    <table class="table" id="taulazerrenda">
-        <thead>
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'|trans }}</th>{% endif %}
-                <th>{{ 'messages.kodea'|trans }}</th>
-                <th>{{ 'messages.mota'|trans }}</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for araumotum in araumotas %}
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ araumotum.udala }}</td>{% endif %}
-                <td>{{ araumotum.kodea }}</td>
-                <td>
-                    {% if app.request.locale == 'es'%}{{ araumotum.motaes }}
-                    {% else %}{{ araumotum.motaeu }}
-                    {% endif %}
-                </td>
-                <td NOWRAP class="text-right">
-                    <ul class="list-inline">
-                        {% if is_granted('ROLE_ADMIN') %}
-                        <li><a href="{{ path('araumota_edit', { 'id': araumotum.id }) }}" class="fa fa-pencil"></a></li>
-                            <li>{{ form_start(deleteforms[araumotum.id],{'attr': {'id': araumotum.id}}) }}
-                                <a href="#" {{ stimulus_controller('confirmation', {
-                                        id: araumotum.id,
-                                        mezua: 'messages.ziurzaude'|trans}) 
-                                    }} 
-                                    data-action="confirmation#onClick" ><i class="fa fa-trash text-danger"></i></a>
-                                {{ form_end(deleteforms[araumotum.id]) }}</li>
+    <div class="container" role="main">
+        <table class="table" id="taulazerrenda">
+            <thead>
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'| trans }}</th>{% endif %}
+                    <th>{{ 'messages.kodea'| trans }}</th>
+                    <th>{{ 'messages.mota'| trans }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for araumotum in araumotas %}
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ araumotum.udala }}</td>{% endif %}
+                    <td>{{ araumotum.kodea }}</td>
+                    <td>
+                        {% if app.request.locale == 'es'%}{{ araumotum.motaes }}
+                        {% else %}{{ araumotum.motaeu }}
                         {% endif %}
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <div class="text-center">
-        {% if araumotas is not empty %}
-            {% if pager.haveToPaginate %}
-                <div class="text-center">
-                {{ pagerfanta(pager, 'twitter_bootstrap3', {'routeName': 'araumota_index_paginated', 'prev_message': 'Anterior' | trans, 'next_message': 'Siguiente' | trans }) }}
+                    </td>
+                    <td NOWRAP class="text-right">
+                        <ul class="list-inline">
+                            {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('araumota_edit', { 'id': araumotum.id }) }}" class="fa fa-pencil"></a></li>
+                                <li>{{ form_start(deleteforms[araumotum.id],{'attr': {'id': araumotum.id}}) }}
+                                    <a href="#" {{ stimulus_controller('confirmation', {
+                                            id: araumotum.id,
+                                            mezua: 'messages.ziurzaude'| trans}) 
+                                        }} 
+                                        data-action="confirmation#onClick" ><i class="fa fa-trash text-danger"></i></a>
+                                    {{ form_end(deleteforms[araumotum.id]) }}</li>
+                            {% endif %}
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="text-center">
+            {% if araumotas is not empty %}
+                {% if pager.haveToPaginate %}
+                    <div class="text-center">
+                    {{ pagerfanta(pager, 'twitter_bootstrap3', {'routeName': 'araumota_index_paginated', 'prev_message': 'Anterior' | trans, 'next_message': 'Siguiente' | trans }) }}
+                {% endif %}
+            {% else %}
+                <p>{{ 'messages.emaitzarikez'| trans }}</p>
             {% endif %}
-        {% else %}
-            <p>{{ 'messages.emaitzarikez'|trans }}</p>
-        {% endif %}
+        </div>
     </div>
-{% endblock %}
+{% endblock body %}
 

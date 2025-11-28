@@ -1,111 +1,107 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">{{ 'messages.datuenbabesa'|trans }}</a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse navbar-right">
-                <ul class="nav navbar-nav">
-                    <li><a href="#" onclick="document.forms['{{ edit_form.vars.name }}'].submit()" class="fa fa-floppy-o"> {{ 'messages.gorde'|trans }}</a></li>
-                    <li><a href="{{ path('datuenbabesa_index') }}" class="fa fa-undo"> {{ 'messages.zerrendara'|trans }}</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-{% endblock %}
+{% block menuTitle %}
+    <a class="navbar-brand">{{ 'messages.datuenbabesa' | trans }}</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    <ul class="nav navbar-nav">
+        <li><a href="#" onclick="document.forms['{{ edit_form.vars.name }}'].submit()" class="fa fa-floppy-o"> {{ 'messages.gorde'| trans }}</a></li>
+        <li><a href="{{ path('datuenbabesa_index') }}" class="fa fa-undo"> {{ 'messages.zerrendara'| trans }}</a></li>
+    </ul>
+{% endblock menuOptions %}
 
 {% block body %}
-    {{ form_start(edit_form) }}
-    <div class="row">
-        <div class="col-sm-3">
-            <div class="form-group">
-                <b>{{ 'messages.maila'|trans }}</b>
-                {#{{ form_label(edit_form.maila, 'Maila: ', { 'label_attr': {'class': 'control-label'} }) }}#}
-                {{ form_errors(edit_form.maila) }}
-                {{ form_widget(edit_form.maila, {'attr': {'class': 'form-control'}}) }}
+    <div class="container" role="main">
+        {{ form_start(edit_form) }}
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <b>{{ 'messages.maila'| trans }}</b>
+                    {#{{ form_label(edit_form.maila, 'Maila: ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    {{ form_errors(edit_form.maila) }}
+                    {{ form_widget(edit_form.maila, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <b>{{ 'messages.kodea'| trans }}</b>
+                    {#{{ form_label(edit_form.kodea, 'Kodea: ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    {{ form_errors(edit_form.kodea) }}
+                    {{ form_widget(edit_form.kodea, {'attr': {'class': 'form-control'}}) }}
+                </div>
             </div>
         </div>
-        <div class="col-sm-3">
-            <div class="form-group">
-                <b>{{ 'messages.kodea'|trans }}</b>
-                {#{{ form_label(edit_form.kodea, 'Kodea: ', { 'label_attr': {'class': 'control-label'} }) }}#}
-                {{ form_errors(edit_form.kodea) }}
-                {{ form_widget(edit_form.kodea, {'attr': {'class': 'form-control'}}) }}
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <b>{{ 'messages.izena'| trans }} ({{ 'messages.eu'| trans }})</b>
+                    {#{{ form_label(edit_form.izenaeu, 'Izena (eu): ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    {{ form_errors(edit_form.izenaeu) }}
+                    {{ form_widget(edit_form.izenaeu, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <b>{{ 'messages.izena'| trans }} ({{ 'messages.es'| trans }})</b>
+                    {#{{ form_label(edit_form.izenaes, 'Izena (es): ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    {{ form_errors(edit_form.izenaes) }}
+                    {{ form_widget(edit_form.izenaes, {'attr': {'class': 'form-control'}}) }}
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="form-group">
-                <b>{{ 'messages.izena'|trans }} ({{ 'messages.eu'|trans }})</b>
-                {#{{ form_label(edit_form.izenaeu, 'Izena (eu): ', { 'label_attr': {'class': 'control-label'} }) }}#}
-                {{ form_errors(edit_form.izenaeu) }}
-                {{ form_widget(edit_form.izenaeu, {'attr': {'class': 'form-control'}}) }}
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="form-group">
-                <b>{{ 'messages.izena'|trans }} ({{ 'messages.es'|trans }})</b>
-                {#{{ form_label(edit_form.izenaes, 'Izena (es): ', { 'label_attr': {'class': 'control-label'} }) }}#}
-                {{ form_errors(edit_form.izenaes) }}
-                {{ form_widget(edit_form.izenaes, {'attr': {'class': 'form-control'}}) }}
-            </div>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="form-group">
-                <b>{{ 'messages.xedea'|trans }} ({{ 'messages.eu'|trans }})</b>
-                {#{{ form_label(edit_form.xedeaeu, 'Xedea (eu): ', { 'label_attr': {'class': 'control-label'} }) }}#}
-                {{ form_errors(edit_form.xedeaeu) }}
-                {{ form_widget(edit_form.xedeaeu, {'attr': {'class': 'form-control'}}) }}
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <b>{{ 'messages.xedea'| trans }} ({{ 'messages.eu'| trans }})</b>
+                    {#{{ form_label(edit_form.xedeaeu, 'Xedea (eu): ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    {{ form_errors(edit_form.xedeaeu) }}
+                    {{ form_widget(edit_form.xedeaeu, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <b>{{ 'messages.xedea'| trans }} ({{ 'messages.es'| trans }})</b>
+                    {#{{ form_label(edit_form.xedeaes, 'Xedea (es): ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    {{ form_errors(edit_form.xedeaes) }}
+                    {{ form_widget(edit_form.xedeaes, {'attr': {'class': 'form-control'}}) }}
+                </div>
             </div>
         </div>
-        <div class="col-sm-6">
-            <div class="form-group">
-                <b>{{ 'messages.xedea'|trans }} ({{ 'messages.es'|trans }})</b>
-                {#{{ form_label(edit_form.xedeaes, 'Xedea (es): ', { 'label_attr': {'class': 'control-label'} }) }}#}
-                {{ form_errors(edit_form.xedeaes) }}
-                {{ form_widget(edit_form.xedeaes, {'attr': {'class': 'form-control'}}) }}
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <b>{{ 'messages.lagapenak'| trans }} ({{ 'messages.eu'| trans }})</b>
+                    {#{{ form_label(edit_form.lagapenakeu, 'Lagapenak (eu): ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    {{ form_errors(edit_form.lagapenakeu) }}
+                    {{ form_widget(edit_form.lagapenakeu, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <b>{{ 'messages.lagapenak'| trans }} ({{ 'messages.es'| trans }})</b>
+                    {#{{ form_label(edit_form.lagapenakes, 'Lagapenak (es): ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    {{ form_errors(edit_form.lagapenakes) }}
+                    {{ form_widget(edit_form.lagapenakes, {'attr': {'class': 'form-control'}}) }}
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="form-group">
-                <b>{{ 'messages.lagapenak'|trans }} ({{ 'messages.eu'|trans }})</b>
-                {#{{ form_label(edit_form.lagapenakeu, 'Lagapenak (eu): ', { 'label_attr': {'class': 'control-label'} }) }}#}
-                {{ form_errors(edit_form.lagapenakeu) }}
-                {{ form_widget(edit_form.lagapenakeu, {'attr': {'class': 'form-control'}}) }}
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="form-group">
-                <b>{{ 'messages.lagapenak'|trans }} ({{ 'messages.es'|trans }})</b>
-                {#{{ form_label(edit_form.lagapenakes, 'Lagapenak (es): ', { 'label_attr': {'class': 'control-label'} }) }}#}
-                {{ form_errors(edit_form.lagapenakes) }}
-                {{ form_widget(edit_form.lagapenakes, {'attr': {'class': 'form-control'}}) }}
-            </div>
-        </div>
-    </div>
 
-    {% if is_granted('ROLE_SUPER_ADMIN') %}
-    <div class="row">
-    {% else %}
-    <div class="row hidden">
-    {% endif %}
-        <div class="col-sm-6">
-            <div class="form-group">
-                <b>{{ 'messages.udala'|trans }}</b>
-                {#{{ form_label(edit_form.udala, 'Udala: ', { 'label_attr': {'class': 'control-label'} }) }}#}
-                {{ form_errors(edit_form.udala) }}
-                {{ form_widget(edit_form.udala, {'attr': {'class': 'form-control'}}) }}
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <div class="row">
+        {% else %}
+        <div class="row hidden">
+        {% endif %}
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <b>{{ 'messages.udala'| trans }}</b>
+                    {#{{ form_label(edit_form.udala, 'Udala: ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    {{ form_errors(edit_form.udala) }}
+                    {{ form_widget(edit_form.udala, {'attr': {'class': 'form-control'}}) }}
+                </div>
             </div>
         </div>
+        {{ form_end(edit_form) }}
     </div>
-    {{ form_end(edit_form) }}
-{% endblock %}
+{% endblock body %}

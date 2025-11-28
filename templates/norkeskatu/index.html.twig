@@ -1,64 +1,60 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">{{ 'messages.norkeskatu'|trans }}</a>
-            </div>
-            {% if is_granted('ROLE_ADMIN') %}
-                <div id="navbar" class="navbar-collapse collapse navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{ path('norkeskatu_new') }}" class="fa fa-plus"> {{ 'messages.berria'|trans }}</a></li>
-                    </ul>
-                </div>
-            {% endif %}
-        </div>
-    </nav>
-{% endblock %}
+{% block menuTitle %}
+    <a class="navbar-brand">{{ 'messages.norkeskatu'| trans }}</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <ul class="nav navbar-nav">
+            <li><a href="{{ path('norkeskatu_new') }}" class="fa fa-plus"> {{ 'messages.berria'| trans }}</a></li>
+        </ul>
+    {% endif %}
+{% endblock menuOptions %}
 
 {% block body %}
-    <table class="table" id="taulazerrenda">
-        <thead>
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'|trans }}</th>{% endif %}
-                <th>{{ 'messages.nork'|trans }}</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for norkeskatu in norkeskatus %}
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ norkeskatu.udala }}</td>{% endif %}
-                <td>
-                    {% if app.request.locale == 'es'%}{{ norkeskatu.norkes }}
-                    {% else %}{{ norkeskatu.norkeu }}
-                    {% endif %}
-                </td>
-                <td NOWRAP class="text-right">
-                    <ul class="list-inline">
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <li><a href="{{ path('norkeskatu_edit', { 'id': norkeskatu.id }) }}" class="fa fa-pencil"></a></li>
-                            <li>{{ form_start(deleteforms[norkeskatu.id],{'attr': {'id': norkeskatu.id}}) }}
-                                <a href="#" {{ stimulus_controller('confirmation', {
-                                        id: norkeskatu.id,
-                                        mezua: 'messages.ziurzaude'|trans}) 
-                                    }} 
-                                    data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
-                                {{ form_end(deleteforms[norkeskatu.id]) }}</li>
+    <div class="container" role="main">
+        <table class="table" id="taulazerrenda">
+            <thead>
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'| trans }}</th>{% endif %}
+                    <th>{{ 'messages.nork'| trans }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for norkeskatu in norkeskatus %}
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ norkeskatu.udala }}</td>{% endif %}
+                    <td>
+                        {% if app.request.locale == 'es'%}{{ norkeskatu.norkes }}
+                        {% else %}{{ norkeskatu.norkeu }}
                         {% endif %}
-                    </ul>
-                </td>
+                    </td>
+                    <td NOWRAP class="text-right">
+                        <ul class="list-inline">
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li><a href="{{ path('norkeskatu_edit', { 'id': norkeskatu.id }) }}" class="fa fa-pencil"></a></li>
+                                <li>{{ form_start(deleteforms[norkeskatu.id],{'attr': {'id': norkeskatu.id}}) }}
+                                    <a href="#" {{ stimulus_controller('confirmation', {
+                                            id: norkeskatu.id,
+                                            mezua: 'messages.ziurzaude'| trans}) 
+                                        }} 
+                                        data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
+                                    {{ form_end(deleteforms[norkeskatu.id]) }}</li>
+                            {% endif %}
+                        </ul>
+                    </td>
 
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <div class="text-center">
-        {% if norkeskatus is not empty %}
-        {% else %}
-            <p>{{ 'messages.emaitzarikez'|trans }}</p>
-        {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="text-center">
+            {% if norkeskatus is not empty %}
+            {% else %}
+                <p>{{ 'messages.emaitzarikez'| trans }}</p>
+            {% endif %}
+        </div>
     </div>
-{% endblock %}
+{% endblock body %}

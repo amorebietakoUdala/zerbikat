@@ -1,0 +1,29 @@
+{% if (eremuak.norkebatzitext or eremuak.norkebatzitable) %}
+   <div id="norkebatzi" class="row seccion">
+      <div class="pl-0 col-sm-12">
+            <div class="page-header border-none mb-0">
+               <h3 class="h2">
+                  {% if app.request.locale == 'eu' %}{{ labelak.norkebatzilabeleu }}
+                  {% else %}{{ labelak.norkebatzilabeles }}
+                  {% endif %}
+               </h3>
+            </div>
+            <div>
+               {% if eremuak.norkebatzitable %}
+                  {% if fitxa.norkebatzi %}
+                        {% if app.request.locale == 'eu' %}{{ fitxa.norkebatzi.norkeu }}
+                        {% else %}{{ fitxa.norkebatzi.norkes }}
+                        {% endif %}
+                  {% endif %}
+               {% endif %}
+
+               {% if eremuak.norkebatzitext %}
+                  {% if app.request.locale == 'eu' %}{{ fitxa.norkonartueu|raw }}
+                  {% else %}{{ fitxa.norkonartues|raw }}
+                  {% endif %}
+               {% endif %}
+
+            </div>
+      </div>
+   </div>
+{% endif %}

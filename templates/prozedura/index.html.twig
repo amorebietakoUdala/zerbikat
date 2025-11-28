@@ -1,67 +1,64 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">{{ 'messages.prozedurak'|trans }}</a>
-            </div>
-            {% if is_granted('ROLE_ADMIN') %}
-                <div id="navbar" class="navbar-collapse collapse navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{ path('prozedura_new') }}" class="fa fa-plus"> {{ 'messages.prozeduraberria'|trans }}</a></li>
-                    </ul>
-                </div>
-            {% endif %}
-        </div>
-    </nav>
-{% endblock %}
+{% block menuTitle %}
+    <a class="navbar-brand">{{ 'messages.prozedurak'| trans }}</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <ul class="nav navbar-nav">
+            <li><a href="{{ path('prozedura_new') }}" class="fa fa-plus"> {{ 'messages.prozeduraberria'| trans }}</a></li>
+        </ul>
+    {% endif %}
+{% endblock menuOptions %}
 
 {% block body %}
-    <table class="table" id="taulazerrenda">
-        <thead>
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'|trans }}</th>{% endif %}
-                <th>{{ 'messages.prozedura'|trans }}</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for prozedura in prozeduras %}
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ prozedura.udala }}</td>{% endif %}
-                <td>
-                    {% if app.request.locale == 'es'%}{{ prozedura.prozeduraes }}
-                    {% else %}{{ prozedura.prozeduraeu }}
-                    {% endif %}
-                </td>
-                <td NOWRAP class="text-right">
-                    <ul class="list-inline">
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <li><a href="{{ path('prozedura_edit', { 'id': prozedura.id }) }}" class="fa fa-pencil"></a></li>
-                            {#<li>{{ form_start(deleteforms[prozedura.id],{'attr': {'id': prozedura.id}}) }}#}
-                                {#<a href="#" onclick="document.getElementById({{ prozedura.id }}).submit();" ><i class="fa fa-trash text-danger"></i></a>#}
-                                {#{{ form_end(deleteforms[prozedura.id]) }}</li>#}
-                            <li>{{ form_start(deleteforms[prozedura.id],{'attr': {'id': prozedura.id}}) }}
-                                <a href="#" {{ stimulus_controller('confirmation', {
-                                        id: prozedura.id,
-                                        mezua: 'messages.ziurzaude'|trans}) 
-                                    }} 
-                                    data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
-                                {{ form_end(deleteforms[prozedura.id]) }}</li>
-                        {% endif %}
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <div class="text-center">
-        {% if prozeduras is not empty %}
+    <div class="container" role="main">
 
-        {% else %}
-            <p>{{ 'messages.emaitzarikez'|trans }}</p>
-        {% endif %}
+        <table class="table" id="taulazerrenda">
+            <thead>
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'| trans }}</th>{% endif %}
+                    <th>{{ 'messages.prozedura'| trans }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for prozedura in prozeduras %}
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ prozedura.udala }}</td>{% endif %}
+                    <td>
+                        {% if app.request.locale == 'es'%}{{ prozedura.prozeduraes }}
+                        {% else %}{{ prozedura.prozeduraeu }}
+                        {% endif %}
+                    </td>
+                    <td NOWRAP class="text-right">
+                        <ul class="list-inline">
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li><a href="{{ path('prozedura_edit', { 'id': prozedura.id }) }}" class="fa fa-pencil"></a></li>
+                                {#<li>{{ form_start(deleteforms[prozedura.id],{'attr': {'id': prozedura.id}}) }}#}
+                                    {#<a href="#" onclick="document.getElementById({{ prozedura.id }}).submit();" ><i class="fa fa-trash text-danger"></i></a>#}
+                                    {#{{ form_end(deleteforms[prozedura.id]) }}</li>#}
+                                <li>{{ form_start(deleteforms[prozedura.id],{'attr': {'id': prozedura.id}}) }}
+                                    <a href="#" {{ stimulus_controller('confirmation', {
+                                            id: prozedura.id,
+                                            mezua: 'messages.ziurzaude'| trans}) 
+                                        }} 
+                                        data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
+                                    {{ form_end(deleteforms[prozedura.id]) }}</li>
+                            {% endif %}
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="text-center">
+            {% if prozeduras is not empty %}
+
+            {% else %}
+                <p>{{ 'messages.emaitzarikez'| trans }}</p>
+            {% endif %}
+        </div>
     </div>
-{% endblock %}
+{% endblock body %}

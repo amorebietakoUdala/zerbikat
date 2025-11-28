@@ -225,7 +225,7 @@
 "messages.azpifamiliak": "Subfamilias"
 "messages.menu.admin": "Configuración"
 "messages.expedientes": "Código Expedientes"
-"Volver a la web del ayuntamiento": "Volver a la web del ayuntamiento"
+"Volver a la web del ayuntamiento": "VOLVER A LA WEB DEL AYUNTAMIENTO"
 "La información ofrecida a continuación carece de validez jurídica y se ofrece sólo a efectos informativos": "La información ofrecida a continuación carece de validez jurídica y se ofrece sólo a efectos informativos"
 "messages.esportatu_liburua": "PDF de procedimientos"
 "messages.bilatu": "Buscar"
@@ -233,6 +233,66 @@
 "messages.esportatu_doklaguntzailea": "PDF de documentación a aportar"
 "messages.resumen_doklaguntzailea": "Resumen documentación a aportar en PDF"
 "messages.goiburua": "Manual de trámites"
+"messages.inicio": "Inicio"
+"messages.atzera": "Atras"
+"messages.azkenEguneraketa": "Última actualización"
+"messages.aurkibidea": "Índice"
+"messages.emaila": "Correo específico del área"
+"messages.masInfo": "Más información"
+"messages.whatsapp.default": "Hola, quiero más información"
+"messages.whatsapp": "Whatsapp"
 "Saila / Azpisaila": "Área / Subárea"
 "Familia / Azpifamilia": "Familia / Subfamilia"
 "Udala": "Ayuntamiento"
+btn.download: "Descargar"
+messages.aukera: "Opción"
+messages.kokapena: "Ubicación"
+messages.kokapenaIkusi: "Ver Ubicación"
+messages.izapideaHasi: "Iniciar trámite"
+messages.izapideraSartu: "Accede a la ficha online"
+
+message.intro: |
+  <b>Bienvenido/a al manual de trámites del Ayuntamiento de Amorebieta-Etxano.</b><br>
+  <br>
+  En este espacio puedes consultar y realizar de forma sencilla todos los trámites que
+  necesites: empadronamiento, licencias, ayudas, participación en actividades,
+  realización de pagos, gestión de impuestos o acceso a servicios municipales.<br>
+  <br>
+  Los trámites están organizados por temas y situaciones de la vida diaria, para facilitar
+  su comprensión y acceso, según lo que necesites en cada momento: cuidar de alguien,
+  cambiar de casa, buscar empleo, abrir un local comercial, organizar un evento,
+  apuntarte a un curso, resolver una duda o solicitar una ayuda.
+
+
+# FOOTER
+footer.ubicacion1: Ubicación
+
+footer.ubicacion2: |
+  <b>Amorebieta-Etxanoko Udala</b><br>
+  Herriko Plaza, z/g 48340<br>
+  Amorebieta-Etxano (Bizkaia)
+
+footer.horario1: "Horario"
+footer.horario2: "7:30 - 15:00"
+footer.whatsapp1: "Whatsapp"
+footer.whatsapp2: "688 866 600"
+footer.escribe1: "Escribe al Ayuntamiento"
+footer.escribe2: ""
+
+footer.SAC: "SAC"
+footer.contacto1: "Contacto"
+footer.contacto2: "Servicio de Atención Ciudadana"
+footer.telefono1: "Teléfono"
+footer.y: " y "
+footer.correo1: "Correo electrónico"
+footer.politica: "Política de privacidad"
+footer.aviso: "Aviso Legal"
+footer.cookies: "Política De Cookies"
+footer.accesibilidad: "Accesbilidad"
+
+title.selloComunicacionClara: "Sello de Comunicación Clara"
+message.selloComunicacionClara: | 
+  El portal de trámites del Ayuntamiento de Amorebieta-Etxano ha sido reconocido con el Certificado<br>
+  de Comunicación Clara tras un análisis exhaustivo realizado por la consultora Prodigioso Volcán.<br>
+  El Certificado de Comunicación Clara reconoce y certifica a aquellas administraciones que<br>
+  demuestran un compromiso real con la claridad en su comunicación y con el derecho a entender.

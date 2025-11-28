@@ -21,7 +21,7 @@
                         {{ 'layout.logout'| trans }}
                     </a>
                 {% else %}
-                    <a href="{{ path('user_security_login_check') }}">{{ 'layout.login'|trans({}) }}</a>
+                    <a href="{{ path('user_security_login_check') }}">{{ 'layout.login'| trans({}) }}</a>
                 {% endif %}
             </div>
         {% endblock authenticated %}

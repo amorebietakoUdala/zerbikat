@@ -1,0 +1,125 @@
+{% if (eremuak.besteak1text or eremuak.besteak1table) %}
+   <div id="besteak1" class="row seccion">
+      <div class="pl-0 col-sm-12">
+            <div class="page-header border-none mb-0">
+               <h3 class="h2">
+                  {% if app.request.locale == 'eu' %}{{ labelak.besteak1labeleu }}
+                  {% else %}{{ labelak.besteak1labeles }}
+                  {% endif %}
+               </h3>
+            </div>
+            <div>
+               {% if eremuak.besteak1text %}
+                  {% if app.request.locale == 'eu' %}{{ fitxa.besteak1eu |raw }}
+                  {% else %}{{ fitxa.besteak1es |raw }}
+                  {% endif %}
+               {% endif %}
+               {% if eremuak.besteak1table %}
+                  <ul>
+                        {% for besteak1 in fitxa.besteak1ak %}
+                           <li>
+                           {% if app.request.locale == 'eu' %}
+                              {% if besteak1.estekaeu %}
+                                    <a href="{{ besteak1.estekaeu }}">{{ besteak1.izenburuaeu }}</a> </li>
+                              {% else %}
+                                    {{ besteak1.izenburuaeu }}
+                              {% endif %}
+                           {% else %}
+                              {% if besteak1.estekaes %}
+                                    <a href="{{ besteak1.estekaes }}">{{ besteak1.izenburuaes }}</a> </li>
+                              {% else %}
+                                    {{ besteak1.izenburuaes }}
+                              {% endif %}
+                           {% endif %}
+                           </li>
+                        {% endfor %}
+                  </ul>
+               {% endif %}
+            </div>
+      </div>
+   </div>
+{% endif %}
+
+{% if (eremuak.besteak2text or eremuak.besteak2table) %}
+   <div id="besteak2" class="row seccion">
+      <div class="pl-0 col-sm-12">
+            <div class="page-header border-none mb-0">
+               <h3 class="h2">
+                  {% if app.request.locale == 'eu' %}{{ labelak.besteak2labeleu }}
+                  {% else %}{{ labelak.besteak2labeles }}
+                  {% endif %}
+               </h3>
+            </div>
+            <div>
+               {% if eremuak.besteak2text %}
+                  {% if app.request.locale == 'eu' %}{{ fitxa.besteak2eu |raw }}
+                  {% else %}{{ fitxa.besteak2es |raw }}
+                  {% endif %}
+               {% endif %}
+               {% if eremuak.besteak2table %}
+                  <ul>
+                        {% for besteak2 in fitxa.besteak2ak %}
+                           <li>
+                           {% if app.request.locale == 'eu' %}
+                              {% if besteak2.estekaeu %}
+                                    <a href="{{ besteak2.estekaeu }}">{{ besteak2.izenburuaeu }}</a> </li>
+                              {% else %}
+                                    {{ besteak2.izenburuaeu }}
+                              {% endif %}
+                           {% else %}
+                              {% if besteak2.estekaes %}
+                                    <a href="{{ besteak2.estekaes }}">{{ besteak2.izenburuaes }}</a> </li>
+                              {% else %}
+                                    {{ besteak2.izenburuaes }}
+                              {% endif %}
+                           {% endif %}
+                           </li>
+                        {% endfor %}
+                  </ul>
+               {% endif %}
+            </div>
+      </div>
+   </div>
+{% endif %}
+
+{% if (eremuak.besteak3text or eremuak.besteak3table) %}
+   <div id="besteak3" class="row seccion">
+      <div class="pl-0 col-sm-12">
+            <div class="page-header border-none mb-0">
+               <h3 class="h2">
+                  {% if app.request.locale == 'eu' %}{{ labelak.besteak3labeleu }}
+                  {% else %}{{ labelak.besteak3labeles }}
+                  {% endif %}
+               </h3>
+            </div>
+            <div>
+               {% if eremuak.besteak3text %}
+                  {% if app.request.locale == 'eu' %}{{ fitxa.besteak3eu |raw }}
+                  {% else %}{{ fitxa.besteak3es |raw }}
+                  {% endif %}
+               {% endif %}
+               {% if eremuak.besteak3table %}
+                  <ul>
+                        {% for besteak3 in fitxa.besteak3ak %}
+                           <li>
+                           {% if app.request.locale == 'eu' %}
+                              {% if besteak3.estekaeu %}
+                                    <a href="{{ besteak3.estekaeu }}">{{ besteak3.izenburuaeu }}</a> </li>
+                              {% else %}
+                                    {{ besteak3.izenburuaeu }}
+                              {% endif %}
+                           {% else %}
+                              {% if besteak3.estekaes %}
+                                    <a href="{{ besteak3.estekaes }}">{{ besteak3.izenburuaes }}</a> </li>
+                              {% else %}
+                                    {{ besteak3.izenburuaes }}
+                              {% endif %}
+                           {% endif %}
+                           </li>
+                        {% endfor %}
+                  </ul>
+               {% endif %}
+            </div>
+      </div>
+   </div>
+{% endif %}

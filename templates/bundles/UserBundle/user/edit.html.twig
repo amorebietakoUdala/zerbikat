@@ -6,21 +6,20 @@
 
 {% block authenticated %}{% endblock %}
 
-
 {% block menua %}
     {{ parent() }}
     <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand">{{ 'messages.erabiltzaileak'|trans }}</a>
+                <a class="navbar-brand">{{ 'messages.erabiltzaileak'| trans }}</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse navbar-right">
                 <ul class="nav navbar-nav">
                     {% if not readonly  %}
                     <li><a href="#" onclick="document.forms['{{ form.vars.name }}'].submit()"
-                           class="fa fa-floppy-o"> {{ 'messages.gorde'|trans }}</a></li>
+                           class="fa fa-floppy-o"> {{ 'messages.gorde'| trans }}</a></li>
                     {% endif %}
-                    <li><a href="{{ path('admin_user_index') }}" class="fa fa-undo"> {{ 'messages.utzi'|trans }}</a></li>
+                    <li><a href="{{ path('admin_user_index') }}" class="fa fa-undo"> {{ 'messages.utzi'| trans }}</a></li>
                 </ul>
             </div>
         </div>

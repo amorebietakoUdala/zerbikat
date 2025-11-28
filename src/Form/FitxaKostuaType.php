@@ -23,6 +23,7 @@ class FitxaKostuaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options) :void
     {
         $udala = $options['udala'];
+        $locale = $options['locale'];
         if ( null !== $udala ) {
             $api = $options[ 'api_url' ];
             // DEBUG
@@ -41,15 +42,18 @@ class FitxaKostuaType extends AbstractType
                 if ( (array_key_exists("kodea_prod", $a))  ) {
                     $txt = $a[ 'kodea_prod' ]." - ";
                 }
-    
-    
-                if ( array_key_exists("izenburuaeu_prod", $a) ) {
-                    $txt = $txt . $a[ 'izenburuaeu_prod' ];
-                    $resp[$txt] = $a['id'];
+                if ( $locale === 'eu' ) {
+                    if ( array_key_exists("izenburuaeu_prod", $a) &&  array_key_exists("atalaeu_prod", $a) ) {
+                        $txt = $a[ 'atalaeu_prod' ] . ' - ' . $txt . $a[ 'izenburuaeu_prod' ];
+                    }
+                } else {
+                    if ( array_key_exists("izenburuaeu_prod", $a) &&  array_key_exists("atalaeu_prod", $a) ) {
+                        $txt = $a[ 'atalaes_prod' ] . ' - ' . $txt . $a[ 'izenburuaes_prod' ];
+                    }
                 }
+                $resp[$txt] = $a['id'];
             }
         }
-
         $builder
             ->add('udala')
             ->add('fitxa')
@@ -66,7 +70,8 @@ class FitxaKostuaType extends AbstractType
         $resolver->setDefaults([
             'data_class' => FitxaKostua::class, 
             'udala' => null, 
-            'api_url' => null
+            'api_url' => null,
+            'locale' => 'eu'
         ]);
     }
 }

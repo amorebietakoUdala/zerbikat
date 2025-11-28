@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Qipsius\TCPDFBundle\Controller\TCPDFController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\HeaderUtils;
 
 class FrontendController extends AbstractController
 {
@@ -37,15 +36,14 @@ class FrontendController extends AbstractController
     public function index ( int $udala, Request $request ): Response
     {
         $familia = $request->get('familia') ?? null;
-        $azpisaila = $request->get('azpisaila') ?? null ;
 
-        $fitxak = $this->fitxaRepo->findPublicByUdalaAndAzpisaila($udala, $azpisaila);
         $familiak = $this->familiaRepo->findByUdalaAndParentAndFamiliaId($udala, $request->getLocale(), null, $familia);
-        $sailak = $this->sailaRepo->findByUdalaAndAzpisaila($udala, $azpisaila);
-
         return $this->render(
             'frontend\index.html.twig',
-            ['fitxak'   => $fitxak, 'familiak' => $familiak, 'sailak'   => $sailak, 'udala'    => $udala]
+            [
+                'familiak' => $familiak, 
+                'udala'    => $udala
+            ]
         );
     }
 
@@ -70,9 +68,24 @@ class FrontendController extends AbstractController
             $kostuZerrenda[] = $array;
         }
 
+        $familiak = $fitxa->getFitxafamilia();
+        foreach ($familiak as $fitxaFamilia) {
+            $familiaEs = $fitxaFamilia->getFamilia()->getFamiliaEs();
+            $familiaEu = $fitxaFamilia->getFamilia()->getFamiliaEu();
+            break;
+        }
+
         return $this->render(
-            'frontend/show.html.twig',
-            ['fitxa'         => $fitxa, 'kanalmotak'    => $kanalmotak, 'eremuak'       => $eremuak, 'labelak'       => $labelak, 'udala'         => $udala, 'kostuZerrenda' => $kostuZerrenda]
+            'frontend/show.html.twig',  [
+                'fitxa'         => $fitxa,
+                'familiaEs'     => $familiaEs,
+                'familiaEu'     => $familiaEu,
+                'kanalmotak'    => $kanalmotak, 
+                'eremuak'       => $eremuak, 
+                'labelak'       => $labelak, 
+                'udala'         => $udala, 
+                'kostuZerrenda' => $kostuZerrenda
+            ]
         );
     }
 

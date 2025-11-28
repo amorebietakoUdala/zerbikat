@@ -1,0 +1,76 @@
+{% if (eremuak.dokumentazioatext or eremuak.dokumentazioatable) %}
+   <div id="dokumentazioa" class="row seccion">
+      <div class="pl-0 col-sm-12">
+            <div class="page-header border-none mb-0">
+               <h3 class="h2">
+                  {% if app.request.locale == 'eu' %}
+                     {{ labelak.dokumentazioalabeleu }}
+                  {% else %}
+                     {{ labelak.dokumentazioalabeles }}
+                  {% endif %}
+               </h3>
+            </div>
+            {% if eremuak.dokumentazioatable %}
+               <ul class="dokumentu-zerrenda mb-1 d-flex flex-justify-content-space-between flex-wrap">
+                     {% for dokumentua in fitxa.dokumentazioak %}
+                        <li class="btn-dokumentua ">
+                           {% if app.request.locale == 'eu' %}
+                                 {% if dokumentua.estekaeu %}
+                                    <a href="{{ dokumentua.estekaeu }}" target="_blank" class="d-flex flex-justify-content-space-between flex-align-items-center">
+                                       <div>
+                                          <span class="font-weight-700">{{ dokumentua.kodea }} {{ dokumentua.deskribapenaeu }}</span><br>
+                                          <span>PDF | ES-EU</span>
+                                       </div>
+                                       <img class="download-icon" src="{{ asset('build/images/descarga.png') }}" alt="{{ 'btn.download' | trans }}" title="{{ 'btn.download' | trans }}">
+                                    </a>
+                                 {% else %}
+                                    {{ dokumentua.kodea }} {{ dokumentua.deskribapenaeu }}
+                                 {% endif %}
+                           {% else %}
+                                 {% if dokumentua.estekaes %}
+                                    <a href="{{ dokumentua.estekaes }}" target="_blank" class="d-flex flex-justify-content-space-between flex-align-items-center">
+                                       <div>
+                                          <span class="font-weight-700">{{ dokumentua.kodea }} {{ dokumentua.deskribapenaes }}</span><br>
+                                          <span>PDF | ES-EU</span>
+                                       </div>
+                                       <img class="download-icon" src="{{ asset('build/images/descarga.png') }}" alt="{{ 'btn.download' | trans }}" title="{{ 'btn.download' | trans }}">
+                                    </a>
+                                 {% else %}
+                                    {{ dokumentua.kodea }} {{ dokumentua.deskribapenaes }}
+                                 {% endif %}
+                           {% endif %}
+                        </li>
+                        {# <li>
+                           {% if app.request.locale == 'eu' %}
+                                 {% if dokumentua.estekaeu %}
+                                    <a class="underline" href="{{ dokumentua.estekaeu }}" target="_blank">
+                                       {{ dokumentua.kodea }} {{ dokumentua.deskribapenaeu }}
+                                    </a>
+                                 {% else %}
+                                    {{ dokumentua.kodea }} {{ dokumentua.deskribapenaeu }}
+                                 {% endif %}
+                           {% else %}
+                                 {% if dokumentua.estekaes %}
+                                    <a class="underline" href="{{ dokumentua.estekaes }}" target="_blank">
+                                       {{ dokumentua.kodea }} {{ dokumentua.deskribapenaes }}
+                                    </a>
+                                 {% else %}
+                                    {{ dokumentua.kodea }} {{ dokumentua.deskribapenaes }}
+                                 {% endif %}
+                           {% endif %}
+                        </li> #}
+                     {% endfor %}
+               </ul>
+            {% endif %}
+            {% if eremuak.dokumentazioatext %}
+               <div class="dokumentazioa-texto">
+                  {% if app.request.locale == 'eu' %}
+                     {{ fitxa.dokumentazioaeu | raw }}
+                  {% else %}
+                     {{ fitxa.dokumentazioaes | raw }}
+                  {% endif %}
+               </div>
+            {% endif %}
+      </div>
+   </div>
+{% endif %}

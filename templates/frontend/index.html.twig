@@ -1,167 +1,112 @@
-{% extends 'base.html.twig' %}
-
-{% block menua %}
-    <nav id="logo_lerroa" class="navbar navbar-fixed-top">
-        <div class="container ">
-            <div class="navbar-header">
-		<ul class="nav navbar-nav">
-		    <li><img id="logoa" src="{{ asset('build/images/logo.png') }}" alt="Amorebieta-Etxanoko Udala"/></li>
-		    <li id="goiburua" class="list-inline">{{ "messages.goiburua" | trans }}</li>
-		    <li id="itzuli_esteka" class="list-inline"><a href="https://www.amorebieta-etxano.eus/">{{ "Volver a la web del ayuntamiento" | trans }}</a></li>
-		</ul>
-            </div>
-        </div>
-    </nav>
-    <nav id="menu_lerroa" class="navbar navbar-default">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand"></a>
-                <ul class="nav navbar-nav">
-                    <li class="list-inline"><a
-                                href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'es'})) }}">ES</a>
-                    </li>
-                    <li class="list-inline"><a
-                                href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'eu'})) }}">EU</a>
-                    </li>
-                </ul>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse navbar-right">
-            </div>
-        </div>
-    </nav>
-{% endblock %}
+{% extends 'frontend/frontend-layout.html.twig' %}
 
 {% block body %}
-    <br/>
-    {{ parent() }}
+    <div class="container" role="main">
+        <div class="row">
+            <div class="col-lg-12 mt-1">
+                <h1>{{ 'messages.goiburua' | trans }}</h1>
+                <div class="col-lg-1 col-md-1 divider">&nbsp;</div>
+            </div>
+        </div>
 
-    <div class="container-fluid alert alert-info" role="alert">{{ "La información ofrecida a continuación carece de validez jurídica y se ofrece sólo a efectos informativos" | trans }}</div>
-
-    <div class="input-group clearfix margin" style="width: 40%; float:right">
-	    <span class="input-group-addon">{{ "messages.bilatu" | trans | capitalize }}</span>
-	    <input id="filtrar" class="form-control" placeholder="{{ "messages.bilatu_placeholder" | trans | capitalize }}" type="text">
-    </div>
-
-    <br/>
-    {% set familiaId = app.request.get('familia') %}
-    {% set azpisailaId = app.request.get('azpisaila') %}
-    <div>
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" {{ ( app.request.get('tab') == 'sailka' or app.request.get('tab') == null ) ? ' class="active"': '' }}>
-                <a href="#sailka" aria-controls="home" role="tab" data-toggle="tab">{{ "Saila / Azpisaila" | trans }}</a>
-            </li>
-            <li role="presentation" {{ ( app.request.get('tab') == 'familiaka' ) ? ' class="active"': '' }}>
-                <a href="#familiaka" aria-controls="profile" role="tab" data-toggle="tab">{{ "Familia / Azpifamilia" | trans }}</a>
-            </li>
-        </ul>
-
-	
-        <div class="tab-content">
-
-            <div role="tabpanel" class="tab-pane {{ ( app.request.get('tab') == 'sailka' or app.request.get('tab') == null ) ? 'active': '' }}" id="sailka">
-                {% for saila in sailak %}
-                    <div class="list-group col-sm-6 servicio" {{ stimulus_controller('erakutsi-ezkutatu',{
-                        id: 'fam'~saila.id,
-                    })}}>
-                        <a class="list-group-item active" style="cursor: pointer;" data-action="erakutsi-ezkutatu#onClick">
-                            <div class="list-group-item-wrapper">
-                                <h4 class="list-group-item-heading active">
-                                    {% if app.request.locale == 'eu' %}{{ saila.sailaeu }}{% else %}{{ saila.sailaes }}{% endif %}
-                                </h4>
+        <div id="intro" class="row">
+            <div class="col-lg-6 col-md-12 col-sm-12 mb-1">
+                {{ 'message.intro' | trans | raw }}
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 d-flex justify-content-end-align-items-start">
+                <div class="col-lg-10 col-md-12 col-sm-12 gray-bg themed-grid-col">
+                    <div id="divFiltrar">
+                        <div class="form-group">
+                            <label class="sr-only" for="inputFiltrar">{{ "messages.bilatu_placeholder" | trans | capitalize }}</label>
+                            <div class="input-group">
+                                <div id="filtrarLogo" class="input-group-addon">
+                                    <img id="filtrarImg" src="{{ asset('build/images/lupa.png') }}"></div>
+                                    <input id="inputFiltrar" class="form-control" placeholder="{{ "messages.bilatu_placeholder" | trans | capitalize }}" type="text">
+                                <div id="filtrarText" class="input-group-addon gray-text">{{ 'messages.bilatu' | trans }}</div>
                             </div>
-                        </a>
-                        <div id='fam{{ saila.id }}' class="listaServicios" style='display: {{ app.request.get('familia') is not null or app.request.get('azpisaila') is not null ? 'block;' : 'none;'}}'
-                        >
-                            {% for azpi in saila.azpisailak | sort  %}
-                                    {% if azpisailaId is null %}
-                                        {% set fitxak2 = azpi.fitxak %}
-                                    {% else %}
-                                        {% set fitxak2 = fitxak %}
-                                    {% endif %}
-                                    {% if (azpisailaId is not null and azpi.id == azpisailaId) or azpisailaId is null %}
-                                        <a href="#" class="list-group-item list-group-item-success listaGen">
-                                        {% if app.request.locale == 'eu' %}{{ azpi.azpisailaeu }}{% else %} {{ azpi.azpisailaes }}{% endif %}
-                                        {% for fitxa in fitxak2 %}
-                                            {% if fitxa.publikoa == 1 and fitxa.azpisaila.id == azpi.id %}
-                                                <a  data-orden="{{ fitxa.espedienteKodea }}" data-id="{{ fitxa.id }}" href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitxa.id }) }}"
-                                                class="list-group-item ">
-                                                {{ fitxa.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitxa.deskribapenaeu }}{% else %}{{ fitxa.deskribapenaes }}{% endif %}
-                                                </a>
-                                            {% endif %}
-                                        {% endfor %}
-                                        </a>
-                                    {% endif %}
-                            {% endfor %}
                         </div>
                     </div>
-                {% endfor %}
-
+                </div>
             </div>
+        </div>
 
-
-            <div role="tabpanel" class="tab-pane {{ app.request.get('tab') == 'familiaka' ? 'active': '' }}" id="familiaka">
-
-                {% for familia in familiak %}
-                    <div class="list-group col-sm-6 servicio" {{ stimulus_controller('erakutsi-ezkutatu',{
-                        id: 'fam-'~familia.id,
-                    })}}>
-                        <a class="list-group-item active" style="cursor: pointer;" data-action="erakutsi-ezkutatu#onClick">
-                            <div class="list-group-item-wrapper">
-                                <h4 class="list-group-item-heading active">
-                                    {% if app.request.locale == 'eu' %}{{ familia.familiaeu }}{% else %} {{ familia.familiaes }}{% endif %}
-                                </h4>
-                                <p class="list-group-item-text">
-                                    {% if app.request.locale == 'eu' %}{{ familia.deskribapenaeu }}{% else %} {{ familia.deskribapenaes }}{% endif %}
-                                </p>
+        {% set azpisailaId = app.request.get('azpisaila') %}
+        {# Si pulsamos cualquier botón el resto se tienen que apagar aunque sean de otra familia con lo cual hay que poner el controlador en un punto en el que abarque todos los botones #}
+        <div class="familia-list-wrapper" {{ stimulus_controller('subfamilias-button', {
+            'activeClass' : 'famButtonActive',
+            'backgroundClassTemplate':'bg-fam-${number}-active',
+        }) }}>
+            {% set familiaId = app.request.get('familia') %}
+            {% for familia in familiak %}
+                <div class="familia mt-2" data-action="erakutsi-ezkutatu:close->subfamilias-button#onListClose">
+                    {# START Familia titulua #}
+                    <div class="tituloFamilia-block">
+                        <h2 class="h2">
+                            {% if app.request.locale == 'eu' %}{{ familia.familiaeu }}{% else %} {{ familia.familiaes }}{% endif %}
+                        </h2>
+                        <hr class="hrGray hr-1first-line-width">
+                        <hr class="hrGray">
+                    </div>
+                    {# END Familia titulua #}
+                    {% if (familiaId is not null and familiaId == familia.id) or familiaId is null %}
+                        <div class="listaServicios" id='fam-{{ familia.id }}'>
+                            {# START azpifamiliak eta euren semeak #}
+                            <div class="flex-row-wrap mt-5px subfamilias">
+                                {% for c in familia.children | sort %}
+                                    {% set imgName = 'build/images/fam-'~c.id~'.png' %}
+                                    {% set imgNameActive = 'build/images/fam-'~c.id~'-active.png' %}
+                                    <button href="#" id="fam-{{ c.id }}-button" class="btn-azpifamilia font-weight bg-fam-{{c.id}}" data-subfamilias-button-target="button"
+                                        {{ stimulus_controller('erakutsi-ezkutatu', {
+                                                'id': 'fam-' ~ c.id ~ '-children-block',
+                                                'children-class': 'js-children-block',
+                                                'button': 'fam-'~c.id~'-button'
+                                            }
+                                        )}}
+                                        data-action="click->subfamilias-button#onClick click->erakutsi-ezkutatu#onClick">
+                                        {% if app.request.locale == 'eu' %}{{ c.familiaeu }}{% else %}{{ c.familiaes }}{% endif %}
+                                    </button>
+                                {% endfor %}
                             </div>
-                        </a>
-                        {% if (familiaId is not null and familiaId == familia.id) or familiaId is null %}
-                        <div class="listaServicios" id='fam-{{ familia.id }}' style='display: {{ app.request.get('familia') is not null or app.request.get('azpisaila') is not null ? 'block;' : 'none;'}}'>
-                            {% if familiaId is not null %}
-                                {% set fitxakf = fitxak %}
-                                {% for fitxaf in fitxakf %}
-                                    {% if fitxaf.publikoa == 1 %}
-                                        <a href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitxaf.id }) }}"
-                                        class="list-group-item listaGen">
-                                        {{ fitxaf.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitxaf.deskribapenaeu }}{% else %} {{ fitxaf.deskribapenaes }}{% endif %}
-                                        </a>
-                                    {% endif %}
-                                {% endfor %}
-                            {% else %}
-                                {% for fitxafamilia  in  familia.fitxafamilia | sort %}
-                                    {% if fitxafamilia.fitxa.publikoa == 1 %}
-                                        <a href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitxafamilia.fitxa.id }) }}"
-                                        class="list-group-item listaGen">
-                                        {{ fitxafamilia.fitxa.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitxafamilia.fitxa.deskribapenaeu }}{% else %} {{ fitxafamilia.fitxa.deskribapenaes }}{% endif %}
-                                        </a>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                            {% for c in familia.children |sort %}
-                                <a href="#" class="list-group-item list-group-item-success">
-                                    {% if app.request.locale == 'eu' %}{{ c.familiaeu }}{% else %} {{ c.familiaes }}{% endif %}
+
+                            {% for c in familia.children | sort %}
+                                <div id="fam-{{c.id}}-children-block" class="text-align-right js-children-block" style="display: none">
+                                    <div class="js-children-block-close" data-action="click->erakutsi-ezkutatu#onClick" {{ stimulus_controller('erakutsi-ezkutatu', { 'id' : 'fam-'~c.id~'-children-block', 'button': 'fam-'~c.id~'-button', 'children-class' : 'js-children-block'})}}>
+                                        <img class="cursor-pointer" src="{{ asset('build/images/flecha desplegable_subcategorias.png') }}">
+                                        <hr class="hrGray hr-1first-line-width-right">
+                                        <hr class="hrGray">
+                                    </div>
+                                
                                     {% for fitx in c.fitxafamilia %}
-                                        <a data-orden="{{ fitx.fitxa.espedienteKodea }}" data-id="{{ fitx.id }}" href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitx.fitxa.id }) }}"
-                                           class="list-group-item">
-                                            {{ fitx.fitxa.espedienteKodea }}-{% if app.request.locale == 'eu' %}{{ fitx.fitxa.deskribapenaeu }}{% else %} {{ fitx.fitxa.deskribapenaes }}{% endif %}
-                                        </a>
+                                        {% if fitx.fitxa.publikoa %}
+                                            <a data-orden="{{ fitx.fitxa.espedienteKodea }}" data-id="{{ fitx.id }}" href="{{ path('frontend_fitxa_show', { 'udala': udala,'id': fitx.fitxa.id }) }}">
+                                                <div class="flex-row fitxa-lerroa-margin js-lista-servicios" {{ stimulus_controller('listaservicios-row')}}>
+                                                    <button class="espedienteKodeaBtn" 
+                                                        data-listaservicios-row-target="rowButton" 
+                                                        data-action="mouseover->listaservicios-row#onMouseOver mouseout->listaservicios-row#onMouseOut">
+                                                        {{ fitx.fitxa.espedienteKodea }}
+                                                    </button>
+                                                    <div class="fitxa-lerroa {{ ( loop.index % 2 ) == 0 ? 'fitxa-lerroa-par-bg' : 'fitxa-lerroa-impar-bg' }} gezia"  data-loop-index="{{ loop.index }}"
+                                                        data-listaservicios-row-target="row"
+                                                        data-action="mouseover->listaservicios-row#onMouseOver mouseout->listaservicios-row#onMouseOut">
+                                                        <div class="w96">{% if app.request.locale == 'eu' %}{{ fitx.fitxa.deskribapenaeu }}{% else %} {{ fitx.fitxa.deskribapenaes }}{% endif %}</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        {% endif %}
                                     {% endfor %}
-                                </a>
+                                </div>
                             {% endfor %}
+                            {# END azpifamiliak eta euren semeak #}
                         </div>
-                        {% endif %}
-                    </div>
+                    {% endif %}
+                </div>
                 {% endfor %}
-
             </div>
-
         </div>
     </div>
-
-{% endblock %}
+{% endblock body %}
 
 {% block javascripts %}
     {{ parent() }}
     {{ encore_entry_script_tags('frontend-index') }}
-{% endblock %}
+{% endblock javascripts %}

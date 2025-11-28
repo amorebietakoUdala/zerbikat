@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block menua %}
+    <nav id="logo_lerroa" class="navbar barra-fija">
+        <div class="container">
+            <div class="navbar-header w100">
+                <ul class="nav navbar-nav flex-row-wrap mt-5px w100">
+                    <li><img id="logoa" src="{{ asset('build/images/logo.png') }}" alt="Amorebieta-Etxanoko Udala"/></li>
+                    <li id="goiburua" class="list-inline">{{ "messages.goiburua" | trans }}</li>
+                    <li id="goiburua-spacer">&nbsp;</li>
+                    <li id="itzuli_esteka" class="list-inline ml-auto">
+                        <a href="https://www.amorebieta-etxano.eus/">
+                            <img id="itzultzeko-gezia" src="{{ asset('build/images/flecha_header.png') }}" alt="{{ "Volver a la web del ayuntamiento" | trans }}" title="{{ "Volver a la web del ayuntamiento" | trans }}">
+                            &nbsp;{{ "Volver a la web del ayuntamiento" | trans | raw }}
+                       </a>
+                    </li>
+                    <li class="list-inline ml-auto hizkuntza hizkuntza-eu">
+                        <a class="{{ app.request.locale == 'eu' ? 'blue-active' : '' }}"
+                            href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'eu'})) }}">EU
+                        </a>
+                    </li>            
+                    <li class="list-inline ml-1 hizkuntza hizkuntza-es">
+                        <a class="{{ app.request.locale == 'es' ? 'blue-active' : '' }}"
+                            href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'es'})) }}">ES
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <nav id="menu_lerroa" class="navbar navbar-default barra-fija">
+        <div class="container pl-0">
+            <div class="navbar-header w100">
+                <a id="menu_lerroko_brand" class="navbar-brand"></a>
+                {% block breadcrumbs %}{% endblock breadcrumbs %}
+            </div>
+            <div id="navbar" class="navbar-collapse collapse navbar-right">
+            </div>
+        </div>
+    </nav>
+    <nav id="azken_eguneraketa_lerroa" class="navbar navbar-default barra-fija">
+        <div class="container h100">
+            <div class="d-flex flex-align-items-center navbar-header w100 flex-row-wrap h100">
+                {% block azkenEguneraketa %}{% endblock azkenEguneraketa %}
+            </div>
+        </div>
+    </nav>
+{% endblock menua %}
+
+{% block footer %}
+    {{ include('frontend/_footer.html.twig') }}
+{% endblock footer %}

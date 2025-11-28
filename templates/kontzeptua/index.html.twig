@@ -1,53 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">Kontzeptuak</a>
-            </div>
-            {% if is_granted('ROLE_ADMIN') %}
-                <div id="navbar" class="navbar-collapse collapse navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{ path('kontzeptua_new') }}" class="fa fa-plus"> Kontzeptu berria</a></li>
-                    </ul>
-                </div>
-            {% endif %}
-        </div>
-    </nav>
-{% endblock %}
+{% block menuTitle %}
+    <a class="navbar-brand">Kontzeptuak</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <ul class="nav navbar-nav">
+            <li><a href="{{ path('kontzeptua_new') }}" class="fa fa-plus"> Kontzeptu berria</a></li>
+        </ul>
+    {% endif %}
+{% endblock menuOptions %}
 
 {% block body %}
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Kodea</th>
-                <th>Kontzeptua</th>
-                <th>Kopurua</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for kontzeptua in kontzeptuas %}
-            <tr>
-                <td>{{ kontzeptua.azpiatala }} -- {{ kontzeptua.kodea }}</td>
-                <td>{{ kontzeptua.kontzeptuaeu }}</td>
-                <td>{{ kontzeptua.kopurua }} {{ kontzeptua.unitatea }}</td>
-                <td NOWRAP class="text-right">
-                    <ul class="list-inline">
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <li><a href="{{ path('kontzeptua_edit', { 'id': kontzeptua.id }) }}" class="fa fa-pencil"></a></li>
-                            <li>{{ form_start(deleteforms[kontzeptua.id],{'attr': {'id': kontzeptua.id}}) }}
-                                <a href="#" onclick="document.getElementById({{ kontzeptua.id }}).submit();" ><i class="fa fa-trash text-danger"></i></a>
-                                {{ form_end(deleteforms[kontzeptua.id]) }}</li>
-                        {% endif %}
+    <div class="container" role="main">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Kodea</th>
+                    <th>Kontzeptua</th>
+                    <th>Kopurua</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for kontzeptua in kontzeptuas %}
+                <tr>
+                    <td>{{ kontzeptua.azpiatala }} -- {{ kontzeptua.kodea }}</td>
+                    <td>{{ kontzeptua.kontzeptuaeu }}</td>
+                    <td>{{ kontzeptua.kopurua }} {{ kontzeptua.unitatea }}</td>
+                    <td NOWRAP class="text-right">
+                        <ul class="list-inline">
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li><a href="{{ path('kontzeptua_edit', { 'id': kontzeptua.id }) }}" class="fa fa-pencil"></a></li>
+                                <li>{{ form_start(deleteforms[kontzeptua.id],{'attr': {'id': kontzeptua.id}}) }}
+                                    <a href="#" onclick="document.getElementById({{ kontzeptua.id }}).submit();" ><i class="fa fa-trash text-danger"></i></a>
+                                    {{ form_end(deleteforms[kontzeptua.id]) }}</li>
+                            {% endif %}
 
 
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-{% endblock %}
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock body %}

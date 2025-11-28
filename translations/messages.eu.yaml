@@ -225,7 +225,7 @@
 "messages.azpifamiliak": "Azpifamiliak"
 "messages.menu.admin": "Konfigurazioa"
 "messages.expedientes": "Expediente Kodea"
-"Volver a la web del ayuntamiento": "Udal webgunera itzuli"
+"Volver a la web del ayuntamiento": "&nbsp;&nbsp;&nbsp;ITZULI&nbsp;&nbsp;UDAL WEBGUNERA"
 "La información ofrecida a continuación carece de validez jurídica y se ofrece sólo a efectos informativos": "Oharra: Informazio honek ez du balio juridikorik, bakarrik ematen da herritarrak jakinaren gainean egon daitezen"
 "messages.esportatu_liburua": "Izapideen libura PDFan"
 "messages.bilatu": "Bilatu"
@@ -233,5 +233,64 @@
 "messages.esportatu_doklaguntzailea": "Dokumentazio laguntzailearen PDFa esportatu"
 "messages.resumen_doklaguntzailea": "Aurkeztu beharreko dokumentazioaren laburpena PDFan"
 "messages.goiburua": "Izapideen liburua"
+"messages.inicio": "Hasiera"
+"messages.atzera": "Atzera"
+"messages.azkenEguneraketa": "Azken eguneraketa"
+"messages.aurkibidea": "Aurkibidea"
+"messages.masInfo": "Informazio gehiago"
+"messages.emaila": "Sailaren posta elektronikoa"
+"messages.whatsapp.default": "Kaixo, informazio gehiago nahi dut"
+"messages.whatsapp": "Whatsapp"
 "Saila / Azpisaila": "Saila / Azpisaila"
 "Udala": "Udala"
+btn.download: "Jaitsi"
+messages.aukera: "Aukera"
+messages.kokapena: "Kokapena"
+messages.kokapenaIkusi: "Kokapena ikusi"
+messages.izapideaHasi: "Izapidea hasi"
+messages.izapideraSartu: "Online fitxara sartu"
+
+message.intro: |
+  <b>Ongi etorri Amorebieta-Etxanoko Udalaren izapideen eskuliburura.</b><br>
+  <br>
+  Gune honetan, behar dituzun izapide guztiak kontsultatu eta erraz egin ditzakezu:
+  erroldatzea, lizentziak, laguntzak, jardueretan parte hartzea, ordainketak egitea,
+  zergak kudeatzea edo udal-zerbitzuak eskuratzea.<br>
+  <br>
+  Izapideak eguneroko bizitzako gaien eta egoeren arabera antolatzen dira,
+  ulertzeko eta sarbidea izateko, une bakoitzean behar duzunaren arabera:
+  Norbait zaintzea, etxez aldatzea, enplegua bilatzea, merkataritza-lokal bat irekitzea,
+  ekitaldi bat antolatzea, ikastaro batean izena ematea, zalantza bat argitzea edo laguntza bat eskatzea.
+
+# FOOTER
+footer.ubicacion1: KOKAPENA
+
+footer.ubicacion2: |
+  <b>Amorebieta-Etxanoko Udala</b><br>
+  Herriko Plaza, z/g 48340<br>
+  Amorebieta-Etxano (Bizkaia)
+
+footer.horario1: "ORDUTEGIA"
+footer.horario2: "7:30 - 15:00"
+footer.whatsapp1: "WHATSAPP"
+footer.whatsapp2: "688 866 600"
+footer.escribe1: "IDATZI"
+footer.escribe2: "UDALARI"
+
+footer.SAC: "HAZ"
+footer.contacto1: "KONTAKTUA"
+footer.contacto2: "Herritarren Arreta Zerbitzua"
+footer.telefono1: "TELEFONO"
+footer.y: " eta "
+footer.correo1: "POSTA ELEKTRONIKOA"
+footer.politica: "Pribatutasun politika"
+footer.aviso: "Lege-Oharra"
+footer.cookies: "Cookien politika"
+footer.accesibilidad: "Irisgarritasuna"
+
+title.selloComunicacionClara: "Komunikazio Argiaren Zigilua"
+message.selloComunicacionClara: | 
+  Prodigioso Volcán aholkularitza-enpresak egindako azterketa sakon baten ondoren,<br>
+  Amorebieta-Etxanoko Udalaren izapideen atariari Komunikazio Argiaren Ziurtagiria eman zaio.<br>
+  Komunikazio Argiaren Ziurtagiriak, komunikazio argitasunarekin eta ulertzeko eskubidearekin benetako konpromisoa erakusten duela,<br>
+  aitortzen eta ziurtatzen ditu.

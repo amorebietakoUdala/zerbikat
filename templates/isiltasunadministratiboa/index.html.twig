@@ -1,67 +1,63 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">{{ 'messages.isiltasunadminak'|trans }}</a>
-            </div>
-            {% if is_granted('ROLE_ADMIN') %}
-                <div id="navbar" class="navbar-collapse collapse navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{ path('isiltasunadministratiboa_new') }}" class="fa fa-plus"> {{ 'messages.berria'|trans }}</a></li>
-                    </ul>
-                </div>
-            {% endif %}
-        </div>
-    </nav>
-{% endblock %}
+{% block menuTitle %}
+    <a class="navbar-brand">{{ 'messages.isiltasunadminak'| trans }}</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    {% if is_granted('ROLE_ADMIN') %}
+            <ul class="nav navbar-nav">
+                <li><a href="{{ path('isiltasunadministratiboa_new') }}" class="fa fa-plus"> {{ 'messages.berria'| trans }}</a></li>
+            </ul>
+    {% endif %}
+{% endblock menuOptions %}
 
 {% block body %}
-    <table class="table" id="taulazerrenda">
-        <thead>
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'|trans }}</th>{% endif %}
-                <th>{{ 'messages.isiltasunadmin'|trans }}</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for isiltasunAdministratiboa in isiltasunAdministratiboas %}
-            <tr>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ isiltasunAdministratiboa.udala }}</td>{% endif %}
-                <td>
-                    {% if app.request.locale == 'es'%}{{ isiltasunAdministratiboa.isiltasunes }}
-                    {% else %}{{ isiltasunAdministratiboa.isiltasuneu }}
-                    {% endif %}
-                </td>
-                <td NOWRAP class="text-right">
-                    <ul class="list-inline">
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <li><a href="{{ path('isiltasunadministratiboa_edit', { 'id': isiltasunAdministratiboa.id }) }}" class="fa fa-pencil"></a></li>
-                            <li>{{ form_start(deleteforms[isiltasunAdministratiboa.id],{'attr': {'id': isiltasunAdministratiboa.id}}) }}
-                                <a href="#" {{ stimulus_controller('confirmation', {
-                                        id: isiltasunAdministratiboa.id,
-                                        mezua: 'messages.ziurzaude'|trans}) 
-                                    }} 
-                                    data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
-                                {{ form_end(deleteforms[isiltasunAdministratiboa.id]) }}</li>
-                        {% endif %}
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <div class="text-center">
-        {% if isiltasunAdministratiboas is not empty %}
-            {% if pager.haveToPaginate %}
-                {{ pagerfanta(pager, 'twitter_bootstrap3', {'routeName': 'isiltasunadministratiboa_index_paginated'}) }}
-            {% endif %}
-        {% else %}
-            <p>{{ 'messages.emaitzarikez'|trans }}</p>
-        {% endif %}
-    </div>
+    <div class="container" role="main">
 
-{% endblock %}
+        <table class="table" id="taulazerrenda">
+            <thead>
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<th>{{ 'messages.udala'| trans }}</th>{% endif %}
+                    <th>{{ 'messages.isiltasunadmin'| trans }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for isiltasunAdministratiboa in isiltasunAdministratiboas %}
+                <tr>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}<td>{{ isiltasunAdministratiboa.udala }}</td>{% endif %}
+                    <td>
+                        {% if app.request.locale == 'es'%}{{ isiltasunAdministratiboa.isiltasunes }}
+                        {% else %}{{ isiltasunAdministratiboa.isiltasuneu }}
+                        {% endif %}
+                    </td>
+                    <td NOWRAP class="text-right">
+                        <ul class="list-inline">
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li><a href="{{ path('isiltasunadministratiboa_edit', { 'id': isiltasunAdministratiboa.id }) }}" class="fa fa-pencil"></a></li>
+                                <li>{{ form_start(deleteforms[isiltasunAdministratiboa.id],{'attr': {'id': isiltasunAdministratiboa.id}}) }}
+                                    <a href="#" {{ stimulus_controller('confirmation', {
+                                            id: isiltasunAdministratiboa.id,
+                                            mezua: 'messages.ziurzaude'| trans}) 
+                                        }} 
+                                        data-action="confirmation#onClick"><i class="fa fa-trash text-danger"></i></a>
+                                    {{ form_end(deleteforms[isiltasunAdministratiboa.id]) }}</li>
+                            {% endif %}
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="text-center">
+            {% if isiltasunAdministratiboas is not empty %}
+                {% if pager.haveToPaginate %}
+                    {{ pagerfanta(pager, 'twitter_bootstrap3', {'routeName': 'isiltasunadministratiboa_index_paginated'}) }}
+                {% endif %}
+            {% else %}
+                <p>{{ 'messages.emaitzarikez'| trans }}</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock body %}

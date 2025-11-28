@@ -1,0 +1,18 @@
+{% if eremuak.oharraktext %}
+   <div id="oharrak" class="row seccion">
+      <div class="pl-0 col-sm-12">
+            <div class="page-header border-none mb-0">
+              <h3 class="h2">
+                  {% if app.request.locale == 'eu' %}{{ labelak.oharraklabeleu }}
+                  {% else %}{{ labelak.oharraklabeles }}
+                  {% endif %}
+               </h3>
+            </div>
+            <div>
+               {% if app.request.locale == 'eu' %}{{ fitxa.oharrakeu |raw }}
+               {% else %}{{ fitxa.oharrakes |raw }}
+               {% endif %}
+            </div>
+      </div>
+   </div>
+{% endif %}

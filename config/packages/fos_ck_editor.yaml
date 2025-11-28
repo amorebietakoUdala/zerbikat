@@ -16,13 +16,15 @@ fos_ck_editor:
                     [
                         "Bold",
                         "Italic",
-                        "Underline",
                         "BulletedList",
                         "NumberedList",
                         "Outdent",
                         "Indent",
                         "Link",
                         "PasteText",
+                        "PasteFromWord",
+                        "Table",
+                        "Source"
                     ],
                 }
             jquery: true

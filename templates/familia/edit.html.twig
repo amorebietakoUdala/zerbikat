@@ -1,132 +1,128 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">{{ 'messages.familiak'|trans }}</a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse navbar-right">
-                <ul class="nav navbar-nav">
-                    <li><a href="#" onclick="document.forms['{{ edit_form.vars.name }}'].submit()" class="fa fa-floppy-o"> {{ 'messages.gorde'|trans }}</a></li>
-                    <li><a href="{{ path('familia_index') }}" class="fa fa-undo"> {{ 'messages.zerrendara'|trans }}</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-{% endblock %}
+{% block menuTitle %}
+    <a class="navbar-brand">{{ 'messages.familiak'| trans }}</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    <ul class="nav navbar-nav">
+        <li><a href="#" onclick="document.forms['{{ edit_form.vars.name }}'].submit()" class="fa fa-floppy-o"> {{ 'messages.gorde'| trans }}</a></li>
+        <li><a href="{{ path('familia_index') }}" class="fa fa-undo"> {{ 'messages.zerrendara'| trans }}</a></li>
+    </ul>
+{% endblock menuOptions %}
 
 {% block body %}
-    {{ form_start(edit_form) }}
-        {#{{ form_widget(edit_form) }}#}
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="form-group">
-                <b>{{ 'messages.familia'|trans }} ({{ 'messages.eu'|trans }})</b>
-                {#{{ form_label(edit_form.familiaeu, 'Familia (eu): ', { 'label_attr': {'class': 'control-label'} }) }}#}
-                {{ form_errors(edit_form.familiaeu) }}
-                {{ form_widget(edit_form.familiaeu, {'attr': {'class': 'form-control'}}) }}
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="form-group">
-                <b>{{ 'messages.familia'|trans }} ({{ 'messages.es'|trans }})</b>
-                {#{{ form_label(edit_form.familiaes, 'Familia (es): ', { 'label_attr': {'class': 'control-label'} }) }}#}
-                {{ form_errors(edit_form.familiaes) }}
-                {{ form_widget(edit_form.familiaes, {'attr': {'class': 'form-control'}}) }}
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="form-group">
-                <b>{{ 'messages.deskribapena'|trans }} ({{ 'messages.eu'|trans }})</b>
-                {#{{ form_label(edit_form.deskribapenaeu, 'Deskribapena (eu): ', { 'label_attr': {'class': 'control-label'} }) }}#}
-                {{ form_errors(edit_form.deskribapenaeu) }}
-                {{ form_widget(edit_form.deskribapenaeu, {'attr': {'class': 'form-control'}}) }}
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="form-group">
-                <b>{{ 'messages.deskribapena'|trans }} ({{ 'messages.es'|trans }})</b>
-                {#{{ form_label(edit_form.deskribapenaes, 'Deskribapena (es): ', { 'label_attr': {'class': 'control-label'} }) }}#}
-                {{ form_errors(edit_form.deskribapenaes) }}
-                {{ form_widget(edit_form.deskribapenaes, {'attr': {'class': 'form-control'}}) }}
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-6">
-            {{ form_label(edit_form.parent, 'Familia Gurasoa: ', { 'label_attr': {'class': 'control-label'} }) }}
-            {{ form_errors(edit_form.parent) }}
-            {{ form_widget(edit_form.parent, {'attr': {'class': 'form-control'}}) }}
-        </div>
-        <div class="col-sm-6">
-            {{ form_label(edit_form.ordena, 'Ordena: ', { 'label_attr': {'class': 'control-label'} }) }}
-            {{ form_errors(edit_form.ordena) }}
-            {{ form_widget(edit_form.ordena, {'attr': {'class': 'form-control'}}) }}
-        </div>
-    </div>
-
-
-    {% if azpifamiliak is not empty %}
+    <div class="container" role="main">
+        {{ form_start(edit_form) }}
+            {#{{ form_widget(edit_form) }}#}
         <div class="row">
-            <div class="col-sm-2"></div>
-            <div class="col-sm-8">
-                <h3>Azpifamiliak</h3>
-                <table class="table table-bordered table-responsive table-condensed table-hover">
-                    <th>Familia (Eus)</th>
-                    <th>Familia (Esp)</th>
-                    <th>Ordena *</th>
-                    <th></th>
-                    {% for a in azpifamiliak %}
-                        <tr>
-                            <td>{{ a.familiaeu }}</td>
-                            <td>{{ a.familiaes }}</td>
-                            <td>{{ a.ordena }}</td>
-                            <td>
-                                <a href="{{ path('familia_edit', {id: a.id}) }}"><i
-                                                class="fa fa-pencil" aria-hidden="true"></i></a>
-                                <a class="btnEzabatuAzpifamilia" data-id="{{ a.id }}" href="javascript:void(0);"><i class="fa fa-trash text-danger"></i></a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <b>{{ 'messages.familia'| trans }} ({{ 'messages.eu'| trans }})</b>
+                    {#{{ form_label(edit_form.familiaeu, 'Familia (eu): ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    {{ form_errors(edit_form.familiaeu) }}
+                    {{ form_widget(edit_form.familiaeu, {'attr': {'class': 'form-control'}}) }}
+                </div>
             </div>
-            <div class="col-sm-2"></div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <b>{{ 'messages.familia'| trans }} ({{ 'messages.es'| trans }})</b>
+                    {#{{ form_label(edit_form.familiaes, 'Familia (es): ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    {{ form_errors(edit_form.familiaes) }}
+                    {{ form_widget(edit_form.familiaes, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <b>{{ 'messages.deskribapena'| trans }} ({{ 'messages.eu'| trans }})</b>
+                    {#{{ form_label(edit_form.deskribapenaeu, 'Deskribapena (eu): ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    {{ form_errors(edit_form.deskribapenaeu) }}
+                    {{ form_widget(edit_form.deskribapenaeu, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <b>{{ 'messages.deskribapena'| trans }} ({{ 'messages.es'| trans }})</b>
+                    {#{{ form_label(edit_form.deskribapenaes, 'Deskribapena (es): ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    {{ form_errors(edit_form.deskribapenaes) }}
+                    {{ form_widget(edit_form.deskribapenaes, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_label(edit_form.parent, 'Familia Gurasoa: ', { 'label_attr': {'class': 'control-label'} }) }}
+                {{ form_errors(edit_form.parent) }}
+                {{ form_widget(edit_form.parent, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="col-sm-6">
+                {{ form_label(edit_form.ordena, 'Ordena: ', { 'label_attr': {'class': 'control-label'} }) }}
+                {{ form_errors(edit_form.ordena) }}
+                {{ form_widget(edit_form.ordena, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+
+        {% if azpifamiliak is not empty %}
             <div class="row">
-            <div class="col-sm-4"></div>
-            <div class="col-sm-4">
-                <p>* Azpifamiliaren ordena izango da Familia Gurasoaren barruan</p>
+                <div class="col-sm-2"></div>
+                <div class="col-sm-8">
+                    <h3>Azpifamiliak</h3>
+                    <table class="table table-bordered table-responsive table-condensed table-hover">
+                        <th>Familia (Eus)</th>
+                        <th>Familia (Esp)</th>
+                        <th>Ordena *</th>
+                        <th></th>
+                        {% for a in azpifamiliak %}
+                            <tr>
+                                <td>{{ a.familiaeu }}</td>
+                                <td>{{ a.familiaes }}</td>
+                                <td>{{ a.ordena }}</td>
+                                <td>
+                                    <a href="{{ path('familia_edit', {id: a.id}) }}"><i
+                                                    class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a class="btnEzabatuAzpifamilia" data-id="{{ a.id }}" href="javascript:void(0);"><i class="fa fa-trash text-danger"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <div class="col-sm-2"></div>
+                <div class="row">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4">
+                    <p>* Azpifamiliaren ordena izango da Familia Gurasoaren barruan</p>
+                </div>
+                <div class="col-sm-4"></div>
+                </div>
             </div>
-            <div class="col-sm-4"></div>
-            </div>
-        </div>
-    {% endif %}
-
-    {% if is_granted('ROLE_SUPER_ADMIN') %}
-    <div class="row">
-    {% else %}
-    <div class="row hidden">
         {% endif %}
-        <div class="col-sm-6">
-            <div class="form-group">
-                <b>{{ 'messages.udala'|trans }}</b>
-                {#{{ form_label(edit_form.udala, 'Udala: ', { 'label_attr': {'class': 'control-label'} }) }}#}
-                {{ form_errors(edit_form.udala) }}
-                {{ form_widget(edit_form.udala, {'attr': {'class': 'form-control'}}) }}
+
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <div class="row">
+        {% else %}
+        <div class="row hidden">
+            {% endif %}
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <b>{{ 'messages.udala'| trans }}</b>
+                    {#{{ form_label(edit_form.udala, 'Udala: ', { 'label_attr': {'class': 'control-label'} }) }}#}
+                    {{ form_errors(edit_form.udala) }}
+                    {{ form_widget(edit_form.udala, {'attr': {'class': 'form-control'}}) }}
+                </div>
             </div>
         </div>
-    </div>
-    {{ form_end(edit_form) }}
+        {{ form_end(edit_form) }}
 
-    <div id="ezkutuan" style="display:none;">
+        <div id="ezkutuan" style="display:none;">
 
+        </div>
     </div>
-{% endblock %}
+{% endblock body %}
 
 {% block stylesheets %}
     {{ parent() }}

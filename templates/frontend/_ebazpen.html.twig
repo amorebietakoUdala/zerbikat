@@ -1,0 +1,76 @@
+{% if (eremuak.ebazpensinpli or eremuak.arduraaitorpena or eremuak.aurreikusi or eremuak.arrunta or eremuak.isiltasunadmin) %}
+   <div id="ebazpen" class="row seccion">
+      <div class="pl-0 col-sm-12">
+            <div class="page-header border-none mb-0">
+               <h2 class="h2">
+                  {% if app.request.locale == 'eu' %}{{ labelak.epealabeleu }}
+                  {% else %}{{ labelak.epealabeles }}
+                  {% endif %}
+               </h2>
+            </div>
+            <div class="d-flex flex-wrap">
+               <div id="aurreikusi" class="border-right col-sm-12 col-md-4 pl-0">
+                  {% if eremuak.aurreikusi %}
+                     {% if fitxa.aurreikusi %}
+                           {% if app.request.locale == 'eu' %}
+                              <b class="h3">{{ labelak.aurreikusilabeleu }}</b>
+                              <br>{{ fitxa.aurreikusi.epeaeu }}
+                           {% else %}
+                              <b class="h3">{{ labelak.aurreikusilabeles }}</b>
+                              <br>{{ fitxa.aurreikusi.epeaes }}
+                           {% endif %}
+                     {% endif %}<br>
+                  {% endif %}
+               </div>
+               <div id="arrunta" class="border-right pl-2 col-sm-12 col-md-4">
+                  {% if eremuak.arrunta %}
+                     {% if fitxa.arrunta %}
+                           {% if app.request.locale == 'eu' %}
+                              <b class="h3">{{ labelak.arruntalabeleu }}</b>
+                              <br>{{ fitxa.arrunta.epeaeu }}
+                           {% else %}
+                              <b class="h3">{{ labelak.arruntalabeles }}</b>
+                              <br> {{ fitxa.arrunta.epeaes }}
+                           {% endif %}
+                     {% endif %}<br>
+                  {% endif %}
+               </div>
+               <div id="isiltasunadmin" class="border-none col-sm-12 col-md-4 pr-0">
+                  {% if eremuak.isiltasunadmin %}
+                     {% if fitxa.isiltasunadmin %}
+                           {% if app.request.locale == 'eu' %}
+                              <b class="h3">{{ labelak.isiltasunadminlabeleu }}</b> 
+                              <br>{{ fitxa.isiltasunadmin.isiltasuneu }}
+                           {% else %}
+                              <b class="h3">{{ labelak.isiltasunadminlabeles }}</b>
+                              <br>{{ fitxa.isiltasunadmin.isiltasunes }}
+                           {% endif %}
+                     {% endif %}
+                  {% endif %}
+               </div>
+               <div id="ebazpensinpli" class="border-right col-sm-12 col-md-4 pl-0 mt-1">
+                  {% if eremuak.ebazpensinpli %}
+                     {% if fitxa.ebazpensinpli %}
+                           {% if app.request.locale == 'eu' %}
+                              <span class="h4">{{ labelak.ebazpensinplilabeleu }}</span>
+                           {% else %}
+                              <span class="h4">{{ labelak.ebazpensinplilabeles }}</span>
+                           {% endif %}
+                     {% endif %}
+                  {% endif %}
+               </div>
+               <div id="arduraaitorpena" class="border-none pl-2 col-sm-12 col-md-4 pr-0 mt-1">
+                  {% if eremuak.arduraaitorpena %}
+                     {% if fitxa.arduraaitorpena %}
+                           {% if app.request.locale == 'eu' %}
+                              <span class="h4">{{ labelak.arduraaitorpenalabeleu }}</span>
+                           {% else %}
+                              <span class="h4">{{ labelak.arduraaitorpenalabeles }}</span>
+                           {% endif %}
+                     {% endif %}
+                  {% endif %}
+               </div>
+            </div>
+      </div>
+   </div>
+{% endif %}

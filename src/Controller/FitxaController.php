@@ -348,7 +348,11 @@ class FitxaController extends AbstractController
             $editForm = $this->createForm(
                 FitxaType::class,
                 $fitxa,
-                ['user' => $user, 'api_url' => $this->zzoo_aplikazioaren_API_url]
+                [
+                    'user' => $user, 
+                    'api_url' => $this->zzoo_aplikazioaren_API_url,
+                    'locale' => $request->getLocale()
+                ]
             );
 
             // Create an ArrayCollection of the current Kostuak objects in the database

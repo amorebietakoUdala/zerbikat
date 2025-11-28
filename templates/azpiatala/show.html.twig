@@ -1,21 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block menua %}
-    {{ parent() }}
-    <nav class="navbar navbar-default navbar-lower" data-spy="affix" data-offset-top="5">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand">{{ 'messages.kostutaulak'|trans }}</a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse navbar-right">
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ path('azpiatala_index') }}" class="fa fa-undo"> {{ 'messages.zerrendara'|trans }}</a></li>
-                    <li><a href="{{ path('azpiatala_edit', { 'id': azpiatala.id }) }}" class="fa fa-pencil"> {{ 'messages.aldatu'|trans }}</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-{% endblock %}
+{% block menuTitle %}
+    <a class="navbar-brand">{{ 'messages.kostutaulak'| trans }}</a>
+{% endblock menuTitle %}
+
+{% block menuOptions %}
+    <ul class="nav navbar-nav">
+        <li><a href="{{ path('azpiatala_index') }}" class="fa fa-undo"> {{ 'messages.zerrendara'| trans }}</a></li>
+        <li><a href="{{ path('azpiatala_edit', { 'id': azpiatala.id }) }}" class="fa fa-pencil"> {{ 'messages.aldatu'| trans }}</a></li>
+    </ul>
+{% endblock menuOptions %}
 
 {% block body %}
 <div class="row">
