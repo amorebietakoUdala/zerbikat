@@ -69,6 +69,10 @@ ul, ol {
     padding-left: 15px;
 }
 
+ul.dropdown-menu li, ol.dropdown-menu li {
+    list-style: none !important;
+}
+
 li {
     list-style: outside;
     margin-bottom: 0px;
