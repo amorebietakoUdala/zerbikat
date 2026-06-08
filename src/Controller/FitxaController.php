@@ -171,8 +171,7 @@ class FitxaController extends AbstractController
             ['espedientekodea' => 'ASC'] // order
         );
         $pdf = $this->__generateAllFitxaHTML($fitxak);
-
-            $filename = "izapideen-liburua";
+        $filename = "izapideen-liburua";
         return $pdf->Output( $filename . ".pdf", 'I' ); // This will output the PDF as a response directly
     }
 
@@ -190,13 +189,15 @@ class FitxaController extends AbstractController
         $eremuak = $this->eremuakRepo->findOneByUdala($udala);
         $labelak = $this->eremuakRepo->findLabelakByUdala($udala);
         $pdf = $this->tcpdfController->create('vertical',PDF_UNIT, PDF_PAGE_FORMAT,true,'UTF-8', false);
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
         $pdf->SetAuthor( $user->getUdala() );
         $pdf->SetTitle( ( "Izapideen Liburua" ) );
         $pdf->SetSubject( "Libro de procedimientos" );
         $pdf->setFontSubsetting( true );
         $pdf->SetFont( 'helvetica', '', 11, '', true );
 
-    //	$full_html = '';
+    	$full_html = '';
         foreach ($fitxak as $fitxa ) {
             $this->logger->debug($fitxa->getEspedienteKodea());
             $kostuZerrenda = [];
@@ -211,7 +212,7 @@ class FitxaController extends AbstractController
                 $kostuZerrenda[] = $array;
             }
             // Debug only:
-    //	    return $this->render(
+    	    // return $this->render(
             $html = $this->render(
             $plantilla,
             [
@@ -226,11 +227,11 @@ class FitxaController extends AbstractController
             $pdf->AddPage();
             $pdf->writeHTML($html->getContent(), true, false, false, false, '');
 
-    //	    $full_html = $full_html.$html->getContent();
+    	    //$full_html = $full_html.$html->getContent();
         }
-    //	$full_html = '<html><head><meta charset="utf-8"></head><body>'.$full_html.'</body></html>';
+    	// $full_html = '<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>'.$full_html.'</body></html>';
         return $pdf;
-    //	return $full_html;
+    	// return $full_html;
     }
 
      /**
@@ -289,6 +290,7 @@ class FitxaController extends AbstractController
             'fitxa/pdf.html.twig',
             ['fitxa'         => $fitxa, 'kanalmotak'    => $kanalmotak, 'delete_form'   => $deleteForm->createView(), 'eremuak'       => $eremuak, 'labelak'       => $labelak, 'kostuZerrenda' => $kostuZerrenda]
         );
+        //return new Response($html->getContent());
 
         $pdf = $this->tcpdfController->create(
             'vertical',
