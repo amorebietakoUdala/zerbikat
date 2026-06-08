@@ -35,3 +35,522 @@
         {% endfor %}
     </table>
 {% endmacro %}
+
+{% macro bilingualTextSection(labelEU, labelES, contentEU, contentES, locale) %}
+    <table cellspacing="0" cellpadding="4">
+        <tr>
+            <td>
+                <h4>{{ locale == 'eu' ? labelEU : labelES }}</h4>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size: small;">
+                {{ (locale == 'eu' ? contentEU : contentES) | raw }}
+            </td>
+        </tr>
+    </table>
+{% endmacro %}
+
+{% macro bilingualOharrakSection(labelEU, labelES, contentEU, contentES, locale) %}
+    <table cellspacing="0" cellpadding="4">
+        <tr>
+            <td>
+                <h4>{{ locale == 'eu' ? labelEU : labelES }}</h4>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size: small;">
+                {{ (locale == 'eu' ? contentEU : contentES) | raw }}
+            </td>
+        </tr>
+    </table>
+{% endmacro %}
+
+{% macro pdfHeaderSection(fitxa, locale) %}
+    <table border="1" cellpadding="4">
+        <tr>
+            <td colspan="12" style="text-align:right">
+                {% if fitxa.updatedAt %}
+                    <span style="font-size: small;">{{ 'message.azkenEguneraketa' | trans }} {{ fitxa.updatedAt|date('Y-m-d H:i:s') }}</span>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <img src="{{ fitxa.udala.logoa }}"/>
+                <h6 style="text-align:center">
+                    {{ locale == 'eu' ? fitxa.udala.izendapenaeu : fitxa.udala.izendapenaes }}
+                </h6>
+                <h6 style="text-align:center">{{ fitxa.udala.ifk }}</h6>
+            </td>
+            <td colspan="2"><h2>{{ fitxa.espedientekodea }}</h2></td>
+            <td colspan="8">
+                <h5>{{ locale == 'eu' ? fitxa.deskribapenaeu : fitxa.deskribapenaes }}</h5>
+            </td>
+        </tr>
+    </table>
+{% endmacro %}
+
+{% macro bilingualDatuenBabesSection(labelEU, labelES, udala, datuenbabesa, textEU, textES, showText, showTable, locale) %}
+    <table cellspacing="0" cellpadding="4">
+        <tr>
+            <td>
+                <h4>{{ locale == 'eu' ? labelEU : labelES }}</h4>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size: xx-small;">
+                {% if showTable and datuenbabesa %}
+                    {{ (locale == 'eu' ? udala.lopdeu : udala.lopdes)
+                        |replace({ ('$$$fitxa.datuenbabesa.izena' ~ (locale == 'eu' ? 'eu' : 'es') ~ '$$$'): datuenbabesa['izena' ~ (locale == 'eu' ? 'eu' : 'es')] })
+                        |replace({ ('$$$fitxa.datuenbabesa.kodea$$$'): datuenbabesa.kodea })
+                        |replace({ ('$$$fitxa.datuenbabesa.xedea' ~ (locale == 'eu' ? 'eu' : 'es') ~ '$$$'): datuenbabesa['xedea' ~ (locale == 'eu' ? 'eu' : 'es')] })
+                        |replace({ ('$$$fitxa.datuenbabesa.lagapenak' ~ (locale == 'eu' ? 'eu' : 'es') ~ '$$$'): datuenbabesa['lagapenak' ~ (locale == 'eu' ? 'eu' : 'es')] })
+                        |raw }}
+                {% endif %}
+                {% if showText %}
+                    {{ (locale == 'eu' ? textEU : textES) | raw }}
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+{% endmacro %}
+
+{% macro bilingualListSection(labelEU, labelES, textEU, textES, items, itemFieldEU, itemFieldES, showText, showTable, locale) %}
+    <table cellspacing="0" cellpadding="4">
+        <tr>
+            <td>
+                <h4>{{ locale == 'eu' ? labelEU : labelES }}</h4>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size: small;">
+                {% if showText %}
+                    {{ (locale == 'eu' ? textEU : textES) | raw }}
+                {% endif %}
+                {% if showTable %}
+                    <ul>
+                        {% for item in items %}
+                            <li>{{ attribute(item, locale == 'eu' ? itemFieldEU : itemFieldES) }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+{% endmacro %}
+
+{% macro bilingualListWithLinkSection(labelEU, labelES, textEU, textES, items, linkFieldEU, linkFieldES, descFieldEU, descFieldES, showText, showTable, locale) %}
+    <table cellspacing="0" cellpadding="4">
+        <tr>
+            <td>
+                <h4>{{ locale == 'eu' ? labelEU : labelES }}</h4>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size: small;">
+                {% if showText %}
+                    {{ (locale == 'eu' ? textEU : textES) | raw }}
+                {% endif %}
+                {% if showTable %}
+                    <ul>
+                        {% for item in items %}
+                            <li>
+                                {% set link = attribute(item, locale == 'eu' ? linkFieldEU : linkFieldES) %}
+                                {% set desc = attribute(item, locale == 'eu' ? descFieldEU : descFieldES) %}
+                                {% if link %}
+                                    <a href="{{ link }}">{{ item.kodea }} {{ desc }}</a>
+                                {% else %}
+                                    {{ item.kodea }} {{ desc }}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+{% endmacro %}
+
+{% macro bilingualLinkListSection(labelEU, labelES, textEU, textES, items, linkFieldEU, linkFieldES, titleFieldEU, titleFieldES, showText, showTable, locale) %}
+    <table cellspacing="0" cellpadding="4">
+        <tr>
+            <td>
+                <h4>{{ locale == 'eu' ? labelEU : labelES }}</h4>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size: small;">
+                {% if showText %}
+                    {{ (locale == 'eu' ? textEU : textES) | raw }}
+                {% endif %}
+                {% if showTable %}
+                    <ul>
+                        {% for item in items %}
+                            <li>
+                                {% set link = attribute(item, locale == 'eu' ? linkFieldEU : linkFieldES) %}
+                                {% set title = attribute(item, locale == 'eu' ? titleFieldEU : titleFieldES) %}
+                                {% if link %}
+                                    <a href="{{ link }}">{{ title }}</a>
+                                {% else %}
+                                    {{ title }}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+{% endmacro %}
+
+{% macro bilingualKostuaSection(labelEU, labelES, doanLabelEU, doanLabelES, showText, showTable, fitxa, kostuZerrenda, locale) %}
+    <table cellspacing="0" cellpadding="4">
+        <tr>
+            <td>
+                <h4>{{ locale == 'eu' ? labelEU : labelES }}</h4>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size: small;">
+                {% set kont = 0 %}
+                {% if showTable %}
+                    {% if fitxa.udala.zergaor %}
+                        {% for kostutaula in kostuZerrenda %}
+                            <table border="1" cellspacing="0" cellpadding="4" width="90%">
+                                <tr>
+                                    <td colspan="12" class="text-center">
+                                        {{ kostutaula['kodea_prod'] }} - {{ kostutaula['izenburua'~locale~'_prod'] }}
+                                    </td>
+                                </tr>
+                                {% for parrafo in kostutaula['parrafoak'] %}
+                                    <tr>
+                                        <td colspan="12">
+                                            {% if parrafo['testua'~locale~'_prod'] %}
+                                                {{ parrafo['testua'~locale~'_prod'] | raw }}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                                {% for kontzeptu in kostutaula['kontzeptuak'] %}
+                                    <tr>
+                                        <td colspan="9">
+                                            {{ kontzeptu['kontzeptua'~locale~'_prod'] is defined ? kontzeptu['kontzeptua'~locale~'_prod'] : '' }}
+                                        </td>
+                                        <td NOWRAP colspan="3">
+                                            {% if kontzeptu['kopurua_prod'] is defined %}
+                                                {{ kontzeptu['kopurua_prod'] }}
+                                            {% endif %}
+                                            {% if kontzeptu['unitatea_prod'] is defined %}
+                                                {{ kontzeptu['unitatea_prod'] }}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                            <p>&nbsp;</p>
+                            {% set kont = kont + 1 %}
+                        {% endfor %}
+                    {% else %}
+                        {% for azpiatal in fitxa.azpiatalak %}
+                            <table border="1" cellspacing="0" cellpadding="4" width="90%">
+                                <tr>
+                                    <td colspan="12" style="font-size: small;"><b>
+                                            {{ azpiatal.atala.ordenantza.kodea }}.{{ azpiatal.atala.kodea }}.{{ azpiatal.kodea }}-
+                                            {{ locale == 'eu' ? azpiatal.izenburuaeu : azpiatal.izenburuaes }}</b>
+                                    </td>
+                                </tr>
+                                {% for parrafo in azpiatal.parrafoak %}
+                                    <tr>
+                                        <td colspan="12" style="font-size: small;">{{ parrafo.testua }} </td>
+                                    </tr>
+                                {% endfor %}
+
+                                {% for kontzeptu in azpiatal.kontzeptuak %}
+                                    <tr>
+                                        <td colspan="9" style="font-size: small;">
+                                            {{ locale == 'eu' ? kontzeptu.kontzeptuaeu : kontzeptu.kontzeptuaes }}
+                                            {% if kontzeptu.baldintza %}
+                                                ({{ locale == 'eu' ? kontzeptu.baldintza.baldintzaeu : kontzeptu.baldintza.baldintzaes }})
+                                            {% endif %}
+                                        </td>
+                                        <td colspan="3" style="font-size: small;">
+                                            {{ kontzeptu.kopurua }} {{ kontzeptu.unitatea }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                            {% set kont = kont + 1 %}
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+                {% if showText %}
+                    {{ locale == 'eu' ? fitxa.kostuaeu | raw : fitxa.kostuaes | raw }}
+                {% endif %}
+                {% if ((locale == 'eu' and fitxa.kostuaeu is empty) or (locale != 'eu' and fitxa.kostuaes is empty)) and kont == 0 %}
+                    {{ locale == 'eu' ? doanLabelEU : doanLabelES }}
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+{% endmacro %}
+
+{% macro bilingualEpeSection(labelak, fitxa, eremuak, locale) %}
+    <table cellspacing="0" cellpadding="4">
+        <tr>
+            <td>
+                <h4>{{ locale == 'eu' ? labelak.epealabeleu : labelak.epealabeles }}</h4>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size: small;">
+                {% if eremuak.aurreikusi and fitxa.aurreikusi %}
+                    {% if locale == 'eu' %}
+                        {{ labelak.aurreikusilabeleu }}: {{ fitxa.aurreikusi }}<br>
+                    {% else %}
+                        {{ labelak.aurreikusilabeles }}: {{ fitxa.aurreikusi.epeaes }}<br>
+                    {% endif %}
+                {% endif %}
+                {% if eremuak.arrunta and fitxa.arrunta %}
+                    {% if locale == 'eu' %}
+                        {{ labelak.arruntalabeleu }}: {{ fitxa.arrunta }}<br>
+                    {% else %}
+                        {{ labelak.arruntalabeles }}: {{ fitxa.arrunta.epeaes }}<br>
+                    {% endif %}
+                {% endif %}
+                {% if eremuak.ebazpensinpli and fitxa.ebazpensinpli %}
+                    {{ locale == 'eu' ? labelak.ebazpensinplilabeleu : labelak.ebazpensinplilabeles }}<br>
+                {% endif %}
+                {% if eremuak.arduraaitorpena and fitxa.arduraaitorpena %}
+                    {{ locale == 'eu' ? labelak.arduraaitorpenalabeleu : labelak.arduraaitorpenalabeles }}<br>
+                {% endif %}
+                {% if eremuak.isiltasunadmin and fitxa.isiltasunadmin %}
+                    {% if locale == 'eu' %}
+                        {{ labelak.isiltasunadminlabeleu }}: {{ fitxa.isiltasunadmin }}
+                    {% else %}
+                        {{ labelak.isiltasunadminlabeles }}: {{ fitxa.isiltasunadmin.isiltasunes }}
+                    {% endif %}
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+{% endmacro %}
+
+{% macro bilingualNorkebatziSection(labelEU, labelES, nork, norkes, norkonartuEU, norkonartuES, showTable, showText, locale) %}
+    <table cellspacing="0" cellpadding="4">
+        <tr>
+            <td>
+                <h4>{{ locale == 'eu' ? labelEU : labelES }}</h4>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size: small;">
+                {% if showTable %}
+                    {{ locale == 'eu' ? nork : norkes }}
+                {% endif %}
+                {% if showText %}
+                    {{ locale == 'eu' ? norkonartuEU | raw : norkonartuES | raw }}
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+{% endmacro %}
+
+{% macro bilingualAzpisailaSection(labelEU, labelES, azpisaila, locale) %}
+    <table cellspacing="0" cellpadding="4">
+        <tr>
+            <td>
+                <h4>{{ locale == 'eu' ? labelEU : labelES }}</h4>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size: small;">
+                {% if azpisaila %}
+                    {{ locale == 'eu' ? azpisaila.saila.sailaeu ~ ' - ' ~ azpisaila.azpisailaeu : azpisaila.saila.sailaes ~ ' - ' ~ azpisaila.azpisailaes }}
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+{% endmacro %}
+
+{% macro bilingualAraudiaSection(labelEU, labelES, textEU, textES, araudiak, showText, showTable, locale) %}
+    <table cellspacing="0" cellpadding="4">
+        <tr>
+            <td>
+                <h4>{{ locale == 'eu' ? labelEU : labelES }}</h4>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size: small;">
+                {% set kont = 0 %}
+                {% if showText %}
+                    {{ (locale == 'eu' ? textEU : textES) | raw }}
+                {% endif %}
+
+                {% if showTable and araudiak|length > 0 %}
+                    <ul>
+                        {% for araua in araudiak %}
+                            {% set link = locale == 'eu' ? araua.araudia.estekaeu : araua.araudia.estekaes %}
+                            {% set title = locale == 'eu' ? araua.araudia.arauaeu : araua.araudia.arauaes %}
+                            {% set section = locale == 'eu' ? araua.atalaeu : araua.atalaes %}
+                            <li>
+                                {% if link is defined and link %}
+                                    <a href="{{ link }}">{{ title }}</a>
+                                {% else %}
+                                    {{ title }}
+                                {% endif %}
+                                {% if section %} - {{ section }}{% endif %}
+                            </li>
+                            {% set kont = kont + 1 %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                {% if kont == 0 and (locale == 'eu' ? textEU is empty : textES is empty) %}
+                    {{ locale == 'eu' ? 'Ez dagokio' : 'No corresponde' }}
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+{% endmacro %}
+
+{% macro bilingualProzeduraSection(labelEU, labelES, textEU, textES, prozedurak, showText, showTable, locale) %}
+    <table cellspacing="0" cellpadding="4">
+        <tr>
+            <td>
+                <h4>{{ locale == 'eu' ? labelEU : labelES }}</h4>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size: small;">
+                {% if showText %}
+                    {{ (locale == 'eu' ? textEU : textES) | raw }}
+                {% endif %}
+            </td>
+        </tr>
+        {% if showTable and prozedurak|length > 0 %}
+            <tr>
+                <td>
+                    <ul>
+                        {% for prozedura in prozedurak %}
+                            <li>{{ locale == 'eu' ? prozedura.prozedura.prozeduraeu : prozedura.prozedura.prozeduraes }}</li>
+                            <li>{{ locale == 'eu' ? prozedura.prozeduraeu : prozedura.prozeduraes }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        {% endif %}
+    </table>
+{% endmacro %}
+
+{% macro kanalaMargoztu(kanalmota, kanal, locale) %}
+   {# {{ dump(kanalmota, kanal, locale) }} #}
+   {% if locale == 'eu' %}
+      {% set mota = kanalmota.motaeu %}
+      {% set deskribapena = kanal.deskribapenaeu | default('') %}
+      {% set izena = kanal.izenaeu | default('') %}
+      {% set esteka = kanal.estekaeu | default('') %}
+      {% set udala = fitxa.udala.izenaeu | default('') %}
+   {% else %}
+      {% set mota =  kanalmota.motaes %}
+      {% set deskribapena = kanal.deskribapenaes | default('') %}
+      {% set izena = kanal.izenaes | default('') %}
+      {% set esteka = kanal.estekaes | default('') %}
+      {% set udala = fitxa.udala.izenaes | default('') %}
+   {% endif %}
+   
+    <table style="margin-top: 10px;">
+      <tr class="mt-1 mb-1">
+            <td>
+                <b>{{ 'messages.aukera' | trans }}:&nbsp;{{ mota }}</b>
+            </td>
+      </tr>
+      {# Telematikoa #}
+      {% if kanal.telematikoa %}
+            {# <ul class="mt-1">
+               <li>{{ deskribapena }}</li>
+            </ul> #}
+            {% if esteka != '' %}
+                <tr>
+                    <td>
+                        <a href="{{esteka}}" title="{{ 'messages.izapideaHasi' | trans }}" alt="{{ 'messages.izapideaHasi' | trans }}" target="_blank">{{ 'messages.izapideaHasi' | trans }}</a>
+                    </td>
+                </tr>
+            {% endif %}
+
+      {# Aurrez-Aurrekoa #}
+      {% elseif kanalmota.id == 1 %}
+         {% if esteka %}
+               <tr class="mb-1">
+                    <td>
+                        {% if izena %}
+                            <ul class="mt-1">
+                                {% if izena %}<li>{{ izena }}:</li>{% endif %}
+                                {% if deskribapena %}<li>{{ deskribapena }}</li>{% endif %}
+                            </ul>
+                        {% endif %}
+                        <b>{{ 'messages.kokapena' | trans  }}:</b>
+                        {% if kanal.eraikina %}{{ kanal.eraikina.izena }}&nbsp;-&nbsp;{% endif %}
+                        {% if kanal.kalea %}{{ kanal.kalea }}{% endif %}{% if kanal.kalezbkia %}&nbsp;{{ kanal.kalezbkia }}, {% endif %}
+                        {% if kanal.postakodea %}{{ kanal.postakodea }} {{ udala }}{% endif %}
+                        {% if '@' in esteka and 'maps' not in esteka %}
+                            <a class="underline" href='mailto:{{ esteka }}'>{{ izena }}</a>
+                        {% else %}
+                            <a class="underline" href="{{ esteka }}" target="_blank" title="{{ 'messages.kokapenaIkusi' | trans }}" alt="{{ 'messages.kokapenaIkusi' | trans }}">{{ 'messages.kokapenaIkusi' | trans }}</a><br>
+                        {% endif %}
+                        {% if kanal.ordutegia %}<b>{{ 'messages.ordutegia' | trans }}:</b> {{ kanal.ordutegia }}{% endif %}
+                        {% if kanal.telefonoa %}{{ kanal.telefonoa }}{% endif %}
+                        {% if kanal.fax %}Faxa: {{ kanal.fax }}{% endif %}
+                    </td>
+               </tr>
+         {% endif %}
+      {# Posta elektronikoa #}
+      {% elseif kanalmota.id == 3 %}
+            <tr>
+                <td>
+                    <a class="underline" href='mailto:{{ esteka }}'>{{ izena }}</a>
+                </td>
+            </tr>
+      {% elseif kanalmota.id == 2 %}
+            <tr>
+                <td>
+                    <a class="underline" href='tel:{{ kanal.telefonoa }}'>{{ kanal.telefonoa }}</a>
+                </td>
+            </tr>
+      {% else %}
+        <tr>
+            <td>
+                <p>{{ deskribapena }}</p>
+            </td>
+        </tr>        
+      {% endif %}
+   </table>
+{% endmacro %}
+
+{% macro bilingualKanalSection(labelEU, labelES, textEU, textES, kanalmotak, kanalak, zerbitzua, udala, parametroa, showText, showTable, locale) %}
+    <table cellspacing="0" cellpadding="4">
+        <tr>
+            <td>
+                <h4>{{ locale == 'eu' ? labelEU : labelES }}</h4>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size: small;">
+                {% if showTable %}
+                    {% for k in kanalmotak %}
+                        {% for kanal in kanalak %}
+                            {% if kanal.kanalmota == k and kanal.erakutsi == 1 %}
+                                {% set kanalmota = kanal.kanalmota %}
+                                {{ _self.kanalaMargoztu(kanalmota, kanal, locale) }}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
+                {% if showText %}
+                    {{ (locale == 'eu' ? textEU : textES) | raw }}
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+{% endmacro %}
