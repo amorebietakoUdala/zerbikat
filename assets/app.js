@@ -40,7 +40,9 @@ function ajustarPadding() {
      alturaTotal += nav.offsetHeight;
    });
    var mainDiv = document.querySelector('div[role="main"]');
-   mainDiv.style.paddingTop = ( alturaTotal ) + 'px';
+   if (mainDiv) {
+     mainDiv.style.paddingTop = ( alturaTotal ) + 'px';
+   }
  }
 
 window.addEventListener('load', ajustarPadding);

@@ -1,4 +1,0 @@
-user_bundle:
-  resource: '@UserBundle/Controller'
-  type: attribute
-  prefix: '/{_locale}'

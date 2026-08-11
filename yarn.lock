@@ -7,10 +7,11 @@ __metadata:
 
 "@amorebietakoudala/stimulus-controller-bundle@file:vendor/amorebietakoudala/stimulus-controller-bundle/assets::locator=root-workspace-0b6124%40workspace%3A.":
   version: 0.1.0
-  resolution: "@amorebietakoudala/stimulus-controller-bundle@file:vendor/amorebietakoudala/stimulus-controller-bundle/assets#vendor/amorebietakoudala/stimulus-controller-bundle/assets::hash=58706c&locator=root-workspace-0b6124%40workspace%3A."
+  resolution: "@amorebietakoudala/stimulus-controller-bundle@file:vendor/amorebietakoudala/stimulus-controller-bundle/assets#vendor/amorebietakoudala/stimulus-controller-bundle/assets::hash=36627e&locator=root-workspace-0b6124%40workspace%3A."
   dependencies:
     "@eonasdan/tempus-dominus": ^6.2.10
     "@hotwired/stimulus": ^3.0.0
+    "@popperjs/core": ^2.11.8
     bootstrap: ^5.2.3
     bootstrap-table: 1.21.1
     jquery: 3.6.1
@@ -21,6 +22,7 @@ __metadata:
   peerDependencies:
     "@eonasdan/tempus-dominus": ^6.2.10
     "@hotwired/stimulus": ^3.0.0
+    "@popperjs/core": ^2.11.8
     bootstrap: ^5.2.3
     bootstrap-table: 1.21.1
     jquery: 3.6.1
@@ -28,7 +30,7 @@ __metadata:
     select2-bootstrap-5-theme: ^1.3.0
     sweetalert2: 11.4.8
     tableexport.jquery.plugin: ^1.26.0
-  checksum: 9113715e40f3a9b146a103dff880d7edd0f6c96aa71e6c4cc788b2f9986a2e68241d2c72e65001fd65449d8f8929413f7a81033bd29e39c2d8507dc41541e4a4
+  checksum: d6e789984a480b0b194a3a1044e6c191cc52aafa7d3029731ee92de807a01252fb3c57da55ede19381d5369ce35991c4810d24cba6426d5b209d545d12783c29
   languageName: node
   linkType: hard
 
@@ -1375,6 +1377,13 @@ __metadata:
   version: 0.11.0
   resolution: "@pkgjs/parseargs@npm:0.11.0"
   checksum: 6ad6a00fc4f2f2cfc6bff76fb1d88b8ee20bc0601e18ebb01b6d4be583733a860239a521a7fbca73b612e66705078809483549d2b18f370eb346c5155c8e4a0f
+  languageName: node
+  linkType: hard
+
+"@popperjs/core@npm:^2.11.8":
+  version: 2.11.8
+  resolution: "@popperjs/core@npm:2.11.8"
+  checksum: e5c69fdebf52a4012f6a1f14817ca8e9599cb1be73dd1387e1785e2ed5e5f0862ff817f420a87c7fc532add1f88a12e25aeb010ffcbdc98eace3d55ce2139cf0
   languageName: node
   linkType: hard
 
@@ -3869,10 +3878,10 @@ __metadata:
 
 "fos-router@file:./vendor/friendsofsymfony/jsrouting-bundle/Resources::locator=root-workspace-0b6124%40workspace%3A.":
   version: 2.5.0
-  resolution: "fos-router@file:./vendor/friendsofsymfony/jsrouting-bundle/Resources#./vendor/friendsofsymfony/jsrouting-bundle/Resources::hash=e4c064&locator=root-workspace-0b6124%40workspace%3A."
+  resolution: "fos-router@file:./vendor/friendsofsymfony/jsrouting-bundle/Resources#./vendor/friendsofsymfony/jsrouting-bundle/Resources::hash=4cc0b8&locator=root-workspace-0b6124%40workspace%3A."
   dependencies:
     "@bpnetguy/webpack-inject-plugin": ^2.0.4
-  checksum: a1504225652d631d2220c1f35f4b59a45780f24d785ddf6719d2b17a98d0d82e3de6af4c7954325cce0c01f92d8e8f4125dd369a6ae0b141b122f1dfd28b00d2
+  checksum: bc18551db997f6f24f3588a20f2e41d6fe3e65433c008ffd023f8cb51780b1f4b49da21765cb99acbbd3e731a7f0760da5c219862ce7cb79bf0cc8fd13edc3e5
   languageName: node
   linkType: hard
 

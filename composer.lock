@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9880338e289de4226bf776552b837c40",
+    "content-hash": "ec629de0596be56df9a615b34f873af1",
     "packages": [
         {
             "name": "amorebietakoudala/stimulus-controller-bundle",
-            "version": "1.0.15",
+            "version": "1.0.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amorebietakoUdala/stimulus-controller-bundle.git",
-                "reference": "48df0f40e0206fb6e37bef0c7d01c847a8f25065"
+                "reference": "5f2b6abfa173a97fad8112c5e805d258d8c907fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amorebietakoUdala/stimulus-controller-bundle/zipball/48df0f40e0206fb6e37bef0c7d01c847a8f25065",
-                "reference": "48df0f40e0206fb6e37bef0c7d01c847a8f25065",
+                "url": "https://api.github.com/repos/amorebietakoUdala/stimulus-controller-bundle/zipball/5f2b6abfa173a97fad8112c5e805d258d8c907fe",
+                "reference": "5f2b6abfa173a97fad8112c5e805d258d8c907fe",
                 "shasum": ""
             },
             "require": {
@@ -28,7 +28,6 @@
                 "symfony/flex": "<1.13"
             },
             "type": "symfony-bundle",
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -47,23 +46,23 @@
                 "stimulus-controller-bundle"
             ],
             "support": {
-                "issues": "https://github.com/amorebietakoUdala/stimulus-controller-bundle/issues",
-                "source": "https://github.com/amorebietakoUdala/stimulus-controller-bundle/tree/1.0.15"
+                "source": "https://github.com/amorebietakoUdala/stimulus-controller-bundle/tree/1.0.16",
+                "issues": "https://github.com/amorebietakoUdala/stimulus-controller-bundle/issues"
             },
-            "time": "2025-10-08T08:21:32+00:00"
+            "time": "2026-08-10T11:42:46+00:00"
         },
         {
             "name": "amorebietakoudala/user-bundle",
-            "version": "2.1.1",
+            "version": "2.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/amorebietakoUdala/user-bundle.git",
-                "reference": "bc339ff866118f3d0897de0964bb96b7e1149b80"
+                "url": "git@github.com:amorebietakoUdala/user-bundle.git",
+                "reference": "ad41df86e42514f3486e3969054f59fdaa7e62ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amorebietakoUdala/user-bundle/zipball/bc339ff866118f3d0897de0964bb96b7e1149b80",
-                "reference": "bc339ff866118f3d0897de0964bb96b7e1149b80",
+                "url": "https://api.github.com/repos/amorebietakoUdala/user-bundle/zipball/ad41df86e42514f3486e3969054f59fdaa7e62ae",
+                "reference": "ad41df86e42514f3486e3969054f59fdaa7e62ae",
                 "shasum": ""
             },
             "require": {
@@ -88,7 +87,11 @@
                     "AMREU\\UserBundle\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "AMREU\\UserBundle\\Tests\\": "tests/"
+                }
+            },
             "authors": [
                 {
                     "name": "Amorebietako Udala",
@@ -97,10 +100,10 @@
             ],
             "description": "AmorebietakoUdala erabiltzaile bundlela",
             "support": {
-                "issues": "https://github.com/amorebietakoUdala/user-bundle/issues",
-                "source": "https://github.com/amorebietakoUdala/user-bundle/tree/2.1.1"
+                "source": "https://github.com/amorebietakoUdala/user-bundle/tree/2.2",
+                "issues": "https://github.com/amorebietakoUdala/user-bundle/issues"
             },
-            "time": "2026-04-09T06:03:35+00:00"
+            "time": "2026-08-06T12:00:27+00:00"
         },
         {
             "name": "babdev/pagerfanta-bundle",
@@ -9645,15 +9648,15 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=8.1"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "platform-overrides": {
         "php": "8.2.27"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
